@@ -346,6 +346,20 @@ function InfoRow({ label, value, accent, mono }: { label: string; value?: string
 }
 
 /* ── BookingModal ────────────────────────────────────────── */
+type BottleItem = { qty: number; name: string };
+
+function parseBottles(str: string): BottleItem[] {
+  if (!str) return [];
+  return str.split(',').map(p => {
+    const m = p.trim().match(/^(\d+)x (.+)$/i);
+    return m ? { qty: parseInt(m[1]), name: m[2] } : { qty: 1, name: p.trim() };
+  }).filter(b => b.name);
+}
+
+function serializeBottles(items: BottleItem[]): string {
+  return items.filter(b => b.name.trim()).map(b => `${b.qty}x ${b.name.toUpperCase()}`).join(', ');
+}
+
 function BookingModal({ table, initialReservation, onClose, onSubmit }: {
   table: Table;
   initialReservation?: Reservation;
@@ -361,10 +375,18 @@ function BookingModal({ table, initialReservation, onClose, onSubmit }: {
     customerName: initialReservation?.customerName ?? '',
     prName:       initialReservation?.prName       ?? '',
     guestsCount:  initialReservation?.guestsCount  ?? table.capacity,
-    bottles:      initialReservation?.bottles      ?? '',
     budget:       initialReservation?.budget       ?? calcBudget(table.capacity),
     notes:        initialReservation?.notes        ?? '',
   });
+
+  const [bottleItems, setBottleItems] = useState<BottleItem[]>(
+    () => parseBottles(initialReservation?.bottles ?? '')
+  );
+
+  const addBottle   = () => setBottleItems(prev => [...prev, { qty: 1, name: '' }]);
+  const removeBottle = (i: number) => setBottleItems(prev => prev.filter((_, idx) => idx !== i));
+  const updateBottle = (i: number, patch: Partial<BottleItem>) =>
+    setBottleItems(prev => prev.map((b, idx) => idx === i ? { ...b, ...patch } : b));
 
   const inp = "w-full bg-bg border border-[#2a2a2a] px-4 py-3 text-xs font-sans text-white placeholder-[#444] outline-none transition-colors";
 
@@ -383,15 +405,18 @@ function BookingModal({ table, initialReservation, onClose, onSubmit }: {
             <h3 className="hv font-black text-xl uppercase text-white">
               {isEdit ? 'Modifica Prenotazione' : 'Prenotazione'}
             </h3>
-            <p className="text-[8px] font-sans uppercase tracking-widest text-[#333] mt-0.5">
+            <p className="text-[8px] font-sans uppercase tracking-widest text-[#777] mt-0.5">
               Tavolo {table.name} · Min €{table.minSpend}
             </p>
           </div>
-          <button onClick={onClose} className="text-[#333] hover:text-white transition-colors p-1"><X size={18} /></button>
+          <button onClick={onClose} className="text-[#777] hover:text-white transition-colors p-1"><X size={18} /></button>
         </div>
 
         <form className="p-8 space-y-5 overflow-y-auto"
-          onSubmit={(e) => { e.preventDefault(); onSubmit({ ...form, status: 'confirmed' as const }); }}>
+          onSubmit={(e) => {
+            e.preventDefault();
+            onSubmit({ ...form, bottles: serializeBottles(bottleItems), status: 'confirmed' as const });
+          }}>
           <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
             <BField label="Cliente">
               <input required className={cn(inp, 'uppercase tracking-widest')} placeholder="NOME COMPLETO"
@@ -402,7 +427,7 @@ function BookingModal({ table, initialReservation, onClose, onSubmit }: {
                 value={form.prName} onChange={e => setForm({ ...form, prName: e.target.value })} />
             </BField>
             <BField label="PAX">
-              <input type="number" className={inp}
+              <input type="number" min={1} className={inp}
                 value={form.guestsCount} onChange={e => {
                   const guests = +e.target.value;
                   setForm({ ...form, guestsCount: guests, budget: calcBudget(guests) });
@@ -416,8 +441,34 @@ function BookingModal({ table, initialReservation, onClose, onSubmit }: {
           </div>
 
           <BField label="Bottiglie">
-            <input className={cn(inp, 'uppercase tracking-widest')} placeholder="2× CHAMPAGNE, 1× VODKA"
-              value={form.bottles} onChange={e => setForm({ ...form, bottles: e.target.value.toUpperCase() })} />
+            <div className="space-y-2">
+              {bottleItems.map((bottle, i) => (
+                <div key={i} className="flex items-center gap-2">
+                  <select
+                    value={bottle.qty}
+                    onChange={e => updateBottle(i, { qty: +e.target.value })}
+                    className="bg-bg border border-[#2a2a2a] px-3 py-3 text-xs font-sans text-white outline-none transition-colors w-20 shrink-0 [color-scheme:dark]">
+                    {Array.from({ length: 10 }, (_, n) => n + 1).map(n => (
+                      <option key={n} value={n}>{n}</option>
+                    ))}
+                  </select>
+                  <input
+                    className={cn(inp, 'uppercase tracking-widest')}
+                    placeholder="NOME BOTTIGLIA"
+                    value={bottle.name}
+                    onChange={e => updateBottle(i, { name: e.target.value.toUpperCase() })}
+                  />
+                  <button type="button" onClick={() => removeBottle(i)}
+                    className="text-[#555] hover:text-red-500 transition-colors p-1 shrink-0">
+                    <X size={14} />
+                  </button>
+                </div>
+              ))}
+              <button type="button" onClick={addBottle}
+                className="flex items-center gap-2 w-full py-2.5 border border-dashed border-[#2a2a2a] text-[#555] hover:border-accent/50 hover:text-accent transition-colors text-[9px] hv font-black uppercase tracking-widest justify-center mt-1">
+                <Plus size={11} /> Aggiungi Bottiglia
+              </button>
+            </div>
           </BField>
 
           <BField label="Note">

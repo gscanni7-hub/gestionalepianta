@@ -646,13 +646,13 @@ function SidebarContent({ user, view, onNav, onLogout, occupancyPct = 0, revenue
       <nav className="flex-1 px-3 py-5 space-y-0.5 overflow-y-auto">
         {user.role === 'admin' ? (
           <>
-            <NavLink icon={<Building2 size={14}/>} label="Venues"
+            <NavLink icon={<Building2 size={14}/>} label="Location"
               active={view==='venues'||view==='venue-events'}
               onClick={() => onNav('venues')} />
-            <NavLink icon={<Settings size={14}/>} label="Venue Design"
+            <NavLink icon={<Settings size={14}/>} label="Layout Tavoli"
               active={view==='editor'}
               onClick={() => onNav('editor')} />
-            <NavLink icon={<BarChart3 size={14}/>} label="Reservations"
+            <NavLink icon={<BarChart3 size={14}/>} label="Prenotazioni"
               active={view==='reservations'}
               onClick={() => onNav('reservations')} />
           </>
@@ -661,7 +661,7 @@ function SidebarContent({ user, view, onNav, onLogout, occupancyPct = 0, revenue
             <NavLink icon={<Calendar size={14}/>} label="Events"
               active={view==='events'||view==='plan'}
               onClick={() => onNav('events')} />
-            <NavLink icon={<BarChart3 size={14}/>} label="Reservations"
+            <NavLink icon={<BarChart3 size={14}/>} label="Prenotazioni"
               active={view==='reservations'}
               onClick={() => onNav('reservations')} />
           </>

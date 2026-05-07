@@ -32,6 +32,8 @@ export default function App() {
   const [editingFloorPlan, setEditingFloorPlan] = useState<{ venueId: string; fp: FloorPlan } | null>(null);
   const [showNewClubModal, setShowNewClubModal] = useState(false);
   const [editingVenue, setEditingVenue] = useState<Venue | null>(null);
+  const [showNewFloorPlanModal, setShowNewFloorPlanModal] = useState(false);
+  const [editingFloorPlanMeta, setEditingFloorPlanMeta] = useState<{ venueId: string; fp: FloorPlan } | null>(null);
   const [editingEvent, setEditingEvent] = useState<Event | null>(null);
 
   const handleLogin = (role: 'admin' | 'pr') => {
@@ -377,9 +379,9 @@ export default function App() {
                     <div className="flex items-start justify-between mb-8 gap-4">
                       <PageTitle title="Venue Design" sub="Gestisci le piante dei tuoi locali" />
                       <button
-                        onClick={() => setShowNewClubModal(true)}
+                        onClick={() => setShowNewFloorPlanModal(true)}
                         className="flex items-center gap-2 bg-accent text-black px-5 py-3 text-[9px] hv font-black uppercase tracking-widest hover:bg-white transition-colors shrink-0 mt-1">
-                        <Plus size={12} /> Nuovo Club
+                        <Plus size={12} /> Nuova Pianta
                       </button>
                     </div>
                     <div className="space-y-6">
@@ -404,11 +406,27 @@ export default function App() {
                                       <p className="text-[8px] font-sans text-[#333] mt-0.5">{fp.tables.length} tavoli</p>
                                     </div>
                                   </div>
-                                  <button
-                                    onClick={() => setEditingFloorPlan({ venueId: venue.id, fp })}
-                                    className="text-[9px] font-sans uppercase tracking-widest text-[#333] hover:text-accent transition-colors flex items-center gap-1.5">
-                                    Modifica <ChevronRight size={11} />
-                                  </button>
+                                  <div className="flex items-center gap-2">
+                                    <div className="flex items-center gap-0.5 opacity-0 group-hover:opacity-100 transition-opacity">
+                                      <button
+                                        onClick={() => setEditingFloorPlanMeta({ venueId: venue.id, fp })}
+                                        className="w-7 h-7 flex items-center justify-center text-[#333] hover:text-accent transition-colors">
+                                        <Pencil size={12} />
+                                      </button>
+                                      <button
+                                        onClick={() => setVenues(prev => prev.map(v =>
+                                          v.id === venue.id ? { ...v, floorPlans: v.floorPlans.filter(f => f.id !== fp.id) } : v
+                                        ))}
+                                        className="w-7 h-7 flex items-center justify-center text-[#333] hover:text-red-500 transition-colors">
+                                        <Trash2 size={12} />
+                                      </button>
+                                    </div>
+                                    <button
+                                      onClick={() => setEditingFloorPlan({ venueId: venue.id, fp })}
+                                      className="text-[9px] font-sans uppercase tracking-widest text-[#333] hover:text-accent transition-colors flex items-center gap-1.5">
+                                      Canvas <ChevronRight size={11} />
+                                    </button>
+                                  </div>
                                 </div>
                               ))}
                             </div>
@@ -439,7 +457,7 @@ export default function App() {
       {showNewEventModal && selectedVenue && (
         <NewEventModal
           venue={selectedVenue}
-          floorPlans={selectedVenue.floorPlans}
+          floorPlans={venues.find(v => v.id === selectedVenue.id)?.floorPlans ?? []}
           onClose={() => setShowNewEventModal(false)}
           onSubmit={(data) => {
             setEvents(prev => [...prev, {
@@ -483,12 +501,41 @@ export default function App() {
       {editingEvent && selectedVenue && (
         <NewEventModal
           venue={selectedVenue}
-          floorPlans={selectedVenue.floorPlans}
+          floorPlans={venues.find(v => v.id === selectedVenue.id)?.floorPlans ?? []}
           initialData={editingEvent}
           onClose={() => setEditingEvent(null)}
           onSubmit={(data) => {
             setEvents(prev => prev.map(ev => ev.id === editingEvent.id ? { ...ev, ...data } : ev));
             setEditingEvent(null);
+          }}
+        />
+      )}
+
+      {showNewFloorPlanModal && (
+        <NewFloorPlanModal
+          venues={venues}
+          onClose={() => setShowNewFloorPlanModal(false)}
+          onSubmit={(venueId) => {
+            setShowNewFloorPlanModal(false);
+            setEditingFloorPlan({
+              venueId,
+              fp: { id: '', name: '', canvasWidth: 800, canvasHeight: 600, staticAreas: [], tables: [] },
+            });
+          }}
+        />
+      )}
+
+      {editingFloorPlanMeta && (
+        <FloorPlanMetaModal
+          fp={editingFloorPlanMeta.fp}
+          onClose={() => setEditingFloorPlanMeta(null)}
+          onSubmit={(name) => {
+            setVenues(prev => prev.map(v =>
+              v.id === editingFloorPlanMeta.venueId
+                ? { ...v, floorPlans: v.floorPlans.map(f => f.id === editingFloorPlanMeta.fp.id ? { ...f, name } : f) }
+                : v
+            ));
+            setEditingFloorPlanMeta(null);
           }}
         />
       )}
@@ -964,6 +1011,98 @@ function NewClubModal({ onClose, onSubmit, initialData }: {
             <button type="submit"
               className="flex-1 py-3.5 text-[9px] hv font-black uppercase tracking-widest bg-accent text-black hover:bg-white transition-colors">
               {isEdit ? 'Salva Modifiche' : 'Avanti'}
+            </button>
+          </div>
+        </form>
+      </motion.div>
+    </div>
+  );
+}
+
+/* ── NewFloorPlanModal ───────────────────────────────────── */
+function NewFloorPlanModal({ venues, onClose, onSubmit }: {
+  venues: Venue[];
+  onClose: () => void;
+  onSubmit: (venueId: string) => void;
+}) {
+  const [venueId, setVenueId] = useState(venues[0]?.id ?? '');
+
+  return (
+    <div className="fixed inset-0 z-[100] flex items-center justify-center p-4">
+      <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }}
+        className="absolute inset-0 bg-black/90 backdrop-blur-sm" onClick={onClose} />
+      <motion.div initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.22, ease: 'easeOut' }}
+        className="relative w-full max-w-md bg-card border border-[#1a1a1a] overflow-hidden">
+        <div className="h-[2px] bg-accent" />
+        <div className="px-8 py-6 border-b border-[#111] flex items-center justify-between">
+          <div>
+            <h3 className="hv font-black text-xl uppercase text-white">Nuova Pianta</h3>
+            <p className="text-[9px] font-sans uppercase tracking-widest text-[#333] mt-1">Seleziona il locale di destinazione</p>
+          </div>
+          <button onClick={onClose} className="text-[#333] hover:text-white transition-colors p-1"><X size={18} /></button>
+        </div>
+        <form className="p-8 space-y-5" onSubmit={(e) => { e.preventDefault(); if (venueId) onSubmit(venueId); }}>
+          <Field label="Locale">
+            <select required
+              className="w-full bg-bg border border-[#1a1a1a] px-4 py-3 text-xs font-sans uppercase tracking-widest text-white outline-none transition-colors [color-scheme:dark]"
+              value={venueId} onChange={e => setVenueId(e.target.value)}>
+              {venues.map(v => <option key={v.id} value={v.id}>{v.name}</option>)}
+            </select>
+          </Field>
+          <div className="flex gap-3 pt-2">
+            <button type="button" onClick={onClose}
+              className="flex-1 py-3.5 text-[9px] hv font-black uppercase tracking-widest border border-[#1a1a1a] text-[#333] hover:text-white hover:border-[#333] transition-all">
+              Annulla
+            </button>
+            <button type="submit"
+              className="flex-1 py-3.5 text-[9px] hv font-black uppercase tracking-widest bg-accent text-black hover:bg-white transition-colors">
+              Avanti
+            </button>
+          </div>
+        </form>
+      </motion.div>
+    </div>
+  );
+}
+
+/* ── FloorPlanMetaModal ──────────────────────────────────── */
+function FloorPlanMetaModal({ fp, onClose, onSubmit }: {
+  fp: FloorPlan;
+  onClose: () => void;
+  onSubmit: (name: string) => void;
+}) {
+  const [name, setName] = useState(fp.name);
+
+  return (
+    <div className="fixed inset-0 z-[100] flex items-center justify-center p-4">
+      <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }}
+        className="absolute inset-0 bg-black/90 backdrop-blur-sm" onClick={onClose} />
+      <motion.div initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.22, ease: 'easeOut' }}
+        className="relative w-full max-w-md bg-card border border-[#1a1a1a] overflow-hidden">
+        <div className="h-[2px] bg-accent" />
+        <div className="px-8 py-6 border-b border-[#111] flex items-center justify-between">
+          <div>
+            <h3 className="hv font-black text-xl uppercase text-white">Modifica Pianta</h3>
+            <p className="text-[9px] font-sans uppercase tracking-widest text-[#333] mt-1">Aggiorna il nome della pianta</p>
+          </div>
+          <button onClick={onClose} className="text-[#333] hover:text-white transition-colors p-1"><X size={18} /></button>
+        </div>
+        <form className="p-8 space-y-5" onSubmit={(e) => { e.preventDefault(); onSubmit(name); }}>
+          <Field label="Nome Pianta">
+            <input required
+              className="w-full bg-bg border border-[#1a1a1a] px-4 py-3 text-xs font-sans uppercase tracking-widest text-white placeholder-[#2a2a2a] outline-none transition-colors"
+              value={name} onChange={e => setName(e.target.value)} />
+          </Field>
+          <div className="flex gap-3 pt-2">
+            <button type="button" onClick={onClose}
+              className="flex-1 py-3.5 text-[9px] hv font-black uppercase tracking-widest border border-[#1a1a1a] text-[#333] hover:text-white hover:border-[#333] transition-all">
+              Annulla
+            </button>
+            <button type="submit"
+              className="flex-1 py-3.5 text-[9px] hv font-black uppercase tracking-widest bg-accent text-black hover:bg-white transition-colors">
+              Salva Modifiche
             </button>
           </div>
         </form>

@@ -100,7 +100,7 @@ export default function App() {
     if (view === 'venues')         return 'Location';
     if (view === 'venue-events')   return selectedVenue?.name ?? '';
     if (view === 'active-events')  return 'Serate';
-    if (view === 'events')         return 'Serate';
+    if (view === 'events')         return 'Prossimi eventi';
     if (view === 'plan')           return selectedEvent?.name ?? '';
     if (view === 'editor')         return 'Layout Tavoli';
     if (view === 'reservations')   return 'Prenotazioni';
@@ -384,7 +384,7 @@ export default function App() {
 
             {view === 'events' && (
               <motion.div key="events" {...PAGE}>
-                <PageTitle title="Serate" sub="Seleziona una serata per accedere alla pianta" />
+                <PageTitle title="Prossimi eventi" sub="Seleziona un evento per accedere alla pianta" />
                 {activeEvents.length === 0 ? (
                   <EmptyState icon={<Calendar size={28} />} label="Nessun evento attivo." />
                 ) : (
@@ -684,7 +684,7 @@ function SidebarContent({ user, view, onNav, onLogout, occupancyPct = 0, revenue
           </>
         ) : (
           <>
-            <NavLink icon={<Calendar size={14}/>} label="Events"
+            <NavLink icon={<Calendar size={14}/>} label="Prossimi eventi"
               active={view==='events'||view==='plan'}
               onClick={() => onNav('events')} />
             <NavLink icon={<BarChart3 size={14}/>} label="Prenotazioni"

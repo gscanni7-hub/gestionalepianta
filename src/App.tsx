@@ -501,6 +501,7 @@ export default function App() {
                 <ReservationsTable
                   reservations={user.role === 'admin' ? reservations : reservations.filter(r => r.prId === user.id)}
                   userRole={user.role}
+                  events={events}
                 />
               </motion.div>
             )}
@@ -858,14 +859,42 @@ function EventCard({ event, venueName, onClick, onEdit, onDelete }: {
 }
 
 /* ── ReservationsTable ───────────────────────────────────── */
-function ReservationsTable({ reservations, userRole }: { reservations: Reservation[]; userRole: string }) {
+function ReservationsTable({ reservations, userRole, events }: {
+  reservations: Reservation[];
+  userRole: string;
+  events: Event[];
+}) {
+  const exportCSV = () => {
+    const headers = ['Evento', 'Tavolo', 'Status', 'Cliente', 'PR', 'PAX', 'Budget €', 'Bottiglie', 'Note'];
+    const rows = reservations.map(r => [
+      events.find(e => e.id === r.eventId)?.name ?? r.eventId,
+      r.tableName ?? r.tableId,
+      r.status,
+      r.customerName,
+      r.prName,
+      r.guestsCount,
+      r.budget,
+      r.bottles,
+      r.notes,
+    ]);
+    const csv = [headers, ...rows]
+      .map(row => row.map(c => `"${String(c ?? '').replace(/"/g, '""')}"`).join(','))
+      .join('\n');
+    const blob = new Blob(['﻿' + csv], { type: 'text/csv;charset=utf-8;' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `prenotazioni_${new Date().toISOString().slice(0, 10)}.csv`;
+    a.click();
+    URL.revokeObjectURL(url);
+  };
+
   return (
     <div className="bg-card border border-[#2a2a2a] overflow-hidden">
       <div className="px-7 py-5 border-b border-[#1e1e1e] flex justify-between items-center">
         <h2 className="hv font-black text-xl uppercase text-white">Prenotazioni</h2>
         <div className="flex gap-2">
-          <IconBtn><Filter size={14} /></IconBtn>
-          <IconBtn><Download size={14} /></IconBtn>
+          <IconBtn onClick={exportCSV}><Download size={14} /></IconBtn>
         </div>
       </div>
 
@@ -1200,9 +1229,9 @@ function FloorPlanMetaModal({ fp, onClose, onSubmit }: {
   );
 }
 
-function IconBtn({ children }: { children: React.ReactNode }) {
+function IconBtn({ children, onClick }: { children: React.ReactNode; onClick?: () => void }) {
   return (
-    <button className="w-8 h-8 border border-[#2a2a2a] flex items-center justify-center text-[#777] hover:text-accent hover:border-[#2a2a2a] transition-all">
+    <button onClick={onClick} className="w-8 h-8 border border-[#2a2a2a] flex items-center justify-center text-[#777] hover:text-accent hover:border-[#2a2a2a] transition-all">
       {children}
     </button>
   );

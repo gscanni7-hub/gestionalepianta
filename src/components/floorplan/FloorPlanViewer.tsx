@@ -127,14 +127,16 @@ export default function FloorPlanViewer({
           </Stage>
         </div>
 
-        <div className="border border-[#2a2a2a] px-5 py-3 flex flex-wrap gap-x-6 gap-y-2 items-center bg-[#080808]">
+        <div className="border border-[#2a2a2a] px-5 py-3 flex items-center gap-6 bg-[#080808]">
           <span className="text-[8px] font-sans uppercase tracking-[0.4em] text-[#666] border-r border-[#2a2a2a] pr-5 shrink-0">Tavoli</span>
-          {Object.entries(STATUS_COLORS).map(([key, color]) => (
-            <div key={key} className="flex items-center gap-2 shrink-0">
-              <span className="w-2 h-2 shrink-0" style={{ background: color }} />
-              <span className="text-[8px] font-sans uppercase tracking-widest text-[#444] capitalize">{key}</span>
-            </div>
-          ))}
+          <div className="flex items-center gap-2 shrink-0">
+            <span className="w-2 h-2 shrink-0 bg-[#ef4444]" />
+            <span className="text-[8px] font-sans uppercase tracking-widest text-[#666]">Confirmed</span>
+          </div>
+          <div className="flex items-center gap-2 shrink-0">
+            <span className="w-2 h-2 shrink-0 bg-[#22c55e]" />
+            <span className="text-[8px] font-sans uppercase tracking-widest text-[#666]">Free</span>
+          </div>
         </div>
       </div>
 

@@ -279,12 +279,6 @@ export default function App() {
             </span>
           </div>
           <div className="flex items-center gap-3 shrink-0">
-            {view === 'venues' && user.role === 'admin' && (
-              <button onClick={() => setShowNewClubModal(true)}
-                className="flex items-center gap-2 bg-accent text-black px-4 py-2 text-[9px] hv font-black uppercase tracking-widest hover:bg-white transition-colors">
-                <Plus size={12} /><span className="hidden sm:inline">Nuovo Club</span>
-              </button>
-            )}
             {view === 'reservations' && (
               <button className="flex items-center gap-2 border border-[#222] text-[#555] px-4 py-2 text-[9px] hv font-black uppercase tracking-widest hover:border-accent hover:text-accent transition-all">
                 <Download size={12} /> Export
@@ -300,7 +294,15 @@ export default function App() {
             {/* Venues */}
             {view === 'venues' && (
               <motion.div key="venues" {...PAGE}>
-                <PageTitle title="I tuoi Locali" sub="Seleziona un locale per gestire gli eventi" />
+                <div className="flex items-start justify-between mb-8 gap-4">
+                  <PageTitle title="I tuoi Locali" sub="Seleziona un locale per gestire gli eventi" />
+                  {user.role === 'admin' && (
+                    <button onClick={() => setShowNewClubModal(true)}
+                      className="flex items-center gap-2 bg-accent text-black px-5 py-3 text-[9px] hv font-black uppercase tracking-widest hover:bg-white transition-colors shrink-0 mt-1">
+                      <Plus size={12} /> Nuovo Club
+                    </button>
+                  )}
+                </div>
                 <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-4 mt-8">
                   {venues.map((venue, i) => (
                     <motion.div key={venue.id}

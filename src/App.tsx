@@ -100,7 +100,7 @@ export default function App() {
     if (view === 'venues')         return 'Location';
     if (view === 'venue-events')   return selectedVenue?.name ?? '';
     if (view === 'active-events')  return 'Serate';
-    if (view === 'events')         return 'Prossimi eventi';
+    if (view === 'events')         return 'Eventi';
     if (view === 'plan')           return selectedEvent?.name ?? '';
     if (view === 'editor')         return 'Layout Tavoli';
     if (view === 'reservations')   return 'Prenotazioni';

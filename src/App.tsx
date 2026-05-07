@@ -224,10 +224,10 @@ export default function App() {
             </span>
           </div>
           <div className="flex items-center gap-3 shrink-0">
-            {view === 'venue-events' && user.role === 'admin' && (
-              <button onClick={() => setShowNewEventModal(true)}
+            {view === 'venues' && user.role === 'admin' && (
+              <button onClick={() => setShowNewClubModal(true)}
                 className="flex items-center gap-2 bg-accent text-black px-4 py-2 text-[9px] hv font-black uppercase tracking-widest hover:bg-white transition-colors">
-                <Plus size={12} /> Nuovo Evento
+                <Plus size={12} /> Nuovo Club
               </button>
             )}
             {view === 'reservations' && (
@@ -263,9 +263,17 @@ export default function App() {
             {/* Venue events */}
             {view === 'venue-events' && selectedVenue && (
               <motion.div key="venue-events" {...PAGE}>
-                <div className="mb-8">
-                  <p className="text-[9px] font-sans uppercase tracking-[0.4em] text-[#333] mb-1">Venue</p>
-                  <h2 className="hv font-black text-4xl uppercase text-white">{selectedVenue.name}</h2>
+                <div className="mb-8 flex items-end justify-between gap-4">
+                  <div>
+                    <p className="text-[9px] font-sans uppercase tracking-[0.4em] text-[#333] mb-1">Venue</p>
+                    <h2 className="hv font-black text-4xl uppercase text-white">{selectedVenue.name}</h2>
+                  </div>
+                  {user.role === 'admin' && (
+                    <button onClick={() => setShowNewEventModal(true)}
+                      className="flex items-center gap-2 bg-accent text-black px-4 py-2.5 text-[9px] hv font-black uppercase tracking-widest hover:bg-white transition-colors shrink-0">
+                      <Plus size={12} /> Nuovo Evento
+                    </button>
+                  )}
                 </div>
                 {venueEvents.length === 0 ? (
                   <EmptyState icon={<Calendar size={28} />} label="Nessun evento ancora.">

@@ -30,6 +30,7 @@ export default function App() {
   const [showNewEventModal, setShowNewEventModal] = useState(false);
   const [mobileSidebarOpen, setMobileSidebarOpen] = useState(false);
   const [editingFloorPlan, setEditingFloorPlan] = useState<{ venueId: string; fp: FloorPlan } | null>(null);
+  const [showNewClubModal, setShowNewClubModal] = useState(false);
   const [editingEvent, setEditingEvent] = useState<Event | null>(null);
 
   const handleLogin = (role: 'admin' | 'pr') => {
@@ -359,27 +360,24 @@ export default function App() {
                   </div>
                 ) : (
                   <div>
-                    <PageTitle title="Venue Design" sub="Gestisci le piante dei tuoi locali" />
-                    <div className="space-y-8 mt-2">
+                    <div className="flex items-start justify-between mb-8 gap-4">
+                      <PageTitle title="Venue Design" sub="Gestisci le piante dei tuoi locali" />
+                      <button
+                        onClick={() => setShowNewClubModal(true)}
+                        className="flex items-center gap-2 bg-accent text-black px-5 py-3 text-[9px] hv font-black uppercase tracking-widest hover:bg-white transition-colors shrink-0 mt-1">
+                        <Plus size={12} /> Nuovo Club
+                      </button>
+                    </div>
+                    <div className="space-y-6">
                       {venues.map(venue => (
                         <div key={venue.id} className="border border-[#1a1a1a] bg-card">
-                          <div className="px-7 py-5 border-b border-[#111] flex items-center justify-between">
-                            <div>
-                              <h3 className="hv font-black text-xl uppercase text-white">{venue.name}</h3>
-                              <p className="text-[9px] font-sans uppercase tracking-widest text-[#333] mt-0.5">{venue.address}</p>
-                            </div>
-                            <button
-                              onClick={() => setEditingFloorPlan({
-                                venueId: venue.id,
-                                fp: { id: '', name: '', canvasWidth: 800, canvasHeight: 600, staticAreas: [], tables: [] },
-                              })}
-                              className="flex items-center gap-2 bg-accent text-black px-4 py-2.5 text-[9px] hv font-black uppercase tracking-widest hover:bg-white transition-colors">
-                              <Plus size={12} /> Nuova Pianta
-                            </button>
+                          <div className="px-7 py-5 border-b border-[#111]">
+                            <h3 className="hv font-black text-xl uppercase text-white">{venue.name}</h3>
+                            <p className="text-[9px] font-sans uppercase tracking-widest text-[#333] mt-0.5">{venue.address}</p>
                           </div>
                           {venue.floorPlans.length === 0 ? (
-                            <div className="px-7 py-10 text-center">
-                              <p className="text-[9px] font-sans uppercase tracking-[0.4em] text-[#1e1e1e]">Nessuna pianta — creane una</p>
+                            <div className="px-7 py-8 text-center">
+                              <p className="text-[9px] font-sans uppercase tracking-[0.4em] text-[#1e1e1e]">Nessuna pianta</p>
                             </div>
                           ) : (
                             <div className="divide-y divide-[#0d0d0d]">
@@ -437,6 +435,22 @@ export default function App() {
               ...data,
             }]);
             setShowNewEventModal(false);
+          }}
+        />
+      )}
+
+      {showNewClubModal && (
+        <NewClubModal
+          onClose={() => setShowNewClubModal(false)}
+          onSubmit={({ name, address }) => {
+            const venueId = `v_${Date.now()}`;
+            setVenues(prev => [...prev, { id: venueId, name, address, floorPlans: [] }]);
+            setShowNewClubModal(false);
+            setEditingFloorPlan({
+              venueId,
+              fp: { id: '', name: '', canvasWidth: 800, canvasHeight: 600, staticAreas: [], tables: [] },
+            });
+            setView('editor');
           }}
         />
       )}
@@ -729,7 +743,7 @@ function ReservationsTable({ reservations, userRole }: { reservations: Reservati
                   </div>
                 </td>
                 <td className="px-7 py-5">
-                  <span className="hv font-bold text-sm text-white">{res.tableId}</span>
+                  <span className="hv font-bold text-sm text-white">{res.tableName ?? res.tableId}</span>
                 </td>
                 <td className="px-7 py-5">
                   <p className="hv font-bold text-[11px] uppercase text-white">{res.customerName}</p>
@@ -850,6 +864,62 @@ function Field({ label, children }: { label: string; children: React.ReactNode }
     <div className="space-y-1.5">
       <label className="text-[8px] font-sans font-bold uppercase tracking-widest text-[#333]">{label}</label>
       {children}
+    </div>
+  );
+}
+
+/* ── NewClubModal ────────────────────────────────────────── */
+function NewClubModal({ onClose, onSubmit }: {
+  onClose: () => void;
+  onSubmit: (d: { name: string; address: string }) => void;
+}) {
+  const [form, setForm] = useState({ name: '', address: '' });
+
+  return (
+    <div className="fixed inset-0 z-[100] flex items-center justify-center p-4">
+      <motion.div
+        initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
+        className="absolute inset-0 bg-black/90 backdrop-blur-sm"
+        onClick={onClose}
+      />
+      <motion.div
+        initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.22, ease: 'easeOut' }}
+        className="relative w-full max-w-md bg-card border border-[#1a1a1a] overflow-hidden"
+      >
+        <div className="h-[2px] bg-accent" />
+        <div className="px-8 py-6 border-b border-[#111] flex items-center justify-between">
+          <div>
+            <h3 className="hv font-black text-xl uppercase text-white">Nuovo Club</h3>
+            <p className="text-[9px] font-sans uppercase tracking-widest text-[#333] mt-1">Crea il locale e poi la sua piantina</p>
+          </div>
+          <button onClick={onClose} className="text-[#333] hover:text-white transition-colors p-1"><X size={18} /></button>
+        </div>
+
+        <form className="p-8 space-y-5" onSubmit={(e) => { e.preventDefault(); onSubmit(form); }}>
+          <Field label="Nome del Club">
+            <input required placeholder="ES. AMNESIA CLUB"
+              className="w-full bg-bg border border-[#1a1a1a] px-4 py-3 text-xs font-sans uppercase tracking-widest text-white placeholder-[#2a2a2a] outline-none transition-colors"
+              value={form.name} onChange={e => setForm({ ...form, name: e.target.value })} />
+          </Field>
+          <Field label="Città / Indirizzo">
+            <input placeholder="ES. MILANO"
+              className="w-full bg-bg border border-[#1a1a1a] px-4 py-3 text-xs font-sans uppercase tracking-widest text-white placeholder-[#2a2a2a] outline-none transition-colors"
+              value={form.address} onChange={e => setForm({ ...form, address: e.target.value })} />
+          </Field>
+
+          <div className="flex gap-3 pt-2">
+            <button type="button" onClick={onClose}
+              className="flex-1 py-3.5 text-[9px] hv font-black uppercase tracking-widest border border-[#1a1a1a] text-[#333] hover:text-white hover:border-[#333] transition-all">
+              Annulla
+            </button>
+            <button type="submit"
+              className="flex-1 py-3.5 text-[9px] hv font-black uppercase tracking-widest bg-accent text-black hover:bg-white transition-colors">
+              Avanti → Crea Piantina
+            </button>
+          </div>
+        </form>
+      </motion.div>
     </div>
   );
 }

@@ -54,6 +54,7 @@ export interface Reservation {
   id: string;
   eventId: string;
   tableId: string;
+  tableName?: string;
   prId: string;
   prName: string;
   customerName: string;

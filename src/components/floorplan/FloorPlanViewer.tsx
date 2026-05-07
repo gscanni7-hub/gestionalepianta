@@ -216,6 +216,7 @@ export default function FloorPlanViewer({ event, floorPlan, reservations, curren
               id: Math.random().toString(36).substr(2, 9),
               eventId: event.id,
               tableId: selectedTable.id,
+              tableName: selectedTable.name,
               prId: currentUser.id,
               ...data,
               createdAt: new Date().toISOString(),

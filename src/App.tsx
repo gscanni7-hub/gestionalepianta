@@ -10,7 +10,7 @@ import { cn } from './lib/utils';
 import FloorPlanViewer from './components/floorplan/FloorPlanViewer';
 import FloorPlanEditor from './components/floorplan/FloorPlanEditor';
 
-type AppView = 'venues' | 'venue-events' | 'events' | 'plan' | 'editor' | 'reservations';
+type AppView = 'venues' | 'venue-events' | 'events' | 'active-events' | 'plan' | 'editor' | 'reservations';
 
 const PAGE = {
   initial: { opacity: 0, y: 12 },
@@ -53,7 +53,7 @@ export default function App() {
     const profile: UserProfile = { id: found.id, email: found.email, role: found.role, displayName: found.displayName };
     localStorage.setItem('nightplan_user', JSON.stringify(profile));
     setUser(profile);
-    setView(found.role === 'admin' ? 'venues' : 'events');
+    setView(found.role === 'admin' ? 'active-events' : 'events');
     setLoginError('');
   };
   const handleLogout = () => {
@@ -70,8 +70,9 @@ export default function App() {
     setMobileSidebarOpen(false);
   };
   const goBack = () => {
-    if (view === 'plan') { setSelectedEvent(null); setView(user?.role === 'admin' ? 'venue-events' : 'events'); }
+    if (view === 'plan') { setSelectedEvent(null); setView(user?.role === 'admin' ? 'active-events' : 'events'); }
     else if (view === 'venue-events') { setSelectedVenue(null); setView('venues'); }
+    else if (view === 'active-events') { setView('venues'); }
   };
 
   const getFloorPlan = (event: Event): FloorPlan | undefined => {
@@ -81,7 +82,7 @@ export default function App() {
 
   const activeEvents  = events.filter(e => e.status === 'active');
   const venueEvents   = selectedVenue ? events.filter(e => e.venueId === selectedVenue.id) : [];
-  const showBack      = view === 'plan' || view === 'venue-events';
+  const showBack      = view === 'plan' || view === 'venue-events' || view === 'active-events';
 
   const activeEventIds = new Set(activeEvents.map(e => e.id));
   const totalTables = activeEvents.reduce((sum, event) => {
@@ -96,12 +97,13 @@ export default function App() {
   const revenueEst   = bookedReservations.reduce((sum, r) => sum + r.budget, 0);
 
   const headerTitle = () => {
-    if (view === 'venues')        return 'Venues';
-    if (view === 'venue-events')  return selectedVenue?.name ?? '';
-    if (view === 'events')        return 'Events';
-    if (view === 'plan')          return selectedEvent?.name ?? '';
-    if (view === 'editor')        return 'Venue Design';
-    if (view === 'reservations')  return 'Reservations';
+    if (view === 'venues')         return 'Location';
+    if (view === 'venue-events')   return selectedVenue?.name ?? '';
+    if (view === 'active-events')  return 'Serate';
+    if (view === 'events')         return 'Serate';
+    if (view === 'plan')           return selectedEvent?.name ?? '';
+    if (view === 'editor')         return 'Layout Tavoli';
+    if (view === 'reservations')   return 'Prenotazioni';
     return '';
   };
 
@@ -359,9 +361,30 @@ export default function App() {
             )}
 
             {/* PR events */}
+            {view === 'active-events' && (
+              <motion.div key="active-events" {...PAGE}>
+                <PageTitle title="Serate" sub="Seleziona una serata per aprire la pianta" />
+                {activeEvents.length === 0 ? (
+                  <EmptyState icon={<Calendar size={28} />} label="Nessuna serata attiva." />
+                ) : (
+                  <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-4 mt-8">
+                    {activeEvents.map((event, i) => (
+                      <motion.div key={event.id}
+                        initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }}
+                        transition={{ delay: i * 0.06 }}>
+                        <EventCard event={event}
+                          venueName={venues.find(v => v.id === event.venueId)?.name}
+                          onClick={() => openEvent(event)} />
+                      </motion.div>
+                    ))}
+                  </div>
+                )}
+              </motion.div>
+            )}
+
             {view === 'events' && (
               <motion.div key="events" {...PAGE}>
-                <PageTitle title="Eventi in Corso" sub="Seleziona un evento per accedere alla pianta" />
+                <PageTitle title="Serate" sub="Seleziona una serata per accedere alla pianta" />
                 {activeEvents.length === 0 ? (
                   <EmptyState icon={<Calendar size={28} />} label="Nessun evento attivo." />
                 ) : (
@@ -646,6 +669,9 @@ function SidebarContent({ user, view, onNav, onLogout, occupancyPct = 0, revenue
       <nav className="flex-1 px-3 py-5 space-y-0.5 overflow-y-auto">
         {user.role === 'admin' ? (
           <>
+            <NavLink icon={<Calendar size={14}/>} label="Serate"
+              active={view==='active-events'||view==='plan'}
+              onClick={() => onNav('active-events')} />
             <NavLink icon={<Building2 size={14}/>} label="Location"
               active={view==='venues'||view==='venue-events'}
               onClick={() => onNav('venues')} />

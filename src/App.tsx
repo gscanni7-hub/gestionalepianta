@@ -879,38 +879,32 @@ function ReservationsTable({ reservations, userRole, events }: {
       rows: [...rows].sort((a, b) => a.customerName.localeCompare(b.customerName)),
     }));
 
-  const allSorted = groups.flatMap(g => g.rows);
-
-  const exportCSV = () => {
-    const headers = ['Evento', 'Tavolo', 'Cliente', 'PR', 'PAX', 'Budget €', 'Bottiglie'];
-    const rows = groups.flatMap(g =>
-      g.rows.map(r => [
-        g.event?.name ?? g.eventId,
-        r.tableName ?? r.tableId,
-        r.customerName,
-        r.prName,
-        r.guestsCount,
-        r.budget,
-        r.bottles,
-      ])
-    );
-    const csv = [headers, ...rows]
+  const exportEventCSV = (rows: Reservation[], eventName: string) => {
+    const headers = ['Tavolo', 'Cliente', 'PR', 'PAX', 'Budget €', 'Bottiglie'];
+    const data = rows.map(r => [
+      r.tableName ?? r.tableId,
+      r.customerName,
+      r.prName,
+      r.guestsCount,
+      r.budget,
+      r.bottles,
+    ]);
+    const csv = [headers, ...data]
       .map(row => row.map(c => `"${String(c ?? '').replace(/"/g, '""')}"`).join(','))
       .join('\n');
     const blob = new Blob(['﻿' + csv], { type: 'text/csv;charset=utf-8;' });
     const url = URL.createObjectURL(blob);
     const a = document.createElement('a');
     a.href = url;
-    a.download = `prenotazioni_${new Date().toISOString().slice(0, 10)}.csv`;
+    a.download = `${eventName.replace(/\s+/g, '_').toLowerCase()}_${new Date().toISOString().slice(0, 10)}.csv`;
     a.click();
     URL.revokeObjectURL(url);
   };
 
   return (
     <div className="bg-card border border-[#2a2a2a] overflow-hidden">
-      <div className="px-7 py-5 border-b border-[#1e1e1e] flex justify-between items-center">
+      <div className="px-7 py-5 border-b border-[#1e1e1e]">
         <h2 className="hv font-black text-xl uppercase text-white">Prenotazioni</h2>
-        <IconBtn onClick={exportCSV}><Download size={14} /></IconBtn>
       </div>
 
       {reservations.length === 0 ? (
@@ -929,9 +923,14 @@ function ReservationsTable({ reservations, userRole, events }: {
                 {event && (
                   <span className="font-mono text-[9px] text-[#555]">{event.date}</span>
                 )}
-                <span className="ml-auto text-[9px] font-sans uppercase tracking-widest text-[#555]">
+                <span className="text-[9px] font-sans uppercase tracking-widest text-[#555]">
                   {rows.length} {rows.length === 1 ? 'prenotazione' : 'prenotazioni'}
                 </span>
+                <button
+                  onClick={() => exportEventCSV(rows, event?.name ?? eventId)}
+                  className="ml-auto flex items-center gap-1.5 text-[#555] hover:text-accent transition-colors text-[9px] font-sans uppercase tracking-widest">
+                  <Download size={11} /> Scarica
+                </button>
               </div>
 
               {/* Mobile cards */}

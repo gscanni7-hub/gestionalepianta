@@ -194,9 +194,20 @@ export default function App() {
               </motion.button>
             </form>
 
-            <p className="text-[#1e1e1e] text-[9px] font-sans uppercase tracking-widest mt-12 text-center">
-              Un'esperienza esclusiva per i club più prestigiosi
-            </p>
+            <div className="mt-10 pt-8 border-t border-[#111] flex gap-3">
+              <button
+                onClick={() => { const u = MOCK_USERS.find(u => u.role === 'pr')!; const p: UserProfile = { id: u.id, email: u.email, role: u.role, displayName: u.displayName }; localStorage.setItem('nightplan_user', JSON.stringify(p)); setUser(p); setView('events'); }}
+                className="flex-1 py-3 text-[9px] hv font-black uppercase tracking-[0.15em] border border-[#1a1a1a] text-[#444] hover:border-[#333] hover:text-[#666] transition-colors"
+              >
+                Demo PR
+              </button>
+              <button
+                onClick={() => { const u = MOCK_USERS.find(u => u.role === 'admin')!; const p: UserProfile = { id: u.id, email: u.email, role: u.role, displayName: u.displayName }; localStorage.setItem('nightplan_user', JSON.stringify(p)); setUser(p); setView('venues'); }}
+                className="flex-1 py-3 text-[9px] hv font-black uppercase tracking-[0.15em] border border-[#1a1a1a] text-[#444] hover:border-[#333] hover:text-[#666] transition-colors"
+              >
+                Demo Proprietario
+              </button>
+            </div>
           </div>
         </motion.div>
       </div>

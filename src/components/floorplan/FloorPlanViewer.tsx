@@ -47,63 +47,65 @@ export default function FloorPlanViewer({ event, floorPlan, reservations, curren
 
   return (
     <div className="flex flex-col lg:flex-row h-full gap-5">
-      {/* Canvas */}
-      <div ref={containerRef}
-        className="flex-1 bg-[#080808] border border-[#1a1a1a] overflow-hidden relative floorplan-grid"
-        style={{ minHeight: 400 }}>
-        <Stage width={containerWidth} height={stageH} scaleX={scale} scaleY={scale}>
-          <Layer>
-            {/* Static areas */}
-            {floorPlan.staticAreas?.map(area => (
-              <Group key={area.id}>
-                <Rect x={area.x} y={area.y} width={area.width} height={area.height}
-                  fill="#0d0d0d" stroke="#222" strokeWidth={1.5} cornerRadius={0} />
-                <Text x={area.x} y={area.y} width={area.width} height={area.height}
-                  text={area.label} align="center" verticalAlign="middle"
-                  fill="#F0E800" fontStyle="bold" fontSize={14} letterSpacing={3}
-                  fontFamily="'Helvetica Neue', Helvetica, Arial, sans-serif" />
-              </Group>
-            ))}
-
-            {/* Tables */}
-            {floorPlan.tables.map(table => {
-              const status = getStatus(table.id);
-              const color  = STATUS_COLORS[status as keyof typeof STATUS_COLORS] ?? STATUS_COLORS.free;
-              const sel    = selectedTable?.id === table.id;
-
-              return (
-                <Group key={table.id} x={table.x} y={table.y}
-                  onClick={() => setSelectedTable(table)}
-                  onTap={() => setSelectedTable(table)}>
-                  {table.shape === 'rect' ? (
-                    <Rect width={table.width} height={table.height}
-                      fill={color} opacity={sel ? 0.28 : 0.14}
-                      stroke={color} strokeWidth={sel ? 2.5 : 1}
-                      cornerRadius={0}
-                      shadowBlur={sel ? 16 : 0} shadowColor={color} />
-                  ) : (
-                    <Circle radius={table.width / 2} x={table.width / 2} y={table.width / 2}
-                      fill={color} opacity={sel ? 0.28 : 0.14}
-                      stroke={color} strokeWidth={sel ? 2.5 : 1}
-                      shadowBlur={sel ? 16 : 0} shadowColor={color} />
-                  )}
-                  <Text text={table.name}
-                    width={table.width} height={table.height}
-                    align="center" verticalAlign="middle"
-                    fill="white" fontStyle="bold" fontSize={10}
+      {/* Canvas + legend wrapper */}
+      <div className="flex-1 flex flex-col gap-0 min-w-0">
+        <div ref={containerRef}
+          className="flex-1 bg-[#080808] border border-[#1a1a1a] border-b-0 overflow-hidden relative floorplan-grid"
+          style={{ minHeight: 400 }}>
+          <Stage width={containerWidth} height={stageH} scaleX={scale} scaleY={scale}>
+            <Layer>
+              {/* Static areas */}
+              {floorPlan.staticAreas?.map(area => (
+                <Group key={area.id}>
+                  <Rect x={area.x} y={area.y} width={area.width} height={area.height}
+                    fill="#0d0d0d" stroke="#222" strokeWidth={1.5} cornerRadius={0} />
+                  <Text x={area.x} y={area.y} width={area.width} height={area.height}
+                    text={area.label} align="center" verticalAlign="middle"
+                    fill="#F0E800" fontStyle="bold" fontSize={14} letterSpacing={3}
                     fontFamily="'Helvetica Neue', Helvetica, Arial, sans-serif" />
                 </Group>
-              );
-            })}
-          </Layer>
-        </Stage>
+              ))}
 
-        {/* Legend */}
-        <div className="absolute bottom-4 left-4 flex gap-5 items-center bg-black/70 backdrop-blur-sm border border-[#1a1a1a] px-4 py-2.5">
-          <span className="text-[8px] font-sans uppercase tracking-[0.4em] text-[#333] border-r border-[#1a1a1a] pr-4">Tavoli</span>
+              {/* Tables */}
+              {floorPlan.tables.map(table => {
+                const status = getStatus(table.id);
+                const color  = STATUS_COLORS[status as keyof typeof STATUS_COLORS] ?? STATUS_COLORS.free;
+                const sel    = selectedTable?.id === table.id;
+
+                return (
+                  <Group key={table.id} x={table.x} y={table.y}
+                    onClick={() => setSelectedTable(table)}
+                    onTap={() => setSelectedTable(table)}>
+                    {table.shape === 'rect' ? (
+                      <Rect width={table.width} height={table.height}
+                        fill={color} opacity={sel ? 0.28 : 0.14}
+                        stroke={color} strokeWidth={sel ? 2.5 : 1}
+                        cornerRadius={0}
+                        shadowBlur={sel ? 16 : 0} shadowColor={color} />
+                    ) : (
+                      <Circle radius={table.width / 2} x={table.width / 2} y={table.width / 2}
+                        fill={color} opacity={sel ? 0.28 : 0.14}
+                        stroke={color} strokeWidth={sel ? 2.5 : 1}
+                        shadowBlur={sel ? 16 : 0} shadowColor={color} />
+                    )}
+                    <Text text={table.name}
+                      width={table.width} height={table.height}
+                      align="center" verticalAlign="middle"
+                      fill="white" fontStyle="bold" fontSize={10}
+                      fontFamily="'Helvetica Neue', Helvetica, Arial, sans-serif" />
+                  </Group>
+                );
+              })}
+            </Layer>
+          </Stage>
+        </div>
+
+        {/* Legend — fuori dal canvas, sotto */}
+        <div className="border border-[#1a1a1a] px-5 py-3 flex flex-wrap gap-x-6 gap-y-2 items-center bg-[#080808]">
+          <span className="text-[8px] font-sans uppercase tracking-[0.4em] text-[#2a2a2a] border-r border-[#1a1a1a] pr-5 shrink-0">Tavoli</span>
           {Object.entries(STATUS_COLORS).map(([key, color]) => (
-            <div key={key} className="flex items-center gap-1.5">
-              <span className="w-1.5 h-1.5 rounded-full shrink-0" style={{ background: color }} />
+            <div key={key} className="flex items-center gap-2 shrink-0">
+              <span className="w-2 h-2 shrink-0" style={{ background: color }} />
               <span className="text-[8px] font-sans uppercase tracking-widest text-[#444] capitalize">{key}</span>
             </div>
           ))}

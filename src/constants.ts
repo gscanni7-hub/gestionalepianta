@@ -24,56 +24,56 @@ const NAIF_FLOOR_PLAN: FloorPlan = {
     { id: 'sa_console', label: 'CONSOLE', x: 793, y: 485, width: 115, height: 335 },
   ],
   tables: [
-    // ── Top row ───────────────────────────────────────────
-    { id: 'n1',  name: '1',  x: 228, y:  72, width:  68, height:  68, shape: 'rect', area: 'Main',        capacity: 6, minSpend: 300 },
-    { id: 'n2',  name: '2',  x: 314, y:  72, width:  68, height:  68, shape: 'rect', area: 'Main',        capacity: 6, minSpend: 300 },
-    { id: 'n3',  name: '3',  x: 400, y:  72, width:  68, height:  68, shape: 'rect', area: 'Main',        capacity: 6, minSpend: 300 },
-    { id: 'n4',  name: '4',  x: 498, y:  72, width:  68, height:  68, shape: 'rect', area: 'Main',        capacity: 6, minSpend: 300 },
-    { id: 'n5',  name: '5',  x: 590, y:  52, width:  88, height:  92, shape: 'rect', area: 'VIP',         capacity: 8, minSpend: 500 },
-    { id: 'n6',  name: '6',  x: 700, y:  62, width:  78, height:  75, shape: 'rect', area: 'VIP',         capacity: 8, minSpend: 500 },
-    // ── Right wall — top section ──────────────────────────
-    { id: 'n7',  name: '7',  x: 800, y: 148, width:  82, height:  62, shape: 'rect', area: 'Wall Right',  capacity: 6, minSpend: 400 },
-    { id: 'n8',  name: '8',  x: 800, y: 225, width:  82, height:  62, shape: 'rect', area: 'Wall Right',  capacity: 6, minSpend: 400 },
-    { id: 'n9',  name: '9',  x: 800, y: 303, width:  82, height:  62, shape: 'rect', area: 'Wall Right',  capacity: 6, minSpend: 400 },
-    { id: 'n9a', name: '9A', x: 800, y: 380, width:  82, height:  62, shape: 'rect', area: 'Wall Right',  capacity: 6, minSpend: 400 },
-    { id: 'n9b', name: '9B', x: 800, y: 457, width:  82, height:  62, shape: 'rect', area: 'Wall Right',  capacity: 6, minSpend: 400 },
-    // ── Center cluster 35–38 ─────────────────────────────
-    { id: 'n35', name: '35', x: 343, y: 213, width:  68, height:  68, shape: 'rect', area: 'Center',      capacity: 6, minSpend: 300 },
-    { id: 'n36', name: '36', x: 420, y: 213, width:  68, height:  68, shape: 'rect', area: 'Center',      capacity: 6, minSpend: 300 },
-    { id: 'n37', name: '37', x: 343, y: 292, width:  68, height:  68, shape: 'rect', area: 'Center',      capacity: 6, minSpend: 300 },
-    { id: 'n38', name: '38', x: 420, y: 292, width:  68, height:  68, shape: 'rect', area: 'Center',      capacity: 6, minSpend: 300 },
-    // ── Center upper ─────────────────────────────────────
-    { id: 'n32', name: '32', x: 600, y: 228, width:  88, height:  90, shape: 'rect', area: 'Center VIP',  capacity: 8, minSpend: 500 },
-    { id: 'n42', name: '42', x: 542, y: 340, width:  98, height:  82, shape: 'rect', area: 'Center',      capacity: 8, minSpend: 400 },
-    // ── Left wall — middle ───────────────────────────────
-    { id: 'n22', name: '22', x:  32, y: 548, width:  73, height:  73, shape: 'rect', area: 'Wall Left',   capacity: 6, minSpend: 300 },
-    { id: 'n21', name: '21', x:  32, y: 635, width:  73, height:  73, shape: 'rect', area: 'Wall Left',   capacity: 6, minSpend: 300 },
-    { id: 'n20', name: '20', x:  32, y: 742, width:  73, height:  73, shape: 'rect', area: 'Wall Left',   capacity: 6, minSpend: 300 },
-    // ── Center row A ─────────────────────────────────────
-    { id: 'n23', name: '23', x: 295, y: 655, width:  88, height:  75, shape: 'rect', area: 'Center',      capacity: 6, minSpend: 350 },
-    { id: 'n24', name: '24', x: 390, y: 660, width:  73, height:  73, shape: 'rect', area: 'Center',      capacity: 6, minSpend: 300 },
-    { id: 'n25', name: '25', x: 468, y: 655, width:  88, height:  75, shape: 'rect', area: 'Center',      capacity: 6, minSpend: 350 },
-    // ── Center row B ─────────────────────────────────────
-    { id: 'n26', name: '26', x: 478, y: 758, width:  88, height:  72, shape: 'rect', area: 'Center',      capacity: 6, minSpend: 350 },
-    { id: 'n27', name: '27', x: 573, y: 758, width:  73, height:  72, shape: 'rect', area: 'Center',      capacity: 6, minSpend: 300 },
-    { id: 'n28', name: '28', x: 650, y: 758, width: 100, height:  72, shape: 'rect', area: 'Center',      capacity: 8, minSpend: 400 },
-    // ── Center row C ─────────────────────────────────────
-    { id: 'n29', name: '29', x: 290, y: 843, width:  78, height:  68, shape: 'rect', area: 'Center',      capacity: 6, minSpend: 300 },
-    { id: 'n30', name: '30', x: 375, y: 843, width:  73, height:  68, shape: 'rect', area: 'Center',      capacity: 6, minSpend: 300 },
-    { id: 'n31', name: '31', x: 452, y: 843, width:  78, height:  68, shape: 'rect', area: 'Center',      capacity: 6, minSpend: 300 },
-    // ── Right wall — lower ───────────────────────────────
-    { id: 'n10', name: '10', x: 805, y: 838, width:  78, height:  62, shape: 'rect', area: 'Wall Right',  capacity: 6, minSpend: 400 },
-    { id: 'n11', name: '11', x: 805, y: 928, width:  88, height:  62, shape: 'rect', area: 'Wall Right',  capacity: 6, minSpend: 400 },
-    { id: 'n12', name: '12', x: 805, y:1018, width:  73, height:  65, shape: 'rect', area: 'Wall Right',  capacity: 6, minSpend: 400 },
-    // ── Left wall — lower ────────────────────────────────
-    { id: 'n19', name: '19', x:  32, y: 918, width:  88, height:  62, shape: 'rect', area: 'Wall Left',   capacity: 6, minSpend: 300 },
-    { id: 'n18', name: '18', x:  32, y:1013, width:  68, height:  68, shape: 'rect', area: 'Wall Left',   capacity: 6, minSpend: 300 },
-    // ── Bottom row ───────────────────────────────────────
-    { id: 'n17', name: '17', x:  95, y:1105, width:  93, height:  62, shape: 'rect', area: 'Entrance',    capacity: 6, minSpend: 300 },
-    { id: 'n16', name: '16', x: 268, y:1105, width:  68, height:  62, shape: 'rect', area: 'Entrance',    capacity: 6, minSpend: 300 },
-    { id: 'n15', name: '15', x: 405, y:1105, width:  93, height:  62, shape: 'rect', area: 'Entrance',    capacity: 6, minSpend: 300 },
-    { id: 'n14', name: '14', x: 537, y:1105, width:  93, height:  62, shape: 'rect', area: 'Entrance',    capacity: 6, minSpend: 300 },
-    { id: 'n13', name: '13', x: 670, y:1105, width:  83, height:  62, shape: 'rect', area: 'Entrance',    capacity: 6, minSpend: 300 },
+    // ── Top row (1–6) ─────────────────────────────────────
+    { id: 'n1',  name: '1',  x: 228, y:  72, width: 72, height: 72, shape: 'rect', area: 'Main',       capacity: 6, minSpend: 300 },
+    { id: 'n2',  name: '2',  x: 316, y:  72, width: 72, height: 72, shape: 'rect', area: 'Main',       capacity: 6, minSpend: 300 },
+    { id: 'n3',  name: '3',  x: 404, y:  72, width: 72, height: 72, shape: 'rect', area: 'Main',       capacity: 6, minSpend: 300 },
+    { id: 'n4',  name: '4',  x: 500, y:  72, width: 72, height: 72, shape: 'rect', area: 'Main',       capacity: 6, minSpend: 300 },
+    { id: 'n5',  name: '5',  x: 592, y:  72, width: 72, height: 72, shape: 'rect', area: 'Main',       capacity: 6, minSpend: 300 },
+    { id: 'n6',  name: '6',  x: 704, y:  72, width: 72, height: 72, shape: 'rect', area: 'Main',       capacity: 6, minSpend: 300 },
+    // ── Right wall — top (7, 8, 9, 9A, 9B) ───────────────
+    { id: 'n7',  name: '7',  x: 806, y: 148, width: 72, height: 72, shape: 'rect', area: 'Wall Right', capacity: 6, minSpend: 300 },
+    { id: 'n8',  name: '8',  x: 806, y: 232, width: 72, height: 72, shape: 'rect', area: 'Wall Right', capacity: 6, minSpend: 300 },
+    { id: 'n9',  name: '9',  x: 806, y: 316, width: 72, height: 72, shape: 'rect', area: 'Wall Right', capacity: 6, minSpend: 300 },
+    { id: 'n9a', name: '9A', x: 806, y: 400, width: 72, height: 72, shape: 'rect', area: 'Wall Right', capacity: 6, minSpend: 300 },
+    { id: 'n9b', name: '9B', x: 806, y: 484, width: 72, height: 72, shape: 'rect', area: 'Wall Right', capacity: 6, minSpend: 300 },
+    // ── Center cluster (35, 36, 37, 38) ──────────────────
+    { id: 'n35', name: '35', x: 343, y: 213, width: 72, height: 72, shape: 'rect', area: 'Center',     capacity: 6, minSpend: 300 },
+    { id: 'n36', name: '36', x: 423, y: 213, width: 72, height: 72, shape: 'rect', area: 'Center',     capacity: 6, minSpend: 300 },
+    { id: 'n37', name: '37', x: 343, y: 293, width: 72, height: 72, shape: 'rect', area: 'Center',     capacity: 6, minSpend: 300 },
+    { id: 'n38', name: '38', x: 423, y: 293, width: 72, height: 72, shape: 'rect', area: 'Center',     capacity: 6, minSpend: 300 },
+    // ── Center upper (32, 42) ─────────────────────────────
+    { id: 'n32', name: '32', x: 602, y: 228, width: 72, height: 72, shape: 'rect', area: 'Center',     capacity: 6, minSpend: 300 },
+    { id: 'n42', name: '42', x: 547, y: 340, width: 72, height: 72, shape: 'rect', area: 'Center',     capacity: 6, minSpend: 300 },
+    // ── Left wall — middle (22, 21, 20) ──────────────────
+    { id: 'n22', name: '22', x:  32, y: 548, width: 72, height: 72, shape: 'rect', area: 'Wall Left',  capacity: 6, minSpend: 300 },
+    { id: 'n21', name: '21', x:  32, y: 632, width: 72, height: 72, shape: 'rect', area: 'Wall Left',  capacity: 6, minSpend: 300 },
+    { id: 'n20', name: '20', x:  32, y: 716, width: 72, height: 72, shape: 'rect', area: 'Wall Left',  capacity: 6, minSpend: 300 },
+    // ── Center row A (23, 24, 25) ─────────────────────────
+    { id: 'n23', name: '23', x: 297, y: 658, width: 72, height: 72, shape: 'rect', area: 'Center',     capacity: 6, minSpend: 300 },
+    { id: 'n24', name: '24', x: 390, y: 658, width: 72, height: 72, shape: 'rect', area: 'Center',     capacity: 6, minSpend: 300 },
+    { id: 'n25', name: '25', x: 472, y: 658, width: 72, height: 72, shape: 'rect', area: 'Center',     capacity: 6, minSpend: 300 },
+    // ── Center row B (26, 27, 28) ─────────────────────────
+    { id: 'n26', name: '26', x: 480, y: 758, width: 72, height: 72, shape: 'rect', area: 'Center',     capacity: 6, minSpend: 300 },
+    { id: 'n27', name: '27', x: 572, y: 758, width: 72, height: 72, shape: 'rect', area: 'Center',     capacity: 6, minSpend: 300 },
+    { id: 'n28', name: '28', x: 655, y: 758, width: 72, height: 72, shape: 'rect', area: 'Center',     capacity: 6, minSpend: 300 },
+    // ── Center row C (29, 30, 31) ─────────────────────────
+    { id: 'n29', name: '29', x: 291, y: 845, width: 72, height: 72, shape: 'rect', area: 'Center',     capacity: 6, minSpend: 300 },
+    { id: 'n30', name: '30', x: 375, y: 845, width: 72, height: 72, shape: 'rect', area: 'Center',     capacity: 6, minSpend: 300 },
+    { id: 'n31', name: '31', x: 455, y: 845, width: 72, height: 72, shape: 'rect', area: 'Center',     capacity: 6, minSpend: 300 },
+    // ── Right wall — lower (10, 11, 12) ──────────────────
+    { id: 'n10', name: '10', x: 806, y: 838, width: 72, height: 72, shape: 'rect', area: 'Wall Right', capacity: 6, minSpend: 300 },
+    { id: 'n11', name: '11', x: 806, y: 922, width: 72, height: 72, shape: 'rect', area: 'Wall Right', capacity: 6, minSpend: 300 },
+    { id: 'n12', name: '12', x: 806, y:1006, width: 72, height: 72, shape: 'rect', area: 'Wall Right', capacity: 6, minSpend: 300 },
+    // ── Left wall — lower (19, 18) ────────────────────────
+    { id: 'n19', name: '19', x:  32, y: 920, width: 72, height: 72, shape: 'rect', area: 'Wall Left',  capacity: 6, minSpend: 300 },
+    { id: 'n18', name: '18', x:  32, y:1014, width: 72, height: 72, shape: 'rect', area: 'Wall Left',  capacity: 6, minSpend: 300 },
+    // ── Bottom row (17, 16, 15, 14, 13) ──────────────────
+    { id: 'n17', name: '17', x: 100, y:1108, width: 72, height: 72, shape: 'rect', area: 'Entrance',   capacity: 6, minSpend: 300 },
+    { id: 'n16', name: '16', x: 270, y:1108, width: 72, height: 72, shape: 'rect', area: 'Entrance',   capacity: 6, minSpend: 300 },
+    { id: 'n15', name: '15', x: 412, y:1108, width: 72, height: 72, shape: 'rect', area: 'Entrance',   capacity: 6, minSpend: 300 },
+    { id: 'n14', name: '14', x: 543, y:1108, width: 72, height: 72, shape: 'rect', area: 'Entrance',   capacity: 6, minSpend: 300 },
+    { id: 'n13', name: '13', x: 674, y:1108, width: 72, height: 72, shape: 'rect', area: 'Entrance',   capacity: 6, minSpend: 300 },
   ],
 };
 

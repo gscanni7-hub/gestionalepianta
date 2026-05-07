@@ -1,9 +1,9 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   Calendar, Settings, BarChart3, LogOut, ChevronRight,
   Plus, Download, Filter, Building2, X, ArrowLeft, Menu, Map, Pencil, Trash2
 } from 'lucide-react';
-import { MOCK_ADMIN, MOCK_PR, INITIAL_VENUES, INITIAL_EVENTS, INITIAL_RESERVATIONS } from './constants';
+import { MOCK_USERS, INITIAL_VENUES, INITIAL_EVENTS, INITIAL_RESERVATIONS } from './constants';
 import { UserProfile, Event, Reservation, Venue, FloorPlan } from './types';
 import { motion, AnimatePresence } from 'framer-motion';
 import { cn } from './lib/utils';
@@ -20,7 +20,15 @@ const PAGE = {
 };
 
 export default function App() {
-  const [user, setUser] = useState<UserProfile | null>(null);
+  const [user, setUser] = useState<UserProfile | null>(() => {
+    try {
+      const saved = localStorage.getItem('nightplan_user');
+      return saved ? JSON.parse(saved) : null;
+    } catch { return null; }
+  });
+  const [loginEmail, setLoginEmail] = useState('');
+  const [loginPassword, setLoginPassword] = useState('');
+  const [loginError, setLoginError] = useState('');
   const [view, setView] = useState<AppView>('venues');
   const [venues, setVenues] = useState(INITIAL_VENUES);
   const [events, setEvents] = useState(INITIAL_EVENTS);
@@ -36,11 +44,23 @@ export default function App() {
   const [editingFloorPlanMeta, setEditingFloorPlanMeta] = useState<{ venueId: string; fp: FloorPlan } | null>(null);
   const [editingEvent, setEditingEvent] = useState<Event | null>(null);
 
-  const handleLogin = (role: 'admin' | 'pr') => {
-    setUser(role === 'admin' ? MOCK_ADMIN : MOCK_PR);
-    setView(role === 'admin' ? 'venues' : 'events');
+  const handleLogin = (e: React.FormEvent) => {
+    e.preventDefault();
+    const found = MOCK_USERS.find(
+      u => u.email.toLowerCase() === loginEmail.trim().toLowerCase() && u.password === loginPassword
+    );
+    if (!found) { setLoginError('Email o password non corretti.'); return; }
+    const profile: UserProfile = { id: found.id, email: found.email, role: found.role, displayName: found.displayName };
+    localStorage.setItem('nightplan_user', JSON.stringify(profile));
+    setUser(profile);
+    setView(found.role === 'admin' ? 'venues' : 'events');
+    setLoginError('');
   };
-  const handleLogout = () => { setUser(null); setSelectedVenue(null); setSelectedEvent(null); };
+  const handleLogout = () => {
+    localStorage.removeItem('nightplan_user');
+    setUser(null); setSelectedVenue(null); setSelectedEvent(null);
+    setLoginEmail(''); setLoginPassword(''); setLoginError('');
+  };
 
   const openVenue = (venue: Venue) => { setSelectedVenue(venue); setView('venue-events'); };
   const openEvent = (event: Event) => {
@@ -131,29 +151,50 @@ export default function App() {
           <div className="w-full max-w-xs">
             <div className="mb-10">
               <h2 className="hv font-black text-2xl uppercase text-white">Accedi</h2>
-              <p className="text-[#333] text-[10px] font-sans uppercase tracking-widest mt-2">Seleziona profilo</p>
+              <p className="text-[#333] text-[10px] font-sans uppercase tracking-widest mt-2">Inserisci le tue credenziali</p>
             </div>
 
-            <div className="space-y-3">
-              <motion.button
-                whileHover={{ scale: 1.01 }} whileTap={{ scale: 0.99 }}
-                onClick={() => handleLogin('admin')}
-                className="group w-full bg-accent text-black py-[18px] text-[10px] hv font-black uppercase tracking-[0.3em] flex items-center justify-between px-6 hover:bg-white transition-colors"
-              >
-                <span>Proprietario</span>
-                <ChevronRight size={14} className="group-hover:translate-x-1 transition-transform" />
-              </motion.button>
-              <motion.button
-                whileHover={{ scale: 1.01 }} whileTap={{ scale: 0.99 }}
-                onClick={() => handleLogin('pr')}
-                className="group w-full bg-transparent text-white py-[18px] text-[10px] hv font-black uppercase tracking-[0.3em] flex items-center justify-between px-6 border border-[#222] hover:border-accent hover:text-accent transition-all"
-              >
-                <span>Staff PR</span>
-                <ChevronRight size={14} className="group-hover:translate-x-1 transition-transform" />
-              </motion.button>
-            </div>
+            <form onSubmit={handleLogin} className="space-y-3">
+              <div className="space-y-1">
+                <label className="text-[9px] hv font-black uppercase tracking-[0.2em] text-[#444]">Email</label>
+                <input
+                  type="email"
+                  autoComplete="email"
+                  required
+                  value={loginEmail}
+                  onChange={e => { setLoginEmail(e.target.value); setLoginError(''); }}
+                  placeholder="tua@email.it"
+                  className="w-full bg-[#0a0a0a] border border-[#1a1a1a] px-5 py-4 text-sm text-white placeholder-[#2a2a2a] outline-none focus:border-accent/40 transition-colors font-sans"
+                />
+              </div>
+              <div className="space-y-1">
+                <label className="text-[9px] hv font-black uppercase tracking-[0.2em] text-[#444]">Password</label>
+                <input
+                  type="password"
+                  autoComplete="current-password"
+                  required
+                  value={loginPassword}
+                  onChange={e => { setLoginPassword(e.target.value); setLoginError(''); }}
+                  placeholder="••••••••"
+                  className="w-full bg-[#0a0a0a] border border-[#1a1a1a] px-5 py-4 text-sm text-white placeholder-[#2a2a2a] outline-none focus:border-accent/40 transition-colors font-sans"
+                />
+              </div>
 
-            <p className="text-[#222] text-[9px] font-sans uppercase tracking-widest mt-12 text-center">
+              {loginError && (
+                <p className="text-red-500/80 text-[10px] font-sans uppercase tracking-widest pt-1">{loginError}</p>
+              )}
+
+              <motion.button
+                type="submit"
+                whileHover={{ scale: 1.01 }} whileTap={{ scale: 0.99 }}
+                className="group w-full bg-accent text-black py-[18px] text-[10px] hv font-black uppercase tracking-[0.3em] flex items-center justify-between px-6 hover:bg-white transition-colors mt-2"
+              >
+                <span>Accedi</span>
+                <ChevronRight size={14} className="group-hover:translate-x-1 transition-transform" />
+              </motion.button>
+            </form>
+
+            <p className="text-[#1e1e1e] text-[9px] font-sans uppercase tracking-widest mt-12 text-center">
               Un'esperienza esclusiva per i club più prestigiosi
             </p>
           </div>

@@ -1,15 +1,29 @@
 import { Event, FloorPlan, Reservation, UserProfile, Venue } from './types';
 
+interface MockCredential {
+  id: string;
+  email: string;
+  password: string;
+  role: 'admin' | 'pr';
+  displayName: string;
+}
+
+export const MOCK_USERS: MockCredential[] = [
+  { id: 'admin_1', email: 'luca@nightplan.it',  password: 'admin2025', role: 'admin', displayName: 'Luca Admin' },
+  { id: 'pr_1',    email: 'marco@nightplan.it', password: 'marco123',  role: 'pr',    displayName: 'Marco PR'   },
+  { id: 'pr_2',    email: 'sofia@nightplan.it', password: 'sofia123',  role: 'pr',    displayName: 'Sofia Bianchi' },
+];
+
 export const MOCK_PR: UserProfile = {
   id: 'pr_1',
-  email: 'pr@nightplan.com',
+  email: 'marco@nightplan.it',
   role: 'pr',
   displayName: 'Marco PR',
 };
 
 export const MOCK_ADMIN: UserProfile = {
   id: 'admin_1',
-  email: 'admin@nightplan.com',
+  email: 'luca@nightplan.it',
   role: 'admin',
   displayName: 'Luca Admin',
 };

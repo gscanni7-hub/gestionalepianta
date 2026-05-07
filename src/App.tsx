@@ -923,7 +923,7 @@ function NewClubModal({ onClose, onSubmit }: {
             </button>
             <button type="submit"
               className="flex-1 py-3.5 text-[9px] hv font-black uppercase tracking-widest bg-accent text-black hover:bg-white transition-colors">
-              Avanti → Crea Piantina
+              Avanti
             </button>
           </div>
         </form>

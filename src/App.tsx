@@ -966,7 +966,7 @@ function NewEventModal({ venue, floorPlans, onClose, onSubmit, initialData }: {
   const isEdit = !!initialData;
   const [form, setForm] = useState({
     name: initialData?.name ?? '',
-    date: initialData?.date ?? '',
+    date: initialData?.date ?? '2026-01-01',
     description: initialData?.description ?? '',
     floorPlanId: initialData?.floorPlanId ?? floorPlans[0]?.id ?? '',
   });
@@ -999,7 +999,7 @@ function NewEventModal({ venue, floorPlans, onClose, onSubmit, initialData }: {
               value={form.name} onChange={e => setForm({ ...form, name: e.target.value })} />
           </Field>
           <Field label="Data">
-            <input required type="date"
+            <input required type="date" min="2026-01-01"
               className="w-full bg-bg border border-[#1a1a1a] px-4 py-3 text-xs font-sans text-white outline-none transition-colors [color-scheme:dark]"
               value={form.date} onChange={e => setForm({ ...form, date: e.target.value })} />
           </Field>

@@ -409,8 +409,9 @@ function BookingModal({ table, initialReservation, onClose, onSubmit }: {
                 }} />
             </BField>
             <BField label="Budget €">
-              <input type="number" className={cn(inp, 'text-accent')}
-                value={form.budget} onChange={e => setForm({ ...form, budget: +e.target.value })} />
+              <div className={cn(inp, 'text-accent hv font-black select-none cursor-default')}>
+                €{form.budget}
+              </div>
             </BField>
           </div>
 

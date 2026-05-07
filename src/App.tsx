@@ -341,6 +341,8 @@ export default function App() {
                     event={selectedEvent} floorPlan={fp}
                     reservations={reservations} currentUser={user}
                     onReservationAdded={(res) => setReservations(prev => [...prev, res])}
+                    onReservationUpdated={(res) => setReservations(prev => prev.map(r => r.id === res.id ? res : r))}
+                    onReservationRemoved={(id) => setReservations(prev => prev.filter(r => r.id !== id))}
                   />
                 </motion.div>
               );

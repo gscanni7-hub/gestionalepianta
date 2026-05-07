@@ -263,17 +263,9 @@ export default function App() {
             {/* Venue events */}
             {view === 'venue-events' && selectedVenue && (
               <motion.div key="venue-events" {...PAGE}>
-                <div className="mb-8 flex items-end justify-between gap-4">
-                  <div>
-                    <p className="text-[9px] font-sans uppercase tracking-[0.4em] text-[#333] mb-1">Venue</p>
-                    <h2 className="hv font-black text-4xl uppercase text-white">{selectedVenue.name}</h2>
-                  </div>
-                  {user.role === 'admin' && (
-                    <button onClick={() => setShowNewEventModal(true)}
-                      className="flex items-center gap-2 bg-accent text-black px-4 py-2.5 text-[9px] hv font-black uppercase tracking-widest hover:bg-white transition-colors shrink-0">
-                      <Plus size={12} /> Nuovo Evento
-                    </button>
-                  )}
+                <div className="mb-8">
+                  <p className="text-[9px] font-sans uppercase tracking-[0.4em] text-[#333] mb-1">Venue</p>
+                  <h2 className="hv font-black text-4xl uppercase text-white">{selectedVenue.name}</h2>
                 </div>
                 {venueEvents.length === 0 ? (
                   <EmptyState icon={<Calendar size={28} />} label="Nessun evento ancora.">
@@ -283,20 +275,30 @@ export default function App() {
                     </button>
                   </EmptyState>
                 ) : (
-                  <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-4">
-                    {venueEvents.map((event, i) => (
-                      <motion.div key={event.id}
-                        initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }}
-                        transition={{ delay: i * 0.06 }}>
-                        <EventCard
-                          event={event}
-                          onClick={() => openEvent(event)}
-                          onEdit={(e) => { e.stopPropagation(); setEditingEvent(event); }}
-                          onDelete={(e) => { e.stopPropagation(); setEvents(prev => prev.filter(ev => ev.id !== event.id)); }}
-                        />
-                      </motion.div>
-                    ))}
-                  </div>
+                  <>
+                    <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-4">
+                      {venueEvents.map((event, i) => (
+                        <motion.div key={event.id}
+                          initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }}
+                          transition={{ delay: i * 0.06 }}>
+                          <EventCard
+                            event={event}
+                            onClick={() => openEvent(event)}
+                            onEdit={(e) => { e.stopPropagation(); setEditingEvent(event); }}
+                            onDelete={(e) => { e.stopPropagation(); setEvents(prev => prev.filter(ev => ev.id !== event.id)); }}
+                          />
+                        </motion.div>
+                      ))}
+                    </div>
+                    {user.role === 'admin' && (
+                      <div className="mt-6 flex justify-center">
+                        <button onClick={() => setShowNewEventModal(true)}
+                          className="flex items-center gap-2 border border-[#1a1a1a] text-[#333] px-6 py-3 text-[9px] hv font-black uppercase tracking-widest hover:border-accent hover:text-accent transition-all">
+                          <Plus size={11} /> Nuovo Evento
+                        </button>
+                      </div>
+                    )}
+                  </>
                 )}
               </motion.div>
             )}

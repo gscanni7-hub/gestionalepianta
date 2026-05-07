@@ -684,7 +684,7 @@ function SidebarContent({ user, view, onNav, onLogout, occupancyPct = 0, revenue
           </>
         ) : (
           <>
-            <NavLink icon={<Calendar size={14}/>} label="Prossimi eventi"
+            <NavLink icon={<Calendar size={14}/>} label="Eventi"
               active={view==='events'||view==='plan'}
               onClick={() => onNav('events')} />
             <NavLink icon={<BarChart3 size={14}/>} label="Prenotazioni"

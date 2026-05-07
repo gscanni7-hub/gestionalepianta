@@ -6,8 +6,8 @@
   --font-mono: 'Roboto Mono', ui-monospace, monospace;
 
   --color-bg:           #000000;
-  --color-card:         #0d0d0d;
-  --color-border:       #1a1a1a;
+  --color-card:         #111111;
+  --color-border:       #2a2a2a;
   --color-accent:       #F0E800;
   --color-accent-muted: rgba(240, 232, 0, 0.07);
 }
@@ -53,8 +53,8 @@ body {
 /* ── Scrollbar ───────────────────────────────────────────── */
 ::-webkit-scrollbar            { width: 3px; }
 ::-webkit-scrollbar-track      { background: transparent; }
-::-webkit-scrollbar-thumb      { background: #1e1e1e; border-radius: 0; }
-::-webkit-scrollbar-thumb:hover{ background: #2e2e2e; }
+::-webkit-scrollbar-thumb      { background: #333; border-radius: 0; }
+::-webkit-scrollbar-thumb:hover{ background: #555; }
 
 /* ── Selection ───────────────────────────────────────────── */
 ::selection { background: #F0E800; color: #000; }

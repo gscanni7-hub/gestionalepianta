@@ -85,7 +85,7 @@ export default function FloorPlanEditor({ floorPlan, onSave }: FloorPlanEditorPr
         <div className="flex items-center justify-between gap-4">
           <div className="flex items-center gap-2 flex-1 min-w-0">
             <input
-              className="flex-1 min-w-0 bg-transparent border border-[#1a1a1a] px-4 py-3 text-xs hv font-black uppercase tracking-widest text-white placeholder-[#333] outline-none focus:border-accent/40 transition-colors"
+              className="flex-1 min-w-0 bg-transparent border border-[#2a2a2a] px-4 py-3 text-xs hv font-black uppercase tracking-widest text-white placeholder-[#555] outline-none focus:border-accent/40 transition-colors"
               placeholder="NOME PIANTA"
               value={fpName}
               onChange={e => setFpName(e.target.value)}

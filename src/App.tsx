@@ -314,14 +314,7 @@ export default function App() {
                       </datalist>
                     </div>
                     <div className="space-y-1">
-                      <div className="flex items-center justify-between">
-                        <label className="text-[9px] hv font-black uppercase tracking-[0.2em] text-[#444]">Password</label>
-                        <button type="button"
-                          onClick={() => { setAuthScreen('forgot'); setForgotError(''); setForgotSent(false); setForgotDevLink(''); }}
-                          className="text-[9px] font-sans text-[#666] hover:text-accent transition-colors underline">
-                          Password dimenticata?
-                        </button>
-                      </div>
+                      <label className="text-[9px] hv font-black uppercase tracking-[0.2em] text-[#444]">Password</label>
                       <input type="password" autoComplete="current-password" required value={loginPassword}
                         onChange={e => { setLoginPassword(e.target.value); setLoginError(''); }}
                         placeholder="••••••••"
@@ -333,6 +326,13 @@ export default function App() {
                       <span>Accedi</span>
                       <ChevronRight size={14} className="group-hover:translate-x-1 transition-transform" />
                     </motion.button>
+                    <div className="text-center pt-1">
+                      <button type="button"
+                        onClick={() => { setAuthScreen('forgot'); setForgotError(''); setForgotSent(false); setForgotDevLink(''); }}
+                        className="text-[9px] font-sans text-[#666] hover:text-accent transition-colors underline">
+                        Password dimenticata?
+                      </button>
+                    </div>
                   </form>
 
                   <div className="mt-10 pt-8 border-t border-[#1e1e1e]">

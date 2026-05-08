@@ -572,8 +572,17 @@ export default function App() {
                       <label className="text-[9px] hv font-black uppercase tracking-[0.2em] text-[#444]">Email</label>
                       <input
                         type="email" required value={regEmail}
-                        onChange={e => { setRegEmail(e.target.value); setRegEmailError(''); setRegError(''); }}
-                        onBlur={() => setRegEmailError(validateEmail(regEmail))}
+                        onChange={e => {
+                          const val = e.target.value;
+                          setRegEmail(val);
+                          setRegError('');
+                          const [, domainPart] = val.split('@');
+                          if (domainPart && domainPart.includes('.'))
+                            setRegEmailError(validateEmail(val));
+                          else
+                            setRegEmailError('');
+                        }}
+                        onBlur={() => { if (regEmail) setRegEmailError(validateEmail(regEmail)); }}
                         placeholder="tua@email.it"
                         className={`w-full bg-[#0a0a0a] border px-5 py-4 text-sm text-white placeholder-[#444] outline-none transition-colors font-sans ${regEmailError ? 'border-red-500/60' : 'border-[#2a2a2a] focus:border-accent/40'}`}
                       />
@@ -583,8 +592,17 @@ export default function App() {
                       <label className="text-[9px] hv font-black uppercase tracking-[0.2em] text-[#444]">Telefono</label>
                       <input
                         type="tel" required value={regPhone}
-                        onChange={e => { setRegPhone(e.target.value); setRegPhoneError(''); setRegError(''); }}
-                        onBlur={() => setRegPhoneError(validatePhone(regPhone))}
+                        onChange={e => {
+                          const val = e.target.value;
+                          setRegPhone(val);
+                          setRegError('');
+                          const digits = val.replace(/\D/g, '');
+                          if (digits.length >= 9)
+                            setRegPhoneError(validatePhone(val));
+                          else
+                            setRegPhoneError('');
+                        }}
+                        onBlur={() => { if (regPhone) setRegPhoneError(validatePhone(regPhone)); }}
                         placeholder="+39 333 000 0000"
                         className={`w-full bg-[#0a0a0a] border px-5 py-4 text-sm text-white placeholder-[#444] outline-none transition-colors font-sans ${regPhoneError ? 'border-red-500/60' : 'border-[#2a2a2a] focus:border-accent/40'}`}
                       />

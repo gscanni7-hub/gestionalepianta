@@ -328,8 +328,11 @@ export default function App() {
                     </motion.button>
                   </form>
 
-                  <button type="button" onClick={() => { setAuthScreen('forgot'); setForgotError(''); setForgotSent(false); setForgotDevLink(''); }}
-                    className="w-full text-center text-[11px] font-sans text-white underline hover:text-accent transition-colors mt-4 py-2">
+                  <button
+                    type="button"
+                    onClick={() => { setAuthScreen('forgot'); setForgotError(''); setForgotSent(false); setForgotDevLink(''); }}
+                    style={{ display: 'block', width: '100%', textAlign: 'center', color: '#ffffff', textDecoration: 'underline', fontSize: 12, marginTop: 14, padding: '6px 0', background: 'none', border: 'none' }}
+                  >
                     Password dimenticata?
                   </button>
 

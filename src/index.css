@@ -5,11 +5,11 @@
   --font-sans: 'Roboto', ui-sans-serif, system-ui, sans-serif;
   --font-mono: 'Roboto Mono', ui-monospace, monospace;
 
-  --color-bg:           #000000;
-  --color-card:         #111111;
-  --color-border:       #2a2a2a;
-  --color-accent:       #F0E800;
-  --color-accent-muted: rgba(240, 232, 0, 0.07);
+  --color-bg:           #1A1A1A;
+  --color-card:         #252525;
+  --color-border:       #383838;
+  --color-accent:       #D4622A;
+  --color-accent-muted: rgba(212, 98, 42, 0.08);
 }
 
 /* ── Global ──────────────────────────────────────────────── */
@@ -39,20 +39,20 @@ body {
 
 /* ── Accent glow ─────────────────────────────────────────── */
 .glow {
-  box-shadow: 0 0 32px rgba(240, 232, 0, 0.12);
+  box-shadow: 0 0 32px rgba(212, 98, 42, 0.18);
 }
 .glow-text {
-  text-shadow: 0 0 24px rgba(240, 232, 0, 0.35);
+  text-shadow: 0 0 24px rgba(212, 98, 42, 0.45);
 }
 .glow-sm {
-  box-shadow: 0 0 16px rgba(240, 232, 0, 0.07);
+  box-shadow: 0 0 16px rgba(212, 98, 42, 0.10);
 }
 .card-hover {
   transition: border-color 0.25s ease, box-shadow 0.25s ease;
 }
 .card-hover:hover {
-  border-color: rgba(240, 232, 0, 0.22);
-  box-shadow: 0 0 28px rgba(240, 232, 0, 0.06);
+  border-color: rgba(212, 98, 42, 0.30);
+  box-shadow: 0 0 28px rgba(212, 98, 42, 0.08);
 }
 
 /* ── Animated status dot ─────────────────────────────────── */
@@ -71,21 +71,21 @@ body {
 /* ── Scrollbar ───────────────────────────────────────────── */
 ::-webkit-scrollbar            { width: 3px; }
 ::-webkit-scrollbar-track      { background: transparent; }
-::-webkit-scrollbar-thumb      { background: #333; border-radius: 0; }
-::-webkit-scrollbar-thumb:hover{ background: #555; }
+::-webkit-scrollbar-thumb      { background: #444; border-radius: 0; }
+::-webkit-scrollbar-thumb:hover{ background: #666; }
 
 /* ── Selection ───────────────────────────────────────────── */
-::selection { background: #F0E800; color: #000; }
+::selection { background: #D4622A; color: #fff; }
 
 /* ── Focus ring globale ──────────────────────────────────── */
 input:focus-visible,
 textarea:focus-visible {
-  outline: 1px solid #F0E800;
+  outline: 1px solid #D4622A;
   outline-offset: 0px;
 }
 button:focus-visible,
 a:focus-visible {
-  outline: 1px solid rgba(240, 232, 0, 0.6);
+  outline: 1px solid rgba(212, 98, 42, 0.7);
   outline-offset: 2px;
 }
 

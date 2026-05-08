@@ -351,10 +351,10 @@ export default function App() {
         <motion.div
           initial={{ opacity: 0, x: -40 }} animate={{ opacity: 1, x: 0 }}
           transition={{ duration: 0.6, ease: 'easeOut' }}
-          className="hidden lg:flex flex-col justify-between p-14 xl:p-20 border-r border-[#1e1e1e] lg:w-[55%] relative overflow-hidden"
+          className="hidden lg:flex flex-col justify-between p-14 xl:p-20 border-r border-[#2e2e2e] lg:w-[55%] relative overflow-hidden"
         >
           <div className="absolute inset-0 floorplan-grid opacity-40 pointer-events-none" />
-          <span className="relative text-[10px] font-sans font-medium uppercase tracking-[0.5em] text-[#777]">
+          <span className="relative text-[10px] font-sans font-medium uppercase tracking-[0.5em] text-[#999]">
             Table Management Platform
           </span>
           <div className="relative">
@@ -364,12 +364,12 @@ export default function App() {
             </h1>
             <div className="mt-8 flex items-center gap-4">
               <div className="h-px w-10 bg-accent shrink-0" />
-              <p className="text-[#777] text-sm font-sans leading-relaxed">
+              <p className="text-[#999] text-sm font-sans leading-relaxed">
                 The operating system<br />for nightlife professionals.
               </p>
             </div>
           </div>
-          <span className="relative text-[9px] font-sans text-[#222] uppercase tracking-[0.4em]">
+          <span className="relative text-[9px] font-sans text-[#555] uppercase tracking-[0.4em]">
             © 2025 Nightplan Management Suite
           </span>
         </motion.div>
@@ -383,7 +383,7 @@ export default function App() {
           {/* Mobile logo */}
           <div className="lg:hidden mb-14 text-center">
             <h1 className="hv font-black text-5xl uppercase tracking-tight text-white">NIGHTPLAN</h1>
-            <p className="text-[#777] text-[10px] font-sans uppercase tracking-[0.4em] mt-2">Management Suite</p>
+            <p className="text-[#999] text-[10px] font-sans uppercase tracking-[0.4em] mt-2">Management Suite</p>
           </div>
 
           <div className="w-full max-w-xs">
@@ -392,12 +392,12 @@ export default function App() {
                 <motion.div key="login" initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -8 }} transition={{ duration: 0.18 }}>
                   <div className="mb-10">
                     <h2 className="hv font-black text-2xl uppercase text-white">Accedi</h2>
-                    <p className="text-[#777] text-[10px] font-sans uppercase tracking-widest mt-2">Inserisci le tue credenziali</p>
+                    <p className="text-[#999] text-[10px] font-sans uppercase tracking-widest mt-2">Inserisci le tue credenziali</p>
                   </div>
 
                   <form onSubmit={handleLogin} className="space-y-3">
                     <div className="space-y-1">
-                      <label className="text-[9px] hv font-black uppercase tracking-[0.2em] text-[#444]">Email</label>
+                      <label className="text-[9px] hv font-black uppercase tracking-[0.2em] text-[#666]">Email</label>
                       <input
                         type="email"
                         list="nightplan-accounts"
@@ -411,22 +411,22 @@ export default function App() {
                           if (match) setLoginPassword(match.password);
                         }}
                         placeholder="tua@email.it"
-                        className="w-full bg-[#0a0a0a] border border-[#2a2a2a] px-5 py-4 text-sm text-white placeholder-[#444] outline-none focus:border-accent/40 transition-colors font-sans"
+                        className="w-full bg-[#141414] border border-[#383838] px-5 py-4 text-sm text-white placeholder-[#444] outline-none focus:border-accent/40 transition-colors font-sans"
                       />
                       <datalist id="nightplan-accounts">
                         {SAVED_ACCOUNTS.map(a => <option key={a.email} value={a.email}>{a.label}</option>)}
                       </datalist>
                     </div>
                     <div className="space-y-1">
-                      <label className="text-[9px] hv font-black uppercase tracking-[0.2em] text-[#444]">Password</label>
+                      <label className="text-[9px] hv font-black uppercase tracking-[0.2em] text-[#666]">Password</label>
                       <input type="password" autoComplete="current-password" required value={loginPassword}
                         onChange={e => { setLoginPassword(e.target.value); setLoginError(''); }}
                         placeholder="••••••••"
-                        className="w-full bg-[#0a0a0a] border border-[#2a2a2a] px-5 py-4 text-sm text-white placeholder-[#444] outline-none focus:border-accent/40 transition-colors font-sans" />
+                        className="w-full bg-[#141414] border border-[#383838] px-5 py-4 text-sm text-white placeholder-[#444] outline-none focus:border-accent/40 transition-colors font-sans" />
                     </div>
                     {loginError && <p className="text-red-500/80 text-[10px] font-sans uppercase tracking-widest pt-1">{loginError}</p>}
                     <motion.button type="submit" whileHover={{ scale: 1.01 }} whileTap={{ scale: 0.99 }}
-                      className="group w-full bg-accent text-black py-[18px] text-[10px] hv font-black uppercase tracking-[0.3em] flex items-center justify-between px-6 hover:bg-white transition-all duration-200 mt-2 hover:shadow-[0_0_24px_rgba(240,232,0,0.3)] glow-sm">
+                      className="group w-full bg-accent text-black py-[18px] text-[10px] hv font-black uppercase tracking-[0.3em] flex items-center justify-between px-6 hover:bg-white transition-all duration-200 mt-2 hover:shadow-[0_0_24px_rgba(212,98,42,0.40)] glow-sm">
                       <span>Accedi</span>
                       <ChevronRight size={14} className="group-hover:translate-x-1 transition-transform" />
                     </motion.button>
@@ -439,10 +439,10 @@ export default function App() {
                     </div>
                   </form>
 
-                  <div className="mt-10 pt-8 border-t border-[#1e1e1e]">
-                    <p className="text-[9px] font-sans text-[#444] uppercase tracking-widest text-center mb-4">Sei un PR?</p>
+                  <div className="mt-10 pt-8 border-t border-[#2e2e2e]">
+                    <p className="text-[9px] font-sans text-[#666] uppercase tracking-widest text-center mb-4">Sei un PR?</p>
                     <button onClick={() => { setAuthScreen('register'); setRegError(''); setRegDone(false); }}
-                      className="w-full py-3.5 text-[9px] hv font-black uppercase tracking-[0.2em] border border-[#2a2a2a] text-[#666] hover:border-accent/40 hover:text-accent transition-colors">
+                      className="w-full py-3.5 text-[9px] hv font-black uppercase tracking-[0.2em] border border-[#383838] text-[#888] hover:border-accent/40 hover:text-accent transition-colors">
                       Registrati
                     </button>
                   </div>
@@ -455,19 +455,19 @@ export default function App() {
                         <UserCheck size={24} className="text-accent" />
                       </div>
                       <h2 className="hv font-black text-xl uppercase text-white mb-3">Email Inviata</h2>
-                      <p className="text-[#777] text-[10px] font-sans uppercase tracking-widest leading-loose">
+                      <p className="text-[#999] text-[10px] font-sans uppercase tracking-widest leading-loose">
                         Controlla la tua casella di posta<br />e clicca il link per reimpostare<br />la password.
                       </p>
                       {forgotDevLink && (
-                        <div className="mt-6 p-4 bg-[#0a0a0a] border border-[#2a2a2a] text-left">
-                          <p className="text-[8px] font-sans uppercase tracking-widest text-[#555] mb-2">Link di reset (dev mode)</p>
+                        <div className="mt-6 p-4 bg-[#141414] border border-[#383838] text-left">
+                          <p className="text-[8px] font-sans uppercase tracking-widest text-[#777] mb-2">Link di reset (dev mode)</p>
                           <a href={forgotDevLink} className="text-accent text-[10px] font-mono break-all hover:underline">
                             Clicca qui per reimpostare
                           </a>
                         </div>
                       )}
                       <button onClick={() => { setAuthScreen('login'); setForgotSent(false); setForgotEmail(''); }}
-                        className="mt-8 w-full py-3.5 text-[9px] hv font-black uppercase tracking-[0.2em] border border-[#2a2a2a] text-[#666] hover:border-accent/40 hover:text-accent transition-colors">
+                        className="mt-8 w-full py-3.5 text-[9px] hv font-black uppercase tracking-[0.2em] border border-[#383838] text-[#888] hover:border-accent/40 hover:text-accent transition-colors">
                         Torna al Login
                       </button>
                     </div>
@@ -475,26 +475,26 @@ export default function App() {
                     <>
                       <div className="mb-10">
                         <h2 className="hv font-black text-2xl uppercase text-white">Password Dimenticata</h2>
-                        <p className="text-[#777] text-[10px] font-sans uppercase tracking-widest mt-2">Inserisci la tua email</p>
+                        <p className="text-[#999] text-[10px] font-sans uppercase tracking-widest mt-2">Inserisci la tua email</p>
                       </div>
                       <form onSubmit={handleForgotPassword} className="space-y-3">
                         <div className="space-y-1">
-                          <label className="text-[9px] hv font-black uppercase tracking-[0.2em] text-[#444]">Email</label>
+                          <label className="text-[9px] hv font-black uppercase tracking-[0.2em] text-[#666]">Email</label>
                           <input type="email" required value={forgotEmail}
                             onChange={e => { setForgotEmail(e.target.value); setForgotError(''); }}
                             placeholder="tua@email.it"
-                            className="w-full bg-[#0a0a0a] border border-[#2a2a2a] px-5 py-4 text-sm text-white placeholder-[#444] outline-none focus:border-accent/40 transition-colors font-sans" />
+                            className="w-full bg-[#141414] border border-[#383838] px-5 py-4 text-sm text-white placeholder-[#444] outline-none focus:border-accent/40 transition-colors font-sans" />
                         </div>
                         {forgotError && <p className="text-red-500/80 text-[10px] font-sans uppercase tracking-widest pt-1">{forgotError}</p>}
                         <motion.button type="submit" whileHover={{ scale: 1.01 }} whileTap={{ scale: 0.99 }}
-                          className="group w-full bg-accent text-black py-[18px] text-[10px] hv font-black uppercase tracking-[0.3em] flex items-center justify-between px-6 hover:bg-white transition-all duration-200 mt-2 hover:shadow-[0_0_24px_rgba(240,232,0,0.3)] glow-sm">
+                          className="group w-full bg-accent text-black py-[18px] text-[10px] hv font-black uppercase tracking-[0.3em] flex items-center justify-between px-6 hover:bg-white transition-all duration-200 mt-2 hover:shadow-[0_0_24px_rgba(212,98,42,0.40)] glow-sm">
                           <span>Invia Link</span>
                           <ChevronRight size={14} className="group-hover:translate-x-1 transition-transform" />
                         </motion.button>
                       </form>
-                      <div className="mt-8 pt-6 border-t border-[#1e1e1e]">
+                      <div className="mt-8 pt-6 border-t border-[#2e2e2e]">
                         <button onClick={() => setAuthScreen('login')}
-                          className="w-full text-[9px] hv font-black uppercase tracking-[0.2em] text-[#444] hover:text-[#777] transition-colors py-2">
+                          className="w-full text-[9px] hv font-black uppercase tracking-[0.2em] text-[#666] hover:text-[#999] transition-colors py-2">
                           ← Torna al Login
                         </button>
                       </div>
@@ -509,7 +509,7 @@ export default function App() {
                         <UserCheck size={24} className="text-accent" />
                       </div>
                       <h2 className="hv font-black text-xl uppercase text-white mb-3">Password Aggiornata</h2>
-                      <p className="text-[#777] text-[10px] font-sans uppercase tracking-widest leading-loose">
+                      <p className="text-[#999] text-[10px] font-sans uppercase tracking-widest leading-loose">
                         La tua password è stata<br />reimpostata con successo.
                       </p>
                       <button onClick={() => { setAuthScreen('login'); setResetDone(false); setNewPassword(''); }}
@@ -521,19 +521,19 @@ export default function App() {
                     <>
                       <div className="mb-10">
                         <h2 className="hv font-black text-2xl uppercase text-white">Nuova Password</h2>
-                        <p className="text-[#777] text-[10px] font-sans uppercase tracking-widest mt-2">{resetEmailState}</p>
+                        <p className="text-[#999] text-[10px] font-sans uppercase tracking-widest mt-2">{resetEmailState}</p>
                       </div>
                       <form onSubmit={handleResetPassword} className="space-y-3">
                         <div className="space-y-1">
-                          <label className="text-[9px] hv font-black uppercase tracking-[0.2em] text-[#444]">Nuova Password</label>
+                          <label className="text-[9px] hv font-black uppercase tracking-[0.2em] text-[#666]">Nuova Password</label>
                           <input type="password" required minLength={4} value={newPassword}
                             onChange={e => { setNewPassword(e.target.value); setResetError(''); }}
                             placeholder="••••••••"
-                            className="w-full bg-[#0a0a0a] border border-[#2a2a2a] px-5 py-4 text-sm text-white placeholder-[#444] outline-none focus:border-accent/40 transition-colors font-sans" />
+                            className="w-full bg-[#141414] border border-[#383838] px-5 py-4 text-sm text-white placeholder-[#444] outline-none focus:border-accent/40 transition-colors font-sans" />
                         </div>
                         {resetError && <p className="text-red-500/80 text-[10px] font-sans uppercase tracking-widest pt-1">{resetError}</p>}
                         <motion.button type="submit" whileHover={{ scale: 1.01 }} whileTap={{ scale: 0.99 }}
-                          className="group w-full bg-accent text-black py-[18px] text-[10px] hv font-black uppercase tracking-[0.3em] flex items-center justify-between px-6 hover:bg-white transition-all duration-200 mt-2 hover:shadow-[0_0_24px_rgba(240,232,0,0.3)] glow-sm">
+                          className="group w-full bg-accent text-black py-[18px] text-[10px] hv font-black uppercase tracking-[0.3em] flex items-center justify-between px-6 hover:bg-white transition-all duration-200 mt-2 hover:shadow-[0_0_24px_rgba(212,98,42,0.40)] glow-sm">
                           <span>Reimposta Password</span>
                           <ChevronRight size={14} className="group-hover:translate-x-1 transition-transform" />
                         </motion.button>
@@ -548,11 +548,11 @@ export default function App() {
                     <UserCheck size={24} className="text-accent" />
                   </div>
                   <h2 className="hv font-black text-xl uppercase text-white mb-3">Richiesta Inviata</h2>
-                  <p className="text-[#777] text-[10px] font-sans uppercase tracking-widest leading-loose">
+                  <p className="text-[#999] text-[10px] font-sans uppercase tracking-widest leading-loose">
                     Il tuo account è in attesa<br />di approvazione admin.
                   </p>
                   <button onClick={() => { setAuthScreen('login'); setRegDone(false); setRegName(''); setRegEmail(''); setRegPassword(''); }}
-                    className="mt-8 w-full py-3.5 text-[9px] hv font-black uppercase tracking-[0.2em] border border-[#2a2a2a] text-[#666] hover:border-accent/40 hover:text-accent transition-colors">
+                    className="mt-8 w-full py-3.5 text-[9px] hv font-black uppercase tracking-[0.2em] border border-[#383838] text-[#888] hover:border-accent/40 hover:text-accent transition-colors">
                     Torna al Login
                   </button>
                 </motion.div>
@@ -560,26 +560,26 @@ export default function App() {
                 <motion.div key="register" initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -8 }} transition={{ duration: 0.18 }}>
                   <div className="mb-10">
                     <h2 className="hv font-black text-2xl uppercase text-white">Registrati</h2>
-                    <p className="text-[#777] text-[10px] font-sans uppercase tracking-widest mt-2">Crea il tuo account PR</p>
+                    <p className="text-[#999] text-[10px] font-sans uppercase tracking-widest mt-2">Crea il tuo account PR</p>
                   </div>
 
                   <form onSubmit={handleRegister} className="space-y-3">
                     <div className="grid grid-cols-2 gap-3">
                       <div className="space-y-1">
-                        <label className="text-[9px] hv font-black uppercase tracking-[0.2em] text-[#444]">Nome</label>
+                        <label className="text-[9px] hv font-black uppercase tracking-[0.2em] text-[#666]">Nome</label>
                         <input required value={regName} onChange={e => { setRegName(e.target.value); setRegError(''); }}
                           placeholder="Mario"
-                          className="w-full bg-[#0a0a0a] border border-[#2a2a2a] px-4 py-4 text-sm text-white placeholder-[#444] outline-none focus:border-accent/40 transition-colors font-sans" />
+                          className="w-full bg-[#141414] border border-[#383838] px-4 py-4 text-sm text-white placeholder-[#444] outline-none focus:border-accent/40 transition-colors font-sans" />
                       </div>
                       <div className="space-y-1">
-                        <label className="text-[9px] hv font-black uppercase tracking-[0.2em] text-[#444]">Cognome</label>
+                        <label className="text-[9px] hv font-black uppercase tracking-[0.2em] text-[#666]">Cognome</label>
                         <input required value={regLastName} onChange={e => { setRegLastName(e.target.value); setRegError(''); }}
                           placeholder="Rossi"
-                          className="w-full bg-[#0a0a0a] border border-[#2a2a2a] px-4 py-4 text-sm text-white placeholder-[#444] outline-none focus:border-accent/40 transition-colors font-sans" />
+                          className="w-full bg-[#141414] border border-[#383838] px-4 py-4 text-sm text-white placeholder-[#444] outline-none focus:border-accent/40 transition-colors font-sans" />
                       </div>
                     </div>
                     <div className="space-y-1">
-                      <label className="text-[9px] hv font-black uppercase tracking-[0.2em] text-[#444]">Email</label>
+                      <label className="text-[9px] hv font-black uppercase tracking-[0.2em] text-[#666]">Email</label>
                       <input
                         type="text" inputMode="email" autoComplete="email" required value={regEmail}
                         onChange={e => {
@@ -594,12 +594,12 @@ export default function App() {
                         }}
                         onBlur={() => { if (regEmail) setRegEmailError(validateEmail(regEmail)); }}
                         placeholder="tua@email.it"
-                        className={`w-full bg-[#0a0a0a] border px-5 py-4 text-sm text-white placeholder-[#444] outline-none transition-colors font-sans ${regEmailError ? 'border-red-500/60' : 'border-[#2a2a2a] focus:border-accent/40'}`}
+                        className={`w-full bg-[#141414] border px-5 py-4 text-sm text-white placeholder-[#444] outline-none transition-colors font-sans ${regEmailError ? 'border-red-500/60' : 'border-[#383838] focus:border-accent/40'}`}
                       />
                       {regEmailError && <p className="text-red-500/80 text-[9px] font-sans uppercase tracking-widest">{regEmailError}</p>}
                     </div>
                     <div className="space-y-1">
-                      <label className="text-[9px] hv font-black uppercase tracking-[0.2em] text-[#444]">Telefono</label>
+                      <label className="text-[9px] hv font-black uppercase tracking-[0.2em] text-[#666]">Telefono</label>
                       <input
                         type="tel" required value={regPhone}
                         onChange={e => {
@@ -614,15 +614,15 @@ export default function App() {
                         }}
                         onBlur={() => { if (regPhone) setRegPhoneError(validatePhone(regPhone)); }}
                         placeholder="+39 333 000 0000"
-                        className={`w-full bg-[#0a0a0a] border px-5 py-4 text-sm text-white placeholder-[#444] outline-none transition-colors font-sans ${regPhoneError ? 'border-red-500/60' : 'border-[#2a2a2a] focus:border-accent/40'}`}
+                        className={`w-full bg-[#141414] border px-5 py-4 text-sm text-white placeholder-[#444] outline-none transition-colors font-sans ${regPhoneError ? 'border-red-500/60' : 'border-[#383838] focus:border-accent/40'}`}
                       />
                       {regPhoneError && <p className="text-red-500/80 text-[9px] font-sans uppercase tracking-widest">{regPhoneError}</p>}
                     </div>
                     <div className="space-y-1">
-                      <label className="text-[9px] hv font-black uppercase tracking-[0.2em] text-[#444]">Password</label>
+                      <label className="text-[9px] hv font-black uppercase tracking-[0.2em] text-[#666]">Password</label>
                       <input type="password" required value={regPassword} onChange={e => { setRegPassword(e.target.value); setRegError(''); }}
                         placeholder="••••••••"
-                        className="w-full bg-[#0a0a0a] border border-[#2a2a2a] px-5 py-4 text-sm text-white placeholder-[#444] outline-none focus:border-accent/40 transition-colors font-sans" />
+                        className="w-full bg-[#141414] border border-[#383838] px-5 py-4 text-sm text-white placeholder-[#444] outline-none focus:border-accent/40 transition-colors font-sans" />
                     </div>
                     {regError && <p className="text-red-500/80 text-[10px] font-sans uppercase tracking-widest pt-1">{regError}</p>}
                     <motion.button
@@ -630,15 +630,15 @@ export default function App() {
                       disabled={!!regEmailError || !!regPhoneError}
                       whileHover={!regEmailError && !regPhoneError ? { scale: 1.01 } : {}}
                       whileTap={!regEmailError && !regPhoneError ? { scale: 0.99 } : {}}
-                      className={`group w-full py-[18px] text-[10px] hv font-black uppercase tracking-[0.3em] flex items-center justify-between px-6 transition-colors mt-2 ${regEmailError || regPhoneError ? 'bg-[#2a2a2a] text-[#555] cursor-not-allowed' : 'bg-accent text-black hover:bg-white'}`}>
+                      className={`group w-full py-[18px] text-[10px] hv font-black uppercase tracking-[0.3em] flex items-center justify-between px-6 transition-colors mt-2 ${regEmailError || regPhoneError ? 'bg-[#2a2a2a] text-[#777] cursor-not-allowed' : 'bg-accent text-black hover:bg-white'}`}>
                       <span>Invia Richiesta</span>
                       <ChevronRight size={14} className="group-hover:translate-x-1 transition-transform" />
                     </motion.button>
                   </form>
 
-                  <div className="mt-8 pt-6 border-t border-[#1e1e1e]">
+                  <div className="mt-8 pt-6 border-t border-[#2e2e2e]">
                     <button onClick={() => { setAuthScreen('login'); setRegError(''); setRegEmailError(''); setRegPhoneError(''); }}
-                      className="w-full text-[9px] hv font-black uppercase tracking-[0.2em] text-[#444] hover:text-[#777] transition-colors py-2">
+                      className="w-full text-[9px] hv font-black uppercase tracking-[0.2em] text-[#666] hover:text-[#999] transition-colors py-2">
                       ← Torna al Login
                     </button>
                   </div>
@@ -656,9 +656,9 @@ export default function App() {
     <div className="min-h-screen bg-bg text-white flex flex-col md:flex-row relative">
 
       {/* ── Mobile top bar ── */}
-      <div className="md:hidden h-12 bg-black border-b border-[#1e1e1e] flex items-center justify-between px-4 sticky top-0 z-50 shrink-0">
+      <div className="md:hidden h-12 bg-black border-b border-[#2e2e2e] flex items-center justify-between px-4 sticky top-0 z-50 shrink-0">
         <span className="hv font-black text-xl uppercase tracking-tight">NP</span>
-        <button onClick={() => setMobileSidebarOpen(o => !o)} className="text-[#555] hover:text-white transition-colors p-1">
+        <button onClick={() => setMobileSidebarOpen(o => !o)} className="text-[#777] hover:text-white transition-colors p-1">
           <Menu size={18} />
         </button>
       </div>
@@ -675,7 +675,7 @@ export default function App() {
             <motion.div
               initial={{ x: '-100%' }} animate={{ x: 0 }} exit={{ x: '-100%' }}
               transition={{ type: 'spring', damping: 30, stiffness: 300 }}
-              className="fixed left-0 top-0 bottom-0 w-72 bg-black border-r border-[#1e1e1e] z-50 md:hidden flex flex-col"
+              className="fixed left-0 top-0 bottom-0 w-72 bg-black border-r border-[#2e2e2e] z-50 md:hidden flex flex-col"
             >
               <SidebarContent
                 user={user}
@@ -692,7 +692,7 @@ export default function App() {
       </AnimatePresence>
 
       {/* ── Desktop sidebar ── */}
-      <aside className="hidden md:flex w-60 xl:w-64 border-r border-[#1e1e1e] bg-black flex-col shrink-0 sticky top-0 h-screen">
+      <aside className="hidden md:flex w-60 xl:w-64 border-r border-[#2e2e2e] bg-black flex-col shrink-0 sticky top-0 h-screen">
         <SidebarContent user={user} view={view}
           onNav={(v) => { setView(v as AppView); setSelectedVenue(null); setSelectedEvent(null); setEditingFloorPlan(null); }}
           onLogout={handleLogout}
@@ -705,15 +705,15 @@ export default function App() {
       {/* ── Main ── */}
       <main className="flex-1 flex flex-col min-w-0 overflow-auto">
         {/* Header */}
-        <header className="h-12 border-b border-[#1e1e1e] flex items-center justify-between px-5 bg-black/95 backdrop-blur-sm sticky top-0 md:top-0 z-30 shrink-0">
+        <header className="h-12 border-b border-[#2e2e2e] flex items-center justify-between px-5 bg-black/95 backdrop-blur-sm sticky top-0 md:top-0 z-30 shrink-0">
           <div className="flex items-center gap-4 min-w-0">
             {showBack && (
               <button onClick={goBack}
-                className="flex items-center gap-1.5 text-[#444] hover:text-accent transition-colors text-[10px] font-sans uppercase tracking-widest shrink-0">
+                className="flex items-center gap-1.5 text-[#666] hover:text-accent transition-colors text-[10px] font-sans uppercase tracking-widest shrink-0">
                 <ArrowLeft size={11} /> Indietro
               </button>
             )}
-            <span className="text-[10px] font-sans font-medium uppercase tracking-[0.35em] text-[#777] truncate">
+            <span className="text-[10px] font-sans font-medium uppercase tracking-[0.35em] text-[#999] truncate">
               {headerTitle()}
             </span>
           </div>
@@ -758,7 +758,7 @@ export default function App() {
             {view === 'venue-events' && selectedVenue && (
               <motion.div key="venue-events" {...PAGE}>
                 <div className="mb-8">
-                  <p className="text-[9px] font-sans uppercase tracking-[0.4em] text-[#777] mb-1">Venue</p>
+                  <p className="text-[9px] font-sans uppercase tracking-[0.4em] text-[#999] mb-1">Venue</p>
                   <h2 className="hv font-black text-4xl uppercase text-white">{selectedVenue.name}</h2>
                 </div>
                 {venueEvents.length === 0 ? (
@@ -787,7 +787,7 @@ export default function App() {
                     {user.role === 'admin' && (
                       <div className="mt-6 flex justify-center">
                         <button onClick={() => setShowNewEventModal(true)}
-                          className="flex items-center gap-2 border border-[#2a2a2a] text-[#777] px-6 py-3 text-[9px] hv font-black uppercase tracking-widest hover:border-accent hover:text-accent transition-all">
+                          className="flex items-center gap-2 border border-[#383838] text-[#999] px-6 py-3 text-[9px] hv font-black uppercase tracking-widest hover:border-accent hover:text-accent transition-all">
                           <Plus size={11} /> Nuovo Evento
                         </button>
                       </div>
@@ -867,7 +867,7 @@ export default function App() {
                   <div className="flex flex-col h-full gap-5">
                     <button
                       onClick={() => setEditingFloorPlan(null)}
-                      className="flex items-center gap-2 text-[#444] hover:text-accent transition-colors text-[10px] font-sans uppercase tracking-widest self-start">
+                      className="flex items-center gap-2 text-[#666] hover:text-accent transition-colors text-[10px] font-sans uppercase tracking-widest self-start">
                       <ArrowLeft size={11} /> Torna alle Piante
                     </button>
                     <FloorPlanEditor
@@ -900,44 +900,44 @@ export default function App() {
                     </div>
                     <div className="space-y-6">
                       {venues.map(venue => (
-                        <div key={venue.id} className="border border-[#2a2a2a] bg-card">
-                          <div className="px-7 py-5 border-b border-[#1e1e1e]">
+                        <div key={venue.id} className="border border-[#383838] bg-card">
+                          <div className="px-7 py-5 border-b border-[#2e2e2e]">
                             <h3 className="hv font-black text-xl uppercase text-white">{venue.name}</h3>
-                            <p className="text-[9px] font-sans uppercase tracking-widest text-[#777] mt-0.5">{venue.address}</p>
+                            <p className="text-[9px] font-sans uppercase tracking-widest text-[#999] mt-0.5">{venue.address}</p>
                           </div>
                           {venue.floorPlans.length === 0 ? (
                             <div className="px-7 py-8 text-center">
-                              <p className="text-[9px] font-sans uppercase tracking-[0.4em] text-[#444]">Nessuna pianta</p>
+                              <p className="text-[9px] font-sans uppercase tracking-[0.4em] text-[#666]">Nessuna pianta</p>
                             </div>
                           ) : (
-                            <div className="divide-y divide-[#0d0d0d]">
+                            <div className="divide-y divide-[#2a2a2a]">
                               {venue.floorPlans.map(fp => (
                                 <div key={fp.id} className="px-7 py-4 flex items-center justify-between group hover:bg-white/[0.01] transition-colors">
                                   <div className="flex items-center gap-4">
-                                    <Map size={14} className="text-[#666] shrink-0" />
+                                    <Map size={14} className="text-[#888] shrink-0" />
                                     <div>
                                       <p className="hv font-black text-sm uppercase text-white">{fp.name}</p>
-                                      <p className="text-[8px] font-sans text-[#777] mt-0.5">{fp.tables.length} tavoli</p>
+                                      <p className="text-[8px] font-sans text-[#999] mt-0.5">{fp.tables.length} tavoli</p>
                                     </div>
                                   </div>
                                   <div className="flex items-center gap-2">
                                     <div className="flex items-center gap-0.5 md:opacity-0 md:group-hover:opacity-100 transition-opacity">
                                       <button
                                         onClick={() => setEditingFloorPlanMeta({ venueId: venue.id, fp })}
-                                        className="w-7 h-7 flex items-center justify-center text-[#777] hover:text-accent transition-colors">
+                                        className="w-7 h-7 flex items-center justify-center text-[#999] hover:text-accent transition-colors">
                                         <Pencil size={12} />
                                       </button>
                                       <button
                                         onClick={() => setVenues(prev => prev.map(v =>
                                           v.id === venue.id ? { ...v, floorPlans: v.floorPlans.filter(f => f.id !== fp.id) } : v
                                         ))}
-                                        className="w-7 h-7 flex items-center justify-center text-[#777] hover:text-red-500 transition-colors">
+                                        className="w-7 h-7 flex items-center justify-center text-[#999] hover:text-red-500 transition-colors">
                                         <Trash2 size={12} />
                                       </button>
                                     </div>
                                     <button
                                       onClick={() => setEditingFloorPlan({ venueId: venue.id, fp })}
-                                      className="text-[9px] font-sans uppercase tracking-widest text-[#777] hover:text-accent transition-colors flex items-center gap-1.5">
+                                      className="text-[9px] font-sans uppercase tracking-widest text-[#999] hover:text-accent transition-colors flex items-center gap-1.5">
                                       Canvas <ChevronRight size={11} />
                                     </button>
                                   </div>
@@ -981,21 +981,21 @@ export default function App() {
                     )}
                   </div>
                   {pendingUsers.length === 0 ? (
-                    <div className="border border-dashed border-[#2a2a2a] py-10 px-6 text-center">
-                      <p className="text-[9px] font-sans uppercase tracking-widest text-[#444]">Nessuna richiesta in attesa</p>
+                    <div className="border border-dashed border-[#383838] py-10 px-6 text-center">
+                      <p className="text-[9px] font-sans uppercase tracking-widest text-[#666]">Nessuna richiesta in attesa</p>
                     </div>
                   ) : (
                     <div className="space-y-2">
                       {pendingUsers.map(u => (
-                        <div key={u.id} className="flex items-center justify-between p-5 bg-card border border-[#2a2a2a] hover:border-[#333] transition-colors">
+                        <div key={u.id} className="flex items-center justify-between p-5 bg-card border border-[#383838] hover:border-[#333] transition-colors">
                           <div className="flex items-center gap-4 min-w-0">
-                            <div className="w-9 h-9 bg-[#111] border border-[#222] flex items-center justify-center shrink-0">
-                              <span className="hv font-black text-[#666] text-xs">{u.displayName.substring(0, 2).toUpperCase()}</span>
+                            <div className="w-9 h-9 bg-[#2a2a2a] border border-[#383838] flex items-center justify-center shrink-0">
+                              <span className="hv font-black text-[#888] text-xs">{u.displayName.substring(0, 2).toUpperCase()}</span>
                             </div>
                             <div className="min-w-0">
                               <p className="hv font-black uppercase text-white text-[11px]">{u.displayName}</p>
-                              <p className="text-[9px] font-sans text-[#666] mt-0.5">{u.email}</p>
-                              <p className="text-[8px] font-sans text-[#444] uppercase tracking-widest mt-0.5">
+                              <p className="text-[9px] font-sans text-[#888] mt-0.5">{u.email}</p>
+                              <p className="text-[8px] font-sans text-[#666] uppercase tracking-widest mt-0.5">
                                 {new Date(u.createdAt).toLocaleDateString('it-IT')}
                               </p>
                             </div>
@@ -1006,7 +1006,7 @@ export default function App() {
                               Approva
                             </button>
                             <button onClick={() => handleRejectUser(u.id)}
-                              className="px-4 py-2 border border-[#2a2a2a] text-red-500/70 text-[9px] hv font-black uppercase tracking-widest hover:border-red-500 hover:text-red-500 transition-colors">
+                              className="px-4 py-2 border border-[#383838] text-red-500/70 text-[9px] hv font-black uppercase tracking-widest hover:border-red-500 hover:text-red-500 transition-colors">
                               Rifiuta
                             </button>
                           </div>
@@ -1025,25 +1025,25 @@ export default function App() {
                     )}
                   </div>
                   {pendingResv.length === 0 ? (
-                    <div className="border border-dashed border-[#2a2a2a] py-10 px-6 text-center">
-                      <p className="text-[9px] font-sans uppercase tracking-widest text-[#444]">Nessuna prenotazione in attesa</p>
+                    <div className="border border-dashed border-[#383838] py-10 px-6 text-center">
+                      <p className="text-[9px] font-sans uppercase tracking-widest text-[#666]">Nessuna prenotazione in attesa</p>
                     </div>
                   ) : (
                     <div className="space-y-2">
                       {pendingResv.map(r => {
                         const ev = events.find(e => e.id === r.eventId);
                         return (
-                          <div key={r.id} className="flex items-center justify-between p-5 bg-card border border-[#2a2a2a] hover:border-[#333] transition-colors gap-4">
+                          <div key={r.id} className="flex items-center justify-between p-5 bg-card border border-[#383838] hover:border-[#333] transition-colors gap-4">
                             <div className="min-w-0 flex-1">
                               <div className="flex items-center gap-3 flex-wrap">
                                 <span className="hv font-black uppercase text-white text-sm">{r.customerName}</span>
-                                <span className="text-[8px] font-sans uppercase tracking-widest text-[#666] border border-[#2a2a2a] px-2 py-0.5">Tav. {r.tableName}</span>
+                                <span className="text-[8px] font-sans uppercase tracking-widest text-[#888] border border-[#383838] px-2 py-0.5">Tav. {r.tableName}</span>
                                 <span className="text-[8px] font-sans uppercase tracking-widest text-orange-400 border border-orange-500/30 px-2 py-0.5">In attesa</span>
                               </div>
                               <div className="flex items-center gap-4 mt-2 flex-wrap">
-                                {ev && <p className="text-[9px] font-sans text-[#666]">{ev.name}</p>}
-                                <p className="text-[9px] font-sans text-[#555]">PR: {r.prName}</p>
-                                <p className="text-[9px] font-sans text-[#555]">{r.guestsCount} pax</p>
+                                {ev && <p className="text-[9px] font-sans text-[#888]">{ev.name}</p>}
+                                <p className="text-[9px] font-sans text-[#777]">PR: {r.prName}</p>
+                                <p className="text-[9px] font-sans text-[#777]">{r.guestsCount} pax</p>
                                 <p className="text-[9px] font-sans text-accent">€{r.budget}</p>
                               </div>
                             </div>
@@ -1053,7 +1053,7 @@ export default function App() {
                                 Approva
                               </button>
                               <button onClick={() => handleRejectReservation(r.id)}
-                                className="px-4 py-2 border border-[#2a2a2a] text-red-500/70 text-[9px] hv font-black uppercase tracking-widest hover:border-red-500 hover:text-red-500 transition-colors">
+                                className="px-4 py-2 border border-[#383838] text-red-500/70 text-[9px] hv font-black uppercase tracking-widest hover:border-red-500 hover:text-red-500 transition-colors">
                                 Rifiuta
                               </button>
                             </div>
@@ -1201,7 +1201,7 @@ function PRProfile({ user, onSave }: {
         {/* Avatar */}
         <div className="flex flex-col items-center gap-4">
           <button type="button" onClick={() => fileRef.current?.click()}
-            className="relative group w-24 h-24 bg-[#111] border border-[#2a2a2a] overflow-hidden hover:border-accent/40 transition-colors">
+            className="relative group w-24 h-24 bg-[#2a2a2a] border border-[#383838] overflow-hidden hover:border-accent/40 transition-colors">
             {image
               ? <img src={image} alt="" className="w-full h-full object-cover" />
               : <span className="hv font-black text-accent text-2xl">{initials}</span>
@@ -1211,7 +1211,7 @@ function PRProfile({ user, onSave }: {
             </div>
           </button>
           <input ref={fileRef} type="file" accept="image/*" className="hidden" onChange={handleImage} />
-          <p className="text-[9px] font-sans uppercase tracking-widest text-[#444]">Clicca per cambiare foto</p>
+          <p className="text-[9px] font-sans uppercase tracking-widest text-[#666]">Clicca per cambiare foto</p>
         </div>
 
         {/* Fields */}
@@ -1219,16 +1219,16 @@ function PRProfile({ user, onSave }: {
           <div className="grid grid-cols-2 gap-4">
             <Field label="Nome">
               <input required value={firstName} onChange={e => setFirstName(e.target.value)}
-                className="w-full bg-bg border border-[#2a2a2a] px-4 py-3 text-sm text-white outline-none focus:border-accent/40 transition-colors font-sans" />
+                className="w-full bg-bg border border-[#383838] px-4 py-3 text-sm text-white outline-none focus:border-accent/40 transition-colors font-sans" />
             </Field>
             <Field label="Cognome">
               <input value={lastName} onChange={e => setLastName(e.target.value)}
-                className="w-full bg-bg border border-[#2a2a2a] px-4 py-3 text-sm text-white outline-none focus:border-accent/40 transition-colors font-sans" />
+                className="w-full bg-bg border border-[#383838] px-4 py-3 text-sm text-white outline-none focus:border-accent/40 transition-colors font-sans" />
             </Field>
           </div>
           <Field label="Email">
             <input disabled value={user.email}
-              className="w-full bg-[#080808] border border-[#1a1a1a] px-4 py-3 text-sm text-[#444] outline-none font-sans cursor-not-allowed" />
+              className="w-full bg-[#080808] border border-[#1a1a1a] px-4 py-3 text-sm text-[#666] outline-none font-sans cursor-not-allowed" />
           </Field>
         </div>
 
@@ -1264,35 +1264,35 @@ function SidebarContent({ user, view, onNav, onLogout, occupancyPct = 0, revenue
   return (
     <>
       {/* Brand */}
-      <div className="px-6 py-6 border-b border-[#1e1e1e] shrink-0">
+      <div className="px-6 py-6 border-b border-[#2e2e2e] shrink-0">
         <div className="flex items-center gap-3">
           <div className="w-8 h-8 bg-accent flex items-center justify-center shrink-0 glow">
             <span className="hv font-black text-black text-sm leading-none">N</span>
           </div>
           <div>
             <span className="hv font-black uppercase tracking-widest text-[11px] text-white block leading-tight">Nightplan</span>
-            <span className="text-[8px] font-sans text-[#777] uppercase tracking-widest">Management</span>
+            <span className="text-[8px] font-sans text-[#999] uppercase tracking-widest">Management</span>
           </div>
         </div>
       </div>
 
       {/* KPIs — admin only */}
       {user.role === 'admin' && (
-        <div className="px-6 py-6 border-b border-[#1e1e1e] space-y-5 shrink-0">
+        <div className="px-6 py-6 border-b border-[#2e2e2e] space-y-5 shrink-0">
           <div>
             <div className="hv font-black leading-none text-white glow-text" style={{ fontSize: 52 }}>
-              {occupancyPct}<span className="text-[28px] text-[#333]">%</span>
+              {occupancyPct}<span className="text-[28px] text-[#555]">%</span>
             </div>
-            <div className="mt-2.5 h-px bg-[#111] relative overflow-hidden">
+            <div className="mt-2.5 h-px bg-[#2a2a2a] relative overflow-hidden">
               <motion.div className="h-px bg-accent absolute inset-y-0 left-0"
                 initial={{ width: 0 }} animate={{ width: `${occupancyPct}%` }}
                 transition={{ duration: 1.2, delay: 0.3, ease: 'easeOut' }} />
             </div>
-            <p className="text-[9px] font-sans uppercase tracking-[0.35em] text-[#777] mt-1.5">Occupancy</p>
+            <p className="text-[9px] font-sans uppercase tracking-[0.35em] text-[#999] mt-1.5">Occupancy</p>
           </div>
           <div>
             <div className="hv font-black text-accent leading-none glow-text" style={{ fontSize: 36 }}>{revenueDisplay}</div>
-            <p className="text-[9px] font-sans uppercase tracking-[0.35em] text-[#777] mt-1">Revenue Est.</p>
+            <p className="text-[9px] font-sans uppercase tracking-[0.35em] text-[#999] mt-1">Revenue Est.</p>
           </div>
         </div>
       )}
@@ -1335,12 +1335,12 @@ function SidebarContent({ user, view, onNav, onLogout, occupancyPct = 0, revenue
       </nav>
 
       {/* User */}
-      <div className="px-6 py-6 border-t border-[#1e1e1e] shrink-0">
+      <div className="px-6 py-6 border-t border-[#2e2e2e] shrink-0">
         <button
           onClick={() => user.role === 'pr' ? onNav('profile') : undefined}
           className={cn('flex items-center gap-3 mb-5 w-full text-left', user.role === 'pr' && 'group cursor-pointer')}
         >
-          <div className="w-9 h-9 bg-[#111] border border-[#222] flex items-center justify-center shrink-0 overflow-hidden group-hover:border-accent/30 transition-colors">
+          <div className="w-9 h-9 bg-[#2a2a2a] border border-[#383838] flex items-center justify-center shrink-0 overflow-hidden group-hover:border-accent/30 transition-colors">
             {user.profileImage
               ? <img src={user.profileImage} alt="" className="w-full h-full object-cover" />
               : <span className="hv font-black text-accent text-xs">{user.displayName.substring(0, 2).toUpperCase()}</span>
@@ -1350,11 +1350,11 @@ function SidebarContent({ user, view, onNav, onLogout, occupancyPct = 0, revenue
             <p className="text-[11px] hv font-black uppercase text-white truncate group-hover:text-accent transition-colors">
               {user.displayName}{user.lastName ? ' ' + user.lastName : ''}
             </p>
-            <p className="text-[8px] font-sans text-[#777] uppercase tracking-widest mt-0.5">{user.role}</p>
+            <p className="text-[8px] font-sans text-[#999] uppercase tracking-widest mt-0.5">{user.role}</p>
           </div>
         </button>
         <button onClick={onLogout}
-          className="flex items-center gap-2 text-[#777] hover:text-accent transition-colors text-[9px] font-sans uppercase tracking-widest w-full">
+          className="flex items-center gap-2 text-[#999] hover:text-accent transition-colors text-[9px] font-sans uppercase tracking-widest w-full">
           <LogOut size={12} /> Sign Out
         </button>
       </div>
@@ -1371,13 +1371,13 @@ function NavSection({ label, children, defaultOpen = true }: { label: string; ch
         onClick={() => setOpen(o => !o)}
         className="flex items-center justify-between w-full px-3 pt-1 pb-2 group"
       >
-        <span className="text-[8px] font-sans uppercase tracking-[0.3em] text-[#444] group-hover:text-[#666] transition-colors">
+        <span className="text-[8px] font-sans uppercase tracking-[0.3em] text-[#666] group-hover:text-[#888] transition-colors">
           {label}
         </span>
         <motion.span
           animate={{ rotate: open ? 0 : -90 }}
           transition={{ duration: 0.2 }}
-          className="text-[#333] group-hover:text-[#555] transition-colors"
+          className="text-[#555] group-hover:text-[#777] transition-colors"
         >
           <ChevronDown size={10} />
         </motion.span>
@@ -1410,9 +1410,9 @@ function NavLink({ icon, label, active, onClick, badge }: { icon: React.ReactNod
         'flex items-center gap-3 w-full px-3 py-2.5 text-[10px] font-sans font-medium uppercase tracking-[0.25em] transition-all duration-200 group border-l-2',
         active
           ? 'text-accent border-accent bg-accent/5 [box-shadow:-2px_0_12px_rgba(240,232,0,0.2)]'
-          : 'text-[#555] border-transparent hover:text-white hover:border-[#333] hover:bg-white/[0.02]'
+          : 'text-[#777] border-transparent hover:text-white hover:border-[#333] hover:bg-white/[0.02]'
       )}>
-      <span className={cn('transition-colors duration-200 shrink-0', active ? 'text-accent' : 'text-[#444] group-hover:text-[#888]')}>
+      <span className={cn('transition-colors duration-200 shrink-0', active ? 'text-accent' : 'text-[#666] group-hover:text-[#888]')}>
         {icon}
       </span>
       <span className="flex-1 text-left">{label}</span>
@@ -1430,7 +1430,7 @@ function PageTitle({ title, sub }: { title: string; sub?: string }) {
   return (
     <div className="mb-8">
       <h2 className="hv font-black text-3xl md:text-4xl uppercase text-white leading-tight tracking-tight">{title}</h2>
-      {sub && <p className="text-[10px] font-sans uppercase tracking-[0.3em] text-[#555] mt-2">{sub}</p>}
+      {sub && <p className="text-[10px] font-sans uppercase tracking-[0.3em] text-[#777] mt-2">{sub}</p>}
     </div>
   );
 }
@@ -1439,8 +1439,8 @@ function PageTitle({ title, sub }: { title: string; sub?: string }) {
 function EmptyState({ icon, label, children }: { icon: React.ReactNode; label: string; children?: React.ReactNode }) {
   return (
     <div className="flex flex-col items-center justify-center py-28 text-center mt-4">
-      <div className="text-[#333] mb-5">{icon}</div>
-      <p className="text-[9px] font-sans uppercase tracking-[0.35em] text-[#444]">{label}</p>
+      <div className="text-[#555] mb-5">{icon}</div>
+      <p className="text-[9px] font-sans uppercase tracking-[0.35em] text-[#666]">{label}</p>
       {children}
     </div>
   );
@@ -1456,26 +1456,26 @@ function VenueCard({ venue, eventCount, onClick, onEdit, onDelete }: {
     <motion.div
       onClick={onClick}
       whileHover={{ y: -2 }}
-      className="group bg-card border border-[#2a2a2a] cursor-pointer overflow-hidden flex flex-col relative"
+      className="group bg-card border border-[#383838] cursor-pointer overflow-hidden flex flex-col relative"
     >
       <div className="h-[2px] w-0 group-hover:w-full bg-accent transition-all duration-500 origin-left" />
 
       <div className="p-7 flex flex-col gap-7 flex-1">
         <div className="flex items-start justify-between">
-          <div className="w-9 h-9 border border-[#222] flex items-center justify-center group-hover:border-accent/30 transition-colors shrink-0">
-            <Building2 size={15} className="text-[#777] group-hover:text-accent transition-colors" />
+          <div className="w-9 h-9 border border-[#383838] flex items-center justify-center group-hover:border-accent/30 transition-colors shrink-0">
+            <Building2 size={15} className="text-[#999] group-hover:text-accent transition-colors" />
           </div>
           {(onEdit || onDelete) && (
             <div className="flex items-center gap-1 md:opacity-0 md:group-hover:opacity-100 transition-opacity">
               {onEdit && (
                 <button onClick={onEdit}
-                  className="w-7 h-7 flex items-center justify-center text-[#777] hover:text-accent transition-colors">
+                  className="w-7 h-7 flex items-center justify-center text-[#999] hover:text-accent transition-colors">
                   <Pencil size={12} />
                 </button>
               )}
               {onDelete && (
                 <button onClick={onDelete}
-                  className="w-7 h-7 flex items-center justify-center text-[#777] hover:text-red-500 transition-colors">
+                  className="w-7 h-7 flex items-center justify-center text-[#999] hover:text-red-500 transition-colors">
                   <Trash2 size={12} />
                 </button>
               )}
@@ -1487,17 +1487,17 @@ function VenueCard({ venue, eventCount, onClick, onEdit, onDelete }: {
           <h3 className="hv font-black text-[clamp(22px,3vw,30px)] uppercase text-white leading-tight group-hover:text-accent transition-colors">
             {venue.name}
           </h3>
-          <p className="text-[9px] font-sans uppercase tracking-widest text-[#666] mt-1">{venue.address}</p>
+          <p className="text-[9px] font-sans uppercase tracking-widest text-[#888] mt-1">{venue.address}</p>
         </div>
 
-        <div className="flex items-end justify-between border-t border-[#1e1e1e] pt-5">
+        <div className="flex items-end justify-between border-t border-[#2e2e2e] pt-5">
           <div>
-            <span className="hv font-black text-[52px] leading-none text-[#161616] group-hover:text-[#222] transition-colors select-none">
+            <span className="hv font-black text-[52px] leading-none text-[#161616] group-hover:text-[#555] transition-colors select-none">
               {String(eventCount).padStart(2, '0')}
             </span>
-            <p className="text-[8px] font-sans uppercase tracking-widest text-[#666] mt-0.5">eventi</p>
+            <p className="text-[8px] font-sans uppercase tracking-widest text-[#888] mt-0.5">eventi</p>
           </div>
-          <div className="flex items-center gap-1.5 text-[#666] group-hover:text-accent transition-colors mb-1">
+          <div className="flex items-center gap-1.5 text-[#888] group-hover:text-accent transition-colors mb-1">
             <span className="text-[9px] font-sans uppercase tracking-widest">Apri</span>
             <ChevronRight size={12} className="group-hover:translate-x-1 transition-transform" />
           </div>
@@ -1517,7 +1517,7 @@ function EventCard({ event, venueName, onClick, onEdit, onDelete }: {
     <motion.div
       onClick={onClick}
       whileHover={{ y: -2 }}
-      className="group bg-card border border-[#2a2a2a] cursor-pointer overflow-hidden flex flex-col card-hover"
+      className="group bg-card border border-[#383838] cursor-pointer overflow-hidden flex flex-col card-hover"
     >
       <div className="h-[2px] w-0 group-hover:w-full bg-accent transition-all duration-500 origin-left" />
 
@@ -1525,7 +1525,7 @@ function EventCard({ event, venueName, onClick, onEdit, onDelete }: {
         <div className="flex items-center justify-between gap-3">
           <div className="flex items-center gap-3 min-w-0">
             {venueName && (
-              <span className="text-[8px] font-sans uppercase tracking-widest text-[#666] flex items-center gap-1.5 shrink-0">
+              <span className="text-[8px] font-sans uppercase tracking-widest text-[#888] flex items-center gap-1.5 shrink-0">
                 <Building2 size={9} /> {venueName}
               </span>
             )}
@@ -1533,7 +1533,7 @@ function EventCard({ event, venueName, onClick, onEdit, onDelete }: {
               'text-[8px] font-sans font-bold uppercase tracking-widest px-2 py-1 shrink-0',
               event.status === 'active'
                 ? 'text-accent bg-accent/8'
-                : 'text-[#777] bg-[#111]'
+                : 'text-[#999] bg-[#2a2a2a]'
             )}>
               {event.status === 'active' && <span className="inline-block w-1.5 h-1.5 rounded-full bg-accent blink mr-1.5 align-middle" />}
               {event.status}
@@ -1543,13 +1543,13 @@ function EventCard({ event, venueName, onClick, onEdit, onDelete }: {
             <div className="flex items-center gap-1 shrink-0 md:opacity-0 md:group-hover:opacity-100 transition-opacity">
               {onEdit && (
                 <button onClick={onEdit}
-                  className="w-7 h-7 flex items-center justify-center text-[#777] hover:text-accent transition-colors">
+                  className="w-7 h-7 flex items-center justify-center text-[#999] hover:text-accent transition-colors">
                   <Pencil size={12} />
                 </button>
               )}
               {onDelete && (
                 <button onClick={onDelete}
-                  className="w-7 h-7 flex items-center justify-center text-[#777] hover:text-red-500 transition-colors">
+                  className="w-7 h-7 flex items-center justify-center text-[#999] hover:text-red-500 transition-colors">
                   <Trash2 size={12} />
                 </button>
               )}
@@ -1558,12 +1558,12 @@ function EventCard({ event, venueName, onClick, onEdit, onDelete }: {
         </div>
 
         <div className="flex-1">
-          <p className="font-mono text-[10px] text-[#666] mb-2 tracking-wider">{event.date}</p>
+          <p className="font-mono text-[10px] text-[#888] mb-2 tracking-wider">{event.date}</p>
           <h3 className="hv font-black text-[clamp(18px,2.5vw,24px)] uppercase text-white leading-tight">{event.name}</h3>
-          <p className="text-[11px] font-sans text-[#777] mt-2.5 leading-relaxed line-clamp-2">{event.description}</p>
+          <p className="text-[11px] font-sans text-[#999] mt-2.5 leading-relaxed line-clamp-2">{event.description}</p>
         </div>
 
-        <div className="flex items-center gap-1.5 text-[#666] group-hover:text-accent transition-colors border-t border-[#1e1e1e] pt-4 mt-1">
+        <div className="flex items-center gap-1.5 text-[#888] group-hover:text-accent transition-colors border-t border-[#2e2e2e] pt-4 mt-1">
           <span className="text-[9px] font-sans uppercase tracking-widest">Apri Pianta</span>
           <ChevronRight size={11} className="group-hover:translate-x-1 transition-transform" />
         </div>
@@ -1616,34 +1616,34 @@ function ReservationsTable({ reservations, userRole, events }: {
   };
 
   return (
-    <div className="bg-card border border-[#2a2a2a] overflow-hidden">
-      <div className="px-7 py-5 border-b border-[#1e1e1e]">
+    <div className="bg-card border border-[#383838] overflow-hidden">
+      <div className="px-7 py-5 border-b border-[#2e2e2e]">
         <h2 className="hv font-black text-xl uppercase text-white">Prenotazioni</h2>
       </div>
 
       {reservations.length === 0 ? (
         <div className="px-7 py-24 text-center">
-          <p className="text-[9px] font-sans uppercase tracking-[0.4em] text-[#444]">Nessuna Prenotazione</p>
+          <p className="text-[9px] font-sans uppercase tracking-[0.4em] text-[#666]">Nessuna Prenotazione</p>
         </div>
       ) : (
         <div className="space-y-0">
           {groups.map(({ event, eventId, rows }) => (
             <div key={eventId}>
               {/* Event header */}
-              <div className="px-7 py-3 bg-[#0a0a0a] border-b border-[#1e1e1e] flex items-center gap-4">
+              <div className="px-7 py-3 bg-[#141414] border-b border-[#2e2e2e] flex items-center gap-4">
                 <span className="hv font-black text-sm uppercase text-white tracking-widest">
                   {event?.name ?? eventId}
                 </span>
                 {event && (
-                  <span className="font-mono text-[9px] text-[#555]">{event.date}</span>
+                  <span className="font-mono text-[9px] text-[#777]">{event.date}</span>
                 )}
-                <span className="text-[9px] font-sans uppercase tracking-widest text-[#555]">
+                <span className="text-[9px] font-sans uppercase tracking-widest text-[#777]">
                   {rows.length} {rows.length === 1 ? 'prenotazione' : 'prenotazioni'}
                 </span>
                 {userRole === 'admin' && (
                   <button
                     onClick={() => exportEventCSV(rows, event?.name ?? eventId)}
-                    className="ml-auto flex items-center gap-1.5 text-[#555] hover:text-accent transition-colors text-[9px] font-sans uppercase tracking-widest">
+                    className="ml-auto flex items-center gap-1.5 text-[#777] hover:text-accent transition-colors text-[9px] font-sans uppercase tracking-widest">
                     <Download size={11} /> Scarica
                   </button>
                 )}
@@ -1656,10 +1656,10 @@ function ReservationsTable({ reservations, userRole, events }: {
                     <div className="flex items-center justify-between">
                       <div className="flex items-center gap-2">
                         <span className={cn('w-1.5 h-1.5 rounded-full shrink-0',
-                          res.status === 'confirmed' ? 'bg-accent blink' : 'bg-[#222]'
+                          res.status === 'confirmed' ? 'bg-accent blink' : 'bg-[#333]'
                         )} />
                         <span className={cn('text-[9px] font-sans uppercase tracking-widest',
-                          res.status === 'confirmed' ? 'text-accent' : 'text-[#777]'
+                          res.status === 'confirmed' ? 'text-accent' : 'text-[#999]'
                         )}>{res.status}</span>
                       </div>
                       <span className="hv font-black text-accent text-lg">€{res.budget}</span>
@@ -1667,11 +1667,11 @@ function ReservationsTable({ reservations, userRole, events }: {
                     <div className="flex items-start justify-between gap-3">
                       <div className="min-w-0">
                         <p className="hv font-bold text-sm uppercase text-white truncate">{res.customerName}</p>
-                        {userRole === 'admin' && <p className="text-[9px] font-sans text-[#777] uppercase tracking-widest mt-0.5">{res.prName}</p>}
+                        {userRole === 'admin' && <p className="text-[9px] font-sans text-[#999] uppercase tracking-widest mt-0.5">{res.prName}</p>}
                       </div>
                       <div className="text-right shrink-0">
                         <p className="hv font-bold text-sm text-white">{res.tableName ?? res.tableId}</p>
-                        <p className="text-[9px] font-sans text-[#777] mt-0.5">{res.guestsCount} pax</p>
+                        <p className="text-[9px] font-sans text-[#999] mt-0.5">{res.guestsCount} pax</p>
                       </div>
                     </div>
                   </div>
@@ -1682,9 +1682,9 @@ function ReservationsTable({ reservations, userRole, events }: {
               <div className="hidden sm:block overflow-x-auto">
                 <table className="w-full text-left border-collapse min-w-[600px]">
                   <thead>
-                    <tr className="border-b border-[#1e1e1e]">
+                    <tr className="border-b border-[#2e2e2e]">
                       {['Tavolo', 'Cliente', ...(userRole === 'admin' ? ['PR'] : []), 'Pax', 'Budget'].map(h => (
-                        <th key={h} className="px-7 py-3 text-[8px] font-sans font-bold uppercase tracking-[0.35em] text-[#555]">{h}</th>
+                        <th key={h} className="px-7 py-3 text-[8px] font-sans font-bold uppercase tracking-[0.35em] text-[#777]">{h}</th>
                       ))}
                     </tr>
                   </thead>
@@ -1699,11 +1699,11 @@ function ReservationsTable({ reservations, userRole, events }: {
                         </td>
                         {userRole === 'admin' && (
                           <td className="px-7 py-4">
-                            <span className="text-[9px] font-sans text-[#777] uppercase tracking-widest group-hover:text-accent transition-colors">{res.prName}</span>
+                            <span className="text-[9px] font-sans text-[#999] uppercase tracking-widest group-hover:text-accent transition-colors">{res.prName}</span>
                           </td>
                         )}
                         <td className="px-7 py-4">
-                          <span className="hv font-black text-lg text-[#777]">{res.guestsCount}</span>
+                          <span className="hv font-black text-lg text-[#999]">{res.guestsCount}</span>
                         </td>
                         <td className="px-7 py-4 text-right">
                           <span className="hv font-black text-lg text-accent">€{res.budget}</span>
@@ -1747,38 +1747,38 @@ function NewEventModal({ venue, floorPlans, onClose, onSubmit, initialData }: {
       <motion.div
         initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.22, ease: 'easeOut' }}
-        className="relative w-full sm:max-w-md bg-card border-t border-x sm:border border-[#2a2a2a] overflow-hidden rounded-t-2xl sm:rounded-none max-h-[90vh] flex flex-col"
+        className="relative w-full sm:max-w-md bg-card border-t border-x sm:border border-[#383838] overflow-hidden rounded-t-2xl sm:rounded-none max-h-[90vh] flex flex-col"
       >
         <div className="h-[2px] bg-accent shrink-0" />
-        <div className="px-6 sm:px-8 py-5 sm:py-6 border-b border-[#1e1e1e] flex items-center justify-between shrink-0">
+        <div className="px-6 sm:px-8 py-5 sm:py-6 border-b border-[#2e2e2e] flex items-center justify-between shrink-0">
           <div>
             <h3 className="hv font-black text-xl uppercase text-white">{isEdit ? 'Modifica Evento' : 'Nuovo Evento'}</h3>
-            <p className="text-[9px] font-sans uppercase tracking-widest text-[#777] mt-1">{venue.name}</p>
+            <p className="text-[9px] font-sans uppercase tracking-widest text-[#999] mt-1">{venue.name}</p>
           </div>
-          <button onClick={onClose} className="text-[#777] hover:text-white transition-colors p-1"><X size={18} /></button>
+          <button onClick={onClose} className="text-[#999] hover:text-white transition-colors p-1"><X size={18} /></button>
         </div>
 
         <form className="p-6 sm:p-8 space-y-5 overflow-y-auto" onSubmit={(e) => { e.preventDefault(); onSubmit(form); }}>
           <Field label="Nome Evento">
             <input required placeholder="ES. TECHNO FRIDAY"
-              className="w-full bg-bg border border-[#2a2a2a] px-4 py-3 text-xs font-sans uppercase tracking-widest text-white placeholder-[#444] outline-none transition-colors"
+              className="w-full bg-bg border border-[#383838] px-4 py-3 text-xs font-sans uppercase tracking-widest text-white placeholder-[#444] outline-none transition-colors"
               value={form.name} onChange={e => setForm({ ...form, name: e.target.value })} />
           </Field>
           <Field label="Data">
             <input required type="date" min="2026-01-01"
-              className="w-full bg-bg border border-[#2a2a2a] px-4 py-3 text-xs font-sans text-white outline-none transition-colors [color-scheme:dark]"
+              className="w-full bg-bg border border-[#383838] px-4 py-3 text-xs font-sans text-white outline-none transition-colors [color-scheme:dark]"
               value={form.date} onChange={e => setForm({ ...form, date: e.target.value })} />
           </Field>
           <Field label="Descrizione (opzionale)">
             <textarea rows={2} placeholder="DETTAGLI..."
-              className="w-full bg-bg border border-[#2a2a2a] px-4 py-3 text-xs font-sans uppercase tracking-widest text-white placeholder-[#444] outline-none transition-colors resize-none"
+              className="w-full bg-bg border border-[#383838] px-4 py-3 text-xs font-sans uppercase tracking-widest text-white placeholder-[#444] outline-none transition-colors resize-none"
               value={form.description} onChange={e => setForm({ ...form, description: e.target.value })} />
           </Field>
 
           {floorPlans.length > 0 && (
             <Field label="Pianta">
               <select
-                className="w-full bg-bg border border-[#2a2a2a] px-4 py-3 text-xs font-sans uppercase tracking-widest text-white outline-none transition-colors [color-scheme:dark]"
+                className="w-full bg-bg border border-[#383838] px-4 py-3 text-xs font-sans uppercase tracking-widest text-white outline-none transition-colors [color-scheme:dark]"
                 value={form.floorPlanId}
                 onChange={e => setForm({ ...form, floorPlanId: e.target.value })}>
                 {floorPlans.map(fp => (
@@ -1790,7 +1790,7 @@ function NewEventModal({ venue, floorPlans, onClose, onSubmit, initialData }: {
 
           <div className="flex gap-3 pt-2">
             <button type="button" onClick={onClose}
-              className="flex-1 py-3.5 text-[9px] hv font-black uppercase tracking-widest border border-[#2a2a2a] text-[#777] hover:text-white hover:border-[#333] transition-all">
+              className="flex-1 py-3.5 text-[9px] hv font-black uppercase tracking-widest border border-[#383838] text-[#999] hover:text-white hover:border-[#333] transition-all">
               Annulla
             </button>
             <button type="submit"
@@ -1808,7 +1808,7 @@ function NewEventModal({ venue, floorPlans, onClose, onSubmit, initialData }: {
 function Field({ label, children }: { label: string; children: React.ReactNode }) {
   return (
     <div className="space-y-1.5">
-      <label className="text-[8px] font-sans font-bold uppercase tracking-widest text-[#777]">{label}</label>
+      <label className="text-[8px] font-sans font-bold uppercase tracking-widest text-[#999]">{label}</label>
       {children}
     </div>
   );
@@ -1833,32 +1833,32 @@ function NewClubModal({ onClose, onSubmit, initialData }: {
       <motion.div
         initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.22, ease: 'easeOut' }}
-        className="relative w-full sm:max-w-md bg-card border-t border-x sm:border border-[#2a2a2a] overflow-hidden rounded-t-2xl sm:rounded-none max-h-[90vh] flex flex-col"
+        className="relative w-full sm:max-w-md bg-card border-t border-x sm:border border-[#383838] overflow-hidden rounded-t-2xl sm:rounded-none max-h-[90vh] flex flex-col"
       >
         <div className="h-[2px] bg-accent shrink-0" />
-        <div className="px-6 sm:px-8 py-5 sm:py-6 border-b border-[#1e1e1e] flex items-center justify-between shrink-0">
+        <div className="px-6 sm:px-8 py-5 sm:py-6 border-b border-[#2e2e2e] flex items-center justify-between shrink-0">
           <div>
             <h3 className="hv font-black text-xl uppercase text-white">{isEdit ? 'Modifica Club' : 'Nuovo Club'}</h3>
-            <p className="text-[9px] font-sans uppercase tracking-widest text-[#777] mt-1">{isEdit ? 'Aggiorna nome e indirizzo' : 'Crea il locale e poi la sua piantina'}</p>
+            <p className="text-[9px] font-sans uppercase tracking-widest text-[#999] mt-1">{isEdit ? 'Aggiorna nome e indirizzo' : 'Crea il locale e poi la sua piantina'}</p>
           </div>
-          <button onClick={onClose} className="text-[#777] hover:text-white transition-colors p-1"><X size={18} /></button>
+          <button onClick={onClose} className="text-[#999] hover:text-white transition-colors p-1"><X size={18} /></button>
         </div>
 
         <form className="p-6 sm:p-8 space-y-5 overflow-y-auto" onSubmit={(e) => { e.preventDefault(); onSubmit(form); }}>
           <Field label="Nome del Club">
             <input required placeholder="ES. AMNESIA CLUB"
-              className="w-full bg-bg border border-[#2a2a2a] px-4 py-3 text-xs font-sans uppercase tracking-widest text-white placeholder-[#444] outline-none transition-colors"
+              className="w-full bg-bg border border-[#383838] px-4 py-3 text-xs font-sans uppercase tracking-widest text-white placeholder-[#444] outline-none transition-colors"
               value={form.name} onChange={e => setForm({ ...form, name: e.target.value })} />
           </Field>
           <Field label="Città / Indirizzo">
             <input placeholder="ES. MILANO"
-              className="w-full bg-bg border border-[#2a2a2a] px-4 py-3 text-xs font-sans uppercase tracking-widest text-white placeholder-[#444] outline-none transition-colors"
+              className="w-full bg-bg border border-[#383838] px-4 py-3 text-xs font-sans uppercase tracking-widest text-white placeholder-[#444] outline-none transition-colors"
               value={form.address} onChange={e => setForm({ ...form, address: e.target.value })} />
           </Field>
 
           <div className="flex gap-3 pt-2">
             <button type="button" onClick={onClose}
-              className="flex-1 py-3.5 text-[9px] hv font-black uppercase tracking-widest border border-[#2a2a2a] text-[#777] hover:text-white hover:border-[#333] transition-all">
+              className="flex-1 py-3.5 text-[9px] hv font-black uppercase tracking-widest border border-[#383838] text-[#999] hover:text-white hover:border-[#333] transition-all">
               Annulla
             </button>
             <button type="submit"
@@ -1886,26 +1886,26 @@ function NewFloorPlanModal({ venues, onClose, onSubmit }: {
         className="absolute inset-0 bg-black/90 backdrop-blur-sm" onClick={onClose} />
       <motion.div initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.22, ease: 'easeOut' }}
-        className="relative w-full sm:max-w-md bg-card border-t border-x sm:border border-[#2a2a2a] overflow-hidden rounded-t-2xl sm:rounded-none max-h-[90vh] flex flex-col">
+        className="relative w-full sm:max-w-md bg-card border-t border-x sm:border border-[#383838] overflow-hidden rounded-t-2xl sm:rounded-none max-h-[90vh] flex flex-col">
         <div className="h-[2px] bg-accent shrink-0" />
-        <div className="px-6 sm:px-8 py-5 sm:py-6 border-b border-[#1e1e1e] flex items-center justify-between shrink-0">
+        <div className="px-6 sm:px-8 py-5 sm:py-6 border-b border-[#2e2e2e] flex items-center justify-between shrink-0">
           <div>
             <h3 className="hv font-black text-xl uppercase text-white">Nuova Pianta</h3>
-            <p className="text-[9px] font-sans uppercase tracking-widest text-[#777] mt-1">Seleziona il locale di destinazione</p>
+            <p className="text-[9px] font-sans uppercase tracking-widest text-[#999] mt-1">Seleziona il locale di destinazione</p>
           </div>
-          <button onClick={onClose} className="text-[#777] hover:text-white transition-colors p-1"><X size={18} /></button>
+          <button onClick={onClose} className="text-[#999] hover:text-white transition-colors p-1"><X size={18} /></button>
         </div>
         <form className="p-6 sm:p-8 space-y-5 overflow-y-auto" onSubmit={(e) => { e.preventDefault(); if (venueId) onSubmit(venueId); }}>
           <Field label="Locale">
             <select required
-              className="w-full bg-bg border border-[#2a2a2a] px-4 py-3 text-xs font-sans uppercase tracking-widest text-white outline-none transition-colors [color-scheme:dark]"
+              className="w-full bg-bg border border-[#383838] px-4 py-3 text-xs font-sans uppercase tracking-widest text-white outline-none transition-colors [color-scheme:dark]"
               value={venueId} onChange={e => setVenueId(e.target.value)}>
               {venues.map(v => <option key={v.id} value={v.id}>{v.name}</option>)}
             </select>
           </Field>
           <div className="flex gap-3 pt-2">
             <button type="button" onClick={onClose}
-              className="flex-1 py-3.5 text-[9px] hv font-black uppercase tracking-widest border border-[#2a2a2a] text-[#777] hover:text-white hover:border-[#333] transition-all">
+              className="flex-1 py-3.5 text-[9px] hv font-black uppercase tracking-widest border border-[#383838] text-[#999] hover:text-white hover:border-[#333] transition-all">
               Annulla
             </button>
             <button type="submit"
@@ -1933,24 +1933,24 @@ function FloorPlanMetaModal({ fp, onClose, onSubmit }: {
         className="absolute inset-0 bg-black/90 backdrop-blur-sm" onClick={onClose} />
       <motion.div initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.22, ease: 'easeOut' }}
-        className="relative w-full sm:max-w-md bg-card border-t border-x sm:border border-[#2a2a2a] overflow-hidden rounded-t-2xl sm:rounded-none max-h-[90vh] flex flex-col">
+        className="relative w-full sm:max-w-md bg-card border-t border-x sm:border border-[#383838] overflow-hidden rounded-t-2xl sm:rounded-none max-h-[90vh] flex flex-col">
         <div className="h-[2px] bg-accent shrink-0" />
-        <div className="px-6 sm:px-8 py-5 sm:py-6 border-b border-[#1e1e1e] flex items-center justify-between shrink-0">
+        <div className="px-6 sm:px-8 py-5 sm:py-6 border-b border-[#2e2e2e] flex items-center justify-between shrink-0">
           <div>
             <h3 className="hv font-black text-xl uppercase text-white">Modifica Pianta</h3>
-            <p className="text-[9px] font-sans uppercase tracking-widest text-[#777] mt-1">Aggiorna il nome della pianta</p>
+            <p className="text-[9px] font-sans uppercase tracking-widest text-[#999] mt-1">Aggiorna il nome della pianta</p>
           </div>
-          <button onClick={onClose} className="text-[#777] hover:text-white transition-colors p-1"><X size={18} /></button>
+          <button onClick={onClose} className="text-[#999] hover:text-white transition-colors p-1"><X size={18} /></button>
         </div>
         <form className="p-6 sm:p-8 space-y-5 overflow-y-auto" onSubmit={(e) => { e.preventDefault(); onSubmit(name); }}>
           <Field label="Nome Pianta">
             <input required
-              className="w-full bg-bg border border-[#2a2a2a] px-4 py-3 text-xs font-sans uppercase tracking-widest text-white placeholder-[#444] outline-none transition-colors"
+              className="w-full bg-bg border border-[#383838] px-4 py-3 text-xs font-sans uppercase tracking-widest text-white placeholder-[#444] outline-none transition-colors"
               value={name} onChange={e => setName(e.target.value)} />
           </Field>
           <div className="flex gap-3 pt-2">
             <button type="button" onClick={onClose}
-              className="flex-1 py-3.5 text-[9px] hv font-black uppercase tracking-widest border border-[#2a2a2a] text-[#777] hover:text-white hover:border-[#333] transition-all">
+              className="flex-1 py-3.5 text-[9px] hv font-black uppercase tracking-widest border border-[#383838] text-[#999] hover:text-white hover:border-[#333] transition-all">
               Annulla
             </button>
             <button type="submit"
@@ -1966,7 +1966,7 @@ function FloorPlanMetaModal({ fp, onClose, onSubmit }: {
 
 function IconBtn({ children, onClick }: { children: React.ReactNode; onClick?: () => void }) {
   return (
-    <button onClick={onClick} className="w-8 h-8 border border-[#2a2a2a] flex items-center justify-center text-[#777] hover:text-accent hover:border-[#2a2a2a] transition-all">
+    <button onClick={onClick} className="w-8 h-8 border border-[#383838] flex items-center justify-center text-[#999] hover:text-accent hover:border-[#383838] transition-all">
       {children}
     </button>
   );

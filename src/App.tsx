@@ -14,6 +14,53 @@ import FloorPlanEditor from './components/floorplan/FloorPlanEditor';
 
 type AppView = 'venues' | 'venue-events' | 'events' | 'active-events' | 'plan' | 'editor' | 'reservations' | 'approvals' | 'profile';
 
+const DISPOSABLE_DOMAINS = new Set([
+  'mailinator.com','guerrillamail.com','guerrillamail.net','guerrillamail.org','guerrillamail.de',
+  'guerrillamail.info','guerrillamail.biz','guerrillamailblock.com','grr.la','sharklasers.com',
+  'spam4.me','trashmail.com','trashmail.me','trashmail.at','trashmail.io','trashmail.xyz',
+  'dispostable.com','fakeinbox.com','tempr.email','discard.email','yopmail.com',
+  '10minutemail.com','10minutemail.net','tempmail.com','tempmail.net','tempmail.org',
+  'throwaway.email','maildrop.cc','mailnesia.com','spamgourmet.com','wegwerfmail.de',
+  'mytrashmail.com','throwam.com','mailtemp.info','mailtemp.net','luxusmail.org',
+  'spamfree24.org','mailnull.com','spamify.com','trash-mail.at','fakemails.com',
+  'fakemail.fr','jetable.fr.nf','getnada.com','mailnull.com','spamhereplease.com',
+  'getairmail.com','filzmail.com','owlpic.com','trbvm.com','spamgourmet.net',
+  'spamgourmet.org','mailtemp.co.uk','anonaddy.com','33mail.com','spamex.com',
+]);
+
+function validateEmail(email: string): string {
+  const trimmed = email.trim().toLowerCase();
+  if (!/^[a-zA-Z0-9._%+\-]+@[a-zA-Z0-9.\-]+\.[a-zA-Z]{2,}$/.test(trimmed))
+    return 'Formato email non valido.';
+  const [local, domain] = trimmed.split('@');
+  if (DISPOSABLE_DOMAINS.has(domain))
+    return 'Email temporanee o usa-e-getta non ammesse.';
+  if (/^(test|fake|temp|trash|spam|example|noreply|no-reply)\./i.test(domain))
+    return 'Dominio email non valido.';
+  if (/^(test|fake|temp|trash|spam|aaa|bbb|xxx|yyy|zzz|asdf|qwerty|user123|admin|root)$/.test(local))
+    return 'Inserisci un indirizzo email reale.';
+  return '';
+}
+
+function validatePhone(phone: string): string {
+  const stripped = phone.trim().replace(/[\s\-\(\)\.]/g, '');
+  if (!stripped) return 'Numero di telefono obbligatorio.';
+  if (stripped.startsWith('+')) {
+    if (stripped.startsWith('+39')) {
+      const nat = stripped.slice(3);
+      if (/^3\d{9}$/.test(nat) || /^0\d{8,9}$/.test(nat)) return '';
+      return 'Numero italiano non valido. Es: +39 333 000 0000';
+    }
+    if (/^\+\d{7,15}$/.test(stripped)) return '';
+    return 'Numero internazionale non valido.';
+  }
+  if (/^3\d{9}$/.test(stripped)) return '';
+  if (/^0\d{8,9}$/.test(stripped)) return '';
+  if (stripped.length < 9) return 'Numero troppo corto.';
+  if (stripped.length > 15) return 'Numero troppo lungo.';
+  return 'Formato non valido. Es: +39 333 000 0000 oppure 333 000 0000';
+}
+
 const PAGE = {
   initial: { opacity: 0, y: 12 },
   animate: { opacity: 1, y: 0 },
@@ -44,6 +91,8 @@ export default function App() {
   const [regPassword, setRegPassword] = useState('');
   const [regPhone, setRegPhone] = useState('');
   const [regError, setRegError] = useState('');
+  const [regEmailError, setRegEmailError] = useState('');
+  const [regPhoneError, setRegPhoneError] = useState('');
   const [regDone, setRegDone] = useState(false);
   const [forgotEmail, setForgotEmail] = useState('');
   const [forgotError, setForgotError] = useState('');
@@ -108,6 +157,11 @@ export default function App() {
 
   const handleRegister = (e: React.FormEvent) => {
     e.preventDefault();
+    const emailErr = validateEmail(regEmail);
+    const phoneErr = validatePhone(regPhone);
+    setRegEmailError(emailErr);
+    setRegPhoneError(phoneErr);
+    if (emailErr || phoneErr) return;
     const exists = managedUsers.find(u => u.email.toLowerCase() === regEmail.trim().toLowerCase());
     if (exists) { setRegError('Email già registrata.'); return; }
     const newUser: ManagedUser = {
@@ -183,7 +237,7 @@ export default function App() {
     setUser(null); setSelectedVenue(null); setSelectedEvent(null);
     setLoginEmail(''); setLoginPassword(''); setLoginError('');
     setAuthScreen('login');
-    setRegDone(false); setRegName(''); setRegLastName(''); setRegEmail(''); setRegPassword(''); setRegPhone(''); setRegError('');
+    setRegDone(false); setRegName(''); setRegLastName(''); setRegEmail(''); setRegPassword(''); setRegPhone(''); setRegError(''); setRegEmailError(''); setRegPhoneError('');
     setForgotEmail(''); setForgotError(''); setForgotSent(false); setForgotDevLink('');
     setNewPassword(''); setResetError(''); setResetDone(false);
   };
@@ -476,15 +530,25 @@ export default function App() {
                     </div>
                     <div className="space-y-1">
                       <label className="text-[9px] hv font-black uppercase tracking-[0.2em] text-[#444]">Email</label>
-                      <input type="email" required value={regEmail} onChange={e => { setRegEmail(e.target.value); setRegError(''); }}
+                      <input
+                        type="email" required value={regEmail}
+                        onChange={e => { setRegEmail(e.target.value); setRegEmailError(''); setRegError(''); }}
+                        onBlur={() => setRegEmailError(validateEmail(regEmail))}
                         placeholder="tua@email.it"
-                        className="w-full bg-[#0a0a0a] border border-[#2a2a2a] px-5 py-4 text-sm text-white placeholder-[#444] outline-none focus:border-accent/40 transition-colors font-sans" />
+                        className={`w-full bg-[#0a0a0a] border px-5 py-4 text-sm text-white placeholder-[#444] outline-none transition-colors font-sans ${regEmailError ? 'border-red-500/60' : 'border-[#2a2a2a] focus:border-accent/40'}`}
+                      />
+                      {regEmailError && <p className="text-red-500/80 text-[9px] font-sans uppercase tracking-widest">{regEmailError}</p>}
                     </div>
                     <div className="space-y-1">
                       <label className="text-[9px] hv font-black uppercase tracking-[0.2em] text-[#444]">Telefono</label>
-                      <input type="tel" required value={regPhone} onChange={e => { setRegPhone(e.target.value); setRegError(''); }}
+                      <input
+                        type="tel" required value={regPhone}
+                        onChange={e => { setRegPhone(e.target.value); setRegPhoneError(''); setRegError(''); }}
+                        onBlur={() => setRegPhoneError(validatePhone(regPhone))}
                         placeholder="+39 333 000 0000"
-                        className="w-full bg-[#0a0a0a] border border-[#2a2a2a] px-5 py-4 text-sm text-white placeholder-[#444] outline-none focus:border-accent/40 transition-colors font-sans" />
+                        className={`w-full bg-[#0a0a0a] border px-5 py-4 text-sm text-white placeholder-[#444] outline-none transition-colors font-sans ${regPhoneError ? 'border-red-500/60' : 'border-[#2a2a2a] focus:border-accent/40'}`}
+                      />
+                      {regPhoneError && <p className="text-red-500/80 text-[9px] font-sans uppercase tracking-widest">{regPhoneError}</p>}
                     </div>
                     <div className="space-y-1">
                       <label className="text-[9px] hv font-black uppercase tracking-[0.2em] text-[#444]">Password</label>
@@ -501,7 +565,7 @@ export default function App() {
                   </form>
 
                   <div className="mt-8 pt-6 border-t border-[#1e1e1e]">
-                    <button onClick={() => { setAuthScreen('login'); setRegError(''); }}
+                    <button onClick={() => { setAuthScreen('login'); setRegError(''); setRegEmailError(''); setRegPhoneError(''); }}
                       className="w-full text-[9px] hv font-black uppercase tracking-[0.2em] text-[#444] hover:text-[#777] transition-colors py-2">
                       ← Torna al Login
                     </button>

@@ -39,7 +39,20 @@ body {
 
 /* ── Accent glow ─────────────────────────────────────────── */
 .glow {
-  box-shadow: 0 0 48px rgba(240, 232, 0, 0.14);
+  box-shadow: 0 0 32px rgba(240, 232, 0, 0.12);
+}
+.glow-text {
+  text-shadow: 0 0 24px rgba(240, 232, 0, 0.35);
+}
+.glow-sm {
+  box-shadow: 0 0 16px rgba(240, 232, 0, 0.07);
+}
+.card-hover {
+  transition: border-color 0.25s ease, box-shadow 0.25s ease;
+}
+.card-hover:hover {
+  border-color: rgba(240, 232, 0, 0.22);
+  box-shadow: 0 0 28px rgba(240, 232, 0, 0.06);
 }
 
 /* ── Animated status dot ─────────────────────────────────── */
@@ -64,9 +77,23 @@ body {
 /* ── Selection ───────────────────────────────────────────── */
 ::selection { background: #F0E800; color: #000; }
 
-/* ── Input/Textarea focus ring ───────────────────────────── */
+/* ── Focus ring globale ──────────────────────────────────── */
 input:focus-visible,
 textarea:focus-visible {
   outline: 1px solid #F0E800;
   outline-offset: 0px;
+}
+button:focus-visible,
+a:focus-visible {
+  outline: 1px solid rgba(240, 232, 0, 0.6);
+  outline-offset: 2px;
+}
+
+/* ── Reduced motion ──────────────────────────────────────── */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
+  .blink { animation: none; opacity: 1; }
 }

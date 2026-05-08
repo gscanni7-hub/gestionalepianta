@@ -426,7 +426,7 @@ export default function App() {
                     </div>
                     {loginError && <p className="text-red-500/80 text-[10px] font-sans uppercase tracking-widest pt-1">{loginError}</p>}
                     <motion.button type="submit" whileHover={{ scale: 1.01 }} whileTap={{ scale: 0.99 }}
-                      className="group w-full bg-accent text-black py-[18px] text-[10px] hv font-black uppercase tracking-[0.3em] flex items-center justify-between px-6 hover:bg-white transition-colors mt-2">
+                      className="group w-full bg-accent text-black py-[18px] text-[10px] hv font-black uppercase tracking-[0.3em] flex items-center justify-between px-6 hover:bg-white transition-all duration-200 mt-2 hover:shadow-[0_0_24px_rgba(240,232,0,0.3)] glow-sm">
                       <span>Accedi</span>
                       <ChevronRight size={14} className="group-hover:translate-x-1 transition-transform" />
                     </motion.button>
@@ -487,7 +487,7 @@ export default function App() {
                         </div>
                         {forgotError && <p className="text-red-500/80 text-[10px] font-sans uppercase tracking-widest pt-1">{forgotError}</p>}
                         <motion.button type="submit" whileHover={{ scale: 1.01 }} whileTap={{ scale: 0.99 }}
-                          className="group w-full bg-accent text-black py-[18px] text-[10px] hv font-black uppercase tracking-[0.3em] flex items-center justify-between px-6 hover:bg-white transition-colors mt-2">
+                          className="group w-full bg-accent text-black py-[18px] text-[10px] hv font-black uppercase tracking-[0.3em] flex items-center justify-between px-6 hover:bg-white transition-all duration-200 mt-2 hover:shadow-[0_0_24px_rgba(240,232,0,0.3)] glow-sm">
                           <span>Invia Link</span>
                           <ChevronRight size={14} className="group-hover:translate-x-1 transition-transform" />
                         </motion.button>
@@ -533,7 +533,7 @@ export default function App() {
                         </div>
                         {resetError && <p className="text-red-500/80 text-[10px] font-sans uppercase tracking-widest pt-1">{resetError}</p>}
                         <motion.button type="submit" whileHover={{ scale: 1.01 }} whileTap={{ scale: 0.99 }}
-                          className="group w-full bg-accent text-black py-[18px] text-[10px] hv font-black uppercase tracking-[0.3em] flex items-center justify-between px-6 hover:bg-white transition-colors mt-2">
+                          className="group w-full bg-accent text-black py-[18px] text-[10px] hv font-black uppercase tracking-[0.3em] flex items-center justify-between px-6 hover:bg-white transition-all duration-200 mt-2 hover:shadow-[0_0_24px_rgba(240,232,0,0.3)] glow-sm">
                           <span>Reimposta Password</span>
                           <ChevronRight size={14} className="group-hover:translate-x-1 transition-transform" />
                         </motion.button>
@@ -1266,7 +1266,7 @@ function SidebarContent({ user, view, onNav, onLogout, occupancyPct = 0, revenue
       {/* Brand */}
       <div className="px-6 py-6 border-b border-[#1e1e1e] shrink-0">
         <div className="flex items-center gap-3">
-          <div className="w-8 h-8 bg-accent flex items-center justify-center shrink-0">
+          <div className="w-8 h-8 bg-accent flex items-center justify-center shrink-0 glow">
             <span className="hv font-black text-black text-sm leading-none">N</span>
           </div>
           <div>
@@ -1280,8 +1280,8 @@ function SidebarContent({ user, view, onNav, onLogout, occupancyPct = 0, revenue
       {user.role === 'admin' && (
         <div className="px-6 py-6 border-b border-[#1e1e1e] space-y-5 shrink-0">
           <div>
-            <div className="hv font-black leading-none text-white" style={{ fontSize: 52 }}>
-              {occupancyPct}<span className="text-[28px] text-[#222]">%</span>
+            <div className="hv font-black leading-none text-white glow-text" style={{ fontSize: 52 }}>
+              {occupancyPct}<span className="text-[28px] text-[#333]">%</span>
             </div>
             <div className="mt-2.5 h-px bg-[#111] relative overflow-hidden">
               <motion.div className="h-px bg-accent absolute inset-y-0 left-0"
@@ -1291,7 +1291,7 @@ function SidebarContent({ user, view, onNav, onLogout, occupancyPct = 0, revenue
             <p className="text-[9px] font-sans uppercase tracking-[0.35em] text-[#777] mt-1.5">Occupancy</p>
           </div>
           <div>
-            <div className="hv font-black text-accent leading-none" style={{ fontSize: 36 }}>{revenueDisplay}</div>
+            <div className="hv font-black text-accent leading-none glow-text" style={{ fontSize: 36 }}>{revenueDisplay}</div>
             <p className="text-[9px] font-sans uppercase tracking-[0.35em] text-[#777] mt-1">Revenue Est.</p>
           </div>
         </div>
@@ -1407,12 +1407,12 @@ function NavLink({ icon, label, active, onClick, badge }: { icon: React.ReactNod
   return (
     <button onClick={onClick}
       className={cn(
-        'flex items-center gap-3 w-full px-3 py-2.5 text-[10px] font-sans font-medium uppercase tracking-[0.25em] transition-all group border-l-2',
+        'flex items-center gap-3 w-full px-3 py-2.5 text-[10px] font-sans font-medium uppercase tracking-[0.25em] transition-all duration-200 group border-l-2',
         active
-          ? 'text-accent border-accent bg-accent/5'
-          : 'text-[#777] border-transparent hover:text-white hover:border-[#2a2a2a]'
+          ? 'text-accent border-accent bg-accent/5 [box-shadow:-2px_0_12px_rgba(240,232,0,0.2)]'
+          : 'text-[#555] border-transparent hover:text-white hover:border-[#333] hover:bg-white/[0.02]'
       )}>
-      <span className={cn('transition-colors shrink-0', active ? 'text-accent' : 'text-[#666] group-hover:text-[#555]')}>
+      <span className={cn('transition-colors duration-200 shrink-0', active ? 'text-accent' : 'text-[#444] group-hover:text-[#888]')}>
         {icon}
       </span>
       <span className="flex-1 text-left">{label}</span>
@@ -1429,8 +1429,8 @@ function NavLink({ icon, label, active, onClick, badge }: { icon: React.ReactNod
 function PageTitle({ title, sub }: { title: string; sub?: string }) {
   return (
     <div className="mb-8">
-      <h2 className="hv font-black text-3xl md:text-4xl uppercase text-white leading-tight">{title}</h2>
-      {sub && <p className="text-[10px] font-sans uppercase tracking-widest text-[#777] mt-1.5">{sub}</p>}
+      <h2 className="hv font-black text-3xl md:text-4xl uppercase text-white leading-tight tracking-tight">{title}</h2>
+      {sub && <p className="text-[10px] font-sans uppercase tracking-[0.3em] text-[#555] mt-2">{sub}</p>}
     </div>
   );
 }
@@ -1439,8 +1439,8 @@ function PageTitle({ title, sub }: { title: string; sub?: string }) {
 function EmptyState({ icon, label, children }: { icon: React.ReactNode; label: string; children?: React.ReactNode }) {
   return (
     <div className="flex flex-col items-center justify-center py-28 text-center mt-4">
-      <div className="text-[#444] mb-4">{icon}</div>
-      <p className="text-[10px] font-sans uppercase tracking-widest text-[#777]">{label}</p>
+      <div className="text-[#333] mb-5">{icon}</div>
+      <p className="text-[9px] font-sans uppercase tracking-[0.35em] text-[#444]">{label}</p>
       {children}
     </div>
   );
@@ -1517,7 +1517,7 @@ function EventCard({ event, venueName, onClick, onEdit, onDelete }: {
     <motion.div
       onClick={onClick}
       whileHover={{ y: -2 }}
-      className="group bg-card border border-[#2a2a2a] cursor-pointer overflow-hidden flex flex-col"
+      className="group bg-card border border-[#2a2a2a] cursor-pointer overflow-hidden flex flex-col card-hover"
     >
       <div className="h-[2px] w-0 group-hover:w-full bg-accent transition-all duration-500 origin-left" />
 

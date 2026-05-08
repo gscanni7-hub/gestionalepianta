@@ -14,7 +14,11 @@
 
 /* ── Global ──────────────────────────────────────────────── */
 *, *::before, *::after { box-sizing: border-box; }
-button { cursor: pointer; }
+button, a, select, label, [role="button"],
+input[type="submit"], input[type="button"],
+input[type="checkbox"], input[type="radio"] {
+  cursor: pointer !important;
+}
 
 body {
   @apply bg-bg text-white font-sans;

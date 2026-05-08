@@ -85,8 +85,7 @@ textarea:focus-visible {
 }
 button:focus-visible,
 a:focus-visible {
-  outline: 1px solid rgba(212, 98, 42, 0.7);
-  outline-offset: 2px;
+  outline: none;
 }
 
 /* ── Reduced motion ──────────────────────────────────────── */

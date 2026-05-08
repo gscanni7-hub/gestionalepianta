@@ -1409,7 +1409,7 @@ function NavLink({ icon, label, active, onClick, badge }: { icon: React.ReactNod
       className={cn(
         'flex items-center gap-3 w-full px-3 py-2.5 text-[10px] font-sans font-medium uppercase tracking-[0.25em] transition-all duration-200 group border-l-2',
         active
-          ? 'text-accent border-accent bg-accent/5 [box-shadow:-2px_0_12px_rgba(240,232,0,0.2)]'
+          ? 'text-accent border-accent bg-accent/5'
           : 'text-[#777] border-transparent hover:text-white hover:border-[#333] hover:bg-white/[0.02]'
       )}>
       <span className={cn('transition-colors duration-200 shrink-0', active ? 'text-accent' : 'text-[#666] group-hover:text-[#888]')}>

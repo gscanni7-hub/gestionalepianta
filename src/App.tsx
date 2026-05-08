@@ -346,7 +346,7 @@ export default function App() {
   /* ── LOGIN ──────────────────────────────────────────────── */
   if (!user) {
     return (
-      <div className="min-h-screen bg-black flex flex-col lg:flex-row">
+      <div className="min-h-screen bg-[#1A1A1A] flex flex-col lg:flex-row">
         {/* Brand panel — desktop */}
         <motion.div
           initial={{ opacity: 0, x: -40 }} animate={{ opacity: 1, x: 0 }}
@@ -378,7 +378,7 @@ export default function App() {
         <motion.div
           initial={{ opacity: 0 }} animate={{ opacity: 1 }}
           transition={{ duration: 0.4, delay: 0.1 }}
-          className="flex-1 flex flex-col justify-center items-center p-8 lg:p-16 bg-black lg:bg-[#030303]"
+          className="flex-1 flex flex-col justify-center items-center p-8 lg:p-16 bg-[#1A1A1A]"
         >
           {/* Mobile logo */}
           <div className="lg:hidden mb-14 text-center">
@@ -656,7 +656,7 @@ export default function App() {
     <div className="min-h-screen bg-bg text-white flex flex-col md:flex-row relative">
 
       {/* ── Mobile top bar ── */}
-      <div className="md:hidden h-12 bg-black border-b border-[#2e2e2e] flex items-center justify-between px-4 sticky top-0 z-50 shrink-0">
+      <div className="md:hidden h-12 bg-[#171717] border-b border-[#2e2e2e] flex items-center justify-between px-4 sticky top-0 z-50 shrink-0">
         <span className="hv font-black text-xl uppercase tracking-tight">NP</span>
         <button onClick={() => setMobileSidebarOpen(o => !o)} className="text-[#777] hover:text-white transition-colors p-1">
           <Menu size={18} />
@@ -675,7 +675,7 @@ export default function App() {
             <motion.div
               initial={{ x: '-100%' }} animate={{ x: 0 }} exit={{ x: '-100%' }}
               transition={{ type: 'spring', damping: 30, stiffness: 300 }}
-              className="fixed left-0 top-0 bottom-0 w-72 bg-black border-r border-[#2e2e2e] z-50 md:hidden flex flex-col"
+              className="fixed left-0 top-0 bottom-0 w-72 bg-[#171717] border-r border-[#2e2e2e] z-50 md:hidden flex flex-col"
             >
               <SidebarContent
                 user={user}
@@ -692,7 +692,7 @@ export default function App() {
       </AnimatePresence>
 
       {/* ── Desktop sidebar ── */}
-      <aside className="hidden md:flex w-60 xl:w-64 border-r border-[#2e2e2e] bg-black flex-col shrink-0 sticky top-0 h-screen">
+      <aside className="hidden md:flex w-60 xl:w-64 border-r border-[#2e2e2e] bg-[#171717] flex-col shrink-0 sticky top-0 h-screen">
         <SidebarContent user={user} view={view}
           onNav={(v) => { setView(v as AppView); setSelectedVenue(null); setSelectedEvent(null); setEditingFloorPlan(null); }}
           onLogout={handleLogout}
@@ -705,7 +705,7 @@ export default function App() {
       {/* ── Main ── */}
       <main className="flex-1 flex flex-col min-w-0 overflow-auto">
         {/* Header */}
-        <header className="h-12 border-b border-[#2e2e2e] flex items-center justify-between px-5 bg-black/95 backdrop-blur-sm sticky top-0 md:top-0 z-30 shrink-0">
+        <header className="h-12 border-b border-[#2e2e2e] flex items-center justify-between px-5 bg-[#171717]/95 backdrop-blur-sm sticky top-0 md:top-0 z-30 shrink-0">
           <div className="flex items-center gap-4 min-w-0">
             {showBack && (
               <button onClick={goBack}

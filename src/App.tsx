@@ -8,6 +8,7 @@ import { MOCK_USERS, INITIAL_VENUES, INITIAL_EVENTS, INITIAL_RESERVATIONS, INITI
 import { UserProfile, Event, Reservation, Venue, FloorPlan, ManagedUser } from './types';
 import { motion, AnimatePresence } from 'framer-motion';
 import { cn } from './lib/utils';
+import { isEmailConfigured, sendPasswordResetEmail } from './lib/emailService';
 import FloorPlanViewer from './components/floorplan/FloorPlanViewer';
 import FloorPlanEditor from './components/floorplan/FloorPlanEditor';
 
@@ -33,7 +34,7 @@ export default function App() {
       return saved ? JSON.parse(saved) : INITIAL_MANAGED_USERS;
     } catch { return INITIAL_MANAGED_USERS; }
   });
-  const [authScreen, setAuthScreen] = useState<'login' | 'register'>('login');
+  const [authScreen, setAuthScreen] = useState<'login' | 'register' | 'forgot' | 'reset'>('login');
   const [loginEmail, setLoginEmail] = useState('');
   const [loginPassword, setLoginPassword] = useState('');
   const [loginError, setLoginError] = useState('');
@@ -44,6 +45,15 @@ export default function App() {
   const [regPhone, setRegPhone] = useState('');
   const [regError, setRegError] = useState('');
   const [regDone, setRegDone] = useState(false);
+  const [forgotEmail, setForgotEmail] = useState('');
+  const [forgotError, setForgotError] = useState('');
+  const [forgotSent, setForgotSent] = useState(false);
+  const [forgotDevLink, setForgotDevLink] = useState('');
+  const [resetTokenState, setResetTokenState] = useState('');
+  const [resetEmailState, setResetEmailState] = useState('');
+  const [newPassword, setNewPassword] = useState('');
+  const [resetError, setResetError] = useState('');
+  const [resetDone, setResetDone] = useState(false);
   const [view, setView] = useState<AppView>('venues');
   const [venues, setVenues] = useState(INITIAL_VENUES);
   const [events, setEvents] = useState(INITIAL_EVENTS);
@@ -62,6 +72,24 @@ export default function App() {
   useEffect(() => {
     localStorage.setItem('nightplan_managed_users', JSON.stringify(managedUsers));
   }, [managedUsers]);
+
+  useEffect(() => {
+    const hash = window.location.hash;
+    if (!hash.startsWith('#reset=')) return;
+    const token = hash.slice(7);
+    type RT = { token: string; email: string; expiresAt: number };
+    const tokens: RT[] = JSON.parse(localStorage.getItem('nightplan_reset_tokens') ?? '[]');
+    const found = tokens.find(t => t.token === token && t.expiresAt > Date.now());
+    if (found) {
+      setResetTokenState(token);
+      setResetEmailState(found.email);
+      setAuthScreen('reset');
+      if (user) { handleLogout(); }
+    } else {
+      window.location.hash = '';
+    }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   const handleLogin = (e: React.FormEvent) => {
     e.preventDefault();
@@ -97,6 +125,43 @@ export default function App() {
     setRegDone(true);
   };
 
+  const handleForgotPassword = async (e: React.FormEvent) => {
+    e.preventDefault();
+    const found = managedUsers.find(u => u.email.toLowerCase() === forgotEmail.trim().toLowerCase());
+    if (!found) { setForgotError('Nessun account trovato con questa email.'); return; }
+    const token = Math.random().toString(36).substr(2, 16) + Date.now().toString(36);
+    const resetLink = `${window.location.origin}${window.location.pathname}#reset=${token}`;
+    type RT = { token: string; email: string; expiresAt: number };
+    const tokens: RT[] = JSON.parse(localStorage.getItem('nightplan_reset_tokens') ?? '[]');
+    tokens.push({ token, email: found.email, expiresAt: Date.now() + 30 * 60 * 1000 });
+    localStorage.setItem('nightplan_reset_tokens', JSON.stringify(tokens));
+    if (isEmailConfigured()) {
+      try {
+        await sendPasswordResetEmail(found.email, found.displayName, resetLink);
+        setForgotSent(true);
+      } catch {
+        setForgotDevLink(resetLink);
+        setForgotSent(true);
+      }
+    } else {
+      setForgotDevLink(resetLink);
+      setForgotSent(true);
+    }
+  };
+
+  const handleResetPassword = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!resetTokenState || !resetEmailState) return;
+    setManagedUsers(prev => prev.map(u =>
+      u.email === resetEmailState ? { ...u, password: newPassword } : u
+    ));
+    type RT = { token: string; email: string; expiresAt: number };
+    const tokens: RT[] = JSON.parse(localStorage.getItem('nightplan_reset_tokens') ?? '[]');
+    localStorage.setItem('nightplan_reset_tokens', JSON.stringify(tokens.filter((t: RT) => t.token !== resetTokenState)));
+    window.location.hash = '';
+    setResetDone(true);
+  };
+
   const handleUpdateProfile = (updates: { displayName: string; lastName: string; profileImage?: string }) => {
     setManagedUsers(prev => prev.map(u => u.id === user!.id ? { ...u, ...updates } : u));
     const updated: UserProfile = { ...user!, ...updates };
@@ -117,7 +182,10 @@ export default function App() {
     localStorage.removeItem('nightplan_user');
     setUser(null); setSelectedVenue(null); setSelectedEvent(null);
     setLoginEmail(''); setLoginPassword(''); setLoginError('');
-    setAuthScreen('login'); setRegDone(false); setRegName(''); setRegLastName(''); setRegEmail(''); setRegPassword(''); setRegPhone(''); setRegError('');
+    setAuthScreen('login');
+    setRegDone(false); setRegName(''); setRegLastName(''); setRegEmail(''); setRegPassword(''); setRegPhone(''); setRegError('');
+    setForgotEmail(''); setForgotError(''); setForgotSent(false); setForgotDevLink('');
+    setNewPassword(''); setResetError(''); setResetDone(false);
   };
 
   const openVenue = (venue: Venue) => { setSelectedVenue(venue); setView('venue-events'); };
@@ -258,6 +326,10 @@ export default function App() {
                       <span>Accedi</span>
                       <ChevronRight size={14} className="group-hover:translate-x-1 transition-transform" />
                     </motion.button>
+                    <button type="button" onClick={() => { setAuthScreen('forgot'); setForgotError(''); setForgotSent(false); setForgotDevLink(''); }}
+                      className="w-full text-center text-[9px] font-sans text-[#333] hover:text-[#666] transition-colors mt-3 py-1">
+                      Password dimenticata?
+                    </button>
                   </form>
 
                   <div className="mt-10 pt-8 border-t border-[#1e1e1e]">
@@ -267,6 +339,100 @@ export default function App() {
                       Registrati
                     </button>
                   </div>
+                </motion.div>
+              ) : authScreen === 'forgot' ? (
+                <motion.div key="forgot" initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -8 }} transition={{ duration: 0.18 }}>
+                  {forgotSent ? (
+                    <div className="text-center py-4">
+                      <div className="w-14 h-14 bg-accent/10 border border-accent/20 flex items-center justify-center mx-auto mb-6">
+                        <UserCheck size={24} className="text-accent" />
+                      </div>
+                      <h2 className="hv font-black text-xl uppercase text-white mb-3">Email Inviata</h2>
+                      <p className="text-[#777] text-[10px] font-sans uppercase tracking-widest leading-loose">
+                        Controlla la tua casella di posta<br />e clicca il link per reimpostare<br />la password.
+                      </p>
+                      {forgotDevLink && (
+                        <div className="mt-6 p-4 bg-[#0a0a0a] border border-[#2a2a2a] text-left">
+                          <p className="text-[8px] font-sans uppercase tracking-widest text-[#555] mb-2">Link di reset (dev mode)</p>
+                          <a href={forgotDevLink} className="text-accent text-[10px] font-mono break-all hover:underline">
+                            Clicca qui per reimpostare
+                          </a>
+                        </div>
+                      )}
+                      <button onClick={() => { setAuthScreen('login'); setForgotSent(false); setForgotEmail(''); }}
+                        className="mt-8 w-full py-3.5 text-[9px] hv font-black uppercase tracking-[0.2em] border border-[#2a2a2a] text-[#666] hover:border-accent/40 hover:text-accent transition-colors">
+                        Torna al Login
+                      </button>
+                    </div>
+                  ) : (
+                    <>
+                      <div className="mb-10">
+                        <h2 className="hv font-black text-2xl uppercase text-white">Password Dimenticata</h2>
+                        <p className="text-[#777] text-[10px] font-sans uppercase tracking-widest mt-2">Inserisci la tua email</p>
+                      </div>
+                      <form onSubmit={handleForgotPassword} className="space-y-3">
+                        <div className="space-y-1">
+                          <label className="text-[9px] hv font-black uppercase tracking-[0.2em] text-[#444]">Email</label>
+                          <input type="email" required value={forgotEmail}
+                            onChange={e => { setForgotEmail(e.target.value); setForgotError(''); }}
+                            placeholder="tua@email.it"
+                            className="w-full bg-[#0a0a0a] border border-[#2a2a2a] px-5 py-4 text-sm text-white placeholder-[#444] outline-none focus:border-accent/40 transition-colors font-sans" />
+                        </div>
+                        {forgotError && <p className="text-red-500/80 text-[10px] font-sans uppercase tracking-widest pt-1">{forgotError}</p>}
+                        <motion.button type="submit" whileHover={{ scale: 1.01 }} whileTap={{ scale: 0.99 }}
+                          className="group w-full bg-accent text-black py-[18px] text-[10px] hv font-black uppercase tracking-[0.3em] flex items-center justify-between px-6 hover:bg-white transition-colors mt-2">
+                          <span>Invia Link</span>
+                          <ChevronRight size={14} className="group-hover:translate-x-1 transition-transform" />
+                        </motion.button>
+                      </form>
+                      <div className="mt-8 pt-6 border-t border-[#1e1e1e]">
+                        <button onClick={() => setAuthScreen('login')}
+                          className="w-full text-[9px] hv font-black uppercase tracking-[0.2em] text-[#444] hover:text-[#777] transition-colors py-2">
+                          ← Torna al Login
+                        </button>
+                      </div>
+                    </>
+                  )}
+                </motion.div>
+              ) : authScreen === 'reset' ? (
+                <motion.div key="reset" initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -8 }} transition={{ duration: 0.18 }}>
+                  {resetDone ? (
+                    <div className="text-center py-4">
+                      <div className="w-14 h-14 bg-accent/10 border border-accent/20 flex items-center justify-center mx-auto mb-6">
+                        <UserCheck size={24} className="text-accent" />
+                      </div>
+                      <h2 className="hv font-black text-xl uppercase text-white mb-3">Password Aggiornata</h2>
+                      <p className="text-[#777] text-[10px] font-sans uppercase tracking-widest leading-loose">
+                        La tua password è stata<br />reimpostata con successo.
+                      </p>
+                      <button onClick={() => { setAuthScreen('login'); setResetDone(false); setNewPassword(''); }}
+                        className="mt-8 w-full py-3.5 text-[9px] hv font-black uppercase tracking-[0.2em] bg-accent text-black hover:bg-white transition-colors">
+                        Accedi ora
+                      </button>
+                    </div>
+                  ) : (
+                    <>
+                      <div className="mb-10">
+                        <h2 className="hv font-black text-2xl uppercase text-white">Nuova Password</h2>
+                        <p className="text-[#777] text-[10px] font-sans uppercase tracking-widest mt-2">{resetEmailState}</p>
+                      </div>
+                      <form onSubmit={handleResetPassword} className="space-y-3">
+                        <div className="space-y-1">
+                          <label className="text-[9px] hv font-black uppercase tracking-[0.2em] text-[#444]">Nuova Password</label>
+                          <input type="password" required minLength={4} value={newPassword}
+                            onChange={e => { setNewPassword(e.target.value); setResetError(''); }}
+                            placeholder="••••••••"
+                            className="w-full bg-[#0a0a0a] border border-[#2a2a2a] px-5 py-4 text-sm text-white placeholder-[#444] outline-none focus:border-accent/40 transition-colors font-sans" />
+                        </div>
+                        {resetError && <p className="text-red-500/80 text-[10px] font-sans uppercase tracking-widest pt-1">{resetError}</p>}
+                        <motion.button type="submit" whileHover={{ scale: 1.01 }} whileTap={{ scale: 0.99 }}
+                          className="group w-full bg-accent text-black py-[18px] text-[10px] hv font-black uppercase tracking-[0.3em] flex items-center justify-between px-6 hover:bg-white transition-colors mt-2">
+                          <span>Reimposta Password</span>
+                          <ChevronRight size={14} className="group-hover:translate-x-1 transition-transform" />
+                        </motion.button>
+                      </form>
+                    </>
+                  )}
                 </motion.div>
               ) : regDone ? (
                 <motion.div key="done" initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.18 }}

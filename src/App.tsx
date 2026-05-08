@@ -571,7 +571,7 @@ export default function App() {
                     <div className="space-y-1">
                       <label className="text-[9px] hv font-black uppercase tracking-[0.2em] text-[#444]">Email</label>
                       <input
-                        type="email" required value={regEmail}
+                        type="text" inputMode="email" autoComplete="email" required value={regEmail}
                         onChange={e => {
                           const val = e.target.value;
                           setRegEmail(val);
@@ -615,8 +615,12 @@ export default function App() {
                         className="w-full bg-[#0a0a0a] border border-[#2a2a2a] px-5 py-4 text-sm text-white placeholder-[#444] outline-none focus:border-accent/40 transition-colors font-sans" />
                     </div>
                     {regError && <p className="text-red-500/80 text-[10px] font-sans uppercase tracking-widest pt-1">{regError}</p>}
-                    <motion.button type="submit" whileHover={{ scale: 1.01 }} whileTap={{ scale: 0.99 }}
-                      className="group w-full bg-accent text-black py-[18px] text-[10px] hv font-black uppercase tracking-[0.3em] flex items-center justify-between px-6 hover:bg-white transition-colors mt-2">
+                    <motion.button
+                      type="submit"
+                      disabled={!!regEmailError || !!regPhoneError}
+                      whileHover={!regEmailError && !regPhoneError ? { scale: 1.01 } : {}}
+                      whileTap={!regEmailError && !regPhoneError ? { scale: 0.99 } : {}}
+                      className={`group w-full py-[18px] text-[10px] hv font-black uppercase tracking-[0.3em] flex items-center justify-between px-6 transition-colors mt-2 ${regEmailError || regPhoneError ? 'bg-[#2a2a2a] text-[#555] cursor-not-allowed' : 'bg-accent text-black hover:bg-white'}`}>
                       <span>Invia Richiesta</span>
                       <ChevronRight size={14} className="group-hover:translate-x-1 transition-transform" />
                     </motion.button>

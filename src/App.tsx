@@ -314,7 +314,14 @@ export default function App() {
                       </datalist>
                     </div>
                     <div className="space-y-1">
-                      <label className="text-[9px] hv font-black uppercase tracking-[0.2em] text-[#444]">Password</label>
+                      <div className="flex items-center justify-between">
+                        <label className="text-[9px] hv font-black uppercase tracking-[0.2em] text-[#444]">Password</label>
+                        <button type="button"
+                          onClick={() => { setAuthScreen('forgot'); setForgotError(''); setForgotSent(false); setForgotDevLink(''); }}
+                          className="text-[9px] font-sans text-[#666] hover:text-accent transition-colors underline">
+                          Password dimenticata?
+                        </button>
+                      </div>
                       <input type="password" autoComplete="current-password" required value={loginPassword}
                         onChange={e => { setLoginPassword(e.target.value); setLoginError(''); }}
                         placeholder="••••••••"
@@ -327,14 +334,6 @@ export default function App() {
                       <ChevronRight size={14} className="group-hover:translate-x-1 transition-transform" />
                     </motion.button>
                   </form>
-
-                  <button
-                    type="button"
-                    onClick={() => { setAuthScreen('forgot'); setForgotError(''); setForgotSent(false); setForgotDevLink(''); }}
-                    style={{ display: 'block', width: '100%', textAlign: 'center', color: '#ffffff', textDecoration: 'underline', fontSize: 12, marginTop: 14, padding: '6px 0', background: 'none', border: 'none' }}
-                  >
-                    Password dimenticata?
-                  </button>
 
                   <div className="mt-10 pt-8 border-t border-[#1e1e1e]">
                     <p className="text-[9px] font-sans text-[#444] uppercase tracking-widest text-center mb-4">Sei un PR?</p>

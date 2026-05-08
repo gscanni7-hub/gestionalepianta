@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import {
-  Calendar, Settings, BarChart3, LogOut, ChevronRight,
+  Calendar, Settings, BarChart3, LogOut, ChevronRight, ChevronDown,
   Plus, Download, Filter, Building2, X, ArrowLeft, Menu, Map, Pencil, Trash2,
   UserCheck, Bell
 } from 'lucide-react';
@@ -1301,8 +1301,7 @@ function SidebarContent({ user, view, onNav, onLogout, occupancyPct = 0, revenue
       <nav className="flex-1 px-3 py-5 overflow-y-auto">
         {user.role === 'admin' ? (
           <>
-            <NavSection label="Gestione" />
-            <div className="space-y-0.5 mb-5">
+            <NavSection label="Gestione">
               <NavLink icon={<Calendar size={14}/>} label="Serate"
                 active={view==='active-events'||view==='plan'}
                 onClick={() => onNav('active-events')} />
@@ -1312,9 +1311,8 @@ function SidebarContent({ user, view, onNav, onLogout, occupancyPct = 0, revenue
               <NavLink icon={<Map size={14}/>} label="Layout Tavoli"
                 active={view==='editor'}
                 onClick={() => onNav('editor')} />
-            </div>
-            <NavSection label="Operazioni" />
-            <div className="space-y-0.5">
+            </NavSection>
+            <NavSection label="Operazioni">
               <NavLink icon={<BarChart3 size={14}/>} label="Prenotazioni"
                 active={view==='reservations'}
                 onClick={() => onNav('reservations')} />
@@ -1322,7 +1320,7 @@ function SidebarContent({ user, view, onNav, onLogout, occupancyPct = 0, revenue
                 active={view==='approvals'}
                 onClick={() => onNav('approvals')}
                 badge={pendingCount} />
-            </div>
+            </NavSection>
           </>
         ) : (
           <div className="space-y-0.5">
@@ -1365,11 +1363,42 @@ function SidebarContent({ user, view, onNav, onLogout, occupancyPct = 0, revenue
 }
 
 /* ── NavSection ──────────────────────────────────────────── */
-function NavSection({ label }: { label: string }) {
+function NavSection({ label, children, defaultOpen = true }: { label: string; children: React.ReactNode; defaultOpen?: boolean }) {
+  const [open, setOpen] = useState(defaultOpen);
   return (
-    <p className="px-3 pt-1 pb-2 text-[8px] font-sans uppercase tracking-[0.3em] text-[#444]">
-      {label}
-    </p>
+    <div className="mb-2">
+      <button
+        onClick={() => setOpen(o => !o)}
+        className="flex items-center justify-between w-full px-3 pt-1 pb-2 group"
+      >
+        <span className="text-[8px] font-sans uppercase tracking-[0.3em] text-[#444] group-hover:text-[#666] transition-colors">
+          {label}
+        </span>
+        <motion.span
+          animate={{ rotate: open ? 0 : -90 }}
+          transition={{ duration: 0.2 }}
+          className="text-[#333] group-hover:text-[#555] transition-colors"
+        >
+          <ChevronDown size={10} />
+        </motion.span>
+      </button>
+      <AnimatePresence initial={false}>
+        {open && (
+          <motion.div
+            key="content"
+            initial={{ height: 0, opacity: 0 }}
+            animate={{ height: 'auto', opacity: 1 }}
+            exit={{ height: 0, opacity: 0 }}
+            transition={{ duration: 0.22, ease: 'easeInOut' }}
+            className="overflow-hidden"
+          >
+            <div className="space-y-0.5 pb-3">
+              {children}
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </div>
   );
 }
 

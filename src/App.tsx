@@ -329,7 +329,7 @@ export default function App() {
                   </form>
 
                   <button type="button" onClick={() => { setAuthScreen('forgot'); setForgotError(''); setForgotSent(false); setForgotDevLink(''); }}
-                    className="w-full text-center text-[11px] font-sans text-[#555] hover:text-accent transition-colors mt-4 py-2 tracking-widest uppercase">
+                    className="w-full text-center text-[11px] font-sans text-white underline hover:text-accent transition-colors mt-4 py-2">
                     Password dimenticata?
                   </button>
 

@@ -1298,35 +1298,41 @@ function SidebarContent({ user, view, onNav, onLogout, occupancyPct = 0, revenue
       )}
 
       {/* Nav */}
-      <nav className="flex-1 px-3 py-5 space-y-0.5 overflow-y-auto">
+      <nav className="flex-1 px-3 py-5 overflow-y-auto">
         {user.role === 'admin' ? (
           <>
-            <NavLink icon={<Calendar size={14}/>} label="Serate"
-              active={view==='active-events'||view==='plan'}
-              onClick={() => onNav('active-events')} />
-            <NavLink icon={<Building2 size={14}/>} label="Location"
-              active={view==='venues'||view==='venue-events'}
-              onClick={() => onNav('venues')} />
-            <NavLink icon={<Settings size={14}/>} label="Layout Tavoli"
-              active={view==='editor'}
-              onClick={() => onNav('editor')} />
-            <NavLink icon={<BarChart3 size={14}/>} label="Prenotazioni"
-              active={view==='reservations'}
-              onClick={() => onNav('reservations')} />
-            <NavLink icon={<Bell size={14}/>} label="Approvazioni"
-              active={view==='approvals'}
-              onClick={() => onNav('approvals')}
-              badge={pendingCount} />
+            <NavSection label="Gestione" />
+            <div className="space-y-0.5 mb-5">
+              <NavLink icon={<Calendar size={14}/>} label="Serate"
+                active={view==='active-events'||view==='plan'}
+                onClick={() => onNav('active-events')} />
+              <NavLink icon={<Building2 size={14}/>} label="Location"
+                active={view==='venues'||view==='venue-events'}
+                onClick={() => onNav('venues')} />
+              <NavLink icon={<Map size={14}/>} label="Layout Tavoli"
+                active={view==='editor'}
+                onClick={() => onNav('editor')} />
+            </div>
+            <NavSection label="Operazioni" />
+            <div className="space-y-0.5">
+              <NavLink icon={<BarChart3 size={14}/>} label="Prenotazioni"
+                active={view==='reservations'}
+                onClick={() => onNav('reservations')} />
+              <NavLink icon={<Bell size={14}/>} label="Approvazioni"
+                active={view==='approvals'}
+                onClick={() => onNav('approvals')}
+                badge={pendingCount} />
+            </div>
           </>
         ) : (
-          <>
+          <div className="space-y-0.5">
             <NavLink icon={<Calendar size={14}/>} label="Eventi"
               active={view==='events'||view==='plan'}
               onClick={() => onNav('events')} />
             <NavLink icon={<BarChart3 size={14}/>} label="Prenotazioni"
               active={view==='reservations'}
               onClick={() => onNav('reservations')} />
-          </>
+          </div>
         )}
       </nav>
 
@@ -1355,6 +1361,15 @@ function SidebarContent({ user, view, onNav, onLogout, occupancyPct = 0, revenue
         </button>
       </div>
     </>
+  );
+}
+
+/* ── NavSection ──────────────────────────────────────────── */
+function NavSection({ label }: { label: string }) {
+  return (
+    <p className="px-3 pt-1 pb-2 text-[8px] font-sans uppercase tracking-[0.3em] text-[#444]">
+      {label}
+    </p>
   );
 }
 

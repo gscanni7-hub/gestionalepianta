@@ -320,6 +320,7 @@ export default function FloorPlanViewer({
         <BookingModal
           table={selectedTable}
           initialReservation={editingReservation ?? undefined}
+          defaultPrName={`${currentUser.displayName}${currentUser.lastName ? ' ' + currentUser.lastName : ''}`}
           onClose={closeBooking}
           onSubmit={(data) => {
             if (editingReservation) {
@@ -372,9 +373,10 @@ function serializeBottles(items: BottleItem[]): string {
   return items.filter(b => b.name.trim()).map(b => `${b.qty}x ${b.name.toUpperCase()}`).join(', ');
 }
 
-function BookingModal({ table, initialReservation, onClose, onSubmit }: {
+function BookingModal({ table, initialReservation, defaultPrName, onClose, onSubmit }: {
   table: Table;
   initialReservation?: Reservation;
+  defaultPrName?: string;
   onClose: () => void;
   onSubmit: (data: any) => void;
 }) {
@@ -385,7 +387,7 @@ function BookingModal({ table, initialReservation, onClose, onSubmit }: {
 
   const [form, setForm] = useState({
     customerName: initialReservation?.customerName ?? '',
-    prName:       initialReservation?.prName       ?? '',
+    prName:       initialReservation?.prName       ?? defaultPrName ?? '',
     guestsCount:  initialReservation?.guestsCount  ?? table.capacity,
     budget:       initialReservation?.budget       ?? calcBudget(table.capacity),
     notes:        initialReservation?.notes        ?? '',

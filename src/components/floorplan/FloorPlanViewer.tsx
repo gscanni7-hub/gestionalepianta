@@ -437,8 +437,8 @@ function BookingModal({ table, initialReservation, defaultPrName, onClose, onSub
                 value={form.customerName} onChange={e => setForm({ ...form, customerName: e.target.value })} />
             </BField>
             <BField label="PR">
-              <input required className={cn(inp, 'uppercase tracking-widest')} placeholder="NOME PR"
-                value={form.prName} onChange={e => setForm({ ...form, prName: e.target.value })} />
+              <input readOnly className={cn(inp, 'uppercase tracking-widest cursor-default select-none text-[#777] bg-[#0a0a0a] border-[#1a1a1a]')}
+                value={form.prName} onChange={() => {}} />
             </BField>
             <BField label="PAX">
               <input type="number" min={1} className={inp}

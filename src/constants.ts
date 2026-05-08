@@ -6,6 +6,8 @@ interface MockCredential {
   password: string;
   role: 'admin' | 'pr';
   displayName: string;
+  lastName?: string;
+  phone?: string;
 }
 
 export const MOCK_USERS: MockCredential[] = [

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import {
   Calendar, Settings, BarChart3, LogOut, ChevronRight,
   Plus, Download, Filter, Building2, X, ArrowLeft, Menu, Map, Pencil, Trash2,
@@ -211,32 +211,14 @@ export default function App() {
                     <p className="text-[#777] text-[10px] font-sans uppercase tracking-widest mt-2">Inserisci le tue credenziali</p>
                   </div>
 
-                  {/* Quick access */}
-                  <div className="flex gap-2 mb-5">
-                    {[
-                      { label: 'Admin', email: 'g.scanni7@gmail.com', password: '1234' },
-                      { label: 'PR',    email: 'lucavisca@gmail.com', password: '1234' },
-                    ].map(acc => (
-                      <button
-                        key={acc.label}
-                        type="button"
-                        onClick={() => { setLoginEmail(acc.email); setLoginPassword(acc.password); setLoginError(''); }}
-                        className="flex-1 border border-[#2a2a2a] hover:border-accent/40 px-3 py-2.5 transition-colors group text-left"
-                      >
-                        <p className="text-[9px] hv font-black uppercase tracking-widest text-[#555] group-hover:text-accent transition-colors">{acc.label}</p>
-                        <p className="text-[9px] font-sans text-[#333] mt-0.5 truncate">{acc.email}</p>
-                        <p className="text-[8px] font-mono text-[#222] mt-0.5">••••</p>
-                      </button>
-                    ))}
-                  </div>
-
                   <form onSubmit={handleLogin} className="space-y-3">
                     <div className="space-y-1">
                       <label className="text-[9px] hv font-black uppercase tracking-[0.2em] text-[#444]">Email</label>
-                      <input type="email" autoComplete="email" required value={loginEmail}
-                        onChange={e => { setLoginEmail(e.target.value); setLoginError(''); }}
-                        placeholder="tua@email.it"
-                        className="w-full bg-[#0a0a0a] border border-[#2a2a2a] px-5 py-4 text-sm text-white placeholder-[#444] outline-none focus:border-accent/40 transition-colors font-sans" />
+                      <LoginEmailField
+                        value={loginEmail}
+                        onChange={v => { setLoginEmail(v); setLoginError(''); }}
+                        onSelect={(email, pw) => { setLoginEmail(email); setLoginPassword(pw); setLoginError(''); }}
+                      />
                     </div>
                     <div className="space-y-1">
                       <label className="text-[9px] hv font-black uppercase tracking-[0.2em] text-[#444]">Password</label>
@@ -829,6 +811,68 @@ export default function App() {
             setEditingFloorPlanMeta(null);
           }}
         />
+      )}
+    </div>
+  );
+}
+
+/* ── LoginEmailField ─────────────────────────────────────── */
+const SAVED_ACCOUNTS = [
+  { label: 'Admin',    email: 'g.scanni7@gmail.com', password: '1234' },
+  { label: 'PR',       email: 'lucavisca@gmail.com', password: '1234' },
+];
+
+function LoginEmailField({ value, onChange, onSelect }: {
+  value: string;
+  onChange: (v: string) => void;
+  onSelect: (email: string, password: string) => void;
+}) {
+  const [open, setOpen] = useState(false);
+  const ref = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const handler = (e: MouseEvent) => {
+      if (ref.current && !ref.current.contains(e.target as Node)) setOpen(false);
+    };
+    document.addEventListener('mousedown', handler);
+    return () => document.removeEventListener('mousedown', handler);
+  }, []);
+
+  const filtered = SAVED_ACCOUNTS.filter(a =>
+    value === '' || a.email.toLowerCase().includes(value.toLowerCase())
+  );
+
+  return (
+    <div ref={ref} className="relative">
+      <input
+        type="email"
+        autoComplete="off"
+        required
+        value={value}
+        onFocus={() => setOpen(true)}
+        onChange={e => { onChange(e.target.value); setOpen(true); }}
+        placeholder="tua@email.it"
+        className="w-full bg-[#0a0a0a] border border-[#2a2a2a] px-5 py-4 text-sm text-white placeholder-[#444] outline-none focus:border-accent/40 transition-colors font-sans"
+      />
+      {open && filtered.length > 0 && (
+        <div className="absolute left-0 right-0 top-full mt-0.5 bg-[#0d0d0d] border border-[#2a2a2a] z-50 overflow-hidden">
+          {filtered.map(acc => (
+            <button
+              key={acc.email}
+              type="button"
+              onMouseDown={e => { e.preventDefault(); onSelect(acc.email, acc.password); setOpen(false); }}
+              className="w-full flex items-center gap-4 px-5 py-3 hover:bg-white/[0.03] transition-colors text-left group"
+            >
+              <div className="w-7 h-7 bg-[#111] border border-[#222] flex items-center justify-center shrink-0 group-hover:border-accent/20 transition-colors">
+                <span className="hv font-black text-[#555] text-[9px] group-hover:text-accent transition-colors">{acc.label[0]}</span>
+              </div>
+              <div className="min-w-0">
+                <p className="text-[10px] font-sans text-white truncate">{acc.email}</p>
+                <p className="text-[8px] font-sans text-[#444] uppercase tracking-widest mt-0.5">{acc.label} · ••••</p>
+              </div>
+            </button>
+          ))}
+        </div>
       )}
     </div>
   );

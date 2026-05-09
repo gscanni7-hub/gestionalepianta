@@ -1933,14 +1933,19 @@ function SidebarContent({ user, view, onNav, onLogout, occupancyPct = 0, revenue
   return (
     <>
       {/* Brand */}
-      <div className="px-6 py-6 border-b border-[#2e2e2e] shrink-0">
-        <div className="flex items-center gap-3">
-          <div className="w-8 h-8 shrink-0 overflow-hidden">
-            <img src="/Logo.png" alt="Nightplan" className="w-full h-full object-contain" />
+      <div className="px-6 py-5 border-b border-[#2e2e2e] shrink-0">
+        <div className="flex items-center gap-3.5">
+          <div className="w-10 h-10 shrink-0 flex items-center justify-center">
+            <img
+              src="/Logo.png"
+              alt="Nightplan"
+              className="w-full h-full object-contain"
+              style={{ filter: 'drop-shadow(0 0 8px rgba(212,98,42,0.55))' }}
+            />
           </div>
-          <div>
-            <span className="hv font-black uppercase tracking-widest text-[11px] text-white block leading-tight">Nightplan</span>
-            <span className="text-[8px] font-sans text-[#999] uppercase tracking-widest">Management</span>
+          <div className="flex flex-col justify-center">
+            <span className="hv font-black uppercase tracking-widest text-[11px] text-white leading-tight">Nightplan</span>
+            <span className="text-[8px] font-sans text-[#666] uppercase tracking-[0.3em] mt-0.5">Management</span>
           </div>
         </div>
       </div>

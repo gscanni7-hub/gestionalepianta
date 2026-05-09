@@ -169,6 +169,7 @@ export default function App() {
   const [editingFloorPlanMeta, setEditingFloorPlanMeta] = useState<{ venueId: string; fp: FloorPlan } | null>(null);
   const [editingEvent, setEditingEvent] = useState<Event | null>(null);
   const [editorVenueId, setEditorVenueId] = useState<string | null>(null);
+  const [venueTab, setVenueTab] = useState<'events' | 'layout'>('events');
 
   useEffect(() => {
     localStorage.setItem('nightplan_managed_users', JSON.stringify(managedUsers));
@@ -347,7 +348,7 @@ export default function App() {
     setNewPassword(''); setResetError(''); setResetDone(false);
   };
 
-  const openVenue = (venue: Venue) => { setSelectedVenue(venue); setView('venue-events'); };
+  const openVenue = (venue: Venue) => { setSelectedVenue(venue); setVenueTab('events'); setView('venue-events'); };
   const openEvent = (event: Event) => {
     if (!selectedVenue) setSelectedVenue(venues.find(v => v.id === event.venueId) ?? null);
     setSelectedEvent(event);
@@ -863,53 +864,141 @@ export default function App() {
               </motion.div>
             )}
 
-            {/* Venue events */}
+            {/* Venue detail — Serate + Pianta */}
             {view === 'venue-events' && selectedVenue && (
               <motion.div key="venue-events" {...PAGE}>
-                <div className="mb-8 flex items-start justify-between gap-4">
-                  <div>
-                    <p className="text-[9px] font-sans uppercase tracking-[0.4em] text-[#999] mb-1">Club</p>
-                    <h2 className="hv font-black text-4xl uppercase text-white">{selectedVenue.name}</h2>
-                  </div>
-                  <button
-                    onClick={() => { setEditorVenueId(selectedVenue.id); setView('editor'); }}
-                    className="flex items-center gap-2 border border-[#383838] text-[#888] px-4 py-2.5 text-[9px] hv font-black uppercase tracking-widest hover:border-accent hover:text-accent transition-all shrink-0 mt-1">
-                    <Map size={12} /> Layout Tavoli
-                  </button>
+                {/* Header */}
+                <div className="mb-7">
+                  <p className="text-[9px] font-sans uppercase tracking-[0.4em] text-[#555] mb-1">Club</p>
+                  <h2 className="hv font-black text-4xl uppercase text-white">{selectedVenue.name}</h2>
                 </div>
-                {venueEvents.length === 0 ? (
-                  <EmptyState icon={<Calendar size={28} />} label="Nessun evento ancora.">
-                    <button onClick={() => setShowNewEventModal(true)}
-                      className="mt-5 flex items-center gap-2 bg-accent text-black px-5 py-3 text-[10px] hv font-black uppercase tracking-widest hover:bg-white transition-colors">
-                      <Plus size={13} /> Crea Evento
+
+                {/* Tabs */}
+                <div className="flex border-b border-[#242424] mb-8 gap-1">
+                  {(['events', 'layout'] as const).map(tab => (
+                    <button key={tab} onClick={() => setVenueTab(tab)}
+                      className={`px-5 py-2.5 text-[9px] hv font-black uppercase tracking-[0.2em] transition-colors relative ${
+                        venueTab === tab ? 'text-white' : 'text-[#555] hover:text-[#888]'
+                      }`}>
+                      {tab === 'events' ? 'Serate' : 'Pianta'}
+                      {venueTab === tab && (
+                        <motion.div layoutId="venue-tab-indicator"
+                          className="absolute bottom-0 left-0 right-0 h-px bg-accent"
+                          transition={{ duration: 0.2 }} />
+                      )}
                     </button>
-                  </EmptyState>
-                ) : (
-                  <>
-                    <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-4">
-                      {venueEvents.map((event, i) => (
-                        <motion.div key={event.id}
-                          initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }}
-                          transition={{ delay: i * 0.06 }}>
-                          <EventCard
-                            event={event}
-                            onClick={() => openEvent(event)}
-                            onEdit={(e) => { e.stopPropagation(); setEditingEvent(event); }}
-                            onDelete={(e) => { e.stopPropagation(); setEvents(prev => prev.filter(ev => ev.id !== event.id)); }}
+                  ))}
+                </div>
+
+                {/* Tab: Serate */}
+                <AnimatePresence mode="wait">
+                  {venueTab === 'events' && (
+                    <motion.div key="tab-events" initial={{ opacity: 0, y: 6 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0 }} transition={{ duration: 0.15 }}>
+                      {venueEvents.length === 0 ? (
+                        <EmptyState icon={<Calendar size={28} />} label="Nessuna serata ancora.">
+                          <button onClick={() => setShowNewEventModal(true)}
+                            className="mt-5 flex items-center gap-2 bg-accent text-black px-5 py-3 text-[10px] hv font-black uppercase tracking-widest hover:bg-white transition-colors">
+                            <Plus size={13} /> Crea Serata
+                          </button>
+                        </EmptyState>
+                      ) : (
+                        <>
+                          <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-4">
+                            {venueEvents.map((event, i) => (
+                              <motion.div key={event.id}
+                                initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }}
+                                transition={{ delay: i * 0.06 }}>
+                                <EventCard
+                                  event={event}
+                                  onClick={() => openEvent(event)}
+                                  onEdit={(e) => { e.stopPropagation(); setEditingEvent(event); }}
+                                  onDelete={(e) => { e.stopPropagation(); setEvents(prev => prev.filter(ev => ev.id !== event.id)); }}
+                                />
+                              </motion.div>
+                            ))}
+                          </div>
+                          {user.role === 'admin' && (
+                            <div className="mt-6 flex justify-center">
+                              <button onClick={() => setShowNewEventModal(true)}
+                                className="flex items-center gap-2 border border-[#383838] text-[#999] px-6 py-3 text-[9px] hv font-black uppercase tracking-widest hover:border-accent hover:text-accent transition-all">
+                                <Plus size={11} /> Nuova Serata
+                              </button>
+                            </div>
+                          )}
+                        </>
+                      )}
+                    </motion.div>
+                  )}
+
+                  {/* Tab: Pianta */}
+                  {venueTab === 'layout' && (
+                    <motion.div key="tab-layout" initial={{ opacity: 0, y: 6 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0 }} transition={{ duration: 0.15 }}>
+                      {editingFloorPlan ? (
+                        <div className="flex flex-col h-full gap-5">
+                          <button onClick={() => setEditingFloorPlan(null)}
+                            className="flex items-center gap-2 text-[#666] hover:text-accent transition-colors text-[10px] font-sans uppercase tracking-widest self-start">
+                            <ArrowLeft size={11} /> Torna alla Pianta
+                          </button>
+                          <FloorPlanEditor
+                            key={editingFloorPlan.fp.id || 'new'}
+                            floorPlan={editingFloorPlan.fp}
+                            onSave={(savedFp) => {
+                              setVenues(prev => prev.map(v =>
+                                v.id === editingFloorPlan.venueId
+                                  ? { ...v, floorPlans: v.floorPlans.some(fp => fp.id === savedFp.id) ? v.floorPlans.map(fp => fp.id === savedFp.id ? savedFp : fp) : [...v.floorPlans, savedFp] }
+                                  : v
+                              ));
+                              setEditingFloorPlan(null);
+                            }}
                           />
-                        </motion.div>
-                      ))}
-                    </div>
-                    {user.role === 'admin' && (
-                      <div className="mt-6 flex justify-center">
-                        <button onClick={() => setShowNewEventModal(true)}
-                          className="flex items-center gap-2 border border-[#383838] text-[#999] px-6 py-3 text-[9px] hv font-black uppercase tracking-widest hover:border-accent hover:text-accent transition-all">
-                          <Plus size={11} /> Nuovo Evento
-                        </button>
-                      </div>
-                    )}
-                  </>
-                )}
+                        </div>
+                      ) : (
+                        <div>
+                          <div className="flex justify-end mb-6">
+                            <button onClick={() => setShowNewFloorPlanModal(true)}
+                              className="flex items-center gap-2 bg-accent text-black px-5 py-3 text-[9px] hv font-black uppercase tracking-widest hover:bg-white transition-colors">
+                              <Plus size={12} /> Nuova Pianta
+                            </button>
+                          </div>
+                          {selectedVenue.floorPlans.length === 0 ? (
+                            <EmptyState icon={<Map size={28} />} label="Nessuna pianta per questo club." />
+                          ) : (
+                            <div className="border border-[#383838] bg-card divide-y divide-[#2a2a2a]">
+                              {selectedVenue.floorPlans.map(fp => (
+                                <div key={fp.id} className="px-7 py-4 flex items-center justify-between group hover:bg-white/[0.01] transition-colors">
+                                  <div className="flex items-center gap-4">
+                                    <Map size={14} className="text-[#888] shrink-0" />
+                                    <div>
+                                      <p className="hv font-black text-sm uppercase text-white">{fp.name}</p>
+                                      <p className="text-[8px] font-sans text-[#999] mt-0.5">{fp.tables.length} tavoli</p>
+                                    </div>
+                                  </div>
+                                  <div className="flex items-center gap-2">
+                                    <div className="flex items-center gap-0.5 md:opacity-0 md:group-hover:opacity-100 transition-opacity">
+                                      <button onClick={() => setEditingFloorPlanMeta({ venueId: selectedVenue.id, fp })}
+                                        className="w-7 h-7 flex items-center justify-center text-[#999] hover:text-accent transition-colors">
+                                        <Pencil size={12} />
+                                      </button>
+                                      <button onClick={() => setVenues(prev => prev.map(v =>
+                                        v.id === selectedVenue.id ? { ...v, floorPlans: v.floorPlans.filter(f => f.id !== fp.id) } : v
+                                      ))} className="w-7 h-7 flex items-center justify-center text-[#999] hover:text-red-500 transition-colors">
+                                        <Trash2 size={12} />
+                                      </button>
+                                    </div>
+                                    <button onClick={() => setEditingFloorPlan({ venueId: selectedVenue.id, fp })}
+                                      className="text-[9px] font-sans uppercase tracking-widest text-[#999] hover:text-accent transition-colors flex items-center gap-1.5">
+                                      Apri Canvas <ChevronRight size={11} />
+                                    </button>
+                                  </div>
+                                </div>
+                              ))}
+                            </div>
+                          )}
+                        </div>
+                      )}
+                    </motion.div>
+                  )}
+                </AnimatePresence>
               </motion.div>
             )}
 
@@ -1434,20 +1523,16 @@ function SidebarContent({ user, view, onNav, onLogout, occupancyPct = 0, revenue
       <nav className="flex-1 px-3 py-5 overflow-y-auto">
         {user.role === 'admin' ? (
           <>
-            <div className="space-y-0.5 mb-6">
+            <div className="space-y-0.5">
               <NavLink icon={<Calendar size={14}/>} label="Prossimi eventi"
                 active={view==='active-events'||view==='plan'}
                 onClick={() => onNav('active-events')} />
-            </div>
-            <NavSection label="Locali">
-              <NavLink icon={<Building2 size={14}/>} label="I miei club"
-                active={view==='venues'||view==='venue-events'}
+              <NavLink icon={<Building2 size={14}/>} label="Club"
+                active={view==='venues'||view==='venue-events'||view==='editor'}
                 onClick={() => onNav('venues')} />
-              <NavLink icon={<Map size={14}/>} label="Layout Tavoli"
-                active={view==='editor'}
-                onClick={() => onNav('editor')} />
-            </NavSection>
-            <NavSection label="Operazioni">
+            </div>
+            <div className="mx-3 my-4 h-px bg-[#242424]" />
+            <div className="space-y-0.5">
               <NavLink icon={<BarChart3 size={14}/>} label="Prenotazioni"
                 active={view==='reservations'}
                 onClick={() => onNav('reservations')} />
@@ -1455,7 +1540,7 @@ function SidebarContent({ user, view, onNav, onLogout, occupancyPct = 0, revenue
                 active={view==='approvals'}
                 onClick={() => onNav('approvals')}
                 badge={pendingCount} />
-            </NavSection>
+            </div>
           </>
         ) : (
           <div className="space-y-0.5">

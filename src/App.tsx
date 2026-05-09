@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import {
   Calendar, Settings, BarChart3, LogOut, ChevronRight, ChevronDown,
   Plus, Download, Filter, Building2, X, ArrowLeft, Menu, Map, Pencil, Trash2,
-  UserCheck, Bell
+  UserCheck, Bell, Clock, TrendingUp, CheckCircle2, XCircle
 } from 'lucide-react';
 import { MOCK_USERS, INITIAL_VENUES, INITIAL_EVENTS, INITIAL_RESERVATIONS, INITIAL_MANAGED_USERS } from './constants';
 import { UserProfile, Event, Reservation, Venue, FloorPlan, ManagedUser } from './types';
@@ -13,7 +13,7 @@ import { isFirebaseConfigured, signInWithGoogle } from './lib/firebase';
 import FloorPlanViewer from './components/floorplan/FloorPlanViewer';
 import FloorPlanEditor from './components/floorplan/FloorPlanEditor';
 
-type AppView = 'venues' | 'venue-events' | 'events' | 'active-events' | 'plan' | 'editor' | 'reservations' | 'approvals' | 'profile';
+type AppView = 'venues' | 'venue-events' | 'events' | 'active-events' | 'plan' | 'editor' | 'reservations' | 'approvals' | 'profile' | 'history';
 
 const DISPOSABLE_DOMAINS = new Set([
   'mailinator.com','guerrillamail.com','guerrillamail.net','guerrillamail.org','guerrillamail.de',
@@ -396,6 +396,7 @@ export default function App() {
     if (view === 'reservations')   return 'Prenotazioni';
     if (view === 'approvals')      return 'Approvazioni';
     if (view === 'profile')        return 'Il Mio Profilo';
+    if (view === 'history')        return 'Il Mio Storico';
     return '';
   };
 
@@ -1252,6 +1253,63 @@ export default function App() {
               </motion.div>
             )}
 
+            {/* History — PR only */}
+            {view === 'history' && user.role === 'pr' && (() => {
+              const myRes = reservations.filter(r => r.prId === user.id);
+              const myEventIds = [...new Set(myRes.map(r => r.eventId))];
+              const approved = myRes.filter(r => r.approvalStatus === 'approved').length;
+              const totalBudget = myRes.reduce((s, r) => s + r.budget, 0);
+              const approvalRate = myRes.length > 0 ? Math.round((approved / myRes.length) * 100) : 0;
+
+              return (
+                <motion.div key="history" {...PAGE}>
+                  <PageTitle title="Il Mio Storico" sub="Riepilogo delle tue prenotazioni" />
+
+                  {/* KPIs */}
+                  <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 mt-8 mb-10">
+                    {[
+                      { icon: <BarChart3 size={16}/>, label: 'Tavoli prenotati', value: myRes.length },
+                      { icon: <TrendingUp size={16}/>, label: 'Budget generato', value: `€${totalBudget.toLocaleString('it-IT')}` },
+                      { icon: <Calendar size={16}/>, label: 'Serate lavorate', value: myEventIds.length },
+                      { icon: <CheckCircle2 size={16}/>, label: 'Tasso approvazione', value: `${approvalRate}%` },
+                    ].map(({ icon, label, value }) => (
+                      <div key={label} className="border border-[#2a2a2a] bg-card px-5 py-5">
+                        <div className="text-accent mb-3">{icon}</div>
+                        <div className="hv font-black text-2xl text-white leading-none">{value}</div>
+                        <div className="text-[9px] font-sans uppercase tracking-[0.3em] text-[#666] mt-2">{label}</div>
+                      </div>
+                    ))}
+                  </div>
+
+                  {/* Events list */}
+                  {myEventIds.length === 0 ? (
+                    <EmptyState icon={<Clock size={28}/>} label="Nessuna prenotazione ancora." />
+                  ) : (
+                    <div className="space-y-3">
+                      {myEventIds.map(eventId => {
+                        const event = events.find(e => e.id === eventId);
+                        if (!event) return null;
+                        const venue = venues.find(v => v.id === event.venueId);
+                        const eventRes = myRes.filter(r => r.eventId === eventId);
+                        const eventApproved = eventRes.filter(r => r.approvalStatus === 'approved').length;
+                        const eventBudget = eventRes.reduce((s, r) => s + r.budget, 0);
+                        return (
+                          <HistoryEventRow
+                            key={eventId}
+                            event={event}
+                            venueName={venue?.name ?? '—'}
+                            reservations={eventRes}
+                            approvedCount={eventApproved}
+                            totalBudget={eventBudget}
+                          />
+                        );
+                      })}
+                    </div>
+                  )}
+                </motion.div>
+              );
+            })()}
+
           </AnimatePresence>
         </div>
       </main>
@@ -1449,6 +1507,86 @@ const SAVED_ACCOUNTS = [
   { label: 'PR',    email: 'lucavisca@gmail.com', password: '1234' },
 ];
 
+/* ── HistoryEventRow ─────────────────────────────────────── */
+function HistoryEventRow({ event, venueName, reservations, approvedCount, totalBudget }: {
+  event: Event; venueName: string; reservations: Reservation[];
+  approvedCount: number; totalBudget: number;
+}) {
+  const [open, setOpen] = useState(false);
+  const statusColor = (s: string) =>
+    s === 'approved' ? 'text-green-400' : s === 'rejected' ? 'text-red-400' : 'text-[#888]';
+  const statusLabel = (s: string) =>
+    s === 'approved' ? 'Approvata' : s === 'rejected' ? 'Rifiutata' : 'In attesa';
+
+  return (
+    <div className="border border-[#2a2a2a] bg-card overflow-hidden">
+      <button
+        onClick={() => setOpen(o => !o)}
+        className="w-full px-6 py-5 flex items-center justify-between hover:bg-white/[0.02] transition-colors text-left"
+      >
+        <div className="flex items-center gap-5 min-w-0">
+          <div className="w-10 h-10 bg-[#1a1a1a] border border-[#333] flex items-center justify-center shrink-0">
+            <Calendar size={14} className="text-accent" />
+          </div>
+          <div className="min-w-0">
+            <p className="hv font-black text-sm uppercase text-white truncate">{event.name}</p>
+            <p className="text-[9px] font-sans text-[#666] mt-0.5 uppercase tracking-widest">{venueName} · {event.date}</p>
+          </div>
+        </div>
+        <div className="flex items-center gap-6 shrink-0 ml-4">
+          <div className="text-right hidden sm:block">
+            <p className="hv font-black text-sm text-white">{reservations.length} <span className="text-[#555] font-normal text-xs">tavoli</span></p>
+            <p className="text-[9px] font-sans text-[#555] mt-0.5">€{totalBudget.toLocaleString('it-IT')}</p>
+          </div>
+          <div className="text-right hidden md:block">
+            <p className="text-[9px] font-sans text-[#555] uppercase tracking-widest">{approvedCount}/{reservations.length} approvate</p>
+          </div>
+          <ChevronDown size={14} className={cn('text-[#555] transition-transform duration-200', open && 'rotate-180')} />
+        </div>
+      </button>
+
+      <AnimatePresence>
+        {open && (
+          <motion.div
+            initial={{ height: 0, opacity: 0 }}
+            animate={{ height: 'auto', opacity: 1 }}
+            exit={{ height: 0, opacity: 0 }}
+            transition={{ duration: 0.2 }}
+            className="overflow-hidden"
+          >
+            <div className="border-t border-[#222] divide-y divide-[#1e1e1e]">
+              {reservations.map(r => (
+                <div key={r.id} className="px-6 py-3.5 flex items-center justify-between gap-4">
+                  <div className="flex items-center gap-4 min-w-0">
+                    <div className="w-6 h-6 bg-[#1a1a1a] border border-[#2a2a2a] flex items-center justify-center shrink-0">
+                      <span className="text-[9px] hv font-black text-accent">{r.tableName ?? '—'}</span>
+                    </div>
+                    <div className="min-w-0">
+                      <p className="text-sm text-white font-sans truncate">{r.customerName}</p>
+                      <p className="text-[9px] font-sans text-[#555] mt-0.5">{r.guestsCount} ospiti · €{r.budget}</p>
+                    </div>
+                  </div>
+                  <div className="flex items-center gap-2 shrink-0">
+                    {r.approvalStatus === 'approved'
+                      ? <CheckCircle2 size={13} className="text-green-400" />
+                      : r.approvalStatus === 'rejected'
+                      ? <XCircle size={13} className="text-red-400" />
+                      : <div className="w-2 h-2 rounded-full bg-[#555]" />
+                    }
+                    <span className={cn('text-[9px] font-sans uppercase tracking-widest', statusColor(r.approvalStatus))}>
+                      {statusLabel(r.approvalStatus)}
+                    </span>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </div>
+  );
+}
+
 /* ── SidebarContent ──────────────────────────────────────── */
 function SidebarContent({ user, view, onNav, onLogout, occupancyPct = 0, revenueEst = 0, pendingCount = 0 }: {
   user: UserProfile; view: string;
@@ -1528,6 +1666,9 @@ function SidebarContent({ user, view, onNav, onLogout, occupancyPct = 0, revenue
             <NavLink icon={<BarChart3 size={14}/>} label="Prenotazioni"
               active={view==='reservations'}
               onClick={() => onNav('reservations')} />
+            <NavLink icon={<Clock size={14}/>} label="Il Mio Storico"
+              active={view==='history'}
+              onClick={() => onNav('history')} />
           </div>
         )}
       </nav>

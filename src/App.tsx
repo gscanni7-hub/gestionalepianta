@@ -6,7 +6,7 @@ import {
   DoorOpen, LogIn
 } from 'lucide-react';
 import { MOCK_USERS, INITIAL_VENUES, INITIAL_EVENTS, INITIAL_RESERVATIONS, INITIAL_MANAGED_USERS } from './constants';
-import { UserProfile, Event, Reservation, Venue, FloorPlan, ManagedUser } from './types';
+import { UserProfile, Event, Reservation, Venue, FloorPlan, ManagedUser, Table } from './types';
 import { motion, AnimatePresence } from 'framer-motion';
 import { cn } from './lib/utils';
 import { isEmailConfigured, sendPasswordResetEmail } from './lib/emailService';
@@ -115,10 +115,22 @@ function validatePhone(phone: string): string {
   return 'Formato non valido. Es: +39 333 000 0000 oppure 333 000 0000';
 }
 
-const calcActualBudget = (budget: number, guestsCount: number, actualPeople: number): number => {
-  if (guestsCount <= 0) return budget;
-  const scaled = Math.round((actualPeople / guestsCount) * budget);
-  return Math.max(budget, scaled);
+const findTable = (res: { tableId: string; eventId: string }, events: Event[], venues: Venue[]): Table | null => {
+  const event = events.find(e => e.id === res.eventId);
+  if (!event) return null;
+  const venue = venues.find(v => v.id === event.venueId);
+  if (!venue) return null;
+  const fp = venue.floorPlans.find(f => f.id === event.floorPlanId) ?? venue.floorPlans[0];
+  return fp?.tables.find(t => t.id === res.tableId) ?? null;
+};
+
+const calcActualBudget = (reservedBudget: number, actualPeople: number, table: Table | null): number => {
+  if (!table) return reservedBudget;
+  const { capacity, minSpend } = table;
+  const perPersonRate = capacity > 0 ? minSpend / capacity : 0;
+  const base = Math.max(reservedBudget, minSpend);
+  if (actualPeople <= capacity) return base;
+  return Math.round(base + (actualPeople - capacity) * perPersonRate);
 };
 
 const PAGE = {
@@ -369,7 +381,8 @@ export default function App() {
   const handleCheckIn = (reservationId: string, actualPeople: number) => {
     const res = reservations.find(r => r.id === reservationId);
     if (!res) return;
-    const actualBudget = calcActualBudget(res.budget, res.guestsCount, actualPeople);
+    const table = findTable(res, events, venues);
+    const actualBudget = calcActualBudget(res.budget, actualPeople, table);
     setReservations(prev => prev.map(r =>
       r.id === reservationId ? { ...r, checkedIn: true, actualPeople, actualBudget } : r
     ));
@@ -387,7 +400,8 @@ export default function App() {
   const handleUpdatePeople = (reservationId: string, actualPeople: number) => {
     const res = reservations.find(r => r.id === reservationId);
     if (!res) return;
-    const actualBudget = calcActualBudget(res.budget, res.guestsCount, actualPeople);
+    const table = findTable(res, events, venues);
+    const actualBudget = calcActualBudget(res.budget, actualPeople, table);
     setReservations(prev => prev.map(r =>
       r.id === reservationId ? { ...r, actualPeople, actualBudget } : r
     ));
@@ -2039,6 +2053,112 @@ function HistoryEventRow({ event, venueName, reservations, approvedCount, totalB
 }
 
 /* ── HostCheckinView ─────────────────────────────────────── */
+function CheckinRow({ res, events, venues, onCheckIn, onUndoCheckIn, onUpdatePeople }: {
+  res: Reservation;
+  events: Event[];
+  venues: Venue[];
+  onCheckIn: (id: string, n: number) => void;
+  onUndoCheckIn: (id: string) => void;
+  onUpdatePeople: (id: string, n: number) => void;
+}) {
+  const [open, setOpen] = useState(false);
+  const [people, setPeople] = useState(res.actualPeople ?? res.guestsCount);
+  const isIn = res.checkedIn;
+  const table = findTable(res, events, venues);
+  const previewBudget = calcActualBudget(res.budget, people, table);
+  const budgetDiff = previewBudget - res.budget;
+  const peopleChanged = people !== (res.actualPeople ?? res.guestsCount);
+
+  return (
+    <div className={cn('border-b border-[#1e1e1e] last:border-0', isIn && 'bg-green-500/[0.03]')}>
+      {/* Main row — always visible */}
+      <button
+        onClick={() => setOpen(o => !o)}
+        className="w-full px-5 py-4 flex items-center gap-4 text-left hover:bg-white/[0.02] transition-colors"
+      >
+        <div className={cn('w-2.5 h-2.5 rounded-full shrink-0 transition-colors', isIn ? 'bg-green-500' : 'bg-[#2e2e2e]')} />
+        <div className="flex-1 min-w-0">
+          <p className={cn('hv font-black text-base uppercase truncate transition-colors', isIn ? 'text-[#aaa]' : 'text-white')}>
+            {res.customerName}
+          </p>
+          <p className="text-[9px] font-sans text-[#555] mt-0.5 truncate">
+            Tav. {res.tableName ?? res.tableId} · PR {res.prName}
+            {isIn && <span className="text-green-500 ml-2">· {res.actualPeople ?? res.guestsCount} entrati · €{res.actualBudget ?? res.budget}</span>}
+          </p>
+        </div>
+        {isIn
+          ? <CheckCircle2 size={16} className="text-green-500 shrink-0" />
+          : <ChevronDown size={14} className={cn('text-[#555] shrink-0 transition-transform duration-200', open && 'rotate-180')} />
+        }
+      </button>
+
+      {/* Expanded panel */}
+      <AnimatePresence>
+        {open && (
+          <motion.div
+            initial={{ height: 0, opacity: 0 }} animate={{ height: 'auto', opacity: 1 }}
+            exit={{ height: 0, opacity: 0 }} transition={{ duration: 0.18 }}
+            className="overflow-hidden"
+          >
+            <div className="px-5 pb-5 pt-1 border-t border-[#1e1e1e]">
+              {/* People counter */}
+              <div className="flex items-center justify-between mb-4">
+                <span className="text-[9px] font-sans uppercase tracking-[0.3em] text-[#555]">Persone entrate</span>
+                <div className="flex items-center gap-3">
+                  <button onClick={() => setPeople(p => Math.max(1, p - 1))}
+                    className="w-8 h-8 border border-[#333] text-[#888] hover:text-white hover:border-[#555] transition-colors text-xl leading-none flex items-center justify-center">−</button>
+                  <span className="hv font-black text-2xl text-white w-8 text-center">{people}</span>
+                  <button onClick={() => setPeople(p => p + 1)}
+                    className="w-8 h-8 border border-[#333] text-[#888] hover:text-white hover:border-[#555] transition-colors text-xl leading-none flex items-center justify-center">+</button>
+                </div>
+              </div>
+
+              {/* Budget preview */}
+              <div className="flex items-center justify-between mb-5 py-3 border-t border-b border-[#1e1e1e]">
+                <span className="text-[9px] font-sans uppercase tracking-[0.3em] text-[#555]">Incasso</span>
+                <div className="flex items-center gap-2">
+                  {people !== res.guestsCount && <span className="text-[9px] font-sans text-[#444] line-through">€{res.budget}</span>}
+                  <span className="hv font-black text-lg text-accent">€{previewBudget}</span>
+                  {budgetDiff > 0 && <span className="text-[9px] font-sans text-green-400">+€{budgetDiff}</span>}
+                </div>
+              </div>
+
+              {/* Actions */}
+              <div className="flex gap-2">
+                {!isIn ? (
+                  <button
+                    onClick={() => { onCheckIn(res.id, people); setOpen(false); }}
+                    className="flex-1 flex items-center justify-center gap-2 py-2.5 bg-accent text-black text-[9px] hv font-black uppercase tracking-widest hover:bg-white transition-colors"
+                  >
+                    <LogIn size={12} /> Segna Entrata
+                  </button>
+                ) : (
+                  <>
+                    {peopleChanged && (
+                      <button
+                        onClick={() => { onUpdatePeople(res.id, people); setOpen(false); }}
+                        className="flex-1 py-2.5 bg-accent text-black text-[9px] hv font-black uppercase tracking-widest hover:bg-white transition-colors"
+                      >
+                        Aggiorna
+                      </button>
+                    )}
+                    <button
+                      onClick={() => { onUndoCheckIn(res.id); setOpen(false); }}
+                      className="flex-1 py-2.5 border border-[#333] text-[#666] text-[9px] hv font-black uppercase tracking-widest hover:border-red-500/40 hover:text-red-400 transition-colors"
+                    >
+                      Annulla Entrata
+                    </button>
+                  </>
+                )}
+              </div>
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </div>
+  );
+}
+
 function HostCheckinView({ reservations, events, venues, userRole, onCheckIn, onUndoCheckIn, onUpdatePeople }: {
   reservations: Reservation[];
   events: Event[];
@@ -2048,16 +2168,24 @@ function HostCheckinView({ reservations, events, venues, userRole, onCheckIn, on
   onUndoCheckIn: (id: string) => void;
   onUpdatePeople: (id: string, actualPeople: number) => void;
 }) {
+  const [search, setSearch] = useState('');
+  const [showEntered, setShowEntered] = useState(false);
+
   const activeEvents = events.filter(e => e.status === 'active');
   const approvedRes = reservations.filter(r => r.approvalStatus === 'approved');
+  const total = approvedRes.length;
   const checkedInCount = approvedRes.filter(r => r.checkedIn).length;
+  const pct = total > 0 ? Math.round((checkedInCount / total) * 100) : 0;
 
-  const [localPeople, setLocalPeople] = useState<Record<string, number>>(() =>
-    Object.fromEntries(approvedRes.map(r => [r.id, r.actualPeople ?? r.guestsCount]))
+  const q = search.trim().toLowerCase();
+  const filtered = approvedRes.filter(r =>
+    !q || r.customerName.toLowerCase().includes(q) ||
+    (r.tableName ?? '').toLowerCase().includes(q) ||
+    r.prName.toLowerCase().includes(q)
   );
 
-  const setPeople = (id: string, val: number) =>
-    setLocalPeople(prev => ({ ...prev, [id]: val }));
+  const pending = filtered.filter(r => !r.checkedIn).sort((a, b) => a.customerName.localeCompare(b.customerName));
+  const entered = filtered.filter(r => r.checkedIn).sort((a, b) => a.customerName.localeCompare(b.customerName));
 
   if (activeEvents.length === 0) {
     return (
@@ -2069,127 +2197,83 @@ function HostCheckinView({ reservations, events, venues, userRole, onCheckIn, on
   }
 
   return (
-    <div>
-      <div className="flex items-center justify-between mb-8">
-        <div>
-          <h1 className="hv font-black text-2xl uppercase text-white tracking-tight">Ingresso Serata</h1>
-          <p className="text-[9px] font-sans text-[#666] uppercase tracking-[0.3em] mt-1">
-            {checkedInCount} / {approvedRes.length} tavoli entrati
-          </p>
-        </div>
-        {approvedRes.length > 0 && (
-          <div className="text-right">
-            <div className="hv font-black text-4xl text-white leading-none">{checkedInCount}</div>
-            <div className="mt-2 h-px w-24 bg-[#2a2a2a] relative overflow-hidden">
-              <div
-                className="h-px bg-accent absolute inset-y-0 left-0 transition-all duration-700"
-                style={{ width: `${approvedRes.length > 0 ? (checkedInCount / approvedRes.length) * 100 : 0}%` }}
-              />
-            </div>
-            <p className="text-[8px] font-sans text-[#555] uppercase tracking-widest mt-1">entrati</p>
+    <div className="max-w-xl mx-auto">
+
+      {/* Header */}
+      <div className="mb-6">
+        <h1 className="hv font-black text-2xl uppercase text-white tracking-tight">Ingresso Serata</h1>
+        <div className="flex items-center gap-3 mt-3">
+          <div className="flex-1 h-1 bg-[#222] overflow-hidden">
+            <motion.div className="h-full bg-accent" initial={{ width: 0 }}
+              animate={{ width: `${pct}%` }} transition={{ duration: 0.6, ease: 'easeOut' }} />
           </div>
+          <span className="hv font-black text-white text-sm shrink-0">{checkedInCount}<span className="text-[#555] font-normal text-xs">/{total}</span></span>
+        </div>
+      </div>
+
+      {/* Search */}
+      <div className="relative mb-6">
+        <input
+          type="text"
+          placeholder="Cerca cliente, tavolo, PR…"
+          value={search}
+          onChange={e => setSearch(e.target.value)}
+          className="w-full bg-[#1e1e1e] border border-[#2e2e2e] px-4 py-3 text-sm font-sans text-white placeholder-[#444] outline-none focus:border-accent/40 transition-colors"
+        />
+        {search && (
+          <button onClick={() => setSearch('')}
+            className="absolute right-3 top-1/2 -translate-y-1/2 text-[#555] hover:text-white transition-colors">
+            <X size={14} />
+          </button>
         )}
       </div>
 
-      <div className="space-y-6">
-        {activeEvents.map(event => {
-          const venue = venues.find(v => v.id === event.venueId);
-          const eventRes = approvedRes
-            .filter(r => r.eventId === event.id)
-            .sort((a, b) => a.customerName.localeCompare(b.customerName));
-          if (eventRes.length === 0) return null;
-          const eventChecked = eventRes.filter(r => r.checkedIn).length;
+      {/* Da fare */}
+      {pending.length > 0 && (
+        <div className="mb-4">
+          <p className="text-[8px] font-sans uppercase tracking-[0.4em] text-[#555] mb-2 px-1">
+            Da fare — {pending.length}
+          </p>
+          <div className="border border-[#2a2a2a] bg-card overflow-hidden">
+            {pending.map(res => (
+              <CheckinRow key={res.id} res={res} events={events} venues={venues}
+                onCheckIn={onCheckIn} onUndoCheckIn={onUndoCheckIn} onUpdatePeople={onUpdatePeople} />
+            ))}
+          </div>
+        </div>
+      )}
 
-          return (
-            <div key={event.id} className="border border-[#2a2a2a] bg-card overflow-hidden">
-              {/* Event header */}
-              <div className="px-6 py-4 border-b border-[#2a2a2a] bg-[#141414] flex items-center justify-between">
-                <div>
-                  <p className="hv font-black text-sm uppercase text-white tracking-widest">{event.name}</p>
-                  <p className="text-[8px] font-sans text-[#666] uppercase tracking-widest mt-0.5">{venue?.name ?? ''} · {event.date}</p>
+      {/* Entrati */}
+      {entered.length > 0 && (
+        <div>
+          <button
+            onClick={() => setShowEntered(o => !o)}
+            className="flex items-center gap-2 text-[8px] font-sans uppercase tracking-[0.4em] text-[#555] hover:text-[#888] transition-colors mb-2 px-1 w-full"
+          >
+            <ChevronDown size={11} className={cn('transition-transform duration-200', showEntered && 'rotate-180')} />
+            Entrati — {entered.length}
+          </button>
+          <AnimatePresence>
+            {showEntered && (
+              <motion.div initial={{ height: 0, opacity: 0 }} animate={{ height: 'auto', opacity: 1 }}
+                exit={{ height: 0, opacity: 0 }} transition={{ duration: 0.2 }} className="overflow-hidden">
+                <div className="border border-[#2a2a2a] bg-card overflow-hidden">
+                  {entered.map(res => (
+                    <CheckinRow key={res.id} res={res} events={events} venues={venues}
+                      onCheckIn={onCheckIn} onUndoCheckIn={onUndoCheckIn} onUpdatePeople={onUpdatePeople} />
+                  ))}
                 </div>
-                <span className="hv font-black text-accent text-lg">{eventChecked}<span className="text-[#555] text-sm font-normal">/{eventRes.length}</span></span>
-              </div>
+              </motion.div>
+            )}
+          </AnimatePresence>
+        </div>
+      )}
 
-              {/* Reservation rows */}
-              <div className="divide-y divide-[#1e1e1e]">
-                {eventRes.map(res => {
-                  const isIn = res.checkedIn;
-                  const people = localPeople[res.id] ?? res.guestsCount;
-                  const previewBudget = calcActualBudget(res.budget, res.guestsCount, people);
-                  const budgetDiff = previewBudget - res.budget;
-                  return (
-                    <div key={res.id} className={cn(
-                      'px-6 py-4 flex items-center gap-4 transition-colors',
-                      isIn ? 'bg-green-500/[0.04]' : 'hover:bg-white/[0.01]'
-                    )}>
-                      {/* Status dot */}
-                      <div className={cn('w-2 h-2 rounded-full shrink-0', isIn ? 'bg-green-500' : 'bg-[#333]')} />
-
-                      {/* Info */}
-                      <div className="flex-1 min-w-0">
-                        <div className="flex items-center gap-2 flex-wrap">
-                          <span className="hv font-black text-sm text-white uppercase">{res.customerName}</span>
-                          <span className="text-[8px] font-sans border border-[#333] px-2 py-0.5 text-[#888] uppercase tracking-widest">Tav. {res.tableName ?? res.tableId}</span>
-                          {isIn && (
-                            <span className="text-[8px] font-sans border border-green-500/30 bg-green-500/10 px-2 py-0.5 text-green-400 uppercase tracking-widest">Entrato</span>
-                          )}
-                        </div>
-                        <p className="text-[9px] font-sans text-[#555] mt-1">
-                          PR: {res.prName} · previsti {res.guestsCount} pax · €{res.budget}
-                          {budgetDiff > 0 && people !== res.guestsCount && (
-                            <span className="text-green-400 ml-1">→ €{previewBudget} (+€{budgetDiff})</span>
-                          )}
-                        </p>
-                      </div>
-
-                      {/* People input */}
-                      <div className="flex items-center gap-1 shrink-0">
-                        <button
-                          onClick={() => setPeople(res.id, Math.max(1, people - 1))}
-                          className="w-7 h-7 border border-[#333] text-[#888] hover:text-white hover:border-[#555] transition-colors text-lg leading-none flex items-center justify-center"
-                        >−</button>
-                        <span className="w-8 text-center hv font-black text-white text-sm">{people}</span>
-                        <button
-                          onClick={() => setPeople(res.id, people + 1)}
-                          className="w-7 h-7 border border-[#333] text-[#888] hover:text-white hover:border-[#555] transition-colors text-lg leading-none flex items-center justify-center"
-                        >+</button>
-                      </div>
-
-                      {/* Action button */}
-                      {!isIn ? (
-                        <button
-                          onClick={() => onCheckIn(res.id, people)}
-                          className="flex items-center gap-2 px-4 py-2 bg-accent text-black text-[9px] hv font-black uppercase tracking-widest hover:bg-white transition-colors shrink-0"
-                        >
-                          <LogIn size={12} /> Entra
-                        </button>
-                      ) : (
-                        <div className="flex items-center gap-2 shrink-0">
-                          {people !== (res.actualPeople ?? res.guestsCount) && (
-                            <button
-                              onClick={() => onUpdatePeople(res.id, people)}
-                              className="px-4 py-2 bg-accent text-black text-[9px] hv font-black uppercase tracking-widest hover:bg-white transition-colors"
-                            >
-                              Aggiorna
-                            </button>
-                          )}
-                          <button
-                            onClick={() => onUndoCheckIn(res.id)}
-                            className="px-4 py-2 border border-[#333] text-[#666] text-[9px] hv font-black uppercase tracking-widest hover:border-red-500/50 hover:text-red-400 transition-colors"
-                          >
-                            Annulla
-                          </button>
-                        </div>
-                      )}
-                    </div>
-                  );
-                })}
-              </div>
-            </div>
-          );
-        })}
-      </div>
+      {filtered.length === 0 && (
+        <div className="py-16 text-center">
+          <p className="text-[9px] font-sans uppercase tracking-[0.4em] text-[#444]">Nessun risultato</p>
+        </div>
+      )}
     </div>
   );
 }

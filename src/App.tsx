@@ -2173,7 +2173,7 @@ function VenueCard({ venue, eventCount, onClick, onEdit, onDelete }: {
 
         <div className="flex items-end justify-between border-t border-[#2e2e2e] pt-5">
           <div>
-            <span className="hv font-black text-[52px] leading-none text-[#3a3a3a] group-hover:text-accent transition-colors select-none">
+            <span className="hv font-black text-[52px] leading-none text-[#3a3a3a] group-hover:text-[#555] transition-colors select-none">
               {String(eventCount).padStart(2, '0')}
             </span>
             <p className="text-[8px] font-sans uppercase tracking-widest text-[#888] mt-0.5">eventi</p>

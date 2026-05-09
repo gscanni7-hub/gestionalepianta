@@ -170,6 +170,7 @@ export default function App() {
   const [editingEvent, setEditingEvent] = useState<Event | null>(null);
   const [editorVenueId, setEditorVenueId] = useState<string | null>(null);
   const [venueTab, setVenueTab] = useState<'events' | 'layout'>('events');
+  const [editingReservation, setEditingReservation] = useState<Reservation | null>(null);
 
   useEffect(() => {
     localStorage.setItem('nightplan_managed_users', JSON.stringify(managedUsers));
@@ -385,6 +386,7 @@ export default function App() {
   const pendingUsers = managedUsers.filter(u => u.status === 'pending');
   const pendingResv  = reservations.filter(r => r.approvalStatus === 'pending');
   const pendingCount = pendingUsers.length + pendingResv.length;
+  const prPendingCount = user?.role === 'pr' ? reservations.filter(r => r.prId === user.id && r.approvalStatus === 'pending').length : 0;
 
   const headerTitle = () => {
     if (view === 'venues')         return 'Location';
@@ -796,6 +798,7 @@ export default function App() {
                 occupancyPct={occupancyPct}
                 revenueEst={revenueEst}
                 pendingCount={pendingCount}
+                prPendingCount={prPendingCount}
               />
             </motion.div>
           </>
@@ -810,6 +813,7 @@ export default function App() {
           occupancyPct={occupancyPct}
           revenueEst={revenueEst}
           pendingCount={pendingCount}
+          prPendingCount={prPendingCount}
         />
       </aside>
 
@@ -1140,6 +1144,8 @@ export default function App() {
                   reservations={user.role === 'admin' ? reservations : reservations.filter(r => r.prId === user.id)}
                   userRole={user.role}
                   events={events}
+                  onDelete={(id) => setReservations(prev => prev.filter(r => r.id !== id))}
+                  onEdit={(r) => setEditingReservation(r)}
                 />
               </motion.div>
             )}
@@ -1267,18 +1273,29 @@ export default function App() {
 
                   {/* KPIs */}
                   <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 mt-8 mb-10">
-                    {[
-                      { icon: <BarChart3 size={16}/>, label: 'Tavoli prenotati', value: myRes.length },
-                      { icon: <TrendingUp size={16}/>, label: 'Budget generato', value: `€${totalBudget.toLocaleString('it-IT')}` },
-                      { icon: <Calendar size={16}/>, label: 'Serate lavorate', value: myEventIds.length },
-                      { icon: <CheckCircle2 size={16}/>, label: 'Tasso approvazione', value: `${approvalRate}%` },
-                    ].map(({ icon, label, value }) => (
-                      <div key={label} className="border border-[#2a2a2a] bg-card px-5 py-5">
-                        <div className="text-accent mb-3">{icon}</div>
-                        <div className="hv font-black text-2xl text-white leading-none">{value}</div>
-                        <div className="text-[9px] font-sans uppercase tracking-[0.3em] text-[#666] mt-2">{label}</div>
+                    <div className="border border-[#2a2a2a] bg-card px-6 py-6">
+                      <div className="text-accent mb-4"><BarChart3 size={18}/></div>
+                      <div className="hv font-black text-4xl text-white leading-none">{myRes.length}</div>
+                      <div className="text-[9px] font-sans uppercase tracking-[0.3em] text-[#555] mt-3">Tavoli prenotati</div>
+                    </div>
+                    <div className="border border-[#2a2a2a] bg-card px-6 py-6">
+                      <div className="text-accent mb-4"><TrendingUp size={18}/></div>
+                      <div className="hv font-black text-4xl text-white leading-none">€{totalBudget >= 1000 ? `${(totalBudget/1000).toFixed(1)}K` : totalBudget}</div>
+                      <div className="text-[9px] font-sans uppercase tracking-[0.3em] text-[#555] mt-3">Budget generato</div>
+                    </div>
+                    <div className="border border-[#2a2a2a] bg-card px-6 py-6">
+                      <div className="text-accent mb-4"><Calendar size={18}/></div>
+                      <div className="hv font-black text-4xl text-white leading-none">{myEventIds.length}</div>
+                      <div className="text-[9px] font-sans uppercase tracking-[0.3em] text-[#555] mt-3">Serate lavorate</div>
+                    </div>
+                    <div className="border border-[#2a2a2a] bg-card px-6 py-6">
+                      <div className="text-accent mb-4"><CheckCircle2 size={18}/></div>
+                      <div className="hv font-black text-4xl text-white leading-none">{approvalRate}<span className="text-xl text-[#555]">%</span></div>
+                      <div className="mt-3 h-1 bg-[#1e1e1e] rounded-full overflow-hidden">
+                        <motion.div className="h-full bg-accent" initial={{ width: 0 }} animate={{ width: `${approvalRate}%` }} transition={{ duration: 1, ease: 'easeOut' }} />
                       </div>
-                    ))}
+                      <div className="text-[9px] font-sans uppercase tracking-[0.3em] text-[#555] mt-2">Tasso approvazione</div>
+                    </div>
                   </div>
 
                   {/* Events list */}
@@ -1421,6 +1438,17 @@ export default function App() {
           onClose={() => setEditingFloorPlan(null)}
         />
       )}
+
+      {editingReservation && (
+        <ReservationQuickEditModal
+          reservation={editingReservation}
+          onClose={() => setEditingReservation(null)}
+          onSave={(updated) => {
+            setReservations(prev => prev.map(r => r.id === updated.id ? updated : r));
+            setEditingReservation(null);
+          }}
+        />
+      )}
     </div>
   );
 }
@@ -1507,19 +1535,90 @@ const SAVED_ACCOUNTS = [
   { label: 'PR',    email: 'lucavisca@gmail.com', password: '1234' },
 ];
 
+/* ── ReservationQuickEditModal ───────────────────────────── */
+function ReservationQuickEditModal({ reservation, onClose, onSave }: {
+  reservation: Reservation;
+  onClose: () => void;
+  onSave: (r: Reservation) => void;
+}) {
+  const [guests, setGuests] = useState(reservation.guestsCount);
+  const [budget, setBudget] = useState(reservation.budget);
+  const [bottles, setBottles] = useState(reservation.bottles);
+  const [notes, setNotes] = useState(reservation.notes);
+
+  return (
+    <div className="fixed inset-0 z-[100] flex items-end justify-center sm:items-center p-0 sm:p-4">
+      <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
+        className="absolute inset-0 bg-black/90 backdrop-blur-sm" onClick={onClose} />
+      <motion.div initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.2 }}
+        className="relative w-full sm:max-w-md bg-card border-t border-x sm:border border-[#383838] overflow-hidden rounded-t-2xl sm:rounded-none max-h-[90vh] flex flex-col">
+        <div className="h-[2px] bg-accent shrink-0" />
+        <div className="px-6 py-5 border-b border-[#2e2e2e] flex items-center justify-between shrink-0">
+          <div>
+            <h3 className="hv font-black text-lg uppercase text-white">Modifica Prenotazione</h3>
+            <p className="text-[9px] font-sans text-[#666] uppercase tracking-widest mt-0.5">{reservation.tableName} · {reservation.customerName}</p>
+          </div>
+          <button onClick={onClose} className="text-[#555] hover:text-white transition-colors"><X size={16} /></button>
+        </div>
+        <form className="p-6 space-y-4 overflow-y-auto" onSubmit={e => { e.preventDefault(); onSave({ ...reservation, guestsCount: guests, budget, bottles, notes }); }}>
+          <div className="grid grid-cols-2 gap-4">
+            <div>
+              <label className="block text-[9px] hv font-black uppercase tracking-[0.2em] text-[#666] mb-2">N. Ospiti</label>
+              <input type="number" min={1} value={guests} onChange={e => setGuests(Number(e.target.value))}
+                className="w-full bg-[#141414] border border-[#383838] px-4 py-3 text-sm text-white outline-none focus:border-accent/40 transition-colors font-sans" />
+            </div>
+            <div>
+              <label className="block text-[9px] hv font-black uppercase tracking-[0.2em] text-[#666] mb-2">Budget €</label>
+              <input type="number" min={0} value={budget} onChange={e => setBudget(Number(e.target.value))}
+                className="w-full bg-[#141414] border border-[#383838] px-4 py-3 text-sm text-white outline-none focus:border-accent/40 transition-colors font-sans" />
+            </div>
+          </div>
+          <div>
+            <label className="block text-[9px] hv font-black uppercase tracking-[0.2em] text-[#666] mb-2">Bottiglie</label>
+            <input value={bottles} onChange={e => setBottles(e.target.value)}
+              placeholder="es. 2 vodka, 1 champagne"
+              className="w-full bg-[#141414] border border-[#383838] px-4 py-3 text-sm text-white placeholder-[#444] outline-none focus:border-accent/40 transition-colors font-sans" />
+          </div>
+          <div>
+            <label className="block text-[9px] hv font-black uppercase tracking-[0.2em] text-[#666] mb-2">Note</label>
+            <textarea value={notes} onChange={e => setNotes(e.target.value)} rows={3}
+              className="w-full bg-[#141414] border border-[#383838] px-4 py-3 text-sm text-white placeholder-[#444] outline-none focus:border-accent/40 transition-colors font-sans resize-none" />
+          </div>
+          <div className="flex gap-3 pt-2">
+            <button type="button" onClick={onClose}
+              className="flex-1 py-3 text-[9px] hv font-black uppercase tracking-[0.2em] border border-[#383838] text-[#777] hover:border-[#555] transition-colors">
+              Annulla
+            </button>
+            <button type="submit"
+              className="flex-1 py-3 text-[9px] hv font-black uppercase tracking-[0.2em] bg-accent text-black hover:bg-white transition-colors">
+              Salva
+            </button>
+          </div>
+        </form>
+      </motion.div>
+    </div>
+  );
+}
+
 /* ── HistoryEventRow ─────────────────────────────────────── */
 function HistoryEventRow({ event, venueName, reservations, approvedCount, totalBudget }: {
   event: Event; venueName: string; reservations: Reservation[];
   approvedCount: number; totalBudget: number;
 }) {
   const [open, setOpen] = useState(false);
-  const statusColor = (s: string) =>
-    s === 'approved' ? 'text-green-400' : s === 'rejected' ? 'text-red-400' : 'text-[#888]';
+  const rejected = reservations.filter(r => r.approvalStatus === 'rejected').length;
+  const borderColor = rejected > 0 ? 'border-l-red-500/50' : approvedCount === reservations.length ? 'border-l-green-500/40' : 'border-l-[#444]';
   const statusLabel = (s: string) =>
     s === 'approved' ? 'Approvata' : s === 'rejected' ? 'Rifiutata' : 'In attesa';
 
+  const approvalBadge = (s: string) => {
+    if (s === 'approved') return <span className="px-2 py-0.5 text-[9px] font-sans uppercase tracking-widest bg-green-500/10 text-green-400 border border-green-500/20">Approvata</span>;
+    if (s === 'rejected') return <span className="px-2 py-0.5 text-[9px] font-sans uppercase tracking-widest bg-red-500/10 text-red-400 border border-red-500/20">Rifiutata</span>;
+    return <span className="px-2 py-0.5 text-[9px] font-sans uppercase tracking-widest bg-[#1e1e1e] text-[#777] border border-[#2a2a2a]">In attesa</span>;
+  };
+
   return (
-    <div className="border border-[#2a2a2a] bg-card overflow-hidden">
+    <div className={cn('border border-[#2a2a2a] border-l-4 bg-card overflow-hidden', borderColor)}>
       <button
         onClick={() => setOpen(o => !o)}
         className="w-full px-6 py-5 flex items-center justify-between hover:bg-white/[0.02] transition-colors text-left"
@@ -1558,7 +1657,7 @@ function HistoryEventRow({ event, venueName, reservations, approvedCount, totalB
               {reservations.map(r => (
                 <div key={r.id} className="px-6 py-3.5 flex items-center justify-between gap-4">
                   <div className="flex items-center gap-4 min-w-0">
-                    <div className="w-6 h-6 bg-[#1a1a1a] border border-[#2a2a2a] flex items-center justify-center shrink-0">
+                    <div className="w-7 h-7 bg-[#141414] border border-[#252525] flex items-center justify-center shrink-0">
                       <span className="text-[9px] hv font-black text-accent">{r.tableName ?? '—'}</span>
                     </div>
                     <div className="min-w-0">
@@ -1566,16 +1665,8 @@ function HistoryEventRow({ event, venueName, reservations, approvedCount, totalB
                       <p className="text-[9px] font-sans text-[#555] mt-0.5">{r.guestsCount} ospiti · €{r.budget}</p>
                     </div>
                   </div>
-                  <div className="flex items-center gap-2 shrink-0">
-                    {r.approvalStatus === 'approved'
-                      ? <CheckCircle2 size={13} className="text-green-400" />
-                      : r.approvalStatus === 'rejected'
-                      ? <XCircle size={13} className="text-red-400" />
-                      : <div className="w-2 h-2 rounded-full bg-[#555]" />
-                    }
-                    <span className={cn('text-[9px] font-sans uppercase tracking-widest', statusColor(r.approvalStatus))}>
-                      {statusLabel(r.approvalStatus)}
-                    </span>
+                  <div className="shrink-0">
+                    {approvalBadge(r.approvalStatus)}
                   </div>
                 </div>
               ))}
@@ -1588,13 +1679,14 @@ function HistoryEventRow({ event, venueName, reservations, approvedCount, totalB
 }
 
 /* ── SidebarContent ──────────────────────────────────────── */
-function SidebarContent({ user, view, onNav, onLogout, occupancyPct = 0, revenueEst = 0, pendingCount = 0 }: {
+function SidebarContent({ user, view, onNav, onLogout, occupancyPct = 0, revenueEst = 0, pendingCount = 0, prPendingCount = 0 }: {
   user: UserProfile; view: string;
   onNav: (v: string) => void;
   onLogout: () => void;
   occupancyPct?: number;
   revenueEst?: number;
   pendingCount?: number;
+  prPendingCount?: number;
 }) {
   const revenueDisplay = revenueEst >= 1000
     ? `€${(revenueEst / 1000).toFixed(1)}K`
@@ -1665,7 +1757,8 @@ function SidebarContent({ user, view, onNav, onLogout, occupancyPct = 0, revenue
               onClick={() => onNav('events')} />
             <NavLink icon={<BarChart3 size={14}/>} label="Prenotazioni"
               active={view==='reservations'}
-              onClick={() => onNav('reservations')} />
+              onClick={() => onNav('reservations')}
+              badge={prPendingCount} />
             <NavLink icon={<Clock size={14}/>} label="Il Mio Storico"
               active={view==='history'}
               onClick={() => onNav('history')} />
@@ -1912,12 +2005,20 @@ function EventCard({ event, venueName, onClick, onEdit, onDelete }: {
 }
 
 /* ── ReservationsTable ───────────────────────────────────── */
-function ReservationsTable({ reservations, userRole, events }: {
+function ReservationsTable({ reservations, userRole, events, onDelete, onEdit }: {
   reservations: Reservation[];
   userRole: string;
   events: Event[];
+  onDelete?: (id: string) => void;
+  onEdit?: (r: Reservation) => void;
 }) {
   const colCount = userRole === 'admin' ? 6 : 5;
+
+  const approvalBadge = (s: string) => {
+    if (s === 'approved') return <span className="inline-flex items-center gap-1 px-2 py-0.5 text-[9px] font-sans uppercase tracking-widest bg-green-500/10 text-green-400 border border-green-500/20">Approvata</span>;
+    if (s === 'rejected') return <span className="inline-flex items-center gap-1 px-2 py-0.5 text-[9px] font-sans uppercase tracking-widest bg-red-500/10 text-red-400 border border-red-500/20">Rifiutata</span>;
+    return <span className="inline-flex items-center gap-1 px-2 py-0.5 text-[9px] font-sans uppercase tracking-widest bg-[#2a2a2a] text-[#888] border border-[#333]">In attesa</span>;
+  };
 
   // Group reservations by event, sorted alphabetically within each group
   const groups: { event: Event | undefined; eventId: string; rows: Reservation[] }[] =
@@ -2019,33 +2120,51 @@ function ReservationsTable({ reservations, userRole, events }: {
 
               {/* Desktop table */}
               <div className="hidden sm:block overflow-x-auto">
-                <table className="w-full text-left border-collapse min-w-[600px]">
+                <table className="w-full text-left border-collapse min-w-[640px]">
                   <thead>
-                    <tr className="border-b border-[#2e2e2e]">
-                      {['Tavolo', 'Cliente', ...(userRole === 'admin' ? ['PR'] : []), 'Pax', 'Budget'].map(h => (
-                        <th key={h} className="px-7 py-3 text-[8px] font-sans font-bold uppercase tracking-[0.35em] text-[#777]">{h}</th>
+                    <tr className="border-b border-[#222]">
+                      {['Tavolo', 'Cliente', ...(userRole === 'admin' ? ['PR'] : []), 'Pax', 'Budget', 'Stato', ''].map((h, i) => (
+                        <th key={i} className="px-6 py-3 text-[8px] font-sans font-bold uppercase tracking-[0.35em] text-[#555]">{h}</th>
                       ))}
                     </tr>
                   </thead>
                   <tbody>
                     {rows.map(res => (
-                      <tr key={res.id} className="border-b border-[#1a1a1a] hover:bg-white/[0.01] transition-colors group">
-                        <td className="px-7 py-4">
-                          <span className="hv font-bold text-sm text-white">{res.tableName ?? res.tableId}</span>
+                      <tr key={res.id} className="border-b border-[#1a1a1a] hover:bg-white/[0.015] transition-colors group">
+                        <td className="px-6 py-3.5">
+                          <span className="hv font-black text-sm text-white">{res.tableName ?? res.tableId}</span>
                         </td>
-                        <td className="px-7 py-4">
-                          <p className="hv font-bold text-[11px] uppercase text-white">{res.customerName}</p>
+                        <td className="px-6 py-3.5">
+                          <p className="text-sm text-white font-sans">{res.customerName}</p>
+                          {res.customerPhone && <p className="text-[9px] font-sans text-[#555] mt-0.5">{res.customerPhone}</p>}
                         </td>
                         {userRole === 'admin' && (
-                          <td className="px-7 py-4">
-                            <span className="text-[9px] font-sans text-[#999] uppercase tracking-widest group-hover:text-accent transition-colors">{res.prName}</span>
+                          <td className="px-6 py-3.5">
+                            <span className="text-[10px] font-sans text-[#777]">{res.prName}</span>
                           </td>
                         )}
-                        <td className="px-7 py-4">
-                          <span className="hv font-black text-lg text-[#999]">{res.guestsCount}</span>
+                        <td className="px-6 py-3.5">
+                          <span className="text-sm font-sans text-[#aaa]">{res.guestsCount}</span>
                         </td>
-                        <td className="px-7 py-4 text-right">
-                          <span className="hv font-black text-lg text-accent">€{res.budget}</span>
+                        <td className="px-6 py-3.5">
+                          <span className="hv font-black text-sm text-accent">€{res.budget}</span>
+                        </td>
+                        <td className="px-6 py-3.5">
+                          {approvalBadge(res.approvalStatus)}
+                        </td>
+                        <td className="px-6 py-3.5">
+                          {userRole === 'pr' && res.approvalStatus === 'pending' && (
+                            <div className="flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
+                              <button onClick={() => onEdit?.(res)}
+                                className="w-7 h-7 flex items-center justify-center text-[#555] hover:text-accent transition-colors">
+                                <Pencil size={12} />
+                              </button>
+                              <button onClick={() => onDelete?.(res.id)}
+                                className="w-7 h-7 flex items-center justify-center text-[#555] hover:text-red-400 transition-colors">
+                                <Trash2 size={12} />
+                              </button>
+                            </div>
+                          )}
                         </td>
                       </tr>
                     ))}

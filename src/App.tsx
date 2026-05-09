@@ -374,6 +374,14 @@ export default function App() {
     ));
   };
 
+  const handleUpdatePeople = (reservationId: string, actualPeople: number) => {
+    setReservations(prev => prev.map(r =>
+      r.id === reservationId ? { ...r, actualPeople } : r
+    ));
+    const res = reservations.find(r => r.id === reservationId);
+    if (res) addToast(`${res.customerName} — aggiornato`, `${actualPeople} ospiti · Tav. ${res.tableName ?? res.tableId}`);
+  };
+
   const handleApproveUser = (id: string) =>
     setManagedUsers(prev => prev.map(u => u.id === id ? { ...u, status: 'approved' } : u));
   const handleRejectUser = (id: string) =>
@@ -1398,6 +1406,7 @@ export default function App() {
                   userRole={user.role}
                   onCheckIn={handleCheckIn}
                   onUndoCheckIn={handleUndoCheckIn}
+                  onUpdatePeople={handleUpdatePeople}
                 />
               </motion.div>
             )}
@@ -2011,13 +2020,14 @@ function HistoryEventRow({ event, venueName, reservations, approvedCount, totalB
 }
 
 /* ── HostCheckinView ─────────────────────────────────────── */
-function HostCheckinView({ reservations, events, venues, userRole, onCheckIn, onUndoCheckIn }: {
+function HostCheckinView({ reservations, events, venues, userRole, onCheckIn, onUndoCheckIn, onUpdatePeople }: {
   reservations: Reservation[];
   events: Event[];
   venues: Venue[];
   userRole: string;
   onCheckIn: (id: string, actualPeople: number) => void;
   onUndoCheckIn: (id: string) => void;
+  onUpdatePeople: (id: string, actualPeople: number) => void;
 }) {
   const activeEvents = events.filter(e => e.status === 'active');
   const approvedRes = reservations.filter(r => r.approvalStatus === 'approved');
@@ -2129,12 +2139,22 @@ function HostCheckinView({ reservations, events, venues, userRole, onCheckIn, on
                           <LogIn size={12} /> Entra
                         </button>
                       ) : (
-                        <button
-                          onClick={() => onUndoCheckIn(res.id)}
-                          className="px-4 py-2 border border-[#333] text-[#666] text-[9px] hv font-black uppercase tracking-widest hover:border-red-500/50 hover:text-red-400 transition-colors shrink-0"
-                        >
-                          Annulla
-                        </button>
+                        <div className="flex items-center gap-2 shrink-0">
+                          {people !== (res.actualPeople ?? res.guestsCount) && (
+                            <button
+                              onClick={() => onUpdatePeople(res.id, people)}
+                              className="px-4 py-2 bg-accent text-black text-[9px] hv font-black uppercase tracking-widest hover:bg-white transition-colors"
+                            >
+                              Aggiorna
+                            </button>
+                          )}
+                          <button
+                            onClick={() => onUndoCheckIn(res.id)}
+                            className="px-4 py-2 border border-[#333] text-[#666] text-[9px] hv font-black uppercase tracking-widest hover:border-red-500/50 hover:text-red-400 transition-colors"
+                          >
+                            Annulla
+                          </button>
+                        </div>
                       )}
                     </div>
                   );

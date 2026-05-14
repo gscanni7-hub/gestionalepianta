@@ -12,13 +12,17 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { cn, COLORS, easeOutQuart, gridContainer, gridItem } from './lib/utils';
 import { isEmailConfigured, sendPasswordResetEmail } from './lib/emailService';
 import { isFirebaseConfigured, signInWithGoogle } from './lib/firebase';
+import { subscribeToReservations } from './lib/reservationService';
 import FloorPlanViewer from './components/floorplan/FloorPlanViewer';
 import FloorPlanEditor from './components/floorplan/FloorPlanEditor';
 import IngressiView from './components/host/IngressiView';
 import PRLinkGenerator from './components/pr/PRLinkGenerator';
+import PRStatsView from './components/pr/PRStatsView';
 import QuickAddModal from './components/pr/QuickAddModal';
 import Dashboard from './components/dashboard/Dashboard';
 import EventDetailView from './components/admin/EventDetailView';
+import PendingApprovalsView from './components/admin/PendingApprovalsView';
+import PRRankingView from './components/admin/PRRankingView';
 
 type AppView = 'dashboard' | 'venues' | 'venue-events' | 'event-detail' | 'events' | 'active-events' | 'plan' | 'editor' | 'reservations' | 'approvals' | 'profile' | 'history' | 'pr-management' | 'checkin';
 
@@ -390,6 +394,52 @@ export default function App() {
     localStorage.setItem('nightplan_reservations', JSON.stringify(reservations));
   }, [reservations]);
 
+  /* ── Firestore real-time sync for reservations ───────────── */
+  useEffect(() => {
+    if (!isFirebaseConfigured()) return;
+    const unsub = subscribeToReservations((firestoreRes) => {
+      if (firestoreRes.length > 0) {
+        setReservations(firestoreRes);
+      }
+    });
+    return unsub;
+  }, []);
+
+  /* ── Browser notifications for new pending reservations ─── */
+  const seenReservationIdsRef = useRef<Set<string>>(new Set());
+  const notifPermissionRef = useRef(false);
+
+  useEffect(() => {
+    if (!user || user.role !== 'admin') return;
+    if (!('Notification' in window)) return;
+    if (Notification.permission === 'granted') {
+      notifPermissionRef.current = true;
+    } else if (Notification.permission !== 'denied') {
+      Notification.requestPermission().then(perm => {
+        notifPermissionRef.current = perm === 'granted';
+      });
+    }
+  }, [user]);
+
+  useEffect(() => {
+    if (!user || user.role !== 'admin') return;
+    reservations.forEach(r => {
+      if (r.approvalStatus === 'pending' && !seenReservationIdsRef.current.has(r.id)) {
+        seenReservationIdsRef.current.add(r.id);
+        // Only notify if we've already gone through at least one scan (skip initial load)
+        if (seenReservationIdsRef.current.size > 1 || notifPermissionRef.current) {
+          if (notifPermissionRef.current && Notification.permission === 'granted') {
+            new Notification('Nuova prenotazione', {
+              body: `${r.customerName} (${r.guestsCount} pers.)`,
+              icon: '/Logo.png',
+            });
+          }
+        }
+      }
+    });
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [reservations]);
+
   useEffect(() => {
     const hash = window.location.hash;
     if (!hash.startsWith('#reset=')) return;
@@ -590,6 +640,33 @@ export default function App() {
     setReservations(prev => prev.map(r => r.id === id ? { ...r, approvalStatus: 'approved' } : r));
   const handleRejectReservation = (id: string) =>
     setReservations(prev => prev.map(r => r.id === id ? { ...r, approvalStatus: 'rejected' } : r));
+
+  const exportGuestList = (eventId?: string) => {
+    const target = eventId
+      ? reservations.filter(r => r.eventId === eventId && (r.approvalStatus === 'approved' || r.checkedIn))
+      : reservations.filter(r => activeEvents.some(e => e.id === r.eventId) && (r.approvalStatus === 'approved' || r.checkedIn));
+    if (target.length === 0) return;
+    const headers = ['Nome', 'Tavolo', 'PR', 'Ospiti', 'Budget', 'Entrato'];
+    const rows = target.map(r => [
+      r.customerName,
+      r.tableName ?? r.tableId,
+      r.prName,
+      r.actualPeople ?? r.guestsCount,
+      r.actualBudget ?? r.budget,
+      r.checkedIn ? 'sì' : 'no',
+    ]);
+    const csv = [headers, ...rows]
+      .map(row => row.map(c => `"${String(c ?? '').replace(/"/g, '""')}"`).join(','))
+      .join('\n');
+    const blob = new Blob(['﻿' + csv], { type: 'text/csv;charset=utf-8;' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    const evName = eventId ? events.find(e => e.id === eventId)?.name ?? 'serata' : 'ospiti';
+    a.download = `${evName.replace(/\s+/g, '_').toLowerCase()}_${new Date().toISOString().slice(0, 10)}.csv`;
+    a.click();
+    URL.revokeObjectURL(url);
+  };
 
   const handleLogout = () => {
     localStorage.removeItem('nightplan_user');
@@ -1593,98 +1670,14 @@ export default function App() {
                   title="Approvazioni"
                   sub={pendingCount > 0 ? `${pendingCount} element${pendingCount !== 1 ? 'i' : 'o'} in attesa` : 'Nessun elemento in attesa'}
                 />
-
-                {/* Pending PRs */}
-                <div className="mb-10">
-                  <div className="flex items-center gap-3 mb-4">
-                    <span className="text-[9px] font-sans uppercase tracking-[0.4em] text-accent font-bold">Nuovi PR</span>
-                    {pendingUsers.length > 0 && (
-                      <span className="bg-accent text-black text-[8px] hv font-black px-2 py-0.5 leading-none">{pendingUsers.length}</span>
-                    )}
-                  </div>
-                  {pendingUsers.length === 0 ? (
-                    <div className="border border-dashed border-[#383838] py-10 px-6 text-center">
-                      <p className="text-[9px] font-sans uppercase tracking-widest text-[#666]">Nessuna richiesta in attesa</p>
-                    </div>
-                  ) : (
-                    <div className="space-y-2">
-                      {pendingUsers.map(u => (
-                        <div key={u.id} className="flex items-center justify-between p-5 bg-card border border-[#383838] hover:border-[#333] transition-colors">
-                          <div className="flex items-center gap-4 min-w-0">
-                            <div className="w-9 h-9 bg-[#2a2a2a] border border-[#383838] flex items-center justify-center shrink-0">
-                              <span className="hv font-black text-[#888] text-xs">{u.displayName.substring(0, 2).toUpperCase()}</span>
-                            </div>
-                            <div className="min-w-0">
-                              <p className="hv font-black uppercase text-white text-[11px]">{u.displayName}</p>
-                              <p className="text-[9px] font-sans text-[#888] mt-0.5">{u.email}</p>
-                              <p className="text-[8px] font-sans text-[#666] uppercase tracking-widest mt-0.5">
-                                {new Date(u.createdAt).toLocaleDateString('it-IT')}
-                              </p>
-                            </div>
-                          </div>
-                          <div className="flex items-center gap-2 shrink-0">
-                            <button onClick={() => handleApproveUser(u.id)}
-                              className="px-4 py-2 bg-accent text-black text-[9px] hv font-black uppercase tracking-widest hover:bg-white transition-colors">
-                              Approva
-                            </button>
-                            <button onClick={() => handleRejectUser(u.id)}
-                              className="px-4 py-2 border border-[#383838] text-red-500/70 text-[9px] hv font-black uppercase tracking-widest hover:border-red-500 hover:text-red-500 transition-colors">
-                              Rifiuta
-                            </button>
-                          </div>
-                        </div>
-                      ))}
-                    </div>
-                  )}
-                </div>
-
-                {/* Pending Reservations */}
-                <div>
-                  <div className="flex items-center gap-3 mb-4">
-                    <span className="text-[9px] font-sans uppercase tracking-[0.4em] text-accent font-bold">Prenotazioni in Attesa</span>
-                    {pendingResv.length > 0 && (
-                      <span className="bg-accent text-black text-[8px] hv font-black px-2 py-0.5 leading-none">{pendingResv.length}</span>
-                    )}
-                  </div>
-                  {pendingResv.length === 0 ? (
-                    <div className="border border-dashed border-[#383838] py-10 px-6 text-center">
-                      <p className="text-[9px] font-sans uppercase tracking-widest text-[#666]">Nessuna prenotazione in attesa</p>
-                    </div>
-                  ) : (
-                    <div className="space-y-2">
-                      {pendingResv.map(r => {
-                        const ev = events.find(e => e.id === r.eventId);
-                        return (
-                          <div key={r.id} className="flex items-center justify-between p-5 bg-card border border-[#383838] hover:border-[#333] transition-colors gap-4">
-                            <div className="min-w-0 flex-1">
-                              <div className="flex items-center gap-3 flex-wrap">
-                                <span className="hv font-black uppercase text-white text-sm">{r.customerName}</span>
-                                <span className="text-[8px] font-sans uppercase tracking-widest text-[#888] border border-[#383838] px-2 py-0.5">Tav. {r.tableName}</span>
-                                <span className="text-[8px] font-sans uppercase tracking-widest text-orange-400 border border-orange-500/30 px-2 py-0.5">In attesa</span>
-                              </div>
-                              <div className="flex items-center gap-4 mt-2 flex-wrap">
-                                {ev && <p className="text-[9px] font-sans text-[#888]">{ev.name}</p>}
-                                <p className="text-[9px] font-sans text-[#777]">PR: {r.prName}</p>
-                                <p className="text-[9px] font-sans text-[#777]">{r.guestsCount} pax</p>
-                                <p className="text-[9px] font-sans text-accent">€{r.budget}</p>
-                              </div>
-                            </div>
-                            <div className="flex items-center gap-2 shrink-0">
-                              <button onClick={() => handleApproveReservation(r.id)}
-                                className="px-4 py-2 bg-accent text-black text-[9px] hv font-black uppercase tracking-widest hover:bg-white transition-colors">
-                                Approva
-                              </button>
-                              <button onClick={() => handleRejectReservation(r.id)}
-                                className="px-4 py-2 border border-[#383838] text-red-500/70 text-[9px] hv font-black uppercase tracking-widest hover:border-red-500 hover:text-red-500 transition-colors">
-                                Rifiuta
-                              </button>
-                            </div>
-                          </div>
-                        );
-                      })}
-                    </div>
-                  )}
-                </div>
+                <PendingApprovalsView
+                  reservations={reservations}
+                  managedUsers={managedUsers}
+                  onApproveReservation={handleApproveReservation}
+                  onRejectReservation={handleRejectReservation}
+                  onApproveUser={handleApproveUser}
+                  onRejectUser={handleRejectUser}
+                />
               </motion.div>
             )}
 
@@ -1721,6 +1714,9 @@ export default function App() {
               return (
                 <motion.div key="history" {...PAGE}>
                   <PageTitle title="Il Mio Storico" sub="Riepilogo delle tue prenotazioni" />
+
+                  {/* PR Stats */}
+                  <PRStatsView prId={user.id} reservations={reservations} events={events} />
 
                   {/* KPIs */}
                   <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 mt-8 mb-10">
@@ -1790,6 +1786,7 @@ export default function App() {
                   onCheckIn={handleCheckIn}
                   onUndoCheckIn={handleUndoCheckIn}
                   onUpdatePeople={handleUpdatePeople}
+                  onExport={user.role === 'admin' ? exportGuestList : undefined}
                 />
               </motion.div>
             )}
@@ -2117,6 +2114,14 @@ function PRManagementPage({ managedUsers, reservations, events, selectedPR, onSe
   return (
     <div>
       <PageTitle title="I Miei PR" sub={`${prUsers.length} professionisti registrati`} />
+
+      {/* PR Ranking */}
+      {prUsers.length > 0 && (
+        <div className="mb-10">
+          <PRRankingView managedUsers={managedUsers} reservations={reservations} />
+        </div>
+      )}
+
       {prUsers.length === 0 ? (
         <EmptyState icon={<Users size={28}/>} label="Nessun PR registrato." />
       ) : (
@@ -2587,7 +2592,7 @@ function CheckinRow({ res, events, venues, onCheckIn, onUndoCheckIn, onUpdatePeo
   );
 }
 
-function HostCheckinView({ reservations, events, venues, userRole, currentUser, onCheckIn, onUndoCheckIn, onUpdatePeople }: {
+function HostCheckinView({ reservations, events, venues, userRole, currentUser, onCheckIn, onUndoCheckIn, onUpdatePeople, onExport }: {
   reservations: Reservation[];
   events: Event[];
   venues: Venue[];
@@ -2596,14 +2601,22 @@ function HostCheckinView({ reservations, events, venues, userRole, currentUser, 
   onCheckIn: (id: string, actualPeople: number) => void;
   onUndoCheckIn: (id: string) => void;
   onUpdatePeople: (id: string, actualPeople: number) => void;
+  onExport?: (eventId: string) => void;
 }) {
   const [search, setSearch] = useState('');
   const [showEntered, setShowEntered] = useState(false);
   const [tab, setTab] = useState<'lista' | 'pianta' | 'ingressi'>('lista');
 
   const activeEvents = events.filter(e => e.status === 'active');
-  const activeEvent = activeEvents[0] ?? null;
-  const approvedRes = reservations.filter(r => r.approvalStatus === 'approved');
+  const [selectedEventId, setSelectedEventId] = useState<string>('');
+
+  // Keep selectedEventId in sync with available events
+  const activeEventId = selectedEventId || activeEvents[0]?.id || '';
+  const activeEvent = activeEvents.find(e => e.id === activeEventId) ?? activeEvents[0] ?? null;
+
+  const approvedRes = reservations.filter(r =>
+    r.approvalStatus === 'approved' && (activeEvent ? r.eventId === activeEvent.id : true)
+  );
   const total = approvedRes.length;
   const checkedInCount = approvedRes.filter(r => r.checkedIn).length;
   const pct = total > 0 ? Math.round((checkedInCount / total) * 100) : 0;
@@ -2632,8 +2645,40 @@ function HostCheckinView({ reservations, events, venues, userRole, currentUser, 
 
       {/* Header */}
       <div className="mb-5 max-w-xl mx-auto w-full">
-        <h1 className="hv font-black text-2xl uppercase text-white tracking-tight">Ingresso Serata</h1>
-        <div className="flex items-center gap-3 mt-3">
+        <div className="flex items-center justify-between gap-3 mb-2">
+          <h1 className="hv font-black text-2xl uppercase text-white tracking-tight">Ingresso Serata</h1>
+          {onExport && activeEvent && (
+            <button
+              onClick={() => onExport(activeEvent.id)}
+              className="flex items-center gap-1.5 text-[#666] hover:text-accent transition-colors text-[9px] font-sans uppercase tracking-widest"
+              title="Esporta lista ospiti"
+            >
+              <Download size={13} /> Export
+            </button>
+          )}
+        </div>
+
+        {/* Multi-event selector */}
+        {activeEvents.length > 1 && (
+          <div className="flex gap-1 mb-4 flex-wrap">
+            {activeEvents.map(ev => (
+              <button
+                key={ev.id}
+                onClick={() => setSelectedEventId(ev.id)}
+                className={cn(
+                  'px-3 py-1.5 text-[8px] hv font-black uppercase tracking-widest transition-colors border',
+                  activeEventId === ev.id
+                    ? 'bg-accent text-black border-accent'
+                    : 'border-[#2a2a2a] text-[#666] hover:text-white hover:border-[#444]'
+                )}
+              >
+                {ev.name}
+              </button>
+            ))}
+          </div>
+        )}
+
+        <div className="flex items-center gap-3">
           <div className="flex-1 h-1 bg-[#222] overflow-hidden">
             <motion.div className="h-full bg-accent" initial={{ width: 0 }}
               animate={{ width: `${pct}%` }} transition={{ duration: 0.6, ease: 'easeOut' }} />

@@ -62,7 +62,10 @@ export interface Event {
   venueId: string;
   name: string;
   date: string;
+  time?: string;
   description: string;
+  coverImage?: string;
+  maxCapacity?: number;
   floorPlanId: string;
   status: 'draft' | 'active' | 'completed';
   registrationToken?: string;

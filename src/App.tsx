@@ -17,8 +17,9 @@ import FloorPlanEditor from './components/floorplan/FloorPlanEditor';
 import IngressiView from './components/host/IngressiView';
 import PRLinkGenerator from './components/pr/PRLinkGenerator';
 import Dashboard from './components/dashboard/Dashboard';
+import EventDetailView from './components/admin/EventDetailView';
 
-type AppView = 'dashboard' | 'venues' | 'venue-events' | 'events' | 'active-events' | 'plan' | 'editor' | 'reservations' | 'approvals' | 'profile' | 'history' | 'pr-management' | 'checkin';
+type AppView = 'dashboard' | 'venues' | 'venue-events' | 'event-detail' | 'events' | 'active-events' | 'plan' | 'editor' | 'reservations' | 'approvals' | 'profile' | 'history' | 'pr-management' | 'checkin';
 
 interface Toast { id: string; message: string; sub?: string; }
 
@@ -602,11 +603,12 @@ export default function App() {
   const openEvent = (event: Event) => {
     if (!selectedVenue) setSelectedVenue(venues.find(v => v.id === event.venueId) ?? null);
     setSelectedEvent(event);
-    setView('plan');
+    setView(user?.role === 'admin' ? 'event-detail' : 'plan');
     setMobileSidebarOpen(false);
   };
   const goBack = () => {
-    if (view === 'plan') { setSelectedEvent(null); setView(user?.role === 'admin' ? 'active-events' : 'events'); }
+    if (view === 'plan') { setSelectedEvent(null); setView('event-detail'); }
+    else if (view === 'event-detail') { setSelectedEvent(null); setView(selectedVenue ? 'venue-events' : 'active-events'); }
     else if (view === 'venue-events') { setSelectedVenue(null); setView('venues'); }
     else if (view === 'active-events') { setView('venues'); }
   };
@@ -1457,6 +1459,23 @@ export default function App() {
               );
             })()}
 
+            {/* Event detail — admin */}
+            {view === 'event-detail' && selectedEvent && user.role === 'admin' && (() => {
+              const evVenue = venues.find(v => v.id === selectedEvent.venueId);
+              if (!evVenue) return null;
+              return (
+                <motion.div key="event-detail" {...PAGE}>
+                  <EventDetailView
+                    event={selectedEvent}
+                    venue={evVenue}
+                    reservations={reservations}
+                    onOpenPlan={() => setView('plan')}
+                    onBack={() => { setSelectedEvent(null); setView(selectedVenue ? 'venue-events' : 'active-events'); }}
+                  />
+                </motion.div>
+              );
+            })()}
+
             {/* Editor */}
             {view === 'editor' && (
               <motion.div key="editor" {...PAGE} className="h-full flex flex-col">
@@ -1840,8 +1859,7 @@ export default function App() {
           venue={selectedVenue}
           floorPlans={venues.find(v => v.id === selectedVenue.id)?.floorPlans ?? []}
           onClose={() => setShowNewEventModal(false)}
-          onSubmit={(data) => {
-            const token = `${Date.now().toString(36)}${Math.random().toString(36).slice(2, 8)}`;
+          onSubmit={(data, token) => {
             setEvents(prev => [...prev, {
               id: `e_${Date.now()}`,
               venueId: selectedVenue.id,
@@ -1849,7 +1867,6 @@ export default function App() {
               registrationToken: token,
               ...data,
             }]);
-            setShowNewEventModal(false);
           }}
         />
       )}
@@ -3263,16 +3280,28 @@ function NewEventModal({ venue, floorPlans, onClose, onSubmit, initialData }: {
   venue: Venue;
   floorPlans: FloorPlan[];
   onClose: () => void;
-  onSubmit: (d: { name: string; date: string; description: string; floorPlanId: string }) => void;
+  onSubmit: (d: { name: string; date: string; time: string; description: string; coverImage: string; maxCapacity: number | undefined; floorPlanId: string }, token?: string) => void;
   initialData?: Event;
 }) {
   const isEdit = !!initialData;
   const [form, setForm] = useState({
     name: initialData?.name ?? '',
     date: initialData?.date ?? '2026-01-01',
+    time: initialData?.time ?? '22:00',
     description: initialData?.description ?? '',
+    coverImage: initialData?.coverImage ?? '',
+    maxCapacity: initialData?.maxCapacity ? String(initialData.maxCapacity) : '',
     floorPlanId: initialData?.floorPlanId ?? floorPlans[0]?.id ?? '',
   });
+  const [createdLink, setCreatedLink] = useState<string | null>(null);
+  const [copied, setCopied] = useState(false);
+
+  const handleCopy = () => {
+    if (!createdLink) return;
+    navigator.clipboard.writeText(createdLink);
+    setCopied(true);
+    setTimeout(() => setCopied(false), 2000);
+  };
 
   return (
     <div className="fixed inset-0 z-[100] flex items-end justify-center sm:items-center p-0 sm:p-4">
@@ -3295,47 +3324,112 @@ function NewEventModal({ venue, floorPlans, onClose, onSubmit, initialData }: {
           <button onClick={onClose} className="text-[#999] hover:text-white transition-colors p-1"><X size={18} /></button>
         </div>
 
-        <form className="p-6 sm:p-8 space-y-5 overflow-y-auto" onSubmit={(e) => { e.preventDefault(); onSubmit(form); }}>
-          <Field label="Nome Evento">
-            <input required placeholder="ES. TECHNO FRIDAY"
-              className="w-full bg-bg border border-[#383838] px-4 py-3 text-xs font-sans uppercase tracking-widest text-white placeholder-[#444] outline-none transition-colors"
-              value={form.name} onChange={e => setForm({ ...form, name: e.target.value })} />
-          </Field>
-          <Field label="Data">
-            <input required type="date" min="2026-01-01"
-              className="w-full bg-bg border border-[#383838] px-4 py-3 text-xs font-sans text-white outline-none transition-colors [color-scheme:dark]"
-              value={form.date} onChange={e => setForm({ ...form, date: e.target.value })} />
-          </Field>
-          <Field label="Descrizione (opzionale)">
-            <textarea rows={2} placeholder="DETTAGLI..."
-              className="w-full bg-bg border border-[#383838] px-4 py-3 text-xs font-sans uppercase tracking-widest text-white placeholder-[#444] outline-none transition-colors resize-none"
-              value={form.description} onChange={e => setForm({ ...form, description: e.target.value })} />
-          </Field>
-
-          {floorPlans.length > 0 && (
-            <Field label="Pianta">
-              <select
-                className="w-full bg-bg border border-[#383838] px-4 py-3 text-xs font-sans uppercase tracking-widest text-white outline-none transition-colors [color-scheme:dark]"
-                value={form.floorPlanId}
-                onChange={e => setForm({ ...form, floorPlanId: e.target.value })}>
-                {floorPlans.map(fp => (
-                  <option key={fp.id} value={fp.id}>{fp.name}</option>
-                ))}
-              </select>
-            </Field>
-          )}
-
-          <div className="flex gap-3 pt-2">
-            <button type="button" onClick={onClose}
-              className="flex-1 py-3.5 text-[9px] hv font-black uppercase tracking-widest border border-[#383838] text-[#999] hover:text-white hover:border-[#333] transition-all">
-              Annulla
+        {/* Post-creation: show registration link */}
+        {createdLink && (
+          <div className="px-6 sm:px-8 py-6 flex flex-col items-center gap-4 overflow-y-auto">
+            <div className="w-12 h-12 rounded-full bg-[#22C55E]/10 flex items-center justify-center">
+              <CheckCircle2 size={24} className="text-[#22C55E]" />
+            </div>
+            <div className="text-center">
+              <p className="hv font-black text-white uppercase text-lg">Evento creato</p>
+              <p className="text-[#666] text-xs mt-1">Copia il link di registrazione e condividilo</p>
+            </div>
+            <div className="w-full bg-[#111] border border-[#2a2a2a] px-4 py-3">
+              <p className="text-[9px] font-mono text-[#555] break-all">{createdLink}</p>
+            </div>
+            <button
+              onClick={handleCopy}
+              className="w-full py-3.5 text-[9px] hv font-black uppercase tracking-widest bg-accent text-black hover:bg-white transition-colors flex items-center justify-center gap-2"
+            >
+              {copied ? <><CheckCircle2 size={13} /> Copiato!</> : 'Copia link'}
             </button>
-            <button type="submit"
-              className="flex-1 py-3.5 text-[9px] hv font-black uppercase tracking-widest bg-accent text-black hover:bg-white transition-colors">
-              {isEdit ? 'Salva Modifiche' : 'Crea Evento'}
+            <button onClick={onClose} className="text-[#555] text-[10px] font-mono uppercase tracking-widest hover:text-white transition-colors">
+              Chiudi
             </button>
           </div>
-        </form>
+        )}
+
+        {!createdLink && (
+          <form className="p-6 sm:p-8 space-y-5 overflow-y-auto" onSubmit={(e) => {
+            e.preventDefault();
+            const token = isEdit ? undefined : `${Date.now().toString(36)}${Math.random().toString(36).slice(2, 8)}`;
+            onSubmit({
+              ...form,
+              maxCapacity: form.maxCapacity ? parseInt(form.maxCapacity) : undefined,
+            }, token);
+            if (!isEdit && token) {
+              setCreatedLink(`${window.location.origin}/r/${token}`);
+            } else if (isEdit) {
+              onClose();
+            }
+          }}>
+            <Field label="Nome Evento">
+              <input required placeholder="ES. TECHNO FRIDAY"
+                className="w-full bg-bg border border-[#383838] px-4 py-3 text-xs font-sans uppercase tracking-widest text-white placeholder-[#444] outline-none transition-colors"
+                value={form.name} onChange={e => setForm({ ...form, name: e.target.value })} />
+            </Field>
+
+            <div className="grid grid-cols-2 gap-3">
+              <Field label="Data">
+                <input required type="date" min="2026-01-01"
+                  className="w-full bg-bg border border-[#383838] px-4 py-3 text-xs font-sans text-white outline-none transition-colors [color-scheme:dark]"
+                  value={form.date} onChange={e => setForm({ ...form, date: e.target.value })} />
+              </Field>
+              <Field label="Orario">
+                <input type="time"
+                  className="w-full bg-bg border border-[#383838] px-4 py-3 text-xs font-sans text-white outline-none transition-colors [color-scheme:dark]"
+                  value={form.time} onChange={e => setForm({ ...form, time: e.target.value })} />
+              </Field>
+            </div>
+
+            <Field label="Immagine di copertina (URL)">
+              <input placeholder="https://..."
+                className="w-full bg-bg border border-[#383838] px-4 py-3 text-xs font-sans text-white placeholder-[#444] outline-none transition-colors"
+                value={form.coverImage} onChange={e => setForm({ ...form, coverImage: e.target.value })} />
+              {form.coverImage && (
+                <div className="mt-2 h-20 overflow-hidden border border-[#2a2a2a]">
+                  <img src={form.coverImage} alt="" className="w-full h-full object-cover" onError={e => (e.currentTarget.style.display = 'none')} />
+                </div>
+              )}
+            </Field>
+
+            <Field label="Capacità massima (opzionale)">
+              <input type="number" min="1" placeholder="Es. 200"
+                className="w-full bg-bg border border-[#383838] px-4 py-3 text-xs font-sans text-white placeholder-[#444] outline-none transition-colors"
+                value={form.maxCapacity} onChange={e => setForm({ ...form, maxCapacity: e.target.value })} />
+            </Field>
+
+            <Field label="Descrizione (opzionale)">
+              <textarea rows={2} placeholder="DETTAGLI..."
+                className="w-full bg-bg border border-[#383838] px-4 py-3 text-xs font-sans uppercase tracking-widest text-white placeholder-[#444] outline-none transition-colors resize-none"
+                value={form.description} onChange={e => setForm({ ...form, description: e.target.value })} />
+            </Field>
+
+            {floorPlans.length > 0 && (
+              <Field label="Pianta">
+                <select
+                  className="w-full bg-bg border border-[#383838] px-4 py-3 text-xs font-sans uppercase tracking-widest text-white outline-none transition-colors [color-scheme:dark]"
+                  value={form.floorPlanId}
+                  onChange={e => setForm({ ...form, floorPlanId: e.target.value })}>
+                  {floorPlans.map(fp => (
+                    <option key={fp.id} value={fp.id}>{fp.name}</option>
+                  ))}
+                </select>
+              </Field>
+            )}
+
+            <div className="flex gap-3 pt-2">
+              <button type="button" onClick={onClose}
+                className="flex-1 py-3.5 text-[9px] hv font-black uppercase tracking-widest border border-[#383838] text-[#999] hover:text-white hover:border-[#333] transition-all">
+                Annulla
+              </button>
+              <button type="submit"
+                className="flex-1 py-3.5 text-[9px] hv font-black uppercase tracking-widest bg-accent text-black hover:bg-white transition-colors">
+                {isEdit ? 'Salva Modifiche' : 'Crea Evento'}
+              </button>
+            </div>
+          </form>
+        )}
       </motion.div>
     </div>
   );

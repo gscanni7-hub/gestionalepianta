@@ -2484,10 +2484,12 @@ function CheckinRow({ res, events, venues, onCheckIn, onUndoCheckIn, onUpdatePeo
   const peopleChanged = people !== (res.actualPeople ?? res.guestsCount);
 
   return (
-    <motion.div
-      animate={flash ? { backgroundColor: 'rgba(34,197,94,0.14)' } : isIn ? { backgroundColor: 'rgba(34,197,94,0.03)' } : { backgroundColor: 'transparent' }}
-      transition={{ duration: 0.35 }}
+    <div
       className="border-b border-[#1e1e1e] last:border-0"
+      style={{
+        backgroundColor: flash ? 'rgba(34,197,94,0.14)' : isIn ? 'rgba(34,197,94,0.03)' : 'transparent',
+        transition: 'background-color 0.35s',
+      }}
     >
       {/* Main row — always visible */}
       <button
@@ -2544,18 +2546,20 @@ function CheckinRow({ res, events, venues, onCheckIn, onUndoCheckIn, onUpdatePeo
               {/* Actions */}
               <div className="flex gap-2">
                 {!isIn ? (
-                  <motion.button
-                    animate={flash ? { backgroundColor: '#22C55E', scale: [1, 1.03, 1] } : { backgroundColor: '#D4622A', scale: 1 }}
-                    transition={{ duration: 0.3 }}
+                  <button
                     onClick={() => {
                       setFlash(true);
                       setTimeout(() => { onCheckIn(res.id, people); setOpen(false); }, 560);
                     }}
                     className="flex-1 flex items-center justify-center gap-2 py-2.5 text-black text-[9px] hv font-black uppercase tracking-widest"
+                    style={{
+                      backgroundColor: flash ? '#22C55E' : '#D4622A',
+                      transition: 'background-color 0.3s',
+                    }}
                   >
                     {flash ? <CheckCircle2 size={12} /> : <LogIn size={12} />}
                     {flash ? 'Entrato!' : 'Segna Entrata'}
-                  </motion.button>
+                  </button>
                 ) : (
                   <>
                     {peopleChanged && (
@@ -2579,7 +2583,7 @@ function CheckinRow({ res, events, venues, onCheckIn, onUndoCheckIn, onUpdatePeo
           </motion.div>
         )}
       </AnimatePresence>
-    </motion.div>
+    </div>
   );
 }
 

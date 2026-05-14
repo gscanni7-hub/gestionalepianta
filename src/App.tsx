@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
+import { useNavigate, useLocation } from 'react-router-dom';
 import {
   Calendar, Settings, BarChart3, LogOut, ChevronRight, ChevronDown,
   Plus, Download, Filter, Building2, X, ArrowLeft, Menu, Map, Pencil, Trash2,
@@ -209,6 +210,116 @@ export default function App() {
   const [venueTab, setVenueTab] = useState<'events' | 'layout'>('events');
   const [editingReservation, setEditingReservation] = useState<Reservation | null>(null);
   const [selectedPR, setSelectedPR] = useState<ManagedUser | null>(null);
+
+  /* ── URL ↔ state sync (react-router) ─────────────────────── */
+  const navigate = useNavigate();
+  const location = useLocation();
+  const ignoreNextLocationChange = useRef(false);
+
+  const buildPath = (): string => {
+    if (!user) return '/login';
+    switch (view) {
+      case 'venues':         return '/clubs';
+      case 'venue-events':   return selectedVenue ? `/clubs/${selectedVenue.id}` : '/clubs';
+      case 'plan':           return (selectedVenue && selectedEvent)
+                                ? `/clubs/${selectedVenue.id}/serate/${selectedEvent.id}/pianta`
+                                : '/clubs';
+      case 'editor':         return editorVenueId
+                                ? `/clubs/${editorVenueId}/editor/${editingFloorPlan?.fp.id ?? 'new'}`
+                                : '/clubs';
+      case 'active-events':  return '/serate-attive';
+      case 'events':         return '/serate';
+      case 'reservations':   return '/prenotazioni';
+      case 'approvals':      return '/approvazioni';
+      case 'profile':        return '/profilo';
+      case 'history':        return '/storico';
+      case 'pr-management':  return selectedPR ? `/pr-team/${selectedPR.id}` : '/pr-team';
+      case 'checkin':        return '/ingresso';
+      default:               return '/clubs';
+    }
+  };
+
+  const applyFromUrl = (path: string) => {
+    // /clubs/:venueId/serate/:eventId/pianta
+    let m = path.match(/^\/clubs\/([^/]+)\/serate\/([^/]+)\/pianta$/);
+    if (m) {
+      const venue = venues.find(v => v.id === m[1]);
+      const event = events.find(e => e.id === m[2]);
+      if (venue && event) {
+        setSelectedVenue(venue);
+        setSelectedEvent(event);
+        setView('plan');
+      }
+      return;
+    }
+    // /clubs/:venueId/editor/:fpId
+    m = path.match(/^\/clubs\/([^/]+)\/editor\/([^/]+)$/);
+    if (m) {
+      setEditorVenueId(m[1]);
+      const venue = venues.find(v => v.id === m[1]);
+      const fp = venue?.floorPlans.find(f => f.id === m[2]);
+      if (venue && fp) setEditingFloorPlan({ venueId: venue.id, fp });
+      setView('editor');
+      return;
+    }
+    // /clubs/:venueId
+    m = path.match(/^\/clubs\/([^/]+)$/);
+    if (m) {
+      const venue = venues.find(v => v.id === m[1]);
+      if (venue) {
+        setSelectedVenue(venue);
+        setView('venue-events');
+      }
+      return;
+    }
+    // /pr-team/:prId
+    m = path.match(/^\/pr-team\/([^/]+)$/);
+    if (m) {
+      const pr = managedUsers.find(u => u.id === m[1]);
+      if (pr) {
+        setSelectedPR(pr);
+        setView('pr-management');
+      }
+      return;
+    }
+    // Top-level routes
+    const topMap: Record<string, AppView> = {
+      '/clubs':         'venues',
+      '/serate-attive': 'active-events',
+      '/serate':        'events',
+      '/prenotazioni':  'reservations',
+      '/approvazioni':  'approvals',
+      '/profilo':       'profile',
+      '/storico':       'history',
+      '/pr-team':       'pr-management',
+      '/ingresso':      'checkin',
+    };
+    if (topMap[path]) {
+      setView(topMap[path]);
+    }
+  };
+
+  // URL → State (initial mount, browser back/forward, refresh)
+  useEffect(() => {
+    if (!user) return;
+    if (ignoreNextLocationChange.current) {
+      ignoreNextLocationChange.current = false;
+      return;
+    }
+    applyFromUrl(location.pathname);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [location.pathname, user]);
+
+  // State → URL
+  useEffect(() => {
+    if (!user) return;
+    const path = buildPath();
+    if (location.pathname !== path) {
+      ignoreNextLocationChange.current = true;
+      navigate(path, { replace: true });
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [view, selectedVenue, selectedEvent, editorVenueId, editingFloorPlan, selectedPR, user]);
 
   useEffect(() => {
     localStorage.setItem('nightplan_managed_users', JSON.stringify(managedUsers));

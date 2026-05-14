@@ -3394,7 +3394,7 @@ function NewEventModal({ venue, floorPlans, onClose, onSubmit, initialData }: {
             </Field>
 
             <Field label="Capacità massima (opzionale)">
-              <input type="number" min="1" placeholder="Es. 200"
+              <input type="number" min="1" step={1} placeholder="Es. 200"
                 className="w-full bg-bg border border-[#383838] px-4 py-3 text-xs font-sans text-white placeholder-[#444] outline-none transition-colors"
                 value={form.maxCapacity} onChange={e => setForm({ ...form, maxCapacity: e.target.value })} />
             </Field>

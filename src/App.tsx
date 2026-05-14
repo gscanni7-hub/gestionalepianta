@@ -2758,6 +2758,9 @@ function SidebarContent({ user, view, onNav, onLogout, occupancyPct = 0, revenue
         {user.role === 'admin' ? (
           <>
             <div className="space-y-0.5">
+              <NavLink icon={<TrendingUp size={14}/>} label="Home"
+                active={view==='dashboard'}
+                onClick={() => onNav('dashboard')} />
               <NavLink icon={<Calendar size={14}/>} label="Prossimi eventi"
                 active={view==='active-events'||view==='plan'}
                 onClick={() => onNav('active-events')} />
@@ -2787,12 +2790,18 @@ function SidebarContent({ user, view, onNav, onLogout, occupancyPct = 0, revenue
           </>
         ) : user.role === 'host' ? (
           <div className="space-y-0.5">
+            <NavLink icon={<TrendingUp size={14}/>} label="Home"
+              active={view==='dashboard'}
+              onClick={() => onNav('dashboard')} />
             <NavLink icon={<DoorOpen size={14}/>} label="Ingresso Serata"
               active={view==='checkin'}
               onClick={() => onNav('checkin')} />
           </div>
         ) : (
           <div className="space-y-0.5">
+            <NavLink icon={<TrendingUp size={14}/>} label="Home"
+              active={view==='dashboard'}
+              onClick={() => onNav('dashboard')} />
             <NavLink icon={<Calendar size={14}/>} label="Eventi"
               active={view==='events'||view==='plan'}
               onClick={() => onNav('events')} />

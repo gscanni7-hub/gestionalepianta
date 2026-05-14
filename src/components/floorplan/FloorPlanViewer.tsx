@@ -3,7 +3,7 @@ import { Stage, Layer, Rect, Circle, Text, Group } from 'react-konva';
 import { FloorPlan, Event, Reservation, Table, UserProfile } from '../../types';
 import { X, Info, Plus, Lock } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { cn } from '../../lib/utils';
+import { cn, COLORS } from '../../lib/utils';
 
 interface FloorPlanViewerProps {
   event: Event;
@@ -17,16 +17,16 @@ interface FloorPlanViewerProps {
 }
 
 const STATUS_COLORS = {
-  confirmed: '#ef4444',
-  pending:   '#f97316',
-  blocked:   '#2a2a2a',
-  free:      '#22c55e',
+  confirmed: COLORS.danger,
+  pending:   COLORS.warning,
+  blocked:   COLORS.neutral,
+  free:      COLORS.success,
 } as const;
 
 const HOST_COLORS = {
-  checkedIn:  '#22c55e',
-  reserved:   '#D4622A',
-  free:       '#2a2a2a',
+  checkedIn:  COLORS.success,
+  reserved:   COLORS.accent,
+  free:       COLORS.neutral,
 } as const;
 
 export default function FloorPlanViewer({
@@ -149,30 +149,30 @@ export default function FloorPlanViewer({
           {hostMode ? (
             <>
               <div className="flex items-center gap-2 shrink-0">
-                <span className="w-2 h-2 shrink-0 bg-[#22c55e]" />
+                <span className="w-2 h-2 shrink-0" style={{ background: COLORS.success }} />
                 <span className="text-[8px] font-sans uppercase tracking-widest text-[#666]">Entrato</span>
               </div>
               <div className="flex items-center gap-2 shrink-0">
-                <span className="w-2 h-2 shrink-0 bg-[#D4622A]" />
+                <span className="w-2 h-2 shrink-0" style={{ background: COLORS.accent }} />
                 <span className="text-[8px] font-sans uppercase tracking-widest text-[#666]">Atteso</span>
               </div>
               <div className="flex items-center gap-2 shrink-0">
-                <span className="w-2 h-2 shrink-0 bg-[#2a2a2a]" />
+                <span className="w-2 h-2 shrink-0" style={{ background: COLORS.neutral }} />
                 <span className="text-[8px] font-sans uppercase tracking-widest text-[#666]">Libero</span>
               </div>
             </>
           ) : (
             <>
               <div className="flex items-center gap-2 shrink-0">
-                <span className="w-2 h-2 shrink-0 bg-[#ef4444]" />
+                <span className="w-2 h-2 shrink-0" style={{ background: COLORS.danger }} />
                 <span className="text-[8px] font-sans uppercase tracking-widest text-[#666]">Confirmed</span>
               </div>
               <div className="flex items-center gap-2 shrink-0">
-                <span className="w-2 h-2 shrink-0 bg-[#f97316]" />
+                <span className="w-2 h-2 shrink-0" style={{ background: COLORS.warning }} />
                 <span className="text-[8px] font-sans uppercase tracking-widest text-[#666]">In attesa</span>
               </div>
               <div className="flex items-center gap-2 shrink-0">
-                <span className="w-2 h-2 shrink-0 bg-[#22c55e]" />
+                <span className="w-2 h-2 shrink-0" style={{ background: COLORS.success }} />
                 <span className="text-[8px] font-sans uppercase tracking-widest text-[#666]">Free</span>
               </div>
             </>

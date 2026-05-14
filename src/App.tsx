@@ -9,7 +9,7 @@ import {
 import { MOCK_USERS, INITIAL_VENUES, INITIAL_EVENTS, INITIAL_RESERVATIONS, INITIAL_MANAGED_USERS } from './constants';
 import { UserProfile, Event, Reservation, Venue, FloorPlan, ManagedUser, Table } from './types';
 import { motion, AnimatePresence } from 'framer-motion';
-import { cn } from './lib/utils';
+import { cn, COLORS, easeOutQuart, gridContainer, gridItem } from './lib/utils';
 import { isEmailConfigured, sendPasswordResetEmail } from './lib/emailService';
 import { isFirebaseConfigured, signInWithGoogle } from './lib/firebase';
 import FloorPlanViewer from './components/floorplan/FloorPlanViewer';
@@ -134,11 +134,23 @@ const calcActualBudget = (reservedBudget: number, actualPeople: number, table: T
   return Math.round(base + (actualPeople - capacity) * perPersonRate);
 };
 
-const PAGE = {
+const PAGE_FADE = {
   initial: { opacity: 0, y: 12 },
   animate: { opacity: 1, y: 0 },
   exit:    { opacity: 0, y: -8 },
-  transition: { duration: 0.22 },
+  transition: { duration: 0.32, ease: easeOutQuart },
+};
+const PAGE_FORWARD = {
+  initial: { opacity: 0, x: 28 },
+  animate: { opacity: 1, x: 0 },
+  exit:    { opacity: 0, x: -16 },
+  transition: { duration: 0.32, ease: easeOutQuart },
+};
+const PAGE_BACK = {
+  initial: { opacity: 0, x: -28 },
+  animate: { opacity: 1, x: 0 },
+  exit:    { opacity: 0, x: 16 },
+  transition: { duration: 0.32, ease: easeOutQuart },
 };
 
 export default function App() {
@@ -210,6 +222,33 @@ export default function App() {
   const [venueTab, setVenueTab] = useState<'events' | 'layout'>('events');
   const [editingReservation, setEditingReservation] = useState<Reservation | null>(null);
   const [selectedPR, setSelectedPR] = useState<ManagedUser | null>(null);
+
+  /* ── Page transition direction ───────────────────────────── */
+  const prevDepthRef = useRef<number>(1);
+  const [navDirection, setNavDirection] = useState<'forward' | 'back' | 'none'>('none');
+
+  const computeDepth = (): number => {
+    if (view === 'plan' || view === 'editor') return 3;
+    if (view === 'venue-events') return 2;
+    if (view === 'pr-management' && selectedPR) return 2;
+    return 1;
+  };
+
+  useEffect(() => {
+    const depth = computeDepth();
+    const prev = prevDepthRef.current;
+    if (depth > prev) setNavDirection('forward');
+    else if (depth < prev) setNavDirection('back');
+    else setNavDirection('none');
+    prevDepthRef.current = depth;
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [view, selectedPR]);
+
+  const PAGE = navDirection === 'forward'
+    ? PAGE_FORWARD
+    : navDirection === 'back'
+    ? PAGE_BACK
+    : PAGE_FADE;
 
   /* ── Command Palette ─────────────────────────────────────── */
   const [paletteOpen, setPaletteOpen] = useState(false);
@@ -649,12 +688,12 @@ export default function App() {
       const total = evResv.length;
       const status = selectedEvent.status;
       const statusBadge = status === 'active'
-        ? { label: 'Attiva', color: '#22c55e' }
+        ? { label: 'Attiva', color: COLORS.success }
         : status === 'draft'
-        ? { label: 'Bozza', color: '#f97316' }
-        : { label: 'Conclusa', color: '#666' };
+        ? { label: 'Bozza', color: COLORS.warning }
+        : { label: 'Conclusa', color: '#888' };
       const badges = [statusBadge];
-      if (total > 0) badges.push({ label: `${checkedIn}/${total} entrati`, color: '#D4622A' });
+      if (total > 0) badges.push({ label: `${checkedIn}/${total} entrati`, color: COLORS.accent });
       return badges;
     }
     return [];
@@ -1190,11 +1229,12 @@ export default function App() {
                     </button>
                   )}
                 </div>
-                <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-4 mt-8">
-                  {venues.map((venue, i) => (
-                    <motion.div key={venue.id}
-                      initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }}
-                      transition={{ delay: i * 0.06, duration: 0.22 }}>
+                <motion.div
+                  className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-4 mt-8"
+                  variants={gridContainer} initial="initial" animate="animate"
+                >
+                  {venues.map((venue) => (
+                    <motion.div key={venue.id} variants={gridItem}>
                       <VenueCard venue={venue}
                         eventCount={events.filter(e => e.venueId === venue.id).length}
                         onClick={() => openVenue(venue)}
@@ -1203,7 +1243,7 @@ export default function App() {
                       />
                     </motion.div>
                   ))}
-                </div>
+                </motion.div>
               </motion.div>
             )}
 
@@ -1334,17 +1374,18 @@ export default function App() {
                 {activeEvents.length === 0 ? (
                   <EmptyState icon={<Calendar size={28} />} label="Nessuna serata attiva." />
                 ) : (
-                  <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-4 mt-8">
-                    {activeEvents.map((event, i) => (
-                      <motion.div key={event.id}
-                        initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }}
-                        transition={{ delay: i * 0.06 }}>
+                  <motion.div
+                    className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-4 mt-8"
+                    variants={gridContainer} initial="initial" animate="animate"
+                  >
+                    {activeEvents.map((event) => (
+                      <motion.div key={event.id} variants={gridItem}>
                         <EventCard event={event}
                           venueName={venues.find(v => v.id === event.venueId)?.name}
                           onClick={() => openEvent(event)} />
                       </motion.div>
                     ))}
-                  </div>
+                  </motion.div>
                 )}
               </motion.div>
             )}
@@ -1355,17 +1396,18 @@ export default function App() {
                 {activeEvents.length === 0 ? (
                   <EmptyState icon={<Calendar size={28} />} label="Nessun evento attivo." />
                 ) : (
-                  <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-4 mt-8">
-                    {activeEvents.map((event, i) => (
-                      <motion.div key={event.id}
-                        initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }}
-                        transition={{ delay: i * 0.06 }}>
+                  <motion.div
+                    className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-4 mt-8"
+                    variants={gridContainer} initial="initial" animate="animate"
+                  >
+                    {activeEvents.map((event) => (
+                      <motion.div key={event.id} variants={gridItem}>
                         <EventCard event={event}
                           venueName={venues.find(v => v.id === event.venueId)?.name}
                           onClick={() => openEvent(event)} />
                       </motion.div>
                     ))}
-                  </div>
+                  </motion.div>
                 )}
               </motion.div>
             )}
@@ -2855,8 +2897,9 @@ function VenueCard({ venue, eventCount, onClick, onEdit, onDelete }: {
   return (
     <motion.div
       onClick={onClick}
-      whileHover={{ y: -2 }}
-      className="group bg-card border border-[#383838] cursor-pointer overflow-hidden flex flex-col relative"
+      whileHover={{ y: -3 }}
+      transition={{ duration: 0.3, ease: easeOutQuart }}
+      className="group bg-card border border-[#383838] cursor-pointer overflow-hidden flex flex-col relative card-hover"
     >
       <div className="h-[2px] w-0 group-hover:w-full bg-accent transition-all duration-500 origin-left" />
 
@@ -2916,7 +2959,8 @@ function EventCard({ event, venueName, onClick, onEdit, onDelete }: {
   return (
     <motion.div
       onClick={onClick}
-      whileHover={{ y: -2 }}
+      whileHover={{ y: -3 }}
+      transition={{ duration: 0.3, ease: easeOutQuart }}
       className="group bg-card border border-[#383838] cursor-pointer overflow-hidden flex flex-col card-hover"
     >
       <div className="h-[2px] w-0 group-hover:w-full bg-accent transition-all duration-500 origin-left" />
@@ -2929,13 +2973,19 @@ function EventCard({ event, venueName, onClick, onEdit, onDelete }: {
                 <Building2 size={9} /> {venueName}
               </span>
             )}
-            <span className={cn(
-              'text-[8px] font-sans font-bold uppercase tracking-widest px-2 py-1 shrink-0',
-              event.status === 'active'
-                ? 'text-accent bg-accent/8'
-                : 'text-[#999] bg-[#2a2a2a]'
-            )}>
-              {event.status === 'active' && <span className="inline-block w-1.5 h-1.5 rounded-full bg-accent blink mr-1.5 align-middle" />}
+            <span
+              className="text-[8px] font-sans font-bold uppercase tracking-widest px-2 py-1 shrink-0"
+              style={
+                event.status === 'active'
+                  ? { color: COLORS.success, background: 'rgba(34, 197, 94, 0.10)' }
+                  : event.status === 'draft'
+                  ? { color: COLORS.warning, background: 'rgba(245, 158, 11, 0.10)' }
+                  : { color: '#999', background: '#2a2a2a' }
+              }
+            >
+              {event.status === 'active' && (
+                <span className="inline-block w-1.5 h-1.5 rounded-full blink mr-1.5 align-middle" style={{ background: COLORS.success }} />
+              )}
               {event.status}
             </span>
           </div>

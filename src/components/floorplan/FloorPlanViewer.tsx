@@ -428,8 +428,9 @@ function BookingModal({ table, initialReservation, defaultPrName, onClose, onSub
 }) {
   const isEdit = !!initialReservation;
 
+  const perPersonRate = table.capacity > 0 ? Math.round(table.minSpend / table.capacity) : 0;
   const calcBudget = (guests: number) =>
-    table.minSpend + Math.max(0, (guests - 10) * 30);
+    table.minSpend + Math.max(0, (guests - table.capacity) * perPersonRate);
 
   const [form, setForm] = useState({
     customerName: initialReservation?.customerName ?? '',

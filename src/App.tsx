@@ -864,10 +864,54 @@ export default function App() {
       <div className="min-h-screen flex flex-col md:flex-row" style={{ backgroundColor: '#0d0c0b' }}>
 
         {/* ── Left brand panel (desktop only) ── */}
-        <div className="hidden md:flex flex-col justify-between flex-1 relative overflow-hidden p-12" style={{ backgroundColor: '#0f0e0c' }}>
-          {/* Glow drammatico dal basso */}
-          <div className="absolute inset-0 bg-[radial-gradient(ellipse_90%_55%_at_50%_110%,rgba(212,98,42,0.18)_0%,transparent_70%)] pointer-events-none" />
-          <div className="absolute inset-0 bg-[radial-gradient(ellipse_50%_30%_at_50%_100%,rgba(212,98,42,0.28)_0%,transparent_100%)] pointer-events-none" />
+        <div className="hidden md:flex flex-col justify-between flex-1 relative overflow-hidden p-12" style={{ backgroundColor: '#0a0908' }}>
+
+          {/* Spotlight pools — vista dall'alto di un club */}
+          {[
+            { x: 18, y: 24, r: 220, pulse: 3.2, delay: 0 },
+            { x: 62, y: 40, r: 260, pulse: 4.0, delay: 0.8 },
+            { x: 28, y: 70, r: 190, pulse: 3.6, delay: 0.4 },
+            { x: 80, y: 20, r: 170, pulse: 4.4, delay: 1.2 },
+            { x: 52, y: 83, r: 240, pulse: 3.0, delay: 0.6 },
+            { x: 76, y: 62, r: 150, pulse: 3.8, delay: 1.0 },
+          ].map((s, i) => (
+            <motion.div
+              key={i}
+              className="absolute pointer-events-none rounded-full"
+              style={{
+                left: `${s.x}%`, top: `${s.y}%`,
+                width: s.r, height: s.r,
+                transform: 'translate(-50%,-50%)',
+                background: `radial-gradient(circle, rgba(212,98,42,0.13) 0%, rgba(212,98,42,0.04) 45%, transparent 70%)`,
+              }}
+              animate={{ opacity: [0.5, 1, 0.5], scale: [0.94, 1.06, 0.94] }}
+              transition={{ duration: s.pulse, delay: s.delay, repeat: Infinity, ease: 'easeInOut' }}
+            />
+          ))}
+
+          {/* Tavoli — cerchi sottili */}
+          {[
+            { x: 18, y: 24, r: 38 },
+            { x: 62, y: 40, r: 46 },
+            { x: 28, y: 70, r: 34 },
+            { x: 80, y: 20, r: 30 },
+            { x: 52, y: 83, r: 50 },
+            { x: 76, y: 62, r: 26 },
+          ].map((t, i) => (
+            <div
+              key={i}
+              className="absolute pointer-events-none rounded-full"
+              style={{
+                left: `${t.x}%`, top: `${t.y}%`,
+                width: t.r, height: t.r,
+                transform: 'translate(-50%,-50%)',
+                border: '1px solid rgba(212,98,42,0.18)',
+              }}
+            />
+          ))}
+
+          {/* Base glow */}
+          <div className="absolute inset-0 bg-[radial-gradient(ellipse_80%_35%_at_50%_108%,rgba(212,98,42,0.14)_0%,transparent_70%)] pointer-events-none" />
 
           {/* Brand */}
           <div className="relative z-10 flex items-center gap-3">
@@ -878,11 +922,11 @@ export default function App() {
           {/* Tagline */}
           <motion.div
             className="relative z-10"
-            initial={{ opacity: 0, y: 16 }}
+            initial={{ opacity: 0, y: 14 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5, delay: 0.1, ease: 'easeOut' }}
+            transition={{ duration: 0.5, delay: 0.15, ease: 'easeOut' }}
           >
-            <h1 className="hv font-black text-white leading-tight tracking-tight" style={{ fontSize: 'clamp(40px, 4.2vw, 60px)' }}>
+            <h1 className="hv font-black text-white leading-tight tracking-tight" style={{ fontSize: 'clamp(38px, 4vw, 56px)' }}>
               Gestisci<br />ogni serata.
             </h1>
           </motion.div>

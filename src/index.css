@@ -116,6 +116,27 @@ a:focus-visible {
   outline: none;
 }
 
+/* ── Auth input left-border focus highlight ──────────────── */
+.auth-input {
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+.auth-input:focus {
+  border-color: rgba(212, 98, 42, 0.5) !important;
+  box-shadow: inset 2px 0 0 #D4622A;
+  outline: none;
+}
+
+/* ── Shake animation for auth errors ─────────────────────── */
+@keyframes shake {
+  0%, 100% { transform: translateX(0); }
+  15%  { transform: translateX(-8px); }
+  30%  { transform: translateX(7px); }
+  45%  { transform: translateX(-6px); }
+  60%  { transform: translateX(4px); }
+  80%  { transform: translateX(-2px); }
+}
+.shake { animation: shake 0.45s ease-in-out; }
+
 /* ── Reduced motion ──────────────────────────────────────── */
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after {

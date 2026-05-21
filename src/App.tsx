@@ -207,6 +207,11 @@ export default function App() {
   const [newPassword, setNewPassword] = useState('');
   const [resetError, setResetError] = useState('');
   const [resetDone, setResetDone] = useState(false);
+  const [showLoginPassword, setShowLoginPassword] = useState(false);
+  const [showRegPassword, setShowRegPassword] = useState(false);
+  const [showNewPasswordField, setShowNewPasswordField] = useState(false);
+  const [loginShake, setLoginShake] = useState(0);
+  const loginFormRef = useRef<HTMLFormElement>(null);
   const [view, setView] = useState<AppView>('venues');
   const [venues, setVenues] = useState(INITIAL_VENUES);
   const [events, setEvents] = useState(INITIAL_EVENTS);
@@ -458,14 +463,22 @@ export default function App() {
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
+  useEffect(() => {
+    if (loginShake === 0 || !loginFormRef.current) return;
+    const el = loginFormRef.current;
+    el.classList.add('shake');
+    const t = setTimeout(() => el.classList.remove('shake'), 500);
+    return () => clearTimeout(t);
+  }, [loginShake]);
+
   const handleLogin = (e: React.FormEvent) => {
     e.preventDefault();
     const found = managedUsers.find(
       u => u.email.toLowerCase() === loginEmail.trim().toLowerCase() && u.password === loginPassword
     );
-    if (!found) { setLoginError('Email o password non corretti.'); return; }
-    if (found.status === 'pending')  { setLoginError('Il tuo account è in attesa di approvazione.'); return; }
-    if (found.status === 'rejected') { setLoginError('Il tuo account non è stato approvato.'); return; }
+    if (!found) { setLoginError('Email o password non corretti.'); setLoginShake(s => s + 1); return; }
+    if (found.status === 'pending')  { setLoginError('Il tuo account è in attesa di approvazione.'); setLoginShake(s => s + 1); return; }
+    if (found.status === 'rejected') { setLoginError('Il tuo account non è stato approvato.'); setLoginShake(s => s + 1); return; }
     const profile: UserProfile = { id: found.id, email: found.email, role: found.role, displayName: found.displayName, lastName: found.lastName, phone: found.phone, profileImage: found.profileImage };
     localStorage.setItem('nightplan_user', JSON.stringify(profile));
     setUser(profile);
@@ -808,9 +821,13 @@ export default function App() {
           className="hidden lg:flex flex-col justify-between p-14 xl:p-20 border-r border-[#2e2e2e] lg:w-[55%] relative overflow-hidden"
         >
           <div className="absolute inset-0 floorplan-grid opacity-40 pointer-events-none" />
-          <span className="relative text-[10px] font-sans font-medium uppercase tracking-[0.5em] text-[#999]">
+          <div className="absolute inset-0 pointer-events-none" style={{ background: 'radial-gradient(ellipse 90% 70% at 25% 55%, rgba(212,98,42,0.09) 0%, transparent 65%)' }} />
+          <div className="absolute bottom-0 left-0 right-0 h-48 pointer-events-none" style={{ background: 'linear-gradient(to top, rgba(26,26,26,0.6) 0%, transparent 100%)' }} />
+
+          <span className="relative text-[9px] font-sans font-medium uppercase tracking-[0.55em] text-[#555]">
             Table Management Platform
           </span>
+
           <div className="relative">
             <h1 className="hv font-black leading-[0.88] tracking-tighter uppercase text-white"
               style={{ fontSize: 'clamp(80px, 10vw, 130px)' }}>
@@ -818,12 +835,25 @@ export default function App() {
             </h1>
             <div className="mt-8 flex items-center gap-4">
               <div className="h-px w-10 bg-accent shrink-0" />
-              <p className="text-[#999] text-sm font-sans leading-relaxed">
+              <p className="text-[#888] text-sm font-sans leading-relaxed">
                 The operating system<br />for nightlife professionals.
               </p>
             </div>
+            <div className="mt-12 space-y-3.5">
+              {[
+                'Pianta tavoli interattiva in tempo reale',
+                'Check-in ospiti e gestione ingressi',
+                'Analytics PR e ranking performance',
+              ].map(text => (
+                <div key={text} className="flex items-center gap-3">
+                  <div className="w-1 h-1 bg-accent rounded-full shrink-0" />
+                  <span className="text-[10px] font-sans uppercase tracking-[0.22em] text-[#4a4a4a]">{text}</span>
+                </div>
+              ))}
+            </div>
           </div>
-          <span className="relative text-[9px] font-sans text-[#555] uppercase tracking-[0.4em]">
+
+          <span className="relative text-[9px] font-sans text-[#3a3a3a] uppercase tracking-[0.4em]">
             © 2025 Nightplan Management Suite
           </span>
         </motion.div>
@@ -835,9 +865,13 @@ export default function App() {
           className="flex-1 flex flex-col justify-center items-center p-8 lg:p-16 bg-[#1A1A1A]"
         >
           {/* Mobile logo */}
-          <div className="lg:hidden mb-14 text-center">
-            <h1 className="hv font-black text-5xl uppercase tracking-tight text-white">NIGHTPLAN</h1>
-            <p className="text-[#999] text-[10px] font-sans uppercase tracking-[0.4em] mt-2">Management Suite</p>
+          <div className="lg:hidden mb-10 -mx-8 px-8 pt-10 pb-8 relative text-center overflow-hidden" style={{ background: 'radial-gradient(ellipse 140% 100% at 50% 0%, rgba(212,98,42,0.13) 0%, transparent 65%)' }}>
+            <h1 className="hv font-black text-[52px] leading-none uppercase tracking-tight text-white">NIGHTPLAN</h1>
+            <div className="flex items-center justify-center gap-3 mt-3">
+              <div className="h-px w-6 bg-accent/50" />
+              <p className="text-[#555] text-[9px] font-sans uppercase tracking-[0.5em]">Management Suite</p>
+              <div className="h-px w-6 bg-accent/50" />
+            </div>
           </div>
 
           <div className="w-full max-w-xs">
@@ -876,7 +910,7 @@ export default function App() {
                   </div>
 
                   {/* Form email/password */}
-                  <form onSubmit={handleLogin} className="space-y-3">
+                  <form ref={loginFormRef} onSubmit={handleLogin} className="space-y-3">
                     <div className="space-y-1">
                       <label className="text-[9px] hv font-black uppercase tracking-[0.2em] text-[#555]">Email</label>
                       <input
@@ -892,7 +926,7 @@ export default function App() {
                           if (match) setLoginPassword(match.password);
                         }}
                         placeholder="tua@email.it"
-                        className="w-full bg-[#141414] border border-[#2e2e2e] px-5 py-3.5 text-sm text-white placeholder-[#383838] outline-none focus:border-accent/40 transition-colors font-sans"
+                        className="auth-input w-full bg-[#141414] border border-[#2e2e2e] px-5 py-3.5 text-sm text-white placeholder-[#383838] font-sans"
                       />
                       <datalist id="nightplan-accounts">
                         {SAVED_ACCOUNTS.map(a => <option key={a.email} value={a.email}>{a.label}</option>)}
@@ -907,10 +941,16 @@ export default function App() {
                           Dimenticata?
                         </button>
                       </div>
-                      <input type="password" autoComplete="current-password" required value={loginPassword}
-                        onChange={e => { setLoginPassword(e.target.value); setLoginError(''); }}
-                        placeholder="••••••••"
-                        className="w-full bg-[#141414] border border-[#2e2e2e] px-5 py-3.5 text-sm text-white placeholder-[#383838] outline-none focus:border-accent/40 transition-colors font-sans" />
+                      <div className="relative">
+                        <input type={showLoginPassword ? 'text' : 'password'} autoComplete="current-password" required value={loginPassword}
+                          onChange={e => { setLoginPassword(e.target.value); setLoginError(''); }}
+                          placeholder="••••••••"
+                          className="auth-input w-full bg-[#141414] border border-[#2e2e2e] px-5 py-3.5 pr-11 text-sm text-white placeholder-[#383838] font-sans" />
+                        <button type="button" onClick={() => setShowLoginPassword(o => !o)}
+                          className="absolute right-4 top-1/2 -translate-y-1/2 text-[#555] hover:text-accent transition-colors">
+                          {showLoginPassword ? <EyeOff size={14} /> : <Eye size={14} />}
+                        </button>
+                      </div>
                     </div>
                     {loginError && <p className="text-red-500/80 text-[10px] font-sans uppercase tracking-widest pt-1">{loginError}</p>}
                     <motion.button type="submit" whileHover={{ scale: 1.01 }} whileTap={{ scale: 0.99 }}
@@ -965,7 +1005,7 @@ export default function App() {
                           <input type="email" required value={forgotEmail}
                             onChange={e => { setForgotEmail(e.target.value); setForgotError(''); }}
                             placeholder="tua@email.it"
-                            className="w-full bg-[#141414] border border-[#383838] px-5 py-4 text-sm text-white placeholder-[#444] outline-none focus:border-accent/40 transition-colors font-sans" />
+                            className="auth-input w-full bg-[#141414] border border-[#383838] px-5 py-4 text-sm text-white placeholder-[#444] font-sans" />
                         </div>
                         {forgotError && <p className="text-red-500/80 text-[10px] font-sans uppercase tracking-widest pt-1">{forgotError}</p>}
                         <motion.button type="submit" whileHover={{ scale: 1.01 }} whileTap={{ scale: 0.99 }}
@@ -1008,10 +1048,16 @@ export default function App() {
                       <form onSubmit={handleResetPassword} className="space-y-3">
                         <div className="space-y-1">
                           <label className="text-[9px] hv font-black uppercase tracking-[0.2em] text-[#666]">Nuova Password</label>
-                          <input type="password" required minLength={4} value={newPassword}
-                            onChange={e => { setNewPassword(e.target.value); setResetError(''); }}
-                            placeholder="••••••••"
-                            className="w-full bg-[#141414] border border-[#383838] px-5 py-4 text-sm text-white placeholder-[#444] outline-none focus:border-accent/40 transition-colors font-sans" />
+                          <div className="relative">
+                            <input type={showNewPasswordField ? 'text' : 'password'} required minLength={4} value={newPassword}
+                              onChange={e => { setNewPassword(e.target.value); setResetError(''); }}
+                              placeholder="••••••••"
+                              className="auth-input w-full bg-[#141414] border border-[#383838] px-5 py-4 pr-11 text-sm text-white placeholder-[#444] font-sans" />
+                            <button type="button" onClick={() => setShowNewPasswordField(o => !o)}
+                              className="absolute right-4 top-1/2 -translate-y-1/2 text-[#555] hover:text-accent transition-colors">
+                              {showNewPasswordField ? <EyeOff size={14} /> : <Eye size={14} />}
+                            </button>
+                          </div>
                         </div>
                         {resetError && <p className="text-red-500/80 text-[10px] font-sans uppercase tracking-widest pt-1">{resetError}</p>}
                         <motion.button type="submit" whileHover={{ scale: 1.01 }} whileTap={{ scale: 0.99 }}
@@ -1076,13 +1122,13 @@ export default function App() {
                         <label className="text-[9px] hv font-black uppercase tracking-[0.2em] text-[#666]">Nome</label>
                         <input required value={regName} onChange={e => { setRegName(e.target.value); setRegError(''); }}
                           placeholder="Mario"
-                          className="w-full bg-[#141414] border border-[#383838] px-4 py-4 text-sm text-white placeholder-[#444] outline-none focus:border-accent/40 transition-colors font-sans" />
+                          className="auth-input w-full bg-[#141414] border border-[#383838] px-4 py-4 text-sm text-white placeholder-[#444] font-sans" />
                       </div>
                       <div className="space-y-1">
                         <label className="text-[9px] hv font-black uppercase tracking-[0.2em] text-[#666]">Cognome</label>
                         <input required value={regLastName} onChange={e => { setRegLastName(e.target.value); setRegError(''); }}
                           placeholder="Rossi"
-                          className="w-full bg-[#141414] border border-[#383838] px-4 py-4 text-sm text-white placeholder-[#444] outline-none focus:border-accent/40 transition-colors font-sans" />
+                          className="auth-input w-full bg-[#141414] border border-[#383838] px-4 py-4 text-sm text-white placeholder-[#444] font-sans" />
                       </div>
                     </div>
                     <div className="space-y-1">
@@ -1101,7 +1147,7 @@ export default function App() {
                         }}
                         onBlur={() => { if (regEmail) setRegEmailError(validateEmail(regEmail)); }}
                         placeholder="tua@email.it"
-                        className={`w-full bg-[#141414] border px-5 py-4 text-sm text-white placeholder-[#444] outline-none transition-colors font-sans ${regEmailError ? 'border-red-500/60' : 'border-[#383838] focus:border-accent/40'}`}
+                        className={`auth-input w-full bg-[#141414] border px-5 py-4 text-sm text-white placeholder-[#444] font-sans ${regEmailError ? 'border-red-500/60' : 'border-[#383838]'}`}
                       />
                       {regEmailError && <p className="text-red-500/80 text-[9px] font-sans uppercase tracking-widest">{regEmailError}</p>}
                     </div>
@@ -1121,15 +1167,21 @@ export default function App() {
                         }}
                         onBlur={() => { if (regPhone) setRegPhoneError(validatePhone(regPhone)); }}
                         placeholder="+39 333 000 0000"
-                        className={`w-full bg-[#141414] border px-5 py-4 text-sm text-white placeholder-[#444] outline-none transition-colors font-sans ${regPhoneError ? 'border-red-500/60' : 'border-[#383838] focus:border-accent/40'}`}
+                        className={`auth-input w-full bg-[#141414] border px-5 py-4 text-sm text-white placeholder-[#444] font-sans ${regPhoneError ? 'border-red-500/60' : 'border-[#383838]'}`}
                       />
                       {regPhoneError && <p className="text-red-500/80 text-[9px] font-sans uppercase tracking-widest">{regPhoneError}</p>}
                     </div>
                     <div className="space-y-1">
                       <label className="text-[9px] hv font-black uppercase tracking-[0.2em] text-[#666]">Password</label>
-                      <input type="password" required value={regPassword} onChange={e => { setRegPassword(e.target.value); setRegError(''); }}
-                        placeholder="••••••••"
-                        className="w-full bg-[#141414] border border-[#383838] px-5 py-4 text-sm text-white placeholder-[#444] outline-none focus:border-accent/40 transition-colors font-sans" />
+                      <div className="relative">
+                        <input type={showRegPassword ? 'text' : 'password'} required value={regPassword} onChange={e => { setRegPassword(e.target.value); setRegError(''); }}
+                          placeholder="••••••••"
+                          className="auth-input w-full bg-[#141414] border border-[#383838] px-5 py-4 pr-11 text-sm text-white placeholder-[#444] font-sans" />
+                        <button type="button" onClick={() => setShowRegPassword(o => !o)}
+                          className="absolute right-4 top-1/2 -translate-y-1/2 text-[#555] hover:text-accent transition-colors">
+                          {showRegPassword ? <EyeOff size={14} /> : <Eye size={14} />}
+                        </button>
+                      </div>
                     </div>
                     {regError && <p className="text-red-500/80 text-[10px] font-sans uppercase tracking-widest pt-1">{regError}</p>}
                     <motion.button

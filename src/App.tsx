@@ -865,20 +865,30 @@ export default function App() {
 
         {/* ── Left brand panel (desktop only) ── */}
         <div className="hidden md:flex flex-col justify-between flex-1 relative overflow-hidden p-12" style={{ backgroundColor: '#0f0e0c' }}>
-          <div className="absolute inset-0 bg-[radial-gradient(ellipse_80%_60%_at_20%_90%,rgba(212,98,42,0.09)_0%,transparent_100%)] pointer-events-none" />
+          {/* Glow drammatico dal basso */}
+          <div className="absolute inset-0 bg-[radial-gradient(ellipse_90%_55%_at_50%_110%,rgba(212,98,42,0.18)_0%,transparent_70%)] pointer-events-none" />
+          <div className="absolute inset-0 bg-[radial-gradient(ellipse_50%_30%_at_50%_100%,rgba(212,98,42,0.28)_0%,transparent_100%)] pointer-events-none" />
+
+          {/* Brand */}
           <div className="relative z-10 flex items-center gap-3">
             <img src="/Logo.png" alt="Nightplan" className="w-10 h-10 object-contain" />
             <span className="hv font-black text-white text-[17px]">Nightplan</span>
           </div>
-          <div className="relative z-10">
-            <h1 className="hv font-black text-white leading-tight tracking-tight mb-4" style={{ fontSize: 'clamp(40px, 4vw, 56px)' }}>
+
+          {/* Tagline */}
+          <motion.div
+            className="relative z-10"
+            initial={{ opacity: 0, y: 16 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5, delay: 0.1, ease: 'easeOut' }}
+          >
+            <h1 className="hv font-black text-white leading-tight tracking-tight" style={{ fontSize: 'clamp(40px, 4.2vw, 60px)' }}>
               Gestisci<br />ogni serata.
             </h1>
-            <p className="text-[#4a4845] text-sm leading-relaxed max-w-xs">
-              Tavoli, prenotazioni e ingressi in un'unica piattaforma.
-            </p>
-          </div>
-          <p className="relative z-10 text-[9px] font-sans text-[#2a2a28] uppercase tracking-[0.3em]">© 2025 Nightplan</p>
+          </motion.div>
+
+          {/* Copyright */}
+          <p className="relative z-10 text-[9px] text-[#2a2826] uppercase tracking-[0.3em]">© 2025 Nightplan</p>
         </div>
 
         {/* ── Right form panel ── */}

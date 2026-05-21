@@ -41,7 +41,7 @@ export default function PRLinkGenerator({ events, venues, user }: Props) {
         <div className="flex items-center gap-3">
           <Link2 size={14} className="text-[#D4622A]" />
           <div>
-            <p className="text-[10px] font-mono uppercase tracking-widest text-white">Il mio link</p>
+            <p className="text-sm font-medium text-white">Il mio link</p>
             <p className="text-[9px] font-sans text-[#555] mt-0.5">Condividi il tuo link personalizzato</p>
           </div>
         </div>
@@ -69,7 +69,7 @@ export default function PRLinkGenerator({ events, venues, user }: Props) {
                       <p className="text-[8px] font-mono uppercase tracking-[0.3em] text-[#D4622A]">
                         {venue?.name ?? 'Venue'}
                       </p>
-                      <p className="text-sm font-bold text-white uppercase" style={{ fontFamily: 'Helvetica Neue, Helvetica, Arial, sans-serif' }}>
+                      <p className="text-sm font-semibold text-white">
                         {event.name}
                       </p>
                       <p className="text-[9px] font-mono text-[#555]">

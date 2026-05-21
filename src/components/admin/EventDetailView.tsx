@@ -59,7 +59,7 @@ export default function EventDetailView({ event, venue, reservations, onOpenPlan
       {/* Back */}
       <button
         onClick={onBack}
-        className="flex items-center gap-2 text-[#666] hover:text-accent transition-colors text-[10px] font-sans uppercase tracking-widest mb-6"
+        className="flex items-center gap-2 text-[#666] hover:text-accent transition-colors text-sm font-medium mb-6"
       >
         <ArrowLeft size={11} /> Torna agli eventi
       </button>
@@ -74,7 +74,7 @@ export default function EventDetailView({ event, venue, reservations, onOpenPlan
       {/* Header */}
       <div className="mb-6">
         <p className="text-[9px] font-mono uppercase tracking-[0.3em] text-[#D4622A] mb-1">{venue.name}</p>
-        <h1 className="hv font-black text-3xl uppercase text-white leading-tight">{event.name}</h1>
+        <h1 className="font-bold text-3xl text-white leading-tight">{event.name}</h1>
         <div className="flex items-center gap-4 mt-2">
           <div className="flex items-center gap-1.5 text-[#555] text-[10px] font-mono capitalize">
             <Calendar size={11} /> {formattedDate}
@@ -100,7 +100,7 @@ export default function EventDetailView({ event, venue, reservations, onOpenPlan
         <div className="border border-[#2a2a2a] bg-[#1a1a1a] p-4 mb-6 flex items-center gap-3">
           <Link2 size={13} className="text-[#D4622A] shrink-0" />
           <div className="flex-1 min-w-0">
-            <p className="text-[8px] font-mono uppercase tracking-widest text-[#555] mb-0.5">Link registrazione generico</p>
+            <p className="text-xs font-medium text-[#555] mb-0.5">Link registrazione generico</p>
             <p className="text-[9px] font-mono text-[#666] truncate">{genericLink}</p>
           </div>
           <button onClick={handleCopyLink}
@@ -119,8 +119,7 @@ export default function EventDetailView({ event, venue, reservations, onOpenPlan
       {/* CTA pianta */}
       <button
         onClick={onOpenPlan}
-        className="w-full flex items-center justify-center gap-2 bg-[#D4622A] text-black py-3.5 font-black uppercase tracking-widest text-xs hover:bg-white transition-colors mb-6"
-        style={{ fontFamily: 'Helvetica Neue, Helvetica, Arial, sans-serif' }}
+        className="w-full flex items-center justify-center gap-2 bg-[#D4622A] text-black py-3.5 text-sm font-semibold rounded-xl hover:bg-white transition-colors mb-6"
       >
         <Map size={14} /> Apri Pianta
       </button>
@@ -131,7 +130,7 @@ export default function EventDetailView({ event, venue, reservations, onOpenPlan
           <button key={t}
             onClick={() => setTab(t)}
             className={cn(
-              'flex-1 py-3 text-[9px] hv font-black uppercase tracking-widest transition-colors relative',
+              'flex-1 py-3 text-sm font-semibold transition-colors relative',
               tab === t ? 'bg-[#D4622A] text-black' : 'text-[#555] hover:text-white'
             )}
           >
@@ -152,14 +151,14 @@ export default function EventDetailView({ event, venue, reservations, onOpenPlan
             ].map(s => (
               <div key={s.label} className="border border-[#2a2a2a] bg-[#1a1a1a] p-3 text-center">
                 <div className={cn('hv font-black text-2xl leading-none', s.color)}>{s.value}</div>
-                <div className="text-[8px] font-mono uppercase tracking-widest text-[#555] mt-1">{s.label}</div>
+                <div className="text-xs text-[#555] mt-1">{s.label}</div>
               </div>
             ))}
           </div>
 
           {approvedRes.length === 0 && pendingRes.length === 0 ? (
             <div className="py-16 text-center border border-[#2a2a2a]">
-              <p className="text-[9px] font-mono uppercase tracking-[0.4em] text-[#444]">Nessuna prenotazione</p>
+              <p className="text-sm text-[#444]">Nessuna prenotazione</p>
             </div>
           ) : (
             <div className="border border-[#2a2a2a] overflow-hidden">
@@ -200,14 +199,14 @@ export default function EventDetailView({ event, venue, reservations, onOpenPlan
                 ].map(s => (
                   <div key={s.label} className="border border-[#2a2a2a] bg-[#1a1a1a] p-3 text-center">
                     <div className={cn('hv font-black text-2xl leading-none', s.color)}>{s.value}</div>
-                    <div className="text-[8px] font-mono uppercase tracking-widest text-[#555] mt-1">{s.label}</div>
+                    <div className="text-xs text-[#555] mt-1">{s.label}</div>
                   </div>
                 ))}
               </div>
 
               {registrations.length === 0 ? (
                 <div className="py-16 text-center border border-[#2a2a2a]">
-                  <p className="text-[9px] font-mono uppercase tracking-[0.4em] text-[#444]">Nessuna registrazione ancora</p>
+                  <p className="text-sm text-[#444]">Nessuna registrazione ancora</p>
                 </div>
               ) : (
                 <div className="border border-[#2a2a2a] overflow-hidden">

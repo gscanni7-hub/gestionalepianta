@@ -95,7 +95,7 @@ export default function IngressiView({ activeEvent }: Props) {
     return (
       <div className="py-24 text-center">
         <ScanLine size={28} className="text-[#333] mx-auto mb-3" />
-        <p className="text-[9px] font-sans uppercase tracking-[0.4em] text-[#555]">Nessun evento attivo stasera</p>
+        <p className="text-sm text-[#555]">Nessun evento attivo stasera</p>
       </div>
     );
   }
@@ -128,12 +128,11 @@ export default function IngressiView({ activeEvent }: Props) {
         onClick={scanning ? stopScanner : startScanner}
         whileTap={{ scale: 0.97 }}
         className={cn(
-          'w-full flex items-center justify-center gap-2 py-4 mb-4 font-black uppercase tracking-widest text-xs transition-colors',
+          'w-full flex items-center justify-center gap-2 py-4 mb-4 text-sm font-semibold rounded-xl transition-colors',
           scanning
             ? 'border border-[#333] text-[#666] hover:text-white hover:border-[#444]'
             : 'bg-[#D4622A] text-black hover:bg-white'
         )}
-        style={{ fontFamily: 'Helvetica Neue, Helvetica, Arial, sans-serif' }}
       >
         {scanning ? <><X size={14} /> Chiudi scanner</> : <><Camera size={14} /> Scannerizza QR</>}
       </motion.button>
@@ -200,14 +199,14 @@ export default function IngressiView({ activeEvent }: Props) {
 
       {!loading && registrations.length === 0 && (
         <div className="py-16 text-center">
-          <p className="text-[9px] font-sans uppercase tracking-[0.4em] text-[#444]">Nessuna registrazione per questa serata</p>
+          <p className="text-sm text-[#444]">Nessuna registrazione per questa serata</p>
         </div>
       )}
 
       {/* Da fare */}
       {pending.length > 0 && (
         <div className="mb-4">
-          <p className="text-[8px] font-sans uppercase tracking-[0.4em] text-[#555] mb-2 px-1">
+          <p className="text-xs font-medium text-[#555] mb-2 px-1">
             Da fare — {pending.length}
           </p>
           <div className="border border-[#2a2a2a] bg-[#1a1a1a] overflow-hidden">
@@ -223,7 +222,7 @@ export default function IngressiView({ activeEvent }: Props) {
         <div>
           <button
             onClick={() => setShowEntered(o => !o)}
-            className="flex items-center gap-2 text-[8px] font-sans uppercase tracking-[0.4em] text-[#555] hover:text-[#888] transition-colors mb-2 px-1 w-full"
+            className="flex items-center gap-2 text-xs font-medium text-[#555] hover:text-[#888] transition-colors mb-2 px-1 w-full"
           >
             <ChevronDown size={11} className={cn('transition-transform duration-200', showEntered && 'rotate-180')} />
             Entrati — {entered.length}
@@ -286,7 +285,7 @@ function RegistrationRow({ reg, onUndoCheckIn }: { reg: Registration; onUndoChec
               {isIn && (
                 <button
                   onClick={() => onUndoCheckIn(reg.id)}
-                  className="w-full py-2 border border-[#333] text-[#666] text-[9px] font-mono uppercase tracking-widest hover:border-[#EF4444]/40 hover:text-[#EF4444] transition-colors"
+                  className="w-full py-2 rounded-xl border border-[#333] text-[#666] text-xs font-medium hover:border-[#EF4444]/40 hover:text-[#EF4444] transition-colors"
                 >
                   Annulla entrata
                 </button>

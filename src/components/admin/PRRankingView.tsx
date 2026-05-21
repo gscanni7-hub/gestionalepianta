@@ -35,7 +35,7 @@ export default function PRRankingView({ managedUsers, reservations }: Props) {
 
   return (
     <div>
-      <p className="text-[9px] font-sans uppercase tracking-[0.4em] text-[#555] mb-5">Ranking PR — per incasso</p>
+      <p className="text-xs font-medium text-[#555] mb-5">Ranking PR — per incasso</p>
       <div className="border border-[#2a2a2a] overflow-hidden">
         {/* Header */}
         <div className="grid grid-cols-[40px_1fr_80px_80px_100px] gap-0 px-5 py-3 bg-[#141414] border-b border-[#2a2a2a]">
@@ -83,7 +83,7 @@ export default function PRRankingView({ managedUsers, reservations }: Props) {
                     }
                   </div>
                   <div className="min-w-0">
-                    <p className="hv font-black text-[11px] uppercase text-white truncate">
+                    <p className="font-semibold text-[13px] text-white truncate">
                       {pr.displayName} {pr.lastName}
                     </p>
                     <p className="text-[8px] font-sans text-[#555] truncate">{pr.email}</p>

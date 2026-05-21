@@ -60,8 +60,8 @@ function AdminDashboard({ user, events, venues, reservations, managedUsers, pend
     <div className="space-y-8">
       {/* Greeting */}
       <div>
-        <p className="text-[9px] font-mono uppercase tracking-[0.3em] text-[#D4622A] mb-1">{dateStr}</p>
-        <h1 className="hv font-black text-3xl uppercase text-white leading-tight">
+        <p className="text-xs font-medium text-[#D4622A] mb-1 capitalize">{dateStr}</p>
+        <h1 className="font-bold text-3xl text-white leading-tight">
           {greeting},<br />{user.displayName}
         </h1>
       </div>
@@ -77,7 +77,7 @@ function AdminDashboard({ user, events, venues, reservations, managedUsers, pend
           >
             <div className={cn('mb-3', k.color)}>{k.icon}</div>
             <div className={cn('hv font-black text-3xl leading-none', k.color)}>{k.value}</div>
-            <div className="text-[8px] font-mono uppercase tracking-widest text-[#555] mt-2">{k.label}</div>
+            <div className="text-xs text-[#555] mt-2">{k.label}</div>
             <div className="text-[9px] font-sans text-[#444] mt-0.5">{k.sub}</div>
           </motion.div>
         ))}
@@ -86,7 +86,7 @@ function AdminDashboard({ user, events, venues, reservations, managedUsers, pend
       {/* Serate attive */}
       {activeEvents.length > 0 && (
         <div>
-          <p className="text-[8px] font-mono uppercase tracking-[0.35em] text-[#555] mb-3">Serate in corso</p>
+          <p className="text-xs font-medium text-[#555] mb-3">Serate in corso</p>
           <div className="space-y-2">
             {activeEvents.map(ev => {
               const venue = venues.find(v => v.id === ev.venueId);
@@ -100,7 +100,7 @@ function AdminDashboard({ user, events, venues, reservations, managedUsers, pend
                 >
                   <div className="w-2 h-2 rounded-full bg-[#D4622A] shrink-0 mt-0.5" />
                   <div className="flex-1 min-w-0">
-                    <p className="hv font-black uppercase text-white text-sm truncate">{ev.name}</p>
+                    <p className="font-semibold text-white text-sm truncate">{ev.name}</p>
                     <p className="text-[9px] font-mono text-[#555] mt-0.5">{venue?.name ?? ''} · {evRes.length} tavoli</p>
                   </div>
                   <ChevronRight size={14} className="text-[#555] shrink-0" />
@@ -113,7 +113,7 @@ function AdminDashboard({ user, events, venues, reservations, managedUsers, pend
 
       {/* Quick actions */}
       <div>
-        <p className="text-[8px] font-mono uppercase tracking-[0.35em] text-[#555] mb-3">Azioni rapide</p>
+        <p className="text-xs font-medium text-[#555] mb-3">Azioni rapide</p>
         <div className="grid grid-cols-2 gap-2">
           {[
             { label: 'Approva', icon: <Bell size={14}/>, view: 'approvals', badge: pendingCount },
@@ -127,7 +127,7 @@ function AdminDashboard({ user, events, venues, reservations, managedUsers, pend
               className="relative flex items-center gap-3 border border-[#2a2a2a] bg-[#1a1a1a] hover:border-[#D4622A]/30 hover:bg-[#1e1e1e] transition-colors px-4 py-3 text-left"
             >
               <span className="text-[#D4622A]">{a.icon}</span>
-              <span className="text-[10px] font-mono uppercase tracking-widest text-[#888]">{a.label}</span>
+              <span className="text-xs font-medium text-[#888]">{a.label}</span>
               {a.badge !== undefined && a.badge > 0 && (
                 <span className="absolute top-2 right-2 min-w-[16px] h-4 px-1 rounded-full bg-[#F59E0B] text-black text-[8px] font-black flex items-center justify-center">
                   {a.badge}
@@ -162,10 +162,10 @@ function PRDashboard({ user, events, venues, reservations, prPendingCount, onNav
     <div className="space-y-8">
       {/* Greeting */}
       <div>
-        <p className="text-[9px] font-mono uppercase tracking-[0.3em] text-[#D4622A] mb-1">
+        <p className="text-xs font-medium text-[#D4622A] mb-1 capitalize">
           {now.toLocaleDateString('it-IT', { weekday: 'long', day: 'numeric', month: 'long' })}
         </p>
-        <h1 className="hv font-black text-3xl uppercase text-white leading-tight">
+        <h1 className="font-bold text-3xl text-white leading-tight">
           {greeting},<br />{user.displayName}
         </h1>
       </div>
@@ -184,7 +184,7 @@ function PRDashboard({ user, events, venues, reservations, prPendingCount, onNav
             className="border border-[#2a2a2a] bg-[#1a1a1a] p-4 text-center"
           >
             <div className={cn('hv font-black text-3xl leading-none', s.color)}>{s.value}</div>
-            <div className="text-[8px] font-mono uppercase tracking-widest text-[#555] mt-2">{s.label}</div>
+            <div className="text-xs text-[#555] mt-2">{s.label}</div>
           </motion.div>
         ))}
       </div>
@@ -204,7 +204,7 @@ function PRDashboard({ user, events, venues, reservations, prPendingCount, onNav
       {/* CTA principale */}
       {activeEvents.length > 0 && (
         <div>
-          <p className="text-[8px] font-mono uppercase tracking-[0.35em] text-[#555] mb-3">Serate attive</p>
+          <p className="text-xs font-medium text-[#555] mb-3">Serate attive</p>
           <div className="space-y-2">
             {activeEvents.map(ev => {
               const venue = venues.find(v => v.id === ev.venueId);
@@ -217,7 +217,7 @@ function PRDashboard({ user, events, venues, reservations, prPendingCount, onNav
                 >
                   <Calendar size={16} className="text-black shrink-0" />
                   <div className="flex-1 min-w-0">
-                    <p className="hv font-black uppercase text-black text-sm truncate">{ev.name}</p>
+                    <p className="font-semibold text-black text-sm truncate">{ev.name}</p>
                     <p className="text-[9px] font-mono text-black/60 mt-0.5">{venue?.name ?? ''}</p>
                   </div>
                   <ChevronRight size={14} className="text-black shrink-0" />
@@ -231,20 +231,20 @@ function PRDashboard({ user, events, venues, reservations, prPendingCount, onNav
       {/* Il mio link */}
       {activeWithToken.length > 0 && (
         <div>
-          <p className="text-[8px] font-mono uppercase tracking-[0.35em] text-[#555] mb-3">Il tuo link</p>
+          <p className="text-xs font-medium text-[#555] mb-3">Il tuo link</p>
           <div className="space-y-2">
             {activeWithToken.map(ev => {
               const link = `${window.location.origin}/r/${ev.registrationToken}?pr=${user.id}`;
               return (
                 <div key={ev.id} className="border border-[#2a2a2a] bg-[#1a1a1a] p-4 space-y-3">
-                  <p className="hv font-black uppercase text-white text-xs">{ev.name}</p>
+                  <p className="font-semibold text-white text-xs">{ev.name}</p>
                   <div className="flex items-center gap-2">
                     <div className="flex-1 bg-[#111] border border-[#222] px-3 py-2 overflow-hidden">
                       <p className="text-[9px] font-mono text-[#555] truncate">{link}</p>
                     </div>
                     <button
                       onClick={() => navigator.clipboard.writeText(link)}
-                      className="shrink-0 px-4 py-2 bg-[#D4622A] text-black text-[9px] font-mono uppercase tracking-widest hover:bg-white transition-colors"
+                      className="shrink-0 px-4 py-2 rounded-xl bg-[#D4622A] text-black text-xs font-semibold hover:bg-white transition-colors"
                     >
                       Copia
                     </button>
@@ -268,7 +268,7 @@ function PRDashboard({ user, events, venues, reservations, prPendingCount, onNav
             className="relative flex items-center gap-3 border border-[#2a2a2a] bg-[#1a1a1a] hover:border-[#D4622A]/30 transition-colors px-4 py-3"
           >
             <span className="text-[#D4622A]">{a.icon}</span>
-            <span className="text-[10px] font-mono uppercase tracking-widest text-[#888]">{a.label}</span>
+            <span className="text-xs font-medium text-[#888]">{a.label}</span>
             {a.badge !== undefined && a.badge > 0 && (
               <span className="absolute top-2 right-2 min-w-[16px] h-4 px-1 rounded-full bg-[#F59E0B] text-black text-[8px] font-black flex items-center justify-center">
                 {a.badge}
@@ -301,10 +301,10 @@ function HostDashboard({ user, events, venues, reservations, onNav }: {
     <div className="space-y-8">
       {/* Greeting */}
       <div>
-        <p className="text-[9px] font-mono uppercase tracking-[0.3em] text-[#D4622A] mb-1">
+        <p className="text-xs font-medium text-[#D4622A] mb-1 capitalize">
           {now.toLocaleDateString('it-IT', { weekday: 'long', day: 'numeric', month: 'long' })}
         </p>
-        <h1 className="hv font-black text-3xl uppercase text-white leading-tight">
+        <h1 className="font-bold text-3xl text-white leading-tight">
           {greeting},<br />{user.displayName}
         </h1>
       </div>
@@ -312,14 +312,14 @@ function HostDashboard({ user, events, venues, reservations, onNav }: {
       {!activeEvent ? (
         <div className="py-20 text-center border border-[#2a2a2a]">
           <DoorOpen size={32} className="text-[#333] mx-auto mb-3" />
-          <p className="text-[9px] font-mono uppercase tracking-[0.4em] text-[#555]">Nessun evento attivo stasera</p>
+          <p className="text-sm text-[#555]">Nessun evento attivo stasera</p>
         </div>
       ) : (
         <>
           {/* Evento in corso */}
           <div className="border-l-2 border-[#D4622A] pl-4">
-            <p className="text-[8px] font-mono uppercase tracking-widest text-[#555]">{venue?.name ?? ''}</p>
-            <p className="hv font-black uppercase text-white text-lg">{activeEvent.name}</p>
+            <p className="text-xs text-[#555]">{venue?.name ?? ''}</p>
+            <p className="font-bold text-white text-lg">{activeEvent.name}</p>
           </div>
 
           {/* Grande numero */}
@@ -328,7 +328,7 @@ function HostDashboard({ user, events, venues, reservations, onNav }: {
               {checkedIn.length}
             </div>
             <div className="text-[#555] hv font-black text-xl mt-1">/ {approved.length}</div>
-            <p className="text-[9px] font-mono uppercase tracking-[0.4em] text-[#555] mt-3">Persone entrate</p>
+            <p className="text-xs text-[#555] mt-3">Persone entrate</p>
             {/* Progress bar */}
             <div className="mt-4 h-1 bg-[#222] overflow-hidden">
               <motion.div
@@ -346,8 +346,7 @@ function HostDashboard({ user, events, venues, reservations, onNav }: {
             <motion.button
               onClick={() => onNav('checkin')}
               whileTap={{ scale: 0.97 }}
-              className="w-full flex items-center justify-center gap-3 bg-[#D4622A] text-black py-5 font-black uppercase tracking-widest hover:bg-white transition-colors"
-              style={{ fontFamily: 'Helvetica Neue, Helvetica, Arial, sans-serif', fontSize: 13 }}
+              className="w-full flex items-center justify-center gap-3 bg-[#D4622A] text-black py-4 text-sm font-semibold rounded-xl hover:bg-white transition-colors"
             >
               <DoorOpen size={18} />
               Vai all'ingresso

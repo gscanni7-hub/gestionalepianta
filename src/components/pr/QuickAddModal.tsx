@@ -70,7 +70,7 @@ export default function QuickAddModal({ events, venues, user, onClose, onAdd }: 
         <div className="h-[2px] bg-[#D4622A] shrink-0" />
 
         <div className="px-6 py-5 border-b border-[#222] flex items-center justify-between shrink-0">
-          <h3 className="hv font-black text-lg uppercase text-white">Aggiungi Prenotazione</h3>
+          <h3 className="font-bold text-lg text-white">Aggiungi Prenotazione</h3>
           <button onClick={onClose} className="text-[#666] hover:text-white transition-colors p-1"><X size={18} /></button>
         </div>
 
@@ -84,11 +84,11 @@ export default function QuickAddModal({ events, venues, user, onClose, onAdd }: 
               <CheckCircle2 size={32} className="text-[#22C55E]" />
             </motion.div>
             <div className="text-center">
-              <p className="hv font-black text-white uppercase text-lg">Aggiunta!</p>
+              <p className="font-bold text-white text-lg">Aggiunta!</p>
               <p className="text-[#666] text-xs mt-1">In attesa di approvazione admin</p>
             </div>
             <button onClick={onClose}
-              className="w-full py-3.5 bg-[#D4622A] text-black text-[9px] hv font-black uppercase tracking-widest hover:bg-white transition-colors">
+              className="w-full py-3.5 rounded-xl bg-[#D4622A] text-black text-sm font-semibold hover:bg-white transition-colors">
               Chiudi
             </button>
           </div>
@@ -97,7 +97,7 @@ export default function QuickAddModal({ events, venues, user, onClose, onAdd }: 
             {/* Event selector */}
             {activeEvents.length > 1 && (
               <div className="space-y-1.5">
-                <label className="text-[8px] font-mono uppercase tracking-widest text-[#555]">Evento</label>
+                <label className="text-xs font-medium text-[#666]">Evento</label>
                 <select
                   value={form.eventId}
                   onChange={e => { setForm({ ...form, eventId: e.target.value }); setTableId(''); }}
@@ -112,7 +112,7 @@ export default function QuickAddModal({ events, venues, user, onClose, onAdd }: 
 
             {/* Customer name */}
             <div className="space-y-1.5">
-              <label className="text-[8px] font-mono uppercase tracking-widest text-[#555]">Nome cliente *</label>
+              <label className="text-xs font-medium text-[#666]">Nome cliente *</label>
               <div className="relative">
                 <User size={13} className="absolute left-3 top-1/2 -translate-y-1/2 text-[#444]" />
                 <input
@@ -127,7 +127,7 @@ export default function QuickAddModal({ events, venues, user, onClose, onAdd }: 
 
             {/* Phone */}
             <div className="space-y-1.5">
-              <label className="text-[8px] font-mono uppercase tracking-widest text-[#555]">Telefono</label>
+              <label className="text-xs font-medium text-[#666]">Telefono</label>
               <div className="relative">
                 <Phone size={13} className="absolute left-3 top-1/2 -translate-y-1/2 text-[#444]" />
                 <input
@@ -142,7 +142,7 @@ export default function QuickAddModal({ events, venues, user, onClose, onAdd }: 
 
             {/* Guests */}
             <div className="space-y-1.5">
-              <label className="text-[8px] font-mono uppercase tracking-widest text-[#555]">Numero persone</label>
+              <label className="text-xs font-medium text-[#666]">Numero persone</label>
               <div className="flex items-center gap-3 bg-[#111] border border-[#2a2a2a] px-4 py-2.5">
                 <Users size={13} className="text-[#444]" />
                 <button type="button" onClick={() => setForm(f => ({ ...f, guestsCount: Math.max(1, f.guestsCount - 1) }))}
@@ -156,7 +156,7 @@ export default function QuickAddModal({ events, venues, user, onClose, onAdd }: 
             {/* Table (optional) */}
             {tables.length > 0 && (
               <div className="space-y-1.5">
-                <label className="text-[8px] font-mono uppercase tracking-widest text-[#555]">Tavolo (opzionale)</label>
+                <label className="text-xs font-medium text-[#666]">Tavolo (opzionale)</label>
                 <select
                   value={tableId}
                   onChange={e => setTableId(e.target.value)}
@@ -172,7 +172,7 @@ export default function QuickAddModal({ events, venues, user, onClose, onAdd }: 
 
             {/* Notes */}
             <div className="space-y-1.5">
-              <label className="text-[8px] font-mono uppercase tracking-widest text-[#555]">Note (opzionale)</label>
+              <label className="text-xs font-medium text-[#666]">Note (opzionale)</label>
               <div className="relative">
                 <FileText size={13} className="absolute left-3 top-3.5 text-[#444]" />
                 <textarea
@@ -187,11 +187,11 @@ export default function QuickAddModal({ events, venues, user, onClose, onAdd }: 
 
             <div className="flex gap-3 pt-2">
               <button type="button" onClick={onClose}
-                className="flex-1 py-3.5 border border-[#2a2a2a] text-[#666] text-[9px] hv font-black uppercase tracking-widest hover:text-white hover:border-[#3a3a3a] transition-colors">
+                className="flex-1 py-3.5 rounded-xl border border-[#2a2a2a] text-[#666] text-sm font-medium hover:text-white hover:border-[#3a3a3a] transition-colors">
                 Annulla
               </button>
               <button type="submit"
-                className="flex-1 py-3.5 bg-[#D4622A] text-black text-[9px] hv font-black uppercase tracking-widest hover:bg-white transition-colors">
+                className="flex-1 py-3.5 rounded-xl bg-[#D4622A] text-black text-sm font-semibold hover:bg-white transition-colors">
                 Aggiungi
               </button>
             </div>

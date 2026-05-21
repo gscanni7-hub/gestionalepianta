@@ -1156,7 +1156,7 @@ export default function App() {
                         placeholder="tua@email.it"
                         className={`auth-input w-full bg-[#141414] border px-5 py-4 text-sm text-white placeholder-[#444] font-sans ${regEmailError ? 'border-red-500/60' : 'border-[#383838]'}`}
                       />
-                      {regEmailError && <p className="text-red-500/80 text-[9px] font-sans uppercase tracking-widest">{regEmailError}</p>}
+                      {regEmailError && <p className="text-red-500/80 text-xs">{regEmailError}</p>}
                     </div>
                     <div className="space-y-1">
                       <label className="text-xs font-medium text-[#666]">Telefono</label>
@@ -1176,7 +1176,7 @@ export default function App() {
                         placeholder="+39 333 000 0000"
                         className={`auth-input w-full bg-[#141414] border px-5 py-4 text-sm text-white placeholder-[#444] font-sans ${regPhoneError ? 'border-red-500/60' : 'border-[#383838]'}`}
                       />
-                      {regPhoneError && <p className="text-red-500/80 text-[9px] font-sans uppercase tracking-widest">{regPhoneError}</p>}
+                      {regPhoneError && <p className="text-red-500/80 text-xs">{regPhoneError}</p>}
                     </div>
                     <div className="space-y-1">
                       <label className="text-xs font-medium text-[#666]">Password</label>
@@ -1311,7 +1311,7 @@ export default function App() {
           const searchBtn = (
             <button
               onClick={() => setPaletteOpen(true)}
-              className="hidden md:flex items-center gap-2 px-3 py-1.5 border border-[#2a2a2a] text-[#666] hover:text-white hover:border-[#383838] transition-colors text-[10px] font-sans uppercase tracking-widest shrink-0"
+              className="hidden md:flex items-center gap-2 px-3 py-1.5 border border-[#2a2a2a] text-[#666] hover:text-white hover:border-[#383838] transition-colors text-xs shrink-0"
               title="Cerca (⌘K)"
             >
               <Search size={12} />
@@ -1326,11 +1326,11 @@ export default function App() {
                 <div className="flex items-center gap-4 min-w-0">
                   {showBack && (
                     <button onClick={goBack}
-                      className="flex items-center gap-1.5 text-[#666] hover:text-accent transition-colors text-[10px] font-sans uppercase tracking-widest shrink-0">
+                      className="flex items-center gap-1.5 text-[#666] hover:text-accent transition-colors text-xs shrink-0">
                       <ArrowLeft size={11} /> Indietro
                     </button>
                   )}
-                  <span className="text-[10px] font-sans font-medium uppercase tracking-[0.35em] text-[#999] truncate">
+                  <span className="text-xs font-medium text-[#999] truncate">
                     {headerTitle()}
                   </span>
                 </div>
@@ -1350,11 +1350,11 @@ export default function App() {
                         {i > 0 && <ChevronRight size={10} className="text-[#444] shrink-0" />}
                         {bc.onClick ? (
                           <button onClick={bc.onClick}
-                            className="text-[8px] font-sans uppercase tracking-[0.3em] text-[#666] hover:text-accent transition-colors truncate">
+                            className="text-xs text-[#666] hover:text-accent transition-colors truncate">
                             {bc.label}
                           </button>
                         ) : (
-                          <span className="text-[8px] font-sans uppercase tracking-[0.3em] text-[#999] truncate">
+                          <span className="text-xs text-[#999] truncate">
                             {bc.label}
                           </span>
                         )}
@@ -1363,7 +1363,7 @@ export default function App() {
                   </div>
                   {/* Title + subtitle + badges */}
                   <div className="flex items-baseline gap-3 flex-wrap">
-                    <h1 className="hv font-black uppercase text-white text-base md:text-lg tracking-tight truncate">
+                    <h1 className="font-bold text-white text-base md:text-lg truncate">
                       {headerTitle()}
                     </h1>
                     {subtitle && (
@@ -1373,7 +1373,7 @@ export default function App() {
                     )}
                     {badges.map((badge, i) => (
                       <span key={i}
-                        className="text-[8px] font-sans uppercase tracking-widest px-2 py-0.5 border"
+                        className="text-xs font-medium rounded-full px-2.5 py-0.5 border"
                         style={{ color: badge.color, borderColor: `${badge.color}33` }}>
                         {badge.label}
                       </span>
@@ -1397,7 +1397,7 @@ export default function App() {
                   <PageTitle title="I tuoi Locali" sub="Seleziona un locale per gestire gli eventi" />
                   {user.role === 'admin' && (
                     <button onClick={() => setShowNewClubModal(true)}
-                      className="flex items-center gap-2 bg-accent text-black px-5 py-3 text-[9px] hv font-black uppercase tracking-widest hover:bg-white transition-colors shrink-0 mt-1">
+                      className="flex items-center gap-2 bg-accent text-black px-5 py-3 text-sm font-semibold rounded-xl hover:bg-white transition-colors shrink-0 mt-1">
                       <Plus size={12} /> Nuovo Club
                     </button>
                   )}
@@ -1425,15 +1425,15 @@ export default function App() {
               <motion.div key="venue-events" {...PAGE}>
                 {/* Header */}
                 <div className="mb-7">
-                  <p className="text-[9px] font-sans uppercase tracking-[0.4em] text-[#555] mb-1">Club</p>
-                  <h2 className="hv font-black text-4xl uppercase text-white">{selectedVenue.name}</h2>
+                  <p className="text-xs text-[#555] mb-1">Club</p>
+                  <h2 className="font-bold text-4xl text-white">{selectedVenue.name}</h2>
                 </div>
 
                 {/* Tabs */}
                 <div className="flex border-b border-[#242424] mb-8 gap-1">
                   {(['events', 'layout'] as const).map(tab => (
                     <button key={tab} onClick={() => setVenueTab(tab)}
-                      className={`px-5 py-2.5 text-[9px] hv font-black uppercase tracking-[0.2em] transition-colors relative ${
+                      className={`px-5 py-2.5 text-sm font-medium transition-colors relative ${
                         venueTab === tab ? 'text-white' : 'text-[#555] hover:text-[#888]'
                       }`}>
                       {tab === 'events' ? 'Serate' : 'Pianta'}
@@ -1453,7 +1453,7 @@ export default function App() {
                       {venueEvents.length === 0 ? (
                         <EmptyState icon={<Calendar size={28} />} label="Nessuna serata ancora.">
                           <button onClick={() => setShowNewEventModal(true)}
-                            className="mt-5 flex items-center gap-2 bg-accent text-black px-5 py-3 text-[10px] hv font-black uppercase tracking-widest hover:bg-white transition-colors">
+                            className="mt-5 flex items-center gap-2 bg-accent text-black px-5 py-3 text-sm font-semibold rounded-xl hover:bg-white transition-colors">
                             <Plus size={13} /> Crea Serata
                           </button>
                         </EmptyState>
@@ -1476,7 +1476,7 @@ export default function App() {
                           {user.role === 'admin' && (
                             <div className="mt-6 flex justify-center">
                               <button onClick={() => setShowNewEventModal(true)}
-                                className="flex items-center gap-2 border border-[#383838] text-[#999] px-6 py-3 text-[9px] hv font-black uppercase tracking-widest hover:border-accent hover:text-accent transition-all">
+                                className="flex items-center gap-2 border border-[#383838] text-[#999] px-6 py-3 text-sm font-medium rounded-xl hover:border-accent hover:text-accent transition-all">
                                 <Plus size={11} /> Nuova Serata
                               </button>
                             </div>
@@ -1492,7 +1492,7 @@ export default function App() {
                       <div>
                           <div className="flex justify-end mb-6">
                             <button onClick={() => setEditingFloorPlan({ venueId: selectedVenue.id, fp: { id: `fp_${Date.now()}`, name: '', canvasWidth: 800, canvasHeight: 600, staticAreas: [], tables: [] } })}
-                              className="flex items-center gap-2 bg-accent text-black px-5 py-3 text-[9px] hv font-black uppercase tracking-widest hover:bg-white transition-colors">
+                              className="flex items-center gap-2 bg-accent text-black px-5 py-3 text-sm font-semibold rounded-xl hover:bg-white transition-colors">
                               <Plus size={12} /> Nuova Pianta
                             </button>
                           </div>
@@ -1524,7 +1524,7 @@ export default function App() {
                                       </button>
                                     </div>
                                     <button onClick={() => setEditingFloorPlan({ venueId: selectedVenue.id, fp })}
-                                      className="text-[9px] font-sans uppercase tracking-widest text-[#999] hover:text-accent transition-colors flex items-center gap-1.5">
+                                      className="text-xs text-[#999] hover:text-accent transition-colors flex items-center gap-1.5">
                                       Apri Canvas <ChevronRight size={11} />
                                     </button>
                                   </div>
@@ -1587,7 +1587,7 @@ export default function App() {
                   {user.role === 'pr' && activeEvents.length > 0 && (
                     <button
                       onClick={() => setShowQuickAdd(true)}
-                      className="flex items-center gap-2 bg-accent text-black px-4 py-2.5 text-[9px] hv font-black uppercase tracking-widest hover:bg-white transition-colors shrink-0 mt-1"
+                      className="flex items-center gap-2 bg-accent text-black px-4 py-2.5 text-sm font-semibold rounded-xl hover:bg-white transition-colors shrink-0 mt-1"
                     >
                       <Plus size={12} /> Aggiungi
                     </button>
@@ -1667,7 +1667,7 @@ export default function App() {
                           {filteredVenue && (
                             <button
                               onClick={() => { setEditorVenueId(null); setView('venue-events'); }}
-                              className="flex items-center gap-2 text-[#666] hover:text-accent transition-colors text-[10px] font-sans uppercase tracking-widest mb-4">
+                              className="flex items-center gap-2 text-[#666] hover:text-accent transition-colors text-xs mb-4">
                               <ArrowLeft size={11} /> Torna al Club
                             </button>
                           )}
@@ -1675,7 +1675,7 @@ export default function App() {
                         </div>
                         <button
                           onClick={() => setShowNewFloorPlanModal(true)}
-                          className="flex items-center gap-2 bg-accent text-black px-5 py-3 text-[9px] hv font-black uppercase tracking-widest hover:bg-white transition-colors shrink-0 mt-1">
+                          className="flex items-center gap-2 bg-accent text-black px-5 py-3 text-sm font-semibold rounded-xl hover:bg-white transition-colors shrink-0 mt-1">
                           <Plus size={12} /> Nuova Pianta
                         </button>
                       </div>
@@ -1684,13 +1684,13 @@ export default function App() {
                           <div key={venue.id} className="border border-[#383838] bg-card">
                             {!filteredVenue && (
                               <div className="px-7 py-5 border-b border-[#2e2e2e]">
-                                <h3 className="hv font-black text-xl uppercase text-white">{venue.name}</h3>
-                                <p className="text-[9px] font-sans uppercase tracking-widest text-[#999] mt-0.5">{venue.address}</p>
+                                <h3 className="font-bold text-xl text-white">{venue.name}</h3>
+                                <p className="text-xs text-[#999] mt-0.5">{venue.address}</p>
                               </div>
                             )}
                             {venue.floorPlans.length === 0 ? (
                               <div className="px-7 py-8 text-center">
-                                <p className="text-[9px] font-sans uppercase tracking-[0.4em] text-[#666]">Nessuna pianta</p>
+                                <p className="text-sm text-[#666]">Nessuna pianta</p>
                               </div>
                             ) : (
                               <div className="divide-y divide-[#2a2a2a]">
@@ -1720,7 +1720,7 @@ export default function App() {
                                       </div>
                                       <button
                                         onClick={() => setEditingFloorPlan({ venueId: venue.id, fp })}
-                                        className="text-[9px] font-sans uppercase tracking-widest text-[#999] hover:text-accent transition-colors flex items-center gap-1.5">
+                                        className="text-xs text-[#999] hover:text-accent transition-colors flex items-center gap-1.5">
                                         Canvas <ChevronRight size={11} />
                                       </button>
                                     </div>
@@ -1810,17 +1810,17 @@ export default function App() {
                     <div className="border border-[#2a2a2a] bg-card px-6 py-6">
                       <div className="text-accent mb-4"><BarChart3 size={18}/></div>
                       <div className="hv font-black text-4xl text-white leading-none">{myRes.length}</div>
-                      <div className="text-[9px] font-sans uppercase tracking-[0.3em] text-[#555] mt-3">Tavoli prenotati</div>
+                      <div className="text-xs text-[#555] mt-3">Tavoli prenotati</div>
                     </div>
                     <div className="border border-[#2a2a2a] bg-card px-6 py-6">
                       <div className="text-accent mb-4"><TrendingUp size={18}/></div>
                       <div className="hv font-black text-4xl text-white leading-none">€{totalBudget >= 1000 ? `${(totalBudget/1000).toFixed(1)}K` : totalBudget}</div>
-                      <div className="text-[9px] font-sans uppercase tracking-[0.3em] text-[#555] mt-3">Budget generato</div>
+                      <div className="text-xs text-[#555] mt-3">Budget generato</div>
                     </div>
                     <div className="border border-[#2a2a2a] bg-card px-6 py-6">
                       <div className="text-accent mb-4"><Calendar size={18}/></div>
                       <div className="hv font-black text-4xl text-white leading-none">{myEventIds.length}</div>
-                      <div className="text-[9px] font-sans uppercase tracking-[0.3em] text-[#555] mt-3">Serate lavorate</div>
+                      <div className="text-xs text-[#555] mt-3">Serate lavorate</div>
                     </div>
                     <div className="border border-[#2a2a2a] bg-card px-6 py-6">
                       <div className="text-accent mb-4"><CheckCircle2 size={18}/></div>
@@ -1828,7 +1828,7 @@ export default function App() {
                       <div className="mt-3 h-1 bg-[#1e1e1e] rounded-full overflow-hidden">
                         <motion.div className="h-full bg-accent" initial={{ width: 0 }} animate={{ width: `${approvalRate}%` }} transition={{ duration: 1, ease: 'easeOut' }} />
                       </div>
-                      <div className="text-[9px] font-sans uppercase tracking-[0.3em] text-[#555] mt-2">Tasso approvazione</div>
+                      <div className="text-xs text-[#555] mt-2">Tasso approvazione</div>
                     </div>
                   </div>
 
@@ -1941,9 +1941,9 @@ export default function App() {
             >
               <div className="flex items-center gap-2">
                 <CheckCircle2 size={13} className="text-accent shrink-0" />
-                <span className="hv font-black text-white text-[11px] uppercase tracking-widest">{t.message}</span>
+                <span className="font-semibold text-white text-sm">{t.message}</span>
               </div>
-              {t.sub && <p className="text-[9px] font-sans text-[#777] mt-1.5 pl-5 uppercase tracking-widest">{t.sub}</p>}
+              {t.sub && <p className="text-xs text-[#777] mt-1.5 pl-5">{t.sub}</p>}
             </motion.div>
           ))}
         </AnimatePresence>
@@ -2124,11 +2124,11 @@ function PRProfile({ user, onSave }: {
               : <span className="hv font-black text-accent text-2xl">{initials}</span>
             }
             <div className="absolute inset-0 bg-black/60 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
-              <span className="text-[9px] hv font-black uppercase tracking-widest text-white">Cambia</span>
+              <span className="text-xs font-medium text-white">Cambia</span>
             </div>
           </button>
           <input ref={fileRef} type="file" accept="image/*" className="hidden" onChange={handleImage} />
-          <p className="text-[9px] font-sans uppercase tracking-widest text-[#666]">Clicca per cambiare foto</p>
+          <p className="text-xs text-[#666]">Clicca per cambiare foto</p>
         </div>
 
         {/* Fields */}
@@ -2151,7 +2151,7 @@ function PRProfile({ user, onSave }: {
 
         <motion.button type="submit" whileHover={{ scale: 1.01 }} whileTap={{ scale: 0.99 }}
           className={cn(
-            'w-full py-4 text-[10px] hv font-black uppercase tracking-[0.3em] transition-colors',
+            'w-full py-4 text-sm font-semibold rounded-xl transition-colors',
             saved ? 'bg-green-500 text-black' : 'bg-accent text-black hover:bg-white'
           )}>
           {saved ? 'Salvato ✓' : 'Salva Modifiche'}
@@ -2189,9 +2189,9 @@ function PRManagementPage({ managedUsers, reservations, events, selectedPR, onSe
   };
 
   const statusBadge = (s: string) => {
-    if (s === 'approved') return <span className="px-2 py-0.5 text-[9px] font-sans uppercase tracking-widest bg-green-500/10 text-green-400 border border-green-500/20">Attivo</span>;
-    if (s === 'rejected') return <span className="px-2 py-0.5 text-[9px] font-sans uppercase tracking-widest bg-red-500/10 text-red-400 border border-red-500/20">Rifiutato</span>;
-    return <span className="px-2 py-0.5 text-[9px] font-sans uppercase tracking-widest bg-[#1e1e1e] text-[#777] border border-[#2a2a2a]">In attesa</span>;
+    if (s === 'approved') return <span className="px-2.5 py-0.5 text-xs font-medium rounded-full bg-green-500/10 text-green-400 border border-green-500/20">Attivo</span>;
+    if (s === 'rejected') return <span className="px-2.5 py-0.5 text-xs font-medium rounded-full bg-red-500/10 text-red-400 border border-red-500/20">Rifiutato</span>;
+    return <span className="px-2.5 py-0.5 text-xs font-medium rounded-full bg-[#1e1e1e] text-[#777] border border-[#2a2a2a]">In attesa</span>;
   };
 
   if (selectedPR) {
@@ -2225,7 +2225,7 @@ function PRManagementPage({ managedUsers, reservations, events, selectedPR, onSe
                       : <span className="hv font-black text-accent text-sm">{pr.displayName.slice(0,2).toUpperCase()}</span>}
                   </div>
                   <div className="min-w-0 flex-1">
-                    <p className="hv font-black text-sm uppercase text-white truncate">{pr.displayName} {pr.lastName}</p>
+                    <p className="font-semibold text-sm text-white truncate">{pr.displayName} {pr.lastName}</p>
                     <p className="text-[10px] font-sans text-[#555] truncate mt-0.5">{pr.email}</p>
                   </div>
                   {statusBadge(pr.status)}
@@ -2235,21 +2235,21 @@ function PRManagementPage({ managedUsers, reservations, events, selectedPR, onSe
                 <div className="grid grid-cols-3 gap-3 border-t border-[#1e1e1e] pt-5">
                   <div>
                     <p className="hv font-black text-xl text-white">{stats.total}</p>
-                    <p className="text-[8px] font-sans uppercase tracking-[0.3em] text-[#555] mt-1">Tavoli</p>
+                    <p className="text-xs text-[#555] mt-1">Tavoli</p>
                   </div>
                   <div>
                     <p className="hv font-black text-xl text-white">€{stats.budget >= 1000 ? `${(stats.budget/1000).toFixed(1)}K` : stats.budget}</p>
-                    <p className="text-[8px] font-sans uppercase tracking-[0.3em] text-[#555] mt-1">Budget</p>
+                    <p className="text-xs text-[#555] mt-1">Budget</p>
                   </div>
                   <div>
                     <p className="hv font-black text-xl text-white">{stats.rate}<span className="text-sm text-[#555]">%</span></p>
-                    <p className="text-[8px] font-sans uppercase tracking-[0.3em] text-[#555] mt-1">Approv.</p>
+                    <p className="text-xs text-[#555] mt-1">Approv.</p>
                   </div>
                 </div>
 
                 {/* CTA */}
                 <button onClick={() => onSelectPR(pr)}
-                  className="w-full py-2.5 text-[9px] hv font-black uppercase tracking-[0.2em] border border-[#2a2a2a] text-[#666] hover:border-accent/40 hover:text-accent transition-colors flex items-center justify-center gap-2">
+                  className="w-full py-2.5 text-sm font-medium rounded-xl border border-[#2a2a2a] text-[#666] hover:border-accent/40 hover:text-accent transition-colors flex items-center justify-center gap-2">
                   Apri Scheda <ChevronRight size={11} />
                 </button>
               </div>
@@ -2281,7 +2281,7 @@ function PRDetailView({ pr, reservations, events, onBack, onUpdateStatus, status
     <div>
       {/* Back */}
       <button onClick={onBack}
-        className="flex items-center gap-2 text-[#555] hover:text-accent transition-colors text-[10px] font-sans uppercase tracking-widest mb-8">
+        className="flex items-center gap-2 text-[#555] hover:text-accent transition-colors text-xs mb-8">
         <ArrowLeft size={11} /> Tutti i PR
       </button>
 
@@ -2293,10 +2293,10 @@ function PRDetailView({ pr, reservations, events, onBack, onUpdateStatus, status
             : <span className="hv font-black text-accent text-xl">{pr.displayName.slice(0,2).toUpperCase()}</span>}
         </div>
         <div>
-          <h2 className="hv font-black text-3xl uppercase text-white tracking-tight">{pr.displayName} {pr.lastName}</h2>
+          <h2 className="font-bold text-3xl text-white">{pr.displayName} {pr.lastName}</h2>
           <div className="flex items-center gap-3 mt-2">
             {statusBadge(pr.status)}
-            <span className="text-[9px] font-sans text-[#444] uppercase tracking-widest">dal {pr.createdAt?.slice(0,10) ?? '—'}</span>
+            <span className="text-xs text-[#555]">dal {pr.createdAt?.slice(0,10) ?? '—'}</span>
           </div>
         </div>
       </div>
@@ -2306,18 +2306,18 @@ function PRDetailView({ pr, reservations, events, onBack, onUpdateStatus, status
         <div className="space-y-4">
           {/* Info card */}
           <div className="border border-[#2a2a2a] bg-card p-5 space-y-4">
-            <p className="text-[9px] font-sans uppercase tracking-[0.3em] text-[#555] mb-1">Informazioni</p>
+            <p className="text-xs text-[#555] mb-1">Informazioni</p>
             {[
               { label: 'Email', value: pr.email },
               { label: 'Telefono', value: pr.phone || '—' },
             ].map(({ label, value }) => (
               <div key={label}>
-                <p className="text-[9px] font-sans uppercase tracking-[0.2em] text-[#555]">{label}</p>
+                <p className="text-xs text-[#555]">{label}</p>
                 <p className="text-sm text-white font-sans mt-1">{value}</p>
               </div>
             ))}
             <div>
-              <p className="text-[9px] font-sans uppercase tracking-[0.2em] text-[#555]">Password</p>
+              <p className="text-xs text-[#555]">Password</p>
               <div className="flex items-center gap-2 mt-1">
                 <p className="text-sm text-white font-sans font-mono">{showPwd ? pr.password : '••••••••'}</p>
                 <button onClick={() => setShowPwd(v => !v)}
@@ -2331,13 +2331,13 @@ function PRDetailView({ pr, reservations, events, onBack, onUpdateStatus, status
           {/* Actions */}
           {pr.status !== 'approved' && (
             <button onClick={() => onUpdateStatus(pr.id, 'approved')}
-              className="w-full py-3 text-[9px] hv font-black uppercase tracking-[0.2em] bg-green-500/10 text-green-400 border border-green-500/20 hover:bg-green-500/20 transition-colors">
+              className="w-full py-3 text-sm font-medium rounded-xl bg-green-500/10 text-green-400 border border-green-500/20 hover:bg-green-500/20 transition-colors">
               Approva Account
             </button>
           )}
           {pr.status !== 'rejected' && (
             <button onClick={() => onUpdateStatus(pr.id, 'rejected')}
-              className="w-full py-3 text-[9px] hv font-black uppercase tracking-[0.2em] bg-red-500/10 text-red-400 border border-red-500/20 hover:bg-red-500/20 transition-colors">
+              className="w-full py-3 text-sm font-medium rounded-xl bg-red-500/10 text-red-400 border border-red-500/20 hover:bg-red-500/20 transition-colors">
               Disabilita Account
             </button>
           )}
@@ -2355,7 +2355,7 @@ function PRDetailView({ pr, reservations, events, onBack, onUpdateStatus, status
             ].map(({ label, value }) => (
               <div key={label} className="border border-[#2a2a2a] bg-card px-4 py-4">
                 <p className="hv font-black text-2xl text-white">{value}</p>
-                <p className="text-[9px] font-sans uppercase tracking-[0.3em] text-[#555] mt-2">{label}</p>
+                <p className="text-xs text-[#555] mt-2">{label}</p>
               </div>
             ))}
           </div>
@@ -2364,7 +2364,7 @@ function PRDetailView({ pr, reservations, events, onBack, onUpdateStatus, status
           {myRes.length > 0 && (
             <div className="border border-[#2a2a2a] bg-card px-5 py-4">
               <div className="flex justify-between mb-2">
-                <span className="text-[9px] font-sans uppercase tracking-[0.3em] text-[#555]">Tasso approvazione</span>
+                <span className="text-xs text-[#555]">Tasso approvazione</span>
                 <span className="text-[9px] hv font-black text-accent">{approvalRate}%</span>
               </div>
               <div className="h-1 bg-[#1e1e1e] rounded-full overflow-hidden">
@@ -2417,8 +2417,8 @@ function ReservationQuickEditModal({ reservation, onClose, onSave }: {
         <div className="h-[2px] bg-accent shrink-0" />
         <div className="px-6 py-5 border-b border-[#2e2e2e] flex items-center justify-between shrink-0">
           <div>
-            <h3 className="hv font-black text-lg uppercase text-white">Modifica Prenotazione</h3>
-            <p className="text-[9px] font-sans text-[#666] uppercase tracking-widest mt-0.5">{reservation.tableName} · {reservation.customerName}</p>
+            <h3 className="font-bold text-lg text-white">Modifica Prenotazione</h3>
+            <p className="text-sm text-[#777] mt-0.5">{reservation.tableName} · {reservation.customerName}</p>
           </div>
           <button onClick={onClose} className="text-[#555] hover:text-white transition-colors"><X size={16} /></button>
         </div>
@@ -2448,11 +2448,11 @@ function ReservationQuickEditModal({ reservation, onClose, onSave }: {
           </div>
           <div className="flex gap-3 pt-2">
             <button type="button" onClick={onClose}
-              className="flex-1 py-3 text-[9px] hv font-black uppercase tracking-[0.2em] border border-[#383838] text-[#777] hover:border-[#555] transition-colors">
+              className="flex-1 py-3 text-sm font-medium rounded-xl border border-[#2e2e2e] text-[#777] hover:border-[#555] transition-colors">
               Annulla
             </button>
             <button type="submit"
-              className="flex-1 py-3 text-[9px] hv font-black uppercase tracking-[0.2em] bg-accent text-black hover:bg-white transition-colors">
+              className="flex-1 py-3 text-sm font-semibold rounded-xl bg-accent text-black hover:bg-white transition-colors">
               Salva
             </button>
           </div>
@@ -2474,9 +2474,9 @@ function HistoryEventRow({ event, venueName, reservations, approvedCount, totalB
     s === 'approved' ? 'Approvata' : s === 'rejected' ? 'Rifiutata' : 'In attesa';
 
   const approvalBadge = (s: string) => {
-    if (s === 'approved') return <span className="px-2 py-0.5 text-[9px] font-sans uppercase tracking-widest bg-green-500/10 text-green-400 border border-green-500/20">Approvata</span>;
-    if (s === 'rejected') return <span className="px-2 py-0.5 text-[9px] font-sans uppercase tracking-widest bg-red-500/10 text-red-400 border border-red-500/20">Rifiutata</span>;
-    return <span className="px-2 py-0.5 text-[9px] font-sans uppercase tracking-widest bg-[#1e1e1e] text-[#777] border border-[#2a2a2a]">In attesa</span>;
+    if (s === 'approved') return <span className="px-2.5 py-0.5 text-xs font-medium rounded-full bg-green-500/10 text-green-400 border border-green-500/20">Approvata</span>;
+    if (s === 'rejected') return <span className="px-2.5 py-0.5 text-xs font-medium rounded-full bg-red-500/10 text-red-400 border border-red-500/20">Rifiutata</span>;
+    return <span className="px-2.5 py-0.5 text-xs font-medium rounded-full bg-[#1e1e1e] text-[#777] border border-[#2a2a2a]">In attesa</span>;
   };
 
   return (
@@ -2491,7 +2491,7 @@ function HistoryEventRow({ event, venueName, reservations, approvedCount, totalB
           </div>
           <div className="min-w-0">
             <p className="hv font-black text-sm uppercase text-white truncate">{event.name}</p>
-            <p className="text-[9px] font-sans text-[#666] mt-0.5 uppercase tracking-widest">{venueName} · {event.date}</p>
+            <p className="text-xs text-[#666] mt-0.5">{venueName} · {event.date}</p>
           </div>
         </div>
         <div className="flex items-center gap-6 shrink-0 ml-4">
@@ -2500,7 +2500,7 @@ function HistoryEventRow({ event, venueName, reservations, approvedCount, totalB
             <p className="text-[9px] font-sans text-[#555] mt-0.5">€{totalBudget.toLocaleString('it-IT')}</p>
           </div>
           <div className="text-right hidden md:block">
-            <p className="text-[9px] font-sans text-[#555] uppercase tracking-widest">{approvedCount}/{reservations.length} approvate</p>
+            <p className="text-xs text-[#555]">{approvedCount}/{reservations.length} approvate</p>
           </div>
           <ChevronDown size={14} className={cn('text-[#555] transition-transform duration-200', open && 'rotate-180')} />
         </div>
@@ -2541,7 +2541,7 @@ function HistoryEventRow({ event, venueName, reservations, approvedCount, totalB
                   </div>
                   <div className="flex items-center gap-2 shrink-0 flex-wrap justify-end">
                     {r.checkedIn && (
-                      <span className="inline-flex items-center gap-1 px-2 py-0.5 text-[9px] font-sans uppercase tracking-widest bg-green-500/10 text-green-400 border border-green-500/20">
+                      <span className="inline-flex items-center gap-1 px-2.5 py-0.5 text-xs font-medium rounded-full bg-green-500/10 text-green-400 border border-green-500/20">
                         <CheckCircle2 size={9}/> Entrato
                       </span>
                     )}
@@ -2590,7 +2590,7 @@ function CheckinRow({ res, events, venues, onCheckIn, onUndoCheckIn, onUpdatePeo
       >
         <div className={cn('w-2.5 h-2.5 rounded-full shrink-0 transition-colors', isIn ? 'bg-green-500' : 'bg-[#2e2e2e]')} />
         <div className="flex-1 min-w-0">
-          <p className={cn('hv font-black text-base uppercase truncate transition-colors', isIn ? 'text-[#aaa]' : 'text-white')}>
+          <p className={cn('font-semibold text-base truncate transition-colors', isIn ? 'text-[#aaa]' : 'text-white')}>
             {res.customerName}
           </p>
           <p className="text-[9px] font-sans text-[#555] mt-0.5 truncate">
@@ -2615,7 +2615,7 @@ function CheckinRow({ res, events, venues, onCheckIn, onUndoCheckIn, onUpdatePeo
             <div className="px-5 pb-5 pt-1 border-t border-[#1e1e1e]">
               {/* People counter */}
               <div className="flex items-center justify-between mb-4">
-                <span className="text-[9px] font-sans uppercase tracking-[0.3em] text-[#555]">Persone entrate</span>
+                <span className="text-xs text-[#555]">Persone entrate</span>
                 <div className="flex items-center gap-3">
                   <button onClick={() => setPeople(p => Math.max(1, p - 1))}
                     className="w-8 h-8 border border-[#333] text-[#888] hover:text-white hover:border-[#555] transition-colors text-xl leading-none flex items-center justify-center">−</button>
@@ -2627,7 +2627,7 @@ function CheckinRow({ res, events, venues, onCheckIn, onUndoCheckIn, onUpdatePeo
 
               {/* Budget preview */}
               <div className="flex items-center justify-between mb-5 py-3 border-t border-b border-[#1e1e1e]">
-                <span className="text-[9px] font-sans uppercase tracking-[0.3em] text-[#555]">Incasso</span>
+                <span className="text-xs text-[#555]">Incasso</span>
                 <div className="flex items-center gap-2">
                   {people !== res.guestsCount && <span className="text-[9px] font-sans text-[#444] line-through">€{res.budget}</span>}
                   <span className="hv font-black text-lg text-accent">€{previewBudget}</span>
@@ -2643,7 +2643,7 @@ function CheckinRow({ res, events, venues, onCheckIn, onUndoCheckIn, onUpdatePeo
                       setFlash(true);
                       setTimeout(() => { onCheckIn(res.id, people); setOpen(false); }, 560);
                     }}
-                    className="flex-1 flex items-center justify-center gap-2 py-2.5 text-black text-[9px] hv font-black uppercase tracking-widest"
+                    className="flex-1 flex items-center justify-center gap-2 py-2.5 text-black text-sm font-semibold rounded-xl"
                     style={{
                       backgroundColor: flash ? '#22C55E' : '#D4622A',
                       transition: 'background-color 0.3s',
@@ -2657,14 +2657,14 @@ function CheckinRow({ res, events, venues, onCheckIn, onUndoCheckIn, onUpdatePeo
                     {peopleChanged && (
                       <button
                         onClick={() => { onUpdatePeople(res.id, people); setOpen(false); }}
-                        className="flex-1 py-2.5 bg-accent text-black text-[9px] hv font-black uppercase tracking-widest hover:bg-white transition-colors"
+                        className="flex-1 py-2.5 rounded-xl bg-accent text-black text-xs font-semibold hover:bg-white transition-colors"
                       >
                         Aggiorna
                       </button>
                     )}
                     <button
                       onClick={() => { onUndoCheckIn(res.id); setOpen(false); }}
-                      className="flex-1 py-2.5 border border-[#333] text-[#666] text-[9px] hv font-black uppercase tracking-widest hover:border-red-500/40 hover:text-red-400 transition-colors"
+                      className="flex-1 py-2.5 rounded-xl border border-[#333] text-[#666] text-xs font-medium hover:border-red-500/40 hover:text-red-400 transition-colors"
                     >
                       Annulla Entrata
                     </button>
@@ -2722,7 +2722,7 @@ function HostCheckinView({ reservations, events, venues, userRole, currentUser, 
     return (
       <div className="flex flex-col items-center justify-center py-32 gap-4">
         <DoorOpen size={32} className="text-[#333]" />
-        <p className="text-[9px] font-sans uppercase tracking-[0.4em] text-[#555]">Nessun evento attivo stasera</p>
+        <p className="text-sm text-[#555]">Nessun evento attivo stasera</p>
       </div>
     );
   }
@@ -2733,11 +2733,11 @@ function HostCheckinView({ reservations, events, venues, userRole, currentUser, 
       {/* Header */}
       <div className="mb-5 max-w-xl mx-auto w-full">
         <div className="flex items-center justify-between gap-3 mb-2">
-          <h1 className="hv font-black text-2xl uppercase text-white tracking-tight">Ingresso Serata</h1>
+          <h1 className="font-bold text-2xl text-white">Ingresso Serata</h1>
           {onExport && activeEvent && (
             <button
               onClick={() => onExport(activeEvent.id)}
-              className="flex items-center gap-1.5 text-[#666] hover:text-accent transition-colors text-[9px] font-sans uppercase tracking-widest"
+              className="flex items-center gap-1.5 text-[#666] hover:text-accent transition-colors text-xs"
               title="Esporta lista ospiti"
             >
               <Download size={13} /> Export
@@ -2753,7 +2753,7 @@ function HostCheckinView({ reservations, events, venues, userRole, currentUser, 
                 key={ev.id}
                 onClick={() => setSelectedEventId(ev.id)}
                 className={cn(
-                  'px-3 py-1.5 text-[8px] hv font-black uppercase tracking-widest transition-colors border',
+                  'px-3 py-1.5 text-xs font-medium transition-colors border rounded-xl',
                   activeEventId === ev.id
                     ? 'bg-accent text-black border-accent'
                     : 'border-[#2a2a2a] text-[#666] hover:text-white hover:border-[#444]'
@@ -2780,7 +2780,7 @@ function HostCheckinView({ reservations, events, venues, userRole, currentUser, 
           <button key={t}
             onClick={() => setTab(t)}
             className={cn(
-              'flex-1 py-2.5 text-[9px] hv font-black uppercase tracking-widest transition-colors',
+              'flex-1 py-2.5 text-xs font-medium transition-colors',
               tab === t ? 'bg-accent text-black' : 'text-[#555] hover:text-white'
             )}>
             {t === 'lista' ? 'Tavoli' : t === 'ingressi' ? 'Da Link' : 'Pianta'}
@@ -2814,7 +2814,7 @@ function HostCheckinView({ reservations, events, venues, userRole, currentUser, 
           {/* Da fare */}
           {pending.length > 0 && (
             <div className="mb-4">
-              <p className="text-[8px] font-sans uppercase tracking-[0.4em] text-[#555] mb-2 px-1">
+              <p className="text-xs text-[#555] mb-2 px-1">
                 Da fare — {pending.length}
               </p>
               <div className="border border-[#2a2a2a] bg-card overflow-hidden">
@@ -2831,7 +2831,7 @@ function HostCheckinView({ reservations, events, venues, userRole, currentUser, 
             <div>
               <button
                 onClick={() => setShowEntered(o => !o)}
-                className="flex items-center gap-2 text-[8px] font-sans uppercase tracking-[0.4em] text-[#555] hover:text-[#888] transition-colors mb-2 px-1 w-full"
+                className="flex items-center gap-2 text-xs text-[#555] hover:text-[#888] transition-colors mb-2 px-1 w-full"
               >
                 <ChevronDown size={11} className={cn('transition-transform duration-200', showEntered && 'rotate-180')} />
                 Entrati — {entered.length}
@@ -2854,7 +2854,7 @@ function HostCheckinView({ reservations, events, venues, userRole, currentUser, 
 
           {filtered.length === 0 && (
             <div className="py-16 text-center">
-              <p className="text-[9px] font-sans uppercase tracking-[0.4em] text-[#444]">Nessun risultato</p>
+              <p className="text-sm text-[#555]">Nessun risultato</p>
             </div>
           )}
         </div>
@@ -2866,7 +2866,7 @@ function HostCheckinView({ reservations, events, venues, userRole, currentUser, 
         const fp = venue?.floorPlans.find(f => f.id === activeEvent.floorPlanId) ?? venue?.floorPlans[0];
         if (!venue || !fp) return (
           <div className="flex flex-col items-center justify-center py-20 gap-3">
-            <p className="text-[9px] font-sans uppercase tracking-[0.4em] text-[#555]">Nessuna pianta disponibile</p>
+            <p className="text-sm text-[#555]">Nessuna pianta disponibile</p>
           </div>
         );
         return (
@@ -2915,8 +2915,8 @@ function SidebarContent({ user, view, onNav, onLogout, occupancyPct = 0, revenue
             />
           </div>
           <div className="flex flex-col justify-center">
-            <span className="hv font-black uppercase tracking-widest text-[13px] text-white leading-tight">Nightplan</span>
-            <span className="text-[8px] font-sans text-[#D4622A] uppercase tracking-[0.3em] mt-0.5">Management</span>
+            <span className="font-semibold text-[13px] text-white leading-tight">Nightplan</span>
+            <span className="text-[10px] font-sans text-[#D4622A] mt-0.5">Management</span>
           </div>
         </div>
       </div>
@@ -2933,11 +2933,11 @@ function SidebarContent({ user, view, onNav, onLogout, occupancyPct = 0, revenue
                 initial={{ width: 0 }} animate={{ width: `${occupancyPct}%` }}
                 transition={{ duration: 1.2, delay: 0.3, ease: 'easeOut' }} />
             </div>
-            <p className="text-[9px] font-sans uppercase tracking-[0.35em] text-[#999] mt-1.5">Occupancy</p>
+            <p className="text-[10px] text-[#999] mt-1.5">Occupancy</p>
           </div>
           <div>
             <div className="hv font-black text-accent leading-none glow-text" style={{ fontSize: 36 }}>{revenueDisplay}</div>
-            <p className="text-[9px] font-sans uppercase tracking-[0.35em] text-[#999] mt-1">Revenue Est.</p>
+            <p className="text-[10px] text-[#999] mt-1">Revenue Est.</p>
           </div>
         </div>
       )}
@@ -3018,14 +3018,14 @@ function SidebarContent({ user, view, onNav, onLogout, occupancyPct = 0, revenue
             }
           </div>
           <div className="min-w-0">
-            <p className="text-[11px] hv font-black uppercase text-white truncate group-hover:text-accent transition-colors">
+            <p className="text-[13px] font-semibold text-white truncate group-hover:text-accent transition-colors">
               {user.displayName}{user.lastName ? ' ' + user.lastName : ''}
             </p>
-            <p className="text-[8px] font-sans text-[#999] uppercase tracking-widest mt-0.5">{user.role}</p>
+            <p className="text-xs text-[#777] mt-0.5 capitalize">{user.role}</p>
           </div>
         </button>
         <button onClick={onLogout}
-          className="flex items-center gap-2 text-[#999] hover:text-accent transition-colors text-[9px] font-sans uppercase tracking-widest w-full">
+          className="flex items-center gap-2 text-[#999] hover:text-accent transition-colors text-xs w-full">
           <LogOut size={12} /> Sign Out
         </button>
       </div>
@@ -3078,7 +3078,7 @@ function NavLink({ icon, label, active, onClick, badge }: { icon: React.ReactNod
   return (
     <button onClick={onClick}
       className={cn(
-        'flex items-center gap-3 w-full px-3 py-2.5 text-[10px] font-sans font-medium uppercase tracking-[0.25em] transition-all duration-200 group border-l-2',
+        'flex items-center gap-3 w-full px-3 py-2.5 text-sm font-medium transition-all duration-200 group border-l-2',
         active
           ? 'text-accent border-accent bg-accent/5'
           : 'text-[#777] border-transparent hover:text-white hover:border-[#333] hover:bg-white/[0.02]'
@@ -3100,8 +3100,8 @@ function NavLink({ icon, label, active, onClick, badge }: { icon: React.ReactNod
 function PageTitle({ title, sub }: { title: string; sub?: string }) {
   return (
     <div className="mb-8">
-      <h2 className="hv font-black text-3xl md:text-4xl uppercase text-white leading-tight tracking-tight">{title}</h2>
-      {sub && <p className="text-[10px] font-sans uppercase tracking-[0.3em] text-[#777] mt-2">{sub}</p>}
+      <h2 className="font-bold text-3xl md:text-4xl text-white leading-tight">{title}</h2>
+      {sub && <p className="text-sm text-[#777] mt-2">{sub}</p>}
     </div>
   );
 }
@@ -3111,7 +3111,7 @@ function EmptyState({ icon, label, children }: { icon: React.ReactNode; label: s
   return (
     <div className="flex flex-col items-center justify-center py-28 text-center mt-4">
       <div className="text-[#555] mb-5">{icon}</div>
-      <p className="text-[9px] font-sans uppercase tracking-[0.35em] text-[#666]">{label}</p>
+      <p className="text-xs text-[#666]">{label}</p>
       {children}
     </div>
   );
@@ -3157,10 +3157,10 @@ function VenueCard({ venue, eventCount, onClick, onEdit, onDelete }: {
         </div>
 
         <div className="flex-1">
-          <h3 className="hv font-black text-[clamp(22px,3vw,30px)] uppercase text-white leading-tight group-hover:text-accent transition-colors">
+          <h3 className="font-bold text-[clamp(22px,3vw,30px)] text-white leading-tight group-hover:text-accent transition-colors">
             {venue.name}
           </h3>
-          <p className="text-[9px] font-sans uppercase tracking-widest text-[#888] mt-1">{venue.address}</p>
+          <p className="text-xs text-[#888] mt-1">{venue.address}</p>
         </div>
 
         <div className="flex items-end justify-between border-t border-[#2e2e2e] pt-5">
@@ -3168,10 +3168,10 @@ function VenueCard({ venue, eventCount, onClick, onEdit, onDelete }: {
             <span className="hv font-black text-[52px] leading-none text-[#3a3a3a] group-hover:text-[#555] transition-colors select-none">
               {String(eventCount).padStart(2, '0')}
             </span>
-            <p className="text-[8px] font-sans uppercase tracking-widest text-[#888] mt-0.5">eventi</p>
+            <p className="text-xs text-[#888] mt-0.5">eventi</p>
           </div>
           <div className="flex items-center gap-1.5 text-[#888] group-hover:text-accent transition-colors mb-1">
-            <span className="text-[9px] font-sans uppercase tracking-widest">Apri</span>
+            <span className="text-xs font-medium">Apri</span>
             <ChevronRight size={12} className="group-hover:translate-x-1 transition-transform" />
           </div>
         </div>
@@ -3202,7 +3202,7 @@ function EventCard({ event, venueName, onClick, onEdit, onDelete }: {
           <div className="absolute inset-0 bg-gradient-to-t from-[#1a1a1a] via-transparent to-transparent" />
           <div className="absolute top-3 left-3 right-3 flex items-center justify-between">
             <span
-              className="text-[8px] font-sans font-bold uppercase tracking-widest px-2 py-1"
+              className="text-xs font-medium rounded-full px-2.5 py-0.5"
               style={
                 event.status === 'active'
                   ? { color: COLORS.success, background: 'rgba(0,0,0,0.7)' }
@@ -3229,12 +3229,12 @@ function EventCard({ event, venueName, onClick, onEdit, onDelete }: {
           <div className="flex items-center justify-between gap-3">
             <div className="flex items-center gap-3 min-w-0">
               {venueName && (
-                <span className="text-[8px] font-sans uppercase tracking-widest text-[#666] flex items-center gap-1.5 shrink-0">
+                <span className="text-xs text-[#666] flex items-center gap-1.5 shrink-0">
                   <Building2 size={9} /> {venueName}
                 </span>
               )}
               <span
-                className="text-[8px] font-sans font-bold uppercase tracking-widest px-2 py-1 shrink-0"
+                className="text-xs font-medium rounded-full px-2.5 py-0.5 shrink-0"
                 style={
                   event.status === 'active'
                     ? { color: COLORS.success, background: 'rgba(34,197,94,0.10)' }
@@ -3266,7 +3266,7 @@ function EventCard({ event, venueName, onClick, onEdit, onDelete }: {
             <p className="font-mono text-[10px] text-[#666] tracking-wider">{formattedDate}</p>
             {event.time && <p className="font-mono text-[10px] text-[#555]">· {event.time}</p>}
           </div>
-          <h3 className="hv font-black text-xl uppercase text-white leading-tight">{event.name}</h3>
+          <h3 className="font-bold text-xl text-white leading-tight">{event.name}</h3>
           {event.description && (
             <p className="text-[11px] font-sans text-[#666] mt-2 leading-relaxed line-clamp-2">{event.description}</p>
           )}
@@ -3274,7 +3274,7 @@ function EventCard({ event, venueName, onClick, onEdit, onDelete }: {
 
         <div className="flex items-center justify-between border-t border-[#222] pt-3">
           <div className="flex items-center gap-1.5 text-[#666] group-hover:text-accent transition-colors">
-            <span className="text-[9px] font-sans uppercase tracking-widest">Apri</span>
+            <span className="text-xs font-medium">Apri</span>
             <ChevronRight size={11} className="group-hover:translate-x-1 transition-transform" />
           </div>
           {event.maxCapacity && (
@@ -3297,9 +3297,9 @@ function ReservationsTable({ reservations, userRole, events, onDelete, onEdit }:
   const colCount = userRole === 'admin' ? 6 : 5;
 
   const approvalBadge = (s: string) => {
-    if (s === 'approved') return <span className="inline-flex items-center gap-1 px-2 py-0.5 text-[9px] font-sans uppercase tracking-widest bg-green-500/10 text-green-400 border border-green-500/20">Approvata</span>;
-    if (s === 'rejected') return <span className="inline-flex items-center gap-1 px-2 py-0.5 text-[9px] font-sans uppercase tracking-widest bg-red-500/10 text-red-400 border border-red-500/20">Rifiutata</span>;
-    return <span className="inline-flex items-center gap-1 px-2 py-0.5 text-[9px] font-sans uppercase tracking-widest bg-[#2a2a2a] text-[#888] border border-[#333]">In attesa</span>;
+    if (s === 'approved') return <span className="inline-flex items-center gap-1 px-2.5 py-0.5 text-xs font-medium rounded-full bg-green-500/10 text-green-400 border border-green-500/20">Approvata</span>;
+    if (s === 'rejected') return <span className="inline-flex items-center gap-1 px-2.5 py-0.5 text-xs font-medium rounded-full bg-red-500/10 text-red-400 border border-red-500/20">Rifiutata</span>;
+    return <span className="inline-flex items-center gap-1 px-2.5 py-0.5 text-xs font-medium rounded-full bg-[#2a2a2a] text-[#888] border border-[#333]">In attesa</span>;
   };
 
   // Group reservations by event, sorted alphabetically within each group
@@ -3340,12 +3340,12 @@ function ReservationsTable({ reservations, userRole, events, onDelete, onEdit }:
   return (
     <div className="bg-card border border-[#383838] overflow-hidden">
       <div className="px-7 py-5 border-b border-[#2e2e2e]">
-        <h2 className="hv font-black text-xl uppercase text-white">Prenotazioni</h2>
+        <h2 className="font-bold text-xl text-white">Prenotazioni</h2>
       </div>
 
       {reservations.length === 0 ? (
         <div className="px-7 py-24 text-center">
-          <p className="text-[9px] font-sans uppercase tracking-[0.4em] text-[#666]">Nessuna Prenotazione</p>
+          <p className="text-sm text-[#666]">Nessuna Prenotazione</p>
         </div>
       ) : (
         <div className="space-y-0">
@@ -3353,24 +3353,24 @@ function ReservationsTable({ reservations, userRole, events, onDelete, onEdit }:
             <div key={eventId}>
               {/* Event header */}
               <div className="px-7 py-3 bg-[#141414] border-b border-[#2e2e2e] flex items-center gap-4 flex-wrap">
-                <span className="hv font-black text-sm uppercase text-white tracking-widest">
+                <span className="font-semibold text-sm text-white">
                   {event?.name ?? eventId}
                 </span>
                 {event && (
                   <span className="font-mono text-[9px] text-[#777]">{event.date}</span>
                 )}
-                <span className="text-[9px] font-sans uppercase tracking-widest text-[#777]">
+                <span className="text-xs text-[#777]">
                   {rows.length} {rows.length === 1 ? 'prenotazione' : 'prenotazioni'}
                 </span>
                 {rows.some(r => r.checkedIn) && (
-                  <span className="flex items-center gap-1 text-[9px] font-sans uppercase tracking-widest text-green-400 border border-green-500/20 bg-green-500/5 px-2 py-0.5">
+                  <span className="flex items-center gap-1 text-xs font-medium rounded-full text-green-400 border border-green-500/20 bg-green-500/5 px-2.5 py-0.5">
                     <CheckCircle2 size={10} /> {rows.filter(r => r.checkedIn).length} entrati
                   </span>
                 )}
                 {userRole === 'admin' && (
                   <button
                     onClick={() => exportEventCSV(rows, event?.name ?? eventId)}
-                    className="ml-auto flex items-center gap-1.5 text-[#777] hover:text-accent transition-colors text-[9px] font-sans uppercase tracking-widest">
+                    className="ml-auto flex items-center gap-1.5 text-[#777] hover:text-accent transition-colors text-xs">
                     <Download size={11} /> Scarica
                   </button>
                 )}
@@ -3385,7 +3385,7 @@ function ReservationsTable({ reservations, userRole, events, onDelete, onEdit }:
                         <span className={cn('w-1.5 h-1.5 rounded-full shrink-0',
                           res.status === 'confirmed' ? 'bg-accent blink' : 'bg-[#333]'
                         )} />
-                        <span className={cn('text-[9px] font-sans uppercase tracking-widest',
+                        <span className={cn('text-xs font-medium',
                           res.status === 'confirmed' ? 'text-accent' : 'text-[#999]'
                         )}>{res.status}</span>
                       </div>
@@ -3411,7 +3411,7 @@ function ReservationsTable({ reservations, userRole, events, onDelete, onEdit }:
                   <thead>
                     <tr className="border-b border-[#222]">
                       {['Tavolo', 'Cliente', ...(userRole === 'admin' ? ['PR'] : []), 'Pax', 'Budget', 'Stato', ''].map((h, i) => (
-                        <th key={i} className="px-6 py-3 text-[8px] font-sans font-bold uppercase tracking-[0.35em] text-[#555]">{h}</th>
+                        <th key={i} className="px-6 py-3 text-xs font-medium text-[#555]">{h}</th>
                       ))}
                     </tr>
                   </thead>
@@ -3447,7 +3447,7 @@ function ReservationsTable({ reservations, userRole, events, onDelete, onEdit }:
                           <div className="flex items-center gap-2 flex-wrap">
                             {approvalBadge(res.approvalStatus)}
                             {res.checkedIn && (
-                              <span className="inline-flex items-center gap-1 px-2 py-0.5 text-[9px] font-sans uppercase tracking-widest bg-green-500/10 text-green-400 border border-green-500/20">
+                              <span className="inline-flex items-center gap-1 px-2.5 py-0.5 text-xs font-medium rounded-full bg-green-500/10 text-green-400 border border-green-500/20">
                                 <CheckCircle2 size={9}/> Entrato{res.actualPeople ? ` · ${res.actualPeople}` : ''}
                               </span>
                             )}
@@ -3523,8 +3523,8 @@ function NewEventModal({ venue, floorPlans, onClose, onSubmit, initialData }: {
         <div className="h-[2px] bg-accent shrink-0" />
         <div className="px-6 sm:px-8 py-5 sm:py-6 border-b border-[#2e2e2e] flex items-center justify-between shrink-0">
           <div>
-            <h3 className="hv font-black text-xl uppercase text-white">{isEdit ? 'Modifica Evento' : 'Nuovo Evento'}</h3>
-            <p className="text-[9px] font-sans uppercase tracking-widest text-[#999] mt-1">{venue.name}</p>
+            <h3 className="font-bold text-xl text-white">{isEdit ? 'Modifica Evento' : 'Nuovo Evento'}</h3>
+            <p className="text-sm text-[#777] mt-1">{venue.name}</p>
           </div>
           <button onClick={onClose} className="text-[#999] hover:text-white transition-colors p-1"><X size={18} /></button>
         </div>
@@ -3536,7 +3536,7 @@ function NewEventModal({ venue, floorPlans, onClose, onSubmit, initialData }: {
               <CheckCircle2 size={24} className="text-[#22C55E]" />
             </div>
             <div className="text-center">
-              <p className="hv font-black text-white uppercase text-lg">Evento creato</p>
+              <p className="font-bold text-white text-lg">Evento creato</p>
               <p className="text-[#666] text-xs mt-1">Copia il link di registrazione e condividilo</p>
             </div>
             <div className="w-full bg-[#111] border border-[#2a2a2a] px-4 py-3">
@@ -3544,11 +3544,11 @@ function NewEventModal({ venue, floorPlans, onClose, onSubmit, initialData }: {
             </div>
             <button
               onClick={handleCopy}
-              className="w-full py-3.5 text-[9px] hv font-black uppercase tracking-widest bg-accent text-black hover:bg-white transition-colors flex items-center justify-center gap-2"
+              className="w-full py-3.5 text-sm font-semibold rounded-xl bg-accent text-black hover:bg-white transition-colors flex items-center justify-center gap-2"
             >
               {copied ? <><CheckCircle2 size={13} /> Copiato!</> : 'Copia link'}
             </button>
-            <button onClick={onClose} className="text-[#555] text-[10px] font-mono uppercase tracking-widest hover:text-white transition-colors">
+            <button onClick={onClose} className="text-[#555] text-xs hover:text-white transition-colors">
               Chiudi
             </button>
           </div>
@@ -3570,7 +3570,7 @@ function NewEventModal({ venue, floorPlans, onClose, onSubmit, initialData }: {
           }}>
             <Field label="Nome Evento">
               <input required placeholder="ES. TECHNO FRIDAY"
-                className="w-full bg-bg border border-[#383838] px-4 py-3 text-xs font-sans uppercase tracking-widest text-white placeholder-[#444] outline-none transition-colors"
+                className="w-full bg-bg border border-[#383838] rounded-xl px-4 py-3 text-sm text-white placeholder-[#555] outline-none transition-colors"
                 value={form.name} onChange={e => setForm({ ...form, name: e.target.value })} />
             </Field>
 
@@ -3606,14 +3606,14 @@ function NewEventModal({ venue, floorPlans, onClose, onSubmit, initialData }: {
 
             <Field label="Descrizione (opzionale)">
               <textarea rows={2} placeholder="DETTAGLI..."
-                className="w-full bg-bg border border-[#383838] px-4 py-3 text-xs font-sans uppercase tracking-widest text-white placeholder-[#444] outline-none transition-colors resize-none"
+                className="w-full bg-bg border border-[#383838] rounded-xl px-4 py-3 text-sm text-white placeholder-[#555] outline-none transition-colors resize-none"
                 value={form.description} onChange={e => setForm({ ...form, description: e.target.value })} />
             </Field>
 
             {floorPlans.length > 0 && (
               <Field label="Pianta">
                 <select
-                  className="w-full bg-bg border border-[#383838] px-4 py-3 text-xs font-sans uppercase tracking-widest text-white outline-none transition-colors [color-scheme:dark]"
+                  className="w-full bg-bg border border-[#383838] rounded-xl px-4 py-3 text-sm text-white outline-none transition-colors [color-scheme:dark]"
                   value={form.floorPlanId}
                   onChange={e => setForm({ ...form, floorPlanId: e.target.value })}>
                   {floorPlans.map(fp => (
@@ -3625,11 +3625,11 @@ function NewEventModal({ venue, floorPlans, onClose, onSubmit, initialData }: {
 
             <div className="flex gap-3 pt-2">
               <button type="button" onClick={onClose}
-                className="flex-1 py-3.5 text-[9px] hv font-black uppercase tracking-widest border border-[#383838] text-[#999] hover:text-white hover:border-[#333] transition-all">
+                className="flex-1 py-3.5 text-sm font-medium rounded-xl border border-[#2e2e2e] text-[#777] hover:text-white hover:border-[#444] transition-all">
                 Annulla
               </button>
               <button type="submit"
-                className="flex-1 py-3.5 text-[9px] hv font-black uppercase tracking-widest bg-accent text-black hover:bg-white transition-colors">
+                className="flex-1 py-3.5 text-sm font-semibold rounded-xl bg-accent text-black hover:bg-white transition-colors">
                 {isEdit ? 'Salva Modifiche' : 'Crea Evento'}
               </button>
             </div>
@@ -3644,7 +3644,7 @@ function NewEventModal({ venue, floorPlans, onClose, onSubmit, initialData }: {
 function Field({ label, children }: { label: string; children: React.ReactNode }) {
   return (
     <div className="space-y-1.5">
-      <label className="text-[8px] font-sans font-bold uppercase tracking-widest text-[#999]">{label}</label>
+      <label className="text-xs font-medium text-[#777]">{label}</label>
       {children}
     </div>
   );
@@ -3674,31 +3674,31 @@ function NewClubModal({ onClose, onSubmit, initialData }: {
         <div className="h-[2px] bg-accent shrink-0" />
         <div className="px-6 sm:px-8 py-5 sm:py-6 border-b border-[#2e2e2e] flex items-center justify-between shrink-0">
           <div>
-            <h3 className="hv font-black text-xl uppercase text-white">{isEdit ? 'Modifica Club' : 'Nuovo Club'}</h3>
-            <p className="text-[9px] font-sans uppercase tracking-widest text-[#999] mt-1">{isEdit ? 'Aggiorna nome e indirizzo' : 'Crea il locale e poi la sua piantina'}</p>
+            <h3 className="font-bold text-xl text-white">{isEdit ? 'Modifica Club' : 'Nuovo Club'}</h3>
+            <p className="text-sm text-[#777] mt-1">{isEdit ? 'Aggiorna nome e indirizzo' : 'Crea il locale e poi la sua piantina'}</p>
           </div>
           <button onClick={onClose} className="text-[#999] hover:text-white transition-colors p-1"><X size={18} /></button>
         </div>
 
         <form className="p-6 sm:p-8 space-y-5 overflow-y-auto" onSubmit={(e) => { e.preventDefault(); onSubmit(form); }}>
           <Field label="Nome del Club">
-            <input required placeholder="ES. AMNESIA CLUB"
-              className="w-full bg-bg border border-[#383838] px-4 py-3 text-xs font-sans uppercase tracking-widest text-white placeholder-[#444] outline-none transition-colors"
+            <input required placeholder="Es. Amnesia Club"
+              className="w-full bg-bg border border-[#383838] rounded-xl px-4 py-3 text-sm font-sans text-white placeholder-[#444] outline-none focus:border-accent/40 transition-colors"
               value={form.name} onChange={e => setForm({ ...form, name: e.target.value })} />
           </Field>
           <Field label="Città / Indirizzo">
-            <input placeholder="ES. MILANO"
-              className="w-full bg-bg border border-[#383838] px-4 py-3 text-xs font-sans uppercase tracking-widest text-white placeholder-[#444] outline-none transition-colors"
+            <input placeholder="Es. Milano"
+              className="w-full bg-bg border border-[#383838] rounded-xl px-4 py-3 text-sm font-sans text-white placeholder-[#444] outline-none focus:border-accent/40 transition-colors"
               value={form.address} onChange={e => setForm({ ...form, address: e.target.value })} />
           </Field>
 
           <div className="flex gap-3 pt-2">
             <button type="button" onClick={onClose}
-              className="flex-1 py-3.5 text-[9px] hv font-black uppercase tracking-widest border border-[#383838] text-[#999] hover:text-white hover:border-[#333] transition-all">
+              className="flex-1 py-3.5 text-sm font-medium rounded-xl border border-[#2e2e2e] text-[#777] hover:text-white hover:border-[#444] transition-all">
               Annulla
             </button>
             <button type="submit"
-              className="flex-1 py-3.5 text-[9px] hv font-black uppercase tracking-widest bg-accent text-black hover:bg-white transition-colors">
+              className="flex-1 py-3.5 text-sm font-semibold rounded-xl bg-accent text-black hover:bg-white transition-colors">
               {isEdit ? 'Salva Modifiche' : 'Avanti'}
             </button>
           </div>
@@ -3727,31 +3727,31 @@ function NewFloorPlanModal({ venues, onClose, onSubmit }: {
         <div className="h-[2px] bg-accent shrink-0" />
         <div className="px-6 sm:px-8 py-5 sm:py-6 border-b border-[#2e2e2e] flex items-center justify-between shrink-0">
           <div>
-            <h3 className="hv font-black text-xl uppercase text-white">Nuova Pianta</h3>
-            <p className="text-[9px] font-sans uppercase tracking-widest text-[#999] mt-1">Dai un nome e scegli il locale</p>
+            <h3 className="font-bold text-xl text-white">Nuova Pianta</h3>
+            <p className="text-sm text-[#777] mt-1">Dai un nome e scegli il locale</p>
           </div>
           <button onClick={onClose} className="text-[#999] hover:text-white transition-colors p-1"><X size={18} /></button>
         </div>
         <form className="p-6 sm:p-8 space-y-5 overflow-y-auto" onSubmit={(e) => { e.preventDefault(); if (venueId && name.trim()) onSubmit(venueId, name.trim()); }}>
           <Field label="Nome Pianta">
             <input required placeholder="Es. Piano Terra, VIP Room..."
-              className="w-full bg-bg border border-[#383838] px-4 py-3 text-xs font-sans uppercase tracking-widest text-white placeholder-[#444] outline-none transition-colors"
+              className="w-full bg-bg border border-[#383838] rounded-xl px-4 py-3 text-sm font-sans text-white placeholder-[#444] outline-none focus:border-accent/40 transition-colors"
               value={name} onChange={e => setName(e.target.value)} />
           </Field>
           <Field label="Locale">
             <select required
-              className="w-full bg-bg border border-[#383838] px-4 py-3 text-xs font-sans uppercase tracking-widest text-white outline-none transition-colors [color-scheme:dark]"
+              className="w-full bg-bg border border-[#383838] rounded-xl px-4 py-3 text-sm font-sans text-white outline-none focus:border-accent/40 transition-colors [color-scheme:dark]"
               value={venueId} onChange={e => setVenueId(e.target.value)}>
               {venues.map(v => <option key={v.id} value={v.id}>{v.name}</option>)}
             </select>
           </Field>
           <div className="flex gap-3 pt-2">
             <button type="button" onClick={onClose}
-              className="flex-1 py-3.5 text-[9px] hv font-black uppercase tracking-widest border border-[#383838] text-[#999] hover:text-white hover:border-[#333] transition-all">
+              className="flex-1 py-3.5 text-sm font-medium rounded-xl border border-[#2e2e2e] text-[#777] hover:text-white hover:border-[#444] transition-all">
               Annulla
             </button>
             <button type="submit"
-              className="flex-1 py-3.5 text-[9px] hv font-black uppercase tracking-widest bg-accent text-black hover:bg-white transition-colors">
+              className="flex-1 py-3.5 text-sm font-semibold rounded-xl bg-accent text-black hover:bg-white transition-colors">
               Avanti
             </button>
           </div>
@@ -3779,24 +3779,24 @@ function FloorPlanMetaModal({ fp, onClose, onSubmit }: {
         <div className="h-[2px] bg-accent shrink-0" />
         <div className="px-6 sm:px-8 py-5 sm:py-6 border-b border-[#2e2e2e] flex items-center justify-between shrink-0">
           <div>
-            <h3 className="hv font-black text-xl uppercase text-white">Modifica Pianta</h3>
-            <p className="text-[9px] font-sans uppercase tracking-widest text-[#999] mt-1">Aggiorna il nome della pianta</p>
+            <h3 className="font-bold text-xl text-white">Modifica Pianta</h3>
+            <p className="text-sm text-[#777] mt-1">Aggiorna il nome della pianta</p>
           </div>
           <button onClick={onClose} className="text-[#999] hover:text-white transition-colors p-1"><X size={18} /></button>
         </div>
         <form className="p-6 sm:p-8 space-y-5 overflow-y-auto" onSubmit={(e) => { e.preventDefault(); onSubmit(name); }}>
           <Field label="Nome Pianta">
             <input required
-              className="w-full bg-bg border border-[#383838] px-4 py-3 text-xs font-sans uppercase tracking-widest text-white placeholder-[#444] outline-none transition-colors"
+              className="w-full bg-bg border border-[#383838] rounded-xl px-4 py-3 text-sm font-sans text-white placeholder-[#444] outline-none focus:border-accent/40 transition-colors"
               value={name} onChange={e => setName(e.target.value)} />
           </Field>
           <div className="flex gap-3 pt-2">
             <button type="button" onClick={onClose}
-              className="flex-1 py-3.5 text-[9px] hv font-black uppercase tracking-widest border border-[#383838] text-[#999] hover:text-white hover:border-[#333] transition-all">
+              className="flex-1 py-3.5 text-sm font-medium rounded-xl border border-[#2e2e2e] text-[#777] hover:text-white hover:border-[#444] transition-all">
               Annulla
             </button>
             <button type="submit"
-              className="flex-1 py-3.5 text-[9px] hv font-black uppercase tracking-widest bg-accent text-black hover:bg-white transition-colors">
+              className="flex-1 py-3.5 text-sm font-semibold rounded-xl bg-accent text-black hover:bg-white transition-colors">
               Salva Modifiche
             </button>
           </div>
@@ -3978,7 +3978,7 @@ function CommandPalette({
         <div className="max-h-[55vh] overflow-y-auto">
           {results.length === 0 ? (
             <div className="py-12 text-center">
-              <p className="text-[9px] font-sans uppercase tracking-[0.4em] text-[#444]">Nessun risultato</p>
+              <p className="text-sm text-[#555]">Nessun risultato</p>
             </div>
           ) : (
             <ul>
@@ -3999,7 +3999,7 @@ function CommandPalette({
                         <p className="text-[9px] font-sans text-[#555] truncate mt-0.5">{item.sub}</p>
                       )}
                     </div>
-                    <span className="text-[8px] font-sans uppercase tracking-widest text-[#444] shrink-0">{typeLabel[item.type]}</span>
+                    <span className="text-xs text-[#555] shrink-0">{typeLabel[item.type]}</span>
                   </button>
                 </li>
               ))}
@@ -4008,7 +4008,7 @@ function CommandPalette({
         </div>
 
         {/* Footer hints */}
-        <div className="px-5 py-2.5 border-t border-[#1e1e1e] flex items-center justify-between text-[8px] font-sans uppercase tracking-widest text-[#444]">
+        <div className="px-5 py-2.5 border-t border-[#1e1e1e] flex items-center justify-between text-xs text-[#555]">
           <div className="flex items-center gap-4">
             <span className="flex items-center gap-1"><kbd className="font-mono border border-[#2a2a2a] px-1 py-0.5">↑↓</kbd> naviga</span>
             <span className="flex items-center gap-1"><kbd className="font-mono border border-[#2a2a2a] px-1 py-0.5">↵</kbd> apri</span>
@@ -4078,7 +4078,7 @@ function BottomTabBar({ user, view, onNav, pendingCount, prPendingCount }: {
                 </span>
               )}
             </motion.div>
-            <span className="text-[8px] font-sans uppercase tracking-widest">{tab.label}</span>
+            <span className="text-[10px] font-medium">{tab.label}</span>
           </button>
         ))}
       </div>

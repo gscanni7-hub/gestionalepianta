@@ -861,27 +861,43 @@ export default function App() {
   /* ── LOGIN ──────────────────────────────────────────────── */
   if (!user) {
     return (
-      <div className="min-h-screen flex items-center justify-center p-4 relative overflow-hidden" style={{ backgroundColor: '#0d0c0b' }}>
-        {/* Watermark */}
-        <div aria-hidden className="absolute bottom-0 right-0 pointer-events-none select-none overflow-hidden">
-          <span className="hv font-black text-white/[0.03] select-none whitespace-nowrap block" style={{ fontSize: 'clamp(140px, 32vw, 420px)', letterSpacing: '-0.05em', transform: 'translate(20%, 20%)' }}>NIGHTPLAN</span>
+      <div className="min-h-screen flex flex-col md:flex-row" style={{ backgroundColor: '#0d0c0b' }}>
+
+        {/* ── Left brand panel (desktop only) ── */}
+        <div className="hidden md:flex flex-col justify-between flex-1 relative overflow-hidden p-12" style={{ backgroundColor: '#0f0e0c' }}>
+          <div className="absolute inset-0 bg-[radial-gradient(ellipse_80%_60%_at_20%_90%,rgba(212,98,42,0.09)_0%,transparent_100%)] pointer-events-none" />
+          <div className="relative z-10 flex items-center gap-3">
+            <img src="/Logo.png" alt="Nightplan" className="w-10 h-10 object-contain" />
+            <span className="hv font-black text-white text-[17px]">Nightplan</span>
+          </div>
+          <div className="relative z-10">
+            <h1 className="hv font-black text-white leading-tight tracking-tight mb-4" style={{ fontSize: 'clamp(40px, 4vw, 56px)' }}>
+              Gestisci<br />ogni serata.
+            </h1>
+            <p className="text-[#4a4845] text-sm leading-relaxed max-w-xs">
+              Tavoli, prenotazioni e ingressi in un'unica piattaforma.
+            </p>
+          </div>
+          <p className="relative z-10 text-[9px] font-sans text-[#2a2a28] uppercase tracking-[0.3em]">© 2025 Nightplan</p>
         </div>
-        {/* Accent glow */}
-        <div className="absolute inset-0 bg-[radial-gradient(ellipse_70%_60%_at_50%_70%,rgba(212,98,42,0.06)_0%,transparent_100%)] pointer-events-none" />
+
+        {/* ── Right form panel ── */}
+        <div className="w-full md:w-[440px] lg:w-[480px] flex flex-col items-center justify-center min-h-screen p-6 md:p-12 relative overflow-hidden" style={{ backgroundColor: '#141412' }}>
+          <div className="absolute inset-0 bg-[radial-gradient(ellipse_70%_60%_at_50%_80%,rgba(212,98,42,0.05)_0%,transparent_100%)] pointer-events-none" />
 
         <motion.div
           initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.38, ease: 'easeOut' }}
           className="relative w-full max-w-sm z-10"
         >
-          {/* Brand */}
-          <div className="flex items-center gap-3 mb-6 px-1">
+          {/* Brand — mobile only */}
+          <div className="flex items-center gap-3 mb-6 px-1 md:hidden">
             <img src="/Logo.png" alt="Nightplan" className="w-9 h-9 object-contain" />
             <p className="hv font-black text-white text-[15px] leading-tight">Nightplan</p>
           </div>
 
-          {/* Card */}
-          <div className="bg-[#141412] border border-white/[0.06] rounded-2xl p-8 shadow-[0_24px_60px_rgba(0,0,0,0.5)]">
+          {/* Card — border on mobile only */}
+          <div className="bg-[#141412] md:bg-transparent border border-white/[0.06] md:border-0 rounded-2xl p-8 md:p-0 shadow-[0_24px_60px_rgba(0,0,0,0.5)] md:shadow-none">
             <div className="w-full">
             <AnimatePresence mode="wait">
               {authScreen === 'login' ? (
@@ -909,7 +925,7 @@ export default function App() {
                           if (match) setLoginPassword(match.password);
                         }}
                         placeholder="tua@email.it"
-                        className="auth-input w-full bg-[#111111] border border-[#2C2C2E] px-5 py-3.5 text-sm text-white placeholder-[#3A3A3C] font-sans"
+                        className="auth-input w-full bg-[#0d0c0b] border border-[#3a3835] px-5 py-3.5 text-sm text-white placeholder-[#4a4845] font-sans"
                       />
                       <datalist id="nightplan-accounts">
                         {SAVED_ACCOUNTS.map(a => <option key={a.email} value={a.email}>{a.label}</option>)}
@@ -928,7 +944,7 @@ export default function App() {
                         <input type={showLoginPassword ? 'text' : 'password'} autoComplete="current-password" required value={loginPassword}
                           onChange={e => { setLoginPassword(e.target.value); setLoginError(''); }}
                           placeholder="••••••••"
-                          className="auth-input w-full bg-[#111111] border border-[#2C2C2E] px-5 py-3.5 pr-11 text-sm text-white placeholder-[#3A3A3C] font-sans" />
+                          className="auth-input w-full bg-[#0d0c0b] border border-[#3a3835] px-5 py-3.5 pr-11 text-sm text-white placeholder-[#4a4845] font-sans" />
                         <button type="button" onClick={() => setShowLoginPassword(o => !o)}
                           className="absolute right-4 top-1/2 -translate-y-1/2 text-[#8E8E93] hover:text-accent transition-colors">
                           {showLoginPassword ? <EyeOff size={14} /> : <Eye size={14} />}
@@ -1221,7 +1237,8 @@ export default function App() {
             </div>
           </div>
         </motion.div>
-        <p className="absolute bottom-5 text-[9px] font-sans text-[#2C2C2E] uppercase tracking-[0.3em]">© 2025 Nightplan</p>
+        <p className="md:hidden absolute bottom-5 text-[9px] font-sans text-[#2C2C2E] uppercase tracking-[0.3em]">© 2025 Nightplan</p>
+        </div>{/* chiude right panel */}
       </div>
     );
   }

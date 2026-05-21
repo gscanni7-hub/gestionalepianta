@@ -2946,8 +2946,11 @@ function SidebarContent({ user, view, onNav, onLogout, occupancyPct = 0, revenue
             </NavSection>
             <NavSection label="Gestione">
               <NavLink icon={<BarChart3 size={14}/>} label="Prenotazioni"
-                active={view==='reservations'||view==='approvals'}
-                onClick={() => onNav('reservations')}
+                active={view==='reservations'}
+                onClick={() => onNav('reservations')} />
+              <NavLink icon={<Bell size={14}/>} label="Approvazioni"
+                active={view==='approvals'}
+                onClick={() => onNav('approvals')}
                 badge={pendingCount} />
               <NavLink icon={<Users size={14}/>} label="Team PR"
                 active={view==='pr-management'}

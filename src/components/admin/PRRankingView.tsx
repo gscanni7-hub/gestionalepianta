@@ -36,7 +36,7 @@ export default function PRRankingView({ managedUsers, reservations }: Props) {
   return (
     <div>
       <p className="text-xs font-medium text-[#555] mb-5">Ranking PR — per incasso</p>
-      <div className="border border-[#2a2a2a] overflow-hidden">
+      <div className="border border-[#2a2a2a] overflow-hidden rounded-xl">
         {/* Header */}
         <div className="grid grid-cols-[40px_1fr_80px_80px_100px] gap-0 px-5 py-3 bg-[#141414] border-b border-[#2a2a2a]">
           <span className="text-[8px] font-sans uppercase tracking-[0.3em] text-[#555]">#</span>
@@ -72,7 +72,7 @@ export default function PRRankingView({ managedUsers, reservations }: Props) {
                 {/* Name */}
                 <div className="flex items-center gap-3 min-w-0">
                   <div
-                    className="w-8 h-8 flex items-center justify-center shrink-0 overflow-hidden"
+                    className="w-8 h-8 flex items-center justify-center shrink-0 overflow-hidden rounded-xl"
                     style={{ border: `1px solid ${medalColor ? medalColor + '40' : '#2a2a2a'}` }}
                   >
                     {pr.profileImage

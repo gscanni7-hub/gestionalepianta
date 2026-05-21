@@ -32,7 +32,7 @@ export default function PRLinkGenerator({ events, venues, user }: Props) {
   if (activeEvents.length === 0) return null;
 
   return (
-    <div className="mt-8 border border-[#2a2a2a] bg-[#1a1a1a]">
+    <div className="mt-8 border border-[#2a2a2a] bg-[#1a1a1a] rounded-xl overflow-hidden">
       {/* Header toggle */}
       <button
         onClick={() => setOpen(o => !o)}
@@ -78,14 +78,14 @@ export default function PRLinkGenerator({ events, venues, user }: Props) {
                     </div>
 
                     <div className="flex items-center gap-2">
-                      <div className="flex-1 bg-[#111] border border-[#2a2a2a] px-3 py-2 overflow-hidden">
+                      <div className="flex-1 bg-[#111] border border-[#2a2a2a] px-3 py-2 overflow-hidden rounded-lg">
                         <p className="text-[9px] font-mono text-[#666] truncate">{link}</p>
                       </div>
                       <motion.button
                         onClick={() => handleCopy(link, event.id)}
                         whileTap={{ scale: 0.93 }}
                         className={cn(
-                          'p-2.5 border transition-colors shrink-0',
+                          'p-2.5 border transition-colors shrink-0 rounded-lg',
                           isCopied
                             ? 'border-[#22C55E]/40 text-[#22C55E] bg-[#22C55E]/10'
                             : 'border-[#2a2a2a] text-[#666] hover:text-white hover:border-[#3a3a3a]'
@@ -97,7 +97,7 @@ export default function PRLinkGenerator({ events, venues, user }: Props) {
                         href={link}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="p-2.5 border border-[#2a2a2a] text-[#666] hover:text-white hover:border-[#3a3a3a] transition-colors shrink-0"
+                        className="p-2.5 border border-[#2a2a2a] text-[#666] hover:text-white hover:border-[#3a3a3a] transition-colors shrink-0 rounded-lg"
                       >
                         <ExternalLink size={14} />
                       </a>

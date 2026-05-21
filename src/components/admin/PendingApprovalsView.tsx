@@ -26,7 +26,7 @@ export default function PendingApprovalsView({
   if (totalPending === 0) {
     return (
       <div className="flex flex-col items-center justify-center py-32 gap-4 text-center">
-        <div className="w-16 h-16 bg-green-500/10 border border-green-500/20 flex items-center justify-center">
+        <div className="w-16 h-16 bg-green-500/10 border border-green-500/20 flex items-center justify-center rounded-2xl">
           <CheckCheck size={28} className="text-green-400" />
         </div>
         <p className="font-bold text-2xl text-white">Tutto in ordine</p>
@@ -45,7 +45,7 @@ export default function PendingApprovalsView({
               <span className="text-[9px] font-sans uppercase tracking-[0.4em] text-accent font-bold">
                 Prenotazioni tavolo in attesa
               </span>
-              <span className="bg-accent text-black text-[8px] hv font-black px-2 py-0.5 leading-none">
+              <span className="bg-accent text-black text-[8px] hv font-black px-2 py-0.5 leading-none rounded-full">
                 {pendingResv.length}
               </span>
             </div>
@@ -60,7 +60,7 @@ export default function PendingApprovalsView({
             {pendingResv.map(r => (
               <div
                 key={r.id}
-                className="flex items-center justify-between p-5 bg-[#1a1a1a] border border-[#2a2a2a] hover:border-[#333] transition-colors gap-4"
+                className="flex items-center justify-between p-5 bg-[#1a1a1a] border border-[#2a2a2a] hover:border-[#333] transition-colors gap-4 rounded-xl"
               >
                 <div className="min-w-0 flex-1">
                   <div className="flex items-center gap-3 flex-wrap">
@@ -111,10 +111,10 @@ export default function PendingApprovalsView({
             {pendingUsers.map(u => (
               <div
                 key={u.id}
-                className="flex items-center justify-between p-5 bg-[#1a1a1a] border border-[#2a2a2a] hover:border-[#333] transition-colors gap-4"
+                className="flex items-center justify-between p-5 bg-[#1a1a1a] border border-[#2a2a2a] hover:border-[#333] transition-colors gap-4 rounded-xl"
               >
                 <div className="flex items-center gap-4 min-w-0">
-                  <div className="w-9 h-9 bg-[#2a2a2a] border border-[#383838] flex items-center justify-center shrink-0">
+                  <div className="w-9 h-9 bg-[#2a2a2a] border border-[#383838] flex items-center justify-center shrink-0 rounded-xl">
                     <span className="hv font-black text-[#888] text-xs">
                       {u.displayName.substring(0, 2).toUpperCase()}
                     </span>

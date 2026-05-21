@@ -1501,13 +1501,13 @@ export default function App() {
                             return liveFloorPlans.length === 0 ? (
                             <EmptyState icon={<Map size={28} />} label="Nessuna pianta per questo club." />
                           ) : (
-                            <div className="border border-[#383838] bg-card divide-y divide-[#2a2a2a]">
+                            <div className="border border-[#383838] bg-card divide-y divide-[#2a2a2a] rounded-xl overflow-hidden">
                               {liveFloorPlans.map(fp => (
                                 <div key={fp.id} className="px-7 py-4 flex items-center justify-between group hover:bg-white/[0.01] transition-colors">
                                   <div className="flex items-center gap-4">
                                     <Map size={14} className="text-[#888] shrink-0" />
                                     <div>
-                                      <p className="hv font-black text-sm uppercase text-white">{fp.name}</p>
+                                      <p className="font-semibold text-sm text-white">{fp.name}</p>
                                       <p className="text-[8px] font-sans text-[#999] mt-0.5">{fp.tables.length} tavoli</p>
                                     </div>
                                   </div>
@@ -1681,7 +1681,7 @@ export default function App() {
                       </div>
                       <div className="space-y-6">
                         {venuesToShow.map(venue => (
-                          <div key={venue.id} className="border border-[#383838] bg-card">
+                          <div key={venue.id} className="border border-[#383838] bg-card rounded-xl overflow-hidden">
                             {!filteredVenue && (
                               <div className="px-7 py-5 border-b border-[#2e2e2e]">
                                 <h3 className="font-bold text-xl text-white">{venue.name}</h3>
@@ -1699,7 +1699,7 @@ export default function App() {
                                     <div className="flex items-center gap-4">
                                       <Map size={14} className="text-[#888] shrink-0" />
                                       <div>
-                                        <p className="hv font-black text-sm uppercase text-white">{fp.name}</p>
+                                        <p className="font-semibold text-sm text-white">{fp.name}</p>
                                         <p className="text-[8px] font-sans text-[#999] mt-0.5">{fp.tables.length} tavoli</p>
                                       </div>
                                     </div>
@@ -1807,22 +1807,22 @@ export default function App() {
 
                   {/* KPIs */}
                   <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 mt-8 mb-10">
-                    <div className="border border-[#2a2a2a] bg-card px-6 py-6">
+                    <div className="border border-[#2a2a2a] bg-card px-6 py-6 rounded-xl">
                       <div className="text-accent mb-4"><BarChart3 size={18}/></div>
                       <div className="hv font-black text-4xl text-white leading-none">{myRes.length}</div>
                       <div className="text-xs text-[#555] mt-3">Tavoli prenotati</div>
                     </div>
-                    <div className="border border-[#2a2a2a] bg-card px-6 py-6">
+                    <div className="border border-[#2a2a2a] bg-card px-6 py-6 rounded-xl">
                       <div className="text-accent mb-4"><TrendingUp size={18}/></div>
                       <div className="hv font-black text-4xl text-white leading-none">€{totalBudget >= 1000 ? `${(totalBudget/1000).toFixed(1)}K` : totalBudget}</div>
                       <div className="text-xs text-[#555] mt-3">Budget generato</div>
                     </div>
-                    <div className="border border-[#2a2a2a] bg-card px-6 py-6">
+                    <div className="border border-[#2a2a2a] bg-card px-6 py-6 rounded-xl">
                       <div className="text-accent mb-4"><Calendar size={18}/></div>
                       <div className="hv font-black text-4xl text-white leading-none">{myEventIds.length}</div>
                       <div className="text-xs text-[#555] mt-3">Serate lavorate</div>
                     </div>
-                    <div className="border border-[#2a2a2a] bg-card px-6 py-6">
+                    <div className="border border-[#2a2a2a] bg-card px-6 py-6 rounded-xl">
                       <div className="text-accent mb-4"><CheckCircle2 size={18}/></div>
                       <div className="hv font-black text-4xl text-white leading-none">{approvalRate}<span className="text-xl text-[#555]">%</span></div>
                       <div className="mt-3 h-1 bg-[#1e1e1e] rounded-full overflow-hidden">
@@ -1937,7 +1937,7 @@ export default function App() {
               animate={{ opacity: 1, y: 0, scale: 1 }}
               exit={{ opacity: 0, y: 8, scale: 0.96 }}
               transition={{ duration: 0.2 }}
-              className="bg-[#1e1e1e] border border-[#2e2e2e] border-l-4 border-l-accent px-5 py-4 min-w-[260px] shadow-2xl"
+              className="bg-[#1e1e1e] border border-[#2e2e2e] border-l-4 border-l-accent px-5 py-4 min-w-[260px] shadow-2xl rounded-xl"
             >
               <div className="flex items-center gap-2">
                 <CheckCircle2 size={13} className="text-accent shrink-0" />
@@ -2118,7 +2118,7 @@ function PRProfile({ user, onSave }: {
         {/* Avatar */}
         <div className="flex flex-col items-center gap-4">
           <button type="button" onClick={() => fileRef.current?.click()}
-            className="relative group w-24 h-24 bg-[#2a2a2a] border border-[#383838] overflow-hidden hover:border-accent/40 transition-colors">
+            className="relative group w-24 h-24 bg-[#2a2a2a] border border-[#383838] overflow-hidden hover:border-accent/40 transition-colors rounded-2xl">
             {image
               ? <img src={image} alt="" className="w-full h-full object-cover" />
               : <span className="hv font-black text-accent text-2xl">{initials}</span>
@@ -2136,16 +2136,16 @@ function PRProfile({ user, onSave }: {
           <div className="grid grid-cols-2 gap-4">
             <Field label="Nome">
               <input required value={firstName} onChange={e => setFirstName(e.target.value)}
-                className="w-full bg-bg border border-[#383838] px-4 py-3 text-sm text-white outline-none focus:border-accent/40 transition-colors font-sans" />
+                className="w-full bg-bg border border-[#383838] rounded-xl px-4 py-3 text-sm text-white outline-none focus:border-accent/40 transition-colors font-sans" />
             </Field>
             <Field label="Cognome">
               <input value={lastName} onChange={e => setLastName(e.target.value)}
-                className="w-full bg-bg border border-[#383838] px-4 py-3 text-sm text-white outline-none focus:border-accent/40 transition-colors font-sans" />
+                className="w-full bg-bg border border-[#383838] rounded-xl px-4 py-3 text-sm text-white outline-none focus:border-accent/40 transition-colors font-sans" />
             </Field>
           </div>
           <Field label="Email">
             <input disabled value={user.email}
-              className="w-full bg-[#080808] border border-[#1a1a1a] px-4 py-3 text-sm text-[#666] outline-none font-sans cursor-not-allowed" />
+              className="w-full bg-[#080808] border border-[#1a1a1a] rounded-xl px-4 py-3 text-sm text-[#666] outline-none font-sans cursor-not-allowed" />
           </Field>
         </div>
 
@@ -2216,10 +2216,10 @@ function PRManagementPage({ managedUsers, reservations, events, selectedPR, onSe
           {prUsers.map(pr => {
             const stats = prStats(pr.id);
             return (
-              <div key={pr.id} className="border border-[#2a2a2a] bg-card p-6 flex flex-col gap-5 hover:border-[#3a3a3a] transition-colors">
+              <div key={pr.id} className="border border-[#2a2a2a] bg-card p-6 flex flex-col gap-5 hover:border-[#3a3a3a] transition-colors rounded-xl">
                 {/* Header */}
                 <div className="flex items-center gap-4">
-                  <div className="w-11 h-11 bg-[#1a1a1a] border border-[#2a2a2a] flex items-center justify-center shrink-0 overflow-hidden">
+                  <div className="w-11 h-11 bg-[#1a1a1a] border border-[#2a2a2a] flex items-center justify-center shrink-0 overflow-hidden rounded-xl">
                     {pr.profileImage
                       ? <img src={pr.profileImage} alt="" className="w-full h-full object-cover" />
                       : <span className="hv font-black text-accent text-sm">{pr.displayName.slice(0,2).toUpperCase()}</span>}
@@ -2287,7 +2287,7 @@ function PRDetailView({ pr, reservations, events, onBack, onUpdateStatus, status
 
       {/* Header */}
       <div className="flex items-center gap-5 mb-8">
-        <div className="w-16 h-16 bg-[#1a1a1a] border border-[#2a2a2a] flex items-center justify-center shrink-0 overflow-hidden">
+        <div className="w-16 h-16 bg-[#1a1a1a] border border-[#2a2a2a] flex items-center justify-center shrink-0 overflow-hidden rounded-2xl">
           {pr.profileImage
             ? <img src={pr.profileImage} alt="" className="w-full h-full object-cover" />
             : <span className="hv font-black text-accent text-xl">{pr.displayName.slice(0,2).toUpperCase()}</span>}
@@ -2305,7 +2305,7 @@ function PRDetailView({ pr, reservations, events, onBack, onUpdateStatus, status
         {/* Left: info + actions */}
         <div className="space-y-4">
           {/* Info card */}
-          <div className="border border-[#2a2a2a] bg-card p-5 space-y-4">
+          <div className="border border-[#2a2a2a] bg-card p-5 space-y-4 rounded-xl">
             <p className="text-xs text-[#555] mb-1">Informazioni</p>
             {[
               { label: 'Email', value: pr.email },
@@ -2353,7 +2353,7 @@ function PRDetailView({ pr, reservations, events, onBack, onUpdateStatus, status
               { label: 'Serate', value: myEventIds.length },
               { label: 'Approv.', value: `${approvalRate}%` },
             ].map(({ label, value }) => (
-              <div key={label} className="border border-[#2a2a2a] bg-card px-4 py-4">
+              <div key={label} className="border border-[#2a2a2a] bg-card px-4 py-4 rounded-xl">
                 <p className="hv font-black text-2xl text-white">{value}</p>
                 <p className="text-xs text-[#555] mt-2">{label}</p>
               </div>
@@ -2362,7 +2362,7 @@ function PRDetailView({ pr, reservations, events, onBack, onUpdateStatus, status
 
           {/* Barra approvazione */}
           {myRes.length > 0 && (
-            <div className="border border-[#2a2a2a] bg-card px-5 py-4">
+            <div className="border border-[#2a2a2a] bg-card px-5 py-4 rounded-xl">
               <div className="flex justify-between mb-2">
                 <span className="text-xs text-[#555]">Tasso approvazione</span>
                 <span className="text-[9px] hv font-black text-accent">{approvalRate}%</span>
@@ -2413,7 +2413,7 @@ function ReservationQuickEditModal({ reservation, onClose, onSave }: {
       <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
         className="absolute inset-0 bg-black/90 backdrop-blur-sm" onClick={onClose} />
       <motion.div initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.2 }}
-        className="relative w-full sm:max-w-md bg-card border-t border-x sm:border border-[#383838] overflow-hidden rounded-t-2xl sm:rounded-none max-h-[90vh] flex flex-col">
+        className="relative w-full sm:max-w-md bg-card border-t border-x sm:border border-[#383838] overflow-hidden rounded-t-2xl sm:rounded-2xl max-h-[90vh] flex flex-col">
         <div className="h-[2px] bg-accent shrink-0" />
         <div className="px-6 py-5 border-b border-[#2e2e2e] flex items-center justify-between shrink-0">
           <div>
@@ -2427,12 +2427,12 @@ function ReservationQuickEditModal({ reservation, onClose, onSave }: {
             <div>
               <label className="block text-xs font-medium text-[#666] mb-2">N. Ospiti</label>
               <input type="number" min={1} value={guests} onChange={e => setGuests(Number(e.target.value))}
-                className="w-full bg-[#141414] border border-[#383838] px-4 py-3 text-sm text-white outline-none focus:border-accent/40 transition-colors font-sans" />
+                className="w-full bg-[#141414] border border-[#383838] rounded-xl px-4 py-3 text-sm text-white outline-none focus:border-accent/40 transition-colors font-sans" />
             </div>
             <div>
               <label className="block text-xs font-medium text-[#666] mb-2">Budget €</label>
               <input type="number" min={0} value={budget} onChange={e => setBudget(Number(e.target.value))}
-                className="w-full bg-[#141414] border border-[#383838] px-4 py-3 text-sm text-white outline-none focus:border-accent/40 transition-colors font-sans" />
+                className="w-full bg-[#141414] border border-[#383838] rounded-xl px-4 py-3 text-sm text-white outline-none focus:border-accent/40 transition-colors font-sans" />
             </div>
           </div>
           <div>
@@ -2444,7 +2444,7 @@ function ReservationQuickEditModal({ reservation, onClose, onSave }: {
           <div>
             <label className="block text-xs font-medium text-[#666] mb-2">Note</label>
             <textarea value={notes} onChange={e => setNotes(e.target.value)} rows={3}
-              className="w-full bg-[#141414] border border-[#383838] px-4 py-3 text-sm text-white placeholder-[#444] outline-none focus:border-accent/40 transition-colors font-sans resize-none" />
+              className="w-full bg-[#141414] border border-[#383838] rounded-xl px-4 py-3 text-sm text-white placeholder-[#444] outline-none focus:border-accent/40 transition-colors font-sans resize-none" />
           </div>
           <div className="flex gap-3 pt-2">
             <button type="button" onClick={onClose}
@@ -2480,17 +2480,17 @@ function HistoryEventRow({ event, venueName, reservations, approvedCount, totalB
   };
 
   return (
-    <div className={cn('border border-[#2a2a2a] border-l-4 bg-card overflow-hidden', borderColor)}>
+    <div className={cn('border border-[#2a2a2a] border-l-4 bg-card overflow-hidden rounded-xl', borderColor)}>
       <button
         onClick={() => setOpen(o => !o)}
         className="w-full px-6 py-5 flex items-center justify-between hover:bg-white/[0.02] transition-colors text-left"
       >
         <div className="flex items-center gap-5 min-w-0">
-          <div className="w-10 h-10 bg-[#1a1a1a] border border-[#333] flex items-center justify-center shrink-0">
+          <div className="w-10 h-10 bg-[#1a1a1a] border border-[#333] flex items-center justify-center shrink-0 rounded-xl">
             <Calendar size={14} className="text-accent" />
           </div>
           <div className="min-w-0">
-            <p className="hv font-black text-sm uppercase text-white truncate">{event.name}</p>
+            <p className="font-semibold text-sm text-white truncate">{event.name}</p>
             <p className="text-xs text-[#666] mt-0.5">{venueName} · {event.date}</p>
           </div>
         </div>
@@ -2520,7 +2520,7 @@ function HistoryEventRow({ event, venueName, reservations, approvedCount, totalB
                 <div key={r.id} className="px-6 py-3.5 flex items-center justify-between gap-4">
                   <div className="flex items-center gap-4 min-w-0">
                     <div className={cn(
-                      'w-7 h-7 border flex items-center justify-center shrink-0',
+                      'w-7 h-7 border flex items-center justify-center shrink-0 rounded-lg',
                       r.checkedIn ? 'bg-green-500/10 border-green-500/30' : 'bg-[#141414] border-[#252525]'
                     )}>
                       <span className={cn('text-[9px] hv font-black', r.checkedIn ? 'text-green-400' : 'text-accent')}>
@@ -2618,10 +2618,10 @@ function CheckinRow({ res, events, venues, onCheckIn, onUndoCheckIn, onUpdatePeo
                 <span className="text-xs text-[#555]">Persone entrate</span>
                 <div className="flex items-center gap-3">
                   <button onClick={() => setPeople(p => Math.max(1, p - 1))}
-                    className="w-8 h-8 border border-[#333] text-[#888] hover:text-white hover:border-[#555] transition-colors text-xl leading-none flex items-center justify-center">−</button>
+                    className="w-8 h-8 border border-[#333] text-[#888] hover:text-white hover:border-[#555] transition-colors text-xl leading-none flex items-center justify-center rounded-xl">−</button>
                   <span className="hv font-black text-2xl text-white w-8 text-center">{people}</span>
                   <button onClick={() => setPeople(p => p + 1)}
-                    className="w-8 h-8 border border-[#333] text-[#888] hover:text-white hover:border-[#555] transition-colors text-xl leading-none flex items-center justify-center">+</button>
+                    className="w-8 h-8 border border-[#333] text-[#888] hover:text-white hover:border-[#555] transition-colors text-xl leading-none flex items-center justify-center rounded-xl">+</button>
                 </div>
               </div>
 
@@ -2766,7 +2766,7 @@ function HostCheckinView({ reservations, events, venues, userRole, currentUser, 
         )}
 
         <div className="flex items-center gap-3">
-          <div className="flex-1 h-1 bg-[#222] overflow-hidden">
+          <div className="flex-1 h-1 bg-[#222] overflow-hidden rounded-full">
             <motion.div className="h-full bg-accent" initial={{ width: 0 }}
               animate={{ width: `${pct}%` }} transition={{ duration: 0.6, ease: 'easeOut' }} />
           </div>
@@ -2775,7 +2775,7 @@ function HostCheckinView({ reservations, events, venues, userRole, currentUser, 
       </div>
 
       {/* Tab switcher */}
-      <div className="flex gap-0 mb-5 max-w-xl mx-auto w-full border border-[#2a2a2a]">
+      <div className="flex gap-0 mb-5 max-w-xl mx-auto w-full border border-[#2a2a2a] rounded-xl overflow-hidden">
         {(['lista', 'ingressi', 'pianta'] as const).map(t => (
           <button key={t}
             onClick={() => setTab(t)}
@@ -2801,7 +2801,7 @@ function HostCheckinView({ reservations, events, venues, userRole, currentUser, 
               placeholder="Cerca cliente, tavolo, PR…"
               value={search}
               onChange={e => setSearch(e.target.value)}
-              className="w-full bg-[#1e1e1e] border border-[#2e2e2e] px-4 py-3 text-sm font-sans text-white placeholder-[#444] outline-none focus:border-accent/40 transition-colors"
+              className="w-full bg-[#1e1e1e] border border-[#2e2e2e] rounded-xl px-4 py-3 text-sm font-sans text-white placeholder-[#444] outline-none focus:border-accent/40 transition-colors"
             />
             {search && (
               <button onClick={() => setSearch('')}
@@ -2817,7 +2817,7 @@ function HostCheckinView({ reservations, events, venues, userRole, currentUser, 
               <p className="text-xs text-[#555] mb-2 px-1">
                 Da fare — {pending.length}
               </p>
-              <div className="border border-[#2a2a2a] bg-card overflow-hidden">
+              <div className="border border-[#2a2a2a] bg-card overflow-hidden rounded-xl">
                 {pending.map(res => (
                   <CheckinRow key={res.id} res={res} events={events} venues={venues}
                     onCheckIn={onCheckIn} onUndoCheckIn={onUndoCheckIn} onUpdatePeople={onUpdatePeople} />
@@ -2840,7 +2840,7 @@ function HostCheckinView({ reservations, events, venues, userRole, currentUser, 
                 {showEntered && (
                   <motion.div initial={{ height: 0, opacity: 0 }} animate={{ height: 'auto', opacity: 1 }}
                     exit={{ height: 0, opacity: 0 }} transition={{ duration: 0.2 }} className="overflow-hidden">
-                    <div className="border border-[#2a2a2a] bg-card overflow-hidden">
+                    <div className="border border-[#2a2a2a] bg-card overflow-hidden rounded-xl">
                       {entered.map(res => (
                         <CheckinRow key={res.id} res={res} events={events} venues={venues}
                           onCheckIn={onCheckIn} onUndoCheckIn={onUndoCheckIn} onUpdatePeople={onUpdatePeople} />
@@ -3011,7 +3011,7 @@ function SidebarContent({ user, view, onNav, onLogout, occupancyPct = 0, revenue
           onClick={() => user.role === 'pr' ? onNav('profile') : undefined}
           className={cn('flex items-center gap-3 mb-5 w-full text-left', user.role === 'pr' && 'group cursor-pointer')}
         >
-          <div className="w-9 h-9 bg-[#2a2a2a] border border-[#383838] flex items-center justify-center shrink-0 overflow-hidden group-hover:border-accent/30 transition-colors">
+          <div className="w-9 h-9 bg-[#2a2a2a] border border-[#383838] flex items-center justify-center shrink-0 overflow-hidden group-hover:border-accent/30 transition-colors rounded-xl">
             {user.profileImage
               ? <img src={user.profileImage} alt="" className="w-full h-full object-cover" />
               : <span className="hv font-black text-accent text-xs">{user.displayName.substring(0, 2).toUpperCase()}</span>
@@ -3078,7 +3078,7 @@ function NavLink({ icon, label, active, onClick, badge }: { icon: React.ReactNod
   return (
     <button onClick={onClick}
       className={cn(
-        'flex items-center gap-3 w-full px-3 py-2.5 text-sm font-medium transition-all duration-200 group border-l-2',
+        'flex items-center gap-3 w-full px-3 py-2.5 text-sm font-medium transition-all duration-200 group border-l-2 rounded-lg',
         active
           ? 'text-accent border-accent bg-accent/5'
           : 'text-[#777] border-transparent hover:text-white hover:border-[#333] hover:bg-white/[0.02]'
@@ -3088,7 +3088,7 @@ function NavLink({ icon, label, active, onClick, badge }: { icon: React.ReactNod
       </span>
       <span className="flex-1 text-left">{label}</span>
       {badge != null && badge > 0 && (
-        <span className="bg-accent text-black text-[8px] hv font-black px-1.5 py-0.5 leading-none min-w-[18px] text-center shrink-0">
+        <span className="bg-accent text-black text-[8px] hv font-black px-1.5 py-0.5 leading-none min-w-[18px] text-center shrink-0 rounded-full">
           {badge}
         </span>
       )}
@@ -3129,13 +3129,13 @@ function VenueCard({ venue, eventCount, onClick, onEdit, onDelete }: {
       whileHover={{ y: -3 }}
       whileTap={{ scale: 0.985 }}
       transition={{ duration: 0.3, ease: easeOutQuart }}
-      className="group bg-card border border-[#383838] cursor-pointer overflow-hidden flex flex-col relative card-hover"
+      className="group bg-card border border-[#383838] cursor-pointer overflow-hidden flex flex-col relative card-hover rounded-xl"
     >
       <div className="h-[2px] w-0 group-hover:w-full bg-accent transition-all duration-500 origin-left" />
 
       <div className="p-7 flex flex-col gap-7 flex-1">
         <div className="flex items-start justify-between">
-          <div className="w-9 h-9 border border-[#383838] flex items-center justify-center group-hover:border-accent/30 transition-colors shrink-0">
+          <div className="w-9 h-9 border border-[#383838] flex items-center justify-center group-hover:border-accent/30 transition-colors shrink-0 rounded-xl">
             <Building2 size={15} className="text-[#999] group-hover:text-accent transition-colors" />
           </div>
           {(onEdit || onDelete) && (
@@ -3193,7 +3193,7 @@ function EventCard({ event, venueName, onClick, onEdit, onDelete }: {
       whileHover={{ y: -3 }}
       whileTap={{ scale: 0.985 }}
       transition={{ duration: 0.3, ease: easeOutQuart }}
-      className="group bg-card border border-[#383838] cursor-pointer overflow-hidden flex flex-col card-hover"
+      className="group bg-card border border-[#383838] cursor-pointer overflow-hidden flex flex-col card-hover rounded-xl"
     >
       {/* Cover image */}
       {event.coverImage ? (
@@ -3258,7 +3258,7 @@ function EventCard({ event, venueName, onClick, onEdit, onDelete }: {
 
         <div className="flex-1">
           {event.coverImage && venueName && (
-            <span className="text-[8px] font-sans uppercase tracking-widest text-[#666] flex items-center gap-1.5 mb-1">
+            <span className="text-[10px] font-sans text-[#666] flex items-center gap-1.5 mb-1">
               <Building2 size={9} /> {venueName}
             </span>
           )}
@@ -3338,7 +3338,7 @@ function ReservationsTable({ reservations, userRole, events, onDelete, onEdit }:
   };
 
   return (
-    <div className="bg-card border border-[#383838] overflow-hidden">
+    <div className="bg-card border border-[#383838] overflow-hidden rounded-xl">
       <div className="px-7 py-5 border-b border-[#2e2e2e]">
         <h2 className="font-bold text-xl text-white">Prenotazioni</h2>
       </div>
@@ -3518,7 +3518,7 @@ function NewEventModal({ venue, floorPlans, onClose, onSubmit, initialData }: {
       <motion.div
         initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.22, ease: 'easeOut' }}
-        className="relative w-full sm:max-w-md bg-card border-t border-x sm:border border-[#383838] overflow-hidden rounded-t-2xl sm:rounded-none max-h-[90vh] flex flex-col"
+        className="relative w-full sm:max-w-md bg-card border-t border-x sm:border border-[#383838] overflow-hidden rounded-t-2xl sm:rounded-2xl max-h-[90vh] flex flex-col"
       >
         <div className="h-[2px] bg-accent shrink-0" />
         <div className="px-6 sm:px-8 py-5 sm:py-6 border-b border-[#2e2e2e] flex items-center justify-between shrink-0">
@@ -3669,7 +3669,7 @@ function NewClubModal({ onClose, onSubmit, initialData }: {
       <motion.div
         initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.22, ease: 'easeOut' }}
-        className="relative w-full sm:max-w-md bg-card border-t border-x sm:border border-[#383838] overflow-hidden rounded-t-2xl sm:rounded-none max-h-[90vh] flex flex-col"
+        className="relative w-full sm:max-w-md bg-card border-t border-x sm:border border-[#383838] overflow-hidden rounded-t-2xl sm:rounded-2xl max-h-[90vh] flex flex-col"
       >
         <div className="h-[2px] bg-accent shrink-0" />
         <div className="px-6 sm:px-8 py-5 sm:py-6 border-b border-[#2e2e2e] flex items-center justify-between shrink-0">
@@ -3723,7 +3723,7 @@ function NewFloorPlanModal({ venues, onClose, onSubmit }: {
         className="absolute inset-0 bg-black/90 backdrop-blur-sm" onClick={onClose} />
       <motion.div initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.22, ease: 'easeOut' }}
-        className="relative w-full sm:max-w-md bg-card border-t border-x sm:border border-[#383838] overflow-hidden rounded-t-2xl sm:rounded-none max-h-[90vh] flex flex-col">
+        className="relative w-full sm:max-w-md bg-card border-t border-x sm:border border-[#383838] overflow-hidden rounded-t-2xl sm:rounded-2xl max-h-[90vh] flex flex-col">
         <div className="h-[2px] bg-accent shrink-0" />
         <div className="px-6 sm:px-8 py-5 sm:py-6 border-b border-[#2e2e2e] flex items-center justify-between shrink-0">
           <div>
@@ -3775,7 +3775,7 @@ function FloorPlanMetaModal({ fp, onClose, onSubmit }: {
         className="absolute inset-0 bg-black/90 backdrop-blur-sm" onClick={onClose} />
       <motion.div initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.22, ease: 'easeOut' }}
-        className="relative w-full sm:max-w-md bg-card border-t border-x sm:border border-[#383838] overflow-hidden rounded-t-2xl sm:rounded-none max-h-[90vh] flex flex-col">
+        className="relative w-full sm:max-w-md bg-card border-t border-x sm:border border-[#383838] overflow-hidden rounded-t-2xl sm:rounded-2xl max-h-[90vh] flex flex-col">
         <div className="h-[2px] bg-accent shrink-0" />
         <div className="px-6 sm:px-8 py-5 sm:py-6 border-b border-[#2e2e2e] flex items-center justify-between shrink-0">
           <div>

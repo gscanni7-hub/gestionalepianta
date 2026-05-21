@@ -65,7 +65,7 @@ export default function QuickAddModal({ events, venues, user, onClose, onAdd }: 
       <motion.div
         initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.22, ease: 'easeOut' }}
-        className="relative w-full sm:max-w-md bg-[#1a1a1a] border-t border-x sm:border border-[#2a2a2a] overflow-hidden rounded-t-2xl sm:rounded-none max-h-[90vh] flex flex-col"
+        className="relative w-full sm:max-w-md bg-[#1a1a1a] border-t border-x sm:border border-[#2a2a2a] overflow-hidden rounded-t-2xl sm:rounded-2xl max-h-[90vh] flex flex-col"
       >
         <div className="h-[2px] bg-[#D4622A] shrink-0" />
 
@@ -101,7 +101,7 @@ export default function QuickAddModal({ events, venues, user, onClose, onAdd }: 
                 <select
                   value={form.eventId}
                   onChange={e => { setForm({ ...form, eventId: e.target.value }); setTableId(''); }}
-                  className="w-full bg-[#111] border border-[#2a2a2a] px-4 py-3 text-sm text-white outline-none focus:border-[#D4622A] transition-colors [color-scheme:dark]"
+                  className="w-full bg-[#111] border border-[#2a2a2a] rounded-xl px-4 py-3 text-sm text-white outline-none focus:border-[#D4622A] transition-colors [color-scheme:dark]"
                 >
                   {activeEvents.map(ev => (
                     <option key={ev.id} value={ev.id}>{ev.name}</option>
@@ -120,7 +120,7 @@ export default function QuickAddModal({ events, venues, user, onClose, onAdd }: 
                   value={form.customerName}
                   onChange={e => setForm({ ...form, customerName: e.target.value })}
                   placeholder="Mario Rossi"
-                  className="w-full bg-[#111] border border-[#2a2a2a] pl-9 pr-3 py-3 text-sm text-white placeholder-[#444] outline-none focus:border-[#D4622A] transition-colors"
+                  className="w-full bg-[#111] border border-[#2a2a2a] rounded-xl pl-9 pr-3 py-3 text-sm text-white placeholder-[#444] outline-none focus:border-[#D4622A] transition-colors"
                 />
               </div>
             </div>
@@ -135,7 +135,7 @@ export default function QuickAddModal({ events, venues, user, onClose, onAdd }: 
                   value={form.customerPhone}
                   onChange={e => setForm({ ...form, customerPhone: e.target.value })}
                   placeholder="+39 333 000 0000"
-                  className="w-full bg-[#111] border border-[#2a2a2a] pl-9 pr-3 py-3 text-sm text-white placeholder-[#444] outline-none focus:border-[#D4622A] transition-colors"
+                  className="w-full bg-[#111] border border-[#2a2a2a] rounded-xl pl-9 pr-3 py-3 text-sm text-white placeholder-[#444] outline-none focus:border-[#D4622A] transition-colors"
                 />
               </div>
             </div>
@@ -143,7 +143,7 @@ export default function QuickAddModal({ events, venues, user, onClose, onAdd }: 
             {/* Guests */}
             <div className="space-y-1.5">
               <label className="text-xs font-medium text-[#666]">Numero persone</label>
-              <div className="flex items-center gap-3 bg-[#111] border border-[#2a2a2a] px-4 py-2.5">
+              <div className="flex items-center gap-3 bg-[#111] border border-[#2a2a2a] rounded-xl px-4 py-2.5">
                 <Users size={13} className="text-[#444]" />
                 <button type="button" onClick={() => setForm(f => ({ ...f, guestsCount: Math.max(1, f.guestsCount - 1) }))}
                   className="w-8 h-8 text-[#888] hover:text-white text-xl leading-none flex items-center justify-center transition-colors">−</button>
@@ -160,7 +160,7 @@ export default function QuickAddModal({ events, venues, user, onClose, onAdd }: 
                 <select
                   value={tableId}
                   onChange={e => setTableId(e.target.value)}
-                  className="w-full bg-[#111] border border-[#2a2a2a] px-4 py-3 text-sm text-white outline-none focus:border-[#D4622A] transition-colors [color-scheme:dark]"
+                  className="w-full bg-[#111] border border-[#2a2a2a] rounded-xl px-4 py-3 text-sm text-white outline-none focus:border-[#D4622A] transition-colors [color-scheme:dark]"
                 >
                   <option value="">Da assegnare</option>
                   {tables.map(t => (
@@ -180,7 +180,7 @@ export default function QuickAddModal({ events, venues, user, onClose, onAdd }: 
                   value={form.notes}
                   onChange={e => setForm({ ...form, notes: e.target.value })}
                   placeholder="Richieste speciali..."
-                  className="w-full bg-[#111] border border-[#2a2a2a] pl-9 pr-3 py-3 text-sm text-white placeholder-[#444] outline-none focus:border-[#D4622A] transition-colors resize-none"
+                  className="w-full bg-[#111] border border-[#2a2a2a] rounded-xl pl-9 pr-3 py-3 text-sm text-white placeholder-[#444] outline-none focus:border-[#D4622A] transition-colors resize-none"
                 />
               </div>
             </div>

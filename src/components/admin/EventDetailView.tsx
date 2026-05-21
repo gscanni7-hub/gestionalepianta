@@ -66,7 +66,7 @@ export default function EventDetailView({ event, venue, reservations, onOpenPlan
 
       {/* Cover image */}
       {event.coverImage && (
-        <div className="h-40 overflow-hidden border border-[#2a2a2a] mb-6">
+        <div className="h-40 overflow-hidden border border-[#2a2a2a] mb-6 rounded-xl">
           <img src={event.coverImage} alt="" className="w-full h-full object-cover opacity-70" />
         </div>
       )}
@@ -97,20 +97,20 @@ export default function EventDetailView({ event, venue, reservations, onOpenPlan
 
       {/* Link registrazione */}
       {genericLink && (
-        <div className="border border-[#2a2a2a] bg-[#1a1a1a] p-4 mb-6 flex items-center gap-3">
+        <div className="border border-[#2a2a2a] bg-[#1a1a1a] p-4 mb-6 flex items-center gap-3 rounded-xl">
           <Link2 size={13} className="text-[#D4622A] shrink-0" />
           <div className="flex-1 min-w-0">
             <p className="text-xs font-medium text-[#555] mb-0.5">Link registrazione generico</p>
             <p className="text-[9px] font-mono text-[#666] truncate">{genericLink}</p>
           </div>
           <button onClick={handleCopyLink}
-            className={cn('p-2 border transition-colors shrink-0',
+            className={cn('p-2 border transition-colors shrink-0 rounded-lg',
               copiedLink ? 'border-[#22C55E]/40 text-[#22C55E]' : 'border-[#2a2a2a] text-[#666] hover:text-white'
             )}>
             {copiedLink ? <Check size={13} /> : <Copy size={13} />}
           </button>
           <a href={genericLink} target="_blank" rel="noopener noreferrer"
-            className="p-2 border border-[#2a2a2a] text-[#666] hover:text-white transition-colors shrink-0">
+            className="p-2 border border-[#2a2a2a] text-[#666] hover:text-white transition-colors shrink-0 rounded-lg">
             <ExternalLink size={13} />
           </a>
         </div>
@@ -125,7 +125,7 @@ export default function EventDetailView({ event, venue, reservations, onOpenPlan
       </button>
 
       {/* Tabs */}
-      <div className="flex border border-[#2a2a2a] mb-5">
+      <div className="flex border border-[#2a2a2a] mb-5 rounded-xl overflow-hidden">
         {(['tavoli', 'registrazioni'] as const).map(t => (
           <button key={t}
             onClick={() => setTab(t)}
@@ -149,7 +149,7 @@ export default function EventDetailView({ event, venue, reservations, onOpenPlan
               { label: 'In attesa', value: pendingRes.length, color: pendingRes.length > 0 ? 'text-[#F59E0B]' : 'text-[#555]' },
               { label: 'Entrati', value: checkedInRes.length, color: 'text-[#22C55E]' },
             ].map(s => (
-              <div key={s.label} className="border border-[#2a2a2a] bg-[#1a1a1a] p-3 text-center">
+              <div key={s.label} className="border border-[#2a2a2a] bg-[#1a1a1a] p-3 text-center rounded-xl">
                 <div className={cn('hv font-black text-2xl leading-none', s.color)}>{s.value}</div>
                 <div className="text-xs text-[#555] mt-1">{s.label}</div>
               </div>
@@ -157,7 +157,7 @@ export default function EventDetailView({ event, venue, reservations, onOpenPlan
           </div>
 
           {approvedRes.length === 0 && pendingRes.length === 0 ? (
-            <div className="py-16 text-center border border-[#2a2a2a]">
+            <div className="py-16 text-center border border-[#2a2a2a] rounded-xl">
               <p className="text-sm text-[#444]">Nessuna prenotazione</p>
             </div>
           ) : (
@@ -197,7 +197,7 @@ export default function EventDetailView({ event, venue, reservations, onOpenPlan
                   { label: 'Da PR', value: regFromPr.length, color: 'text-[#D4622A]' },
                   { label: 'Entrati', value: regCheckedIn.length, color: 'text-[#22C55E]' },
                 ].map(s => (
-                  <div key={s.label} className="border border-[#2a2a2a] bg-[#1a1a1a] p-3 text-center">
+                  <div key={s.label} className="border border-[#2a2a2a] bg-[#1a1a1a] p-3 text-center rounded-xl">
                     <div className={cn('hv font-black text-2xl leading-none', s.color)}>{s.value}</div>
                     <div className="text-xs text-[#555] mt-1">{s.label}</div>
                   </div>
@@ -205,11 +205,11 @@ export default function EventDetailView({ event, venue, reservations, onOpenPlan
               </div>
 
               {registrations.length === 0 ? (
-                <div className="py-16 text-center border border-[#2a2a2a]">
+                <div className="py-16 text-center border border-[#2a2a2a] rounded-xl">
                   <p className="text-sm text-[#444]">Nessuna registrazione ancora</p>
                 </div>
               ) : (
-                <div className="border border-[#2a2a2a] overflow-hidden">
+                <div className="border border-[#2a2a2a] overflow-hidden rounded-xl">
                   {registrations.map(reg => (
                     <div key={reg.id} className="flex items-center gap-4 px-4 py-3 border-b border-[#1e1e1e] last:border-0">
                       <div className={cn('w-2 h-2 rounded-full shrink-0', reg.checkedIn ? 'bg-[#22C55E]' : 'bg-[#2e2e2e]')} />

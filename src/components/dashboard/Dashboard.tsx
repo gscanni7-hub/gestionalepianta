@@ -73,7 +73,7 @@ function AdminDashboard({ user, events, venues, reservations, managedUsers, pend
             key={k.label}
             initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.3, delay: i * 0.06 }}
-            className="border border-[#2a2a2a] bg-[#1a1a1a] p-4"
+            className="border border-[#2a2a2a] bg-[#1a1a1a] p-4 rounded-xl"
           >
             <div className={cn('mb-3', k.color)}>{k.icon}</div>
             <div className={cn('hv font-black text-3xl leading-none', k.color)}>{k.value}</div>
@@ -96,7 +96,7 @@ function AdminDashboard({ user, events, venues, reservations, managedUsers, pend
                   key={ev.id}
                   onClick={() => onOpenEvent(ev)}
                   whileTap={{ scale: 0.985 }}
-                  className="w-full flex items-center gap-4 border border-[#2a2a2a] bg-[#1a1a1a] hover:border-[#D4622A]/30 transition-colors p-4 text-left"
+                  className="w-full flex items-center gap-4 border border-[#2a2a2a] bg-[#1a1a1a] hover:border-[#D4622A]/30 transition-colors p-4 text-left rounded-xl"
                 >
                   <div className="w-2 h-2 rounded-full bg-[#D4622A] shrink-0 mt-0.5" />
                   <div className="flex-1 min-w-0">
@@ -124,7 +124,7 @@ function AdminDashboard({ user, events, venues, reservations, managedUsers, pend
             <button
               key={a.view}
               onClick={() => onNav(a.view)}
-              className="relative flex items-center gap-3 border border-[#2a2a2a] bg-[#1a1a1a] hover:border-[#D4622A]/30 hover:bg-[#1e1e1e] transition-colors px-4 py-3 text-left"
+              className="relative flex items-center gap-3 border border-[#2a2a2a] bg-[#1a1a1a] hover:border-[#D4622A]/30 hover:bg-[#1e1e1e] transition-colors px-4 py-3 text-left rounded-xl"
             >
               <span className="text-[#D4622A]">{a.icon}</span>
               <span className="text-xs font-medium text-[#888]">{a.label}</span>
@@ -181,7 +181,7 @@ function PRDashboard({ user, events, venues, reservations, prPendingCount, onNav
             key={s.label}
             initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.28, delay: i * 0.06 }}
-            className="border border-[#2a2a2a] bg-[#1a1a1a] p-4 text-center"
+            className="border border-[#2a2a2a] bg-[#1a1a1a] p-4 text-center rounded-xl"
           >
             <div className={cn('hv font-black text-3xl leading-none', s.color)}>{s.value}</div>
             <div className="text-xs text-[#555] mt-2">{s.label}</div>
@@ -190,9 +190,9 @@ function PRDashboard({ user, events, venues, reservations, prPendingCount, onNav
       </div>
 
       {myBudget > 0 && (
-        <div className="border border-[#2a2a2a] bg-[#1a1a1a] p-4 flex items-center justify-between">
+        <div className="border border-[#2a2a2a] bg-[#1a1a1a] p-4 flex items-center justify-between rounded-xl">
           <div>
-            <p className="text-[8px] font-mono uppercase tracking-widest text-[#555]">Budget generato stasera</p>
+            <p className="text-xs text-[#555]">Budget generato stasera</p>
             <p className="hv font-black text-2xl text-[#22C55E] mt-1">
               {myBudget >= 1000 ? `€${(myBudget/1000).toFixed(1)}K` : `€${myBudget}`}
             </p>
@@ -213,7 +213,7 @@ function PRDashboard({ user, events, venues, reservations, prPendingCount, onNav
                   key={ev.id}
                   onClick={() => onOpenEvent(ev)}
                   whileTap={{ scale: 0.985 }}
-                  className="w-full flex items-center gap-4 bg-[#D4622A] hover:bg-white transition-colors p-4 text-left group"
+                  className="w-full flex items-center gap-4 bg-[#D4622A] hover:bg-white transition-colors p-4 text-left group rounded-xl"
                 >
                   <Calendar size={16} className="text-black shrink-0" />
                   <div className="flex-1 min-w-0">
@@ -236,10 +236,10 @@ function PRDashboard({ user, events, venues, reservations, prPendingCount, onNav
             {activeWithToken.map(ev => {
               const link = `${window.location.origin}/r/${ev.registrationToken}?pr=${user.id}`;
               return (
-                <div key={ev.id} className="border border-[#2a2a2a] bg-[#1a1a1a] p-4 space-y-3">
+                <div key={ev.id} className="border border-[#2a2a2a] bg-[#1a1a1a] p-4 space-y-3 rounded-xl">
                   <p className="font-semibold text-white text-xs">{ev.name}</p>
                   <div className="flex items-center gap-2">
-                    <div className="flex-1 bg-[#111] border border-[#222] px-3 py-2 overflow-hidden">
+                    <div className="flex-1 bg-[#111] border border-[#222] px-3 py-2 overflow-hidden rounded-lg">
                       <p className="text-[9px] font-mono text-[#555] truncate">{link}</p>
                     </div>
                     <button
@@ -265,7 +265,7 @@ function PRDashboard({ user, events, venues, reservations, prPendingCount, onNav
           <button
             key={a.view}
             onClick={() => onNav(a.view)}
-            className="relative flex items-center gap-3 border border-[#2a2a2a] bg-[#1a1a1a] hover:border-[#D4622A]/30 transition-colors px-4 py-3"
+            className="relative flex items-center gap-3 border border-[#2a2a2a] bg-[#1a1a1a] hover:border-[#D4622A]/30 transition-colors px-4 py-3 rounded-xl"
           >
             <span className="text-[#D4622A]">{a.icon}</span>
             <span className="text-xs font-medium text-[#888]">{a.label}</span>
@@ -310,7 +310,7 @@ function HostDashboard({ user, events, venues, reservations, onNav }: {
       </div>
 
       {!activeEvent ? (
-        <div className="py-20 text-center border border-[#2a2a2a]">
+        <div className="py-20 text-center border border-[#2a2a2a] rounded-xl">
           <DoorOpen size={32} className="text-[#333] mx-auto mb-3" />
           <p className="text-sm text-[#555]">Nessun evento attivo stasera</p>
         </div>
@@ -323,14 +323,14 @@ function HostDashboard({ user, events, venues, reservations, onNav }: {
           </div>
 
           {/* Grande numero */}
-          <div className="border border-[#2a2a2a] bg-[#1a1a1a] p-8 text-center">
+          <div className="border border-[#2a2a2a] bg-[#1a1a1a] p-8 text-center rounded-xl">
             <div className="hv font-black text-white leading-none" style={{ fontSize: 72 }}>
               {checkedIn.length}
             </div>
             <div className="text-[#555] hv font-black text-xl mt-1">/ {approved.length}</div>
             <p className="text-xs text-[#555] mt-3">Persone entrate</p>
             {/* Progress bar */}
-            <div className="mt-4 h-1 bg-[#222] overflow-hidden">
+            <div className="mt-4 h-1 bg-[#222] overflow-hidden rounded-full">
               <motion.div
                 className="h-full bg-[#22C55E]"
                 initial={{ width: 0 }}

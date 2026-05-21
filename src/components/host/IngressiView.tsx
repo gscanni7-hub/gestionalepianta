@@ -113,7 +113,7 @@ export default function IngressiView({ activeEvent }: Props) {
     <div className="max-w-xl mx-auto w-full">
       {/* Stats bar */}
       <div className="flex items-center gap-3 mb-5">
-        <div className="flex-1 h-1 bg-[#222] overflow-hidden">
+        <div className="flex-1 h-1 bg-[#222] overflow-hidden rounded-full">
           <motion.div className="h-full bg-[#22C55E]" initial={{ width: 0 }}
             animate={{ width: total > 0 ? `${Math.round(checkedInCount / total * 100)}%` : '0%' }}
             transition={{ duration: 0.6, ease: 'easeOut' }} />
@@ -150,7 +150,7 @@ export default function IngressiView({ activeEvent }: Props) {
           <motion.div
             initial={{ opacity: 0, y: -8 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -8 }}
             className={cn(
-              'flex items-start gap-3 p-4 border mb-4',
+              'flex items-start gap-3 p-4 border mb-4 rounded-xl',
               scanResult.ok
                 ? 'bg-[#22C55E]/10 border-[#22C55E]/30'
                 : 'bg-[#EF4444]/10 border-[#EF4444]/30'
@@ -181,7 +181,7 @@ export default function IngressiView({ activeEvent }: Props) {
             placeholder="Cerca nome, PR…"
             value={search}
             onChange={e => setSearch(e.target.value)}
-            className="w-full bg-[#1e1e1e] border border-[#2e2e2e] px-4 py-3 text-sm font-sans text-white placeholder-[#444] outline-none focus:border-[#D4622A]/40 transition-colors"
+            className="w-full bg-[#1e1e1e] border border-[#2e2e2e] rounded-xl px-4 py-3 text-sm font-sans text-white placeholder-[#444] outline-none focus:border-[#D4622A]/40 transition-colors"
           />
           {search && (
             <button onClick={() => setSearch('')} className="absolute right-3 top-1/2 -translate-y-1/2 text-[#555] hover:text-white">
@@ -209,7 +209,7 @@ export default function IngressiView({ activeEvent }: Props) {
           <p className="text-xs font-medium text-[#555] mb-2 px-1">
             Da fare — {pending.length}
           </p>
-          <div className="border border-[#2a2a2a] bg-[#1a1a1a] overflow-hidden">
+          <div className="border border-[#2a2a2a] bg-[#1a1a1a] overflow-hidden rounded-xl">
             {pending.map(reg => (
               <RegistrationRow key={reg.id} reg={reg} onUndoCheckIn={handleUndoCheckIn} />
             ))}
@@ -231,7 +231,7 @@ export default function IngressiView({ activeEvent }: Props) {
             {showEntered && (
               <motion.div initial={{ height: 0, opacity: 0 }} animate={{ height: 'auto', opacity: 1 }}
                 exit={{ height: 0, opacity: 0 }} transition={{ duration: 0.2 }} className="overflow-hidden">
-                <div className="border border-[#2a2a2a] bg-[#1a1a1a] overflow-hidden">
+                <div className="border border-[#2a2a2a] bg-[#1a1a1a] overflow-hidden rounded-xl">
                   {entered.map(reg => (
                     <RegistrationRow key={reg.id} reg={reg} onUndoCheckIn={handleUndoCheckIn} />
                   ))}

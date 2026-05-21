@@ -34,7 +34,7 @@ export default function PRStatsView({ prId, reservations, events }: Props) {
       {/* KPIs */}
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 mb-10">
         {kpis.map(({ icon, value, label }) => (
-          <div key={label} className="border border-[#2a2a2a] bg-[#1a1a1a] px-6 py-6">
+          <div key={label} className="border border-[#2a2a2a] bg-[#1a1a1a] px-6 py-6 rounded-xl">
             <div className="text-accent mb-4">{icon}</div>
             <div className="hv font-black text-3xl text-white leading-none">{value}</div>
             <div className="text-xs text-[#555] mt-3">{label}</div>
@@ -59,7 +59,7 @@ export default function PRStatsView({ prId, reservations, events }: Props) {
               const barPct = Math.round((evBudget / maxBudget) * 100);
 
               return (
-                <div key={eid} className="border border-[#2a2a2a] bg-[#1a1a1a] px-5 py-4">
+                <div key={eid} className="border border-[#2a2a2a] bg-[#1a1a1a] px-5 py-4 rounded-xl">
                   <div className="flex items-center justify-between mb-3 flex-wrap gap-2">
                     <div>
                       <p className="font-semibold text-sm text-white">{event?.name ?? eid}</p>
@@ -84,7 +84,7 @@ export default function PRStatsView({ prId, reservations, events }: Props) {
                   </div>
                   {/* CSS bar chart */}
                   <div className="flex items-center gap-2 mt-2">
-                    <div className="flex-1 h-1.5 bg-[#252525] overflow-hidden">
+                    <div className="flex-1 h-1.5 bg-[#252525] overflow-hidden rounded-full">
                       <div
                         className="h-full bg-accent transition-all duration-700"
                         style={{ width: `${barPct}%` }}

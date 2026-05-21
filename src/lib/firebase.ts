@@ -1,6 +1,6 @@
 import { initializeApp, getApps, getApp } from 'firebase/app';
 import { getFirestore } from 'firebase/firestore';
-import { getAuth, GoogleAuthProvider, signInWithPopup } from 'firebase/auth';
+import { getAuth, GoogleAuthProvider, OAuthProvider, signInWithPopup } from 'firebase/auth';
 
 const firebaseConfig = {
   apiKey:            import.meta.env.VITE_FIREBASE_API_KEY,
@@ -25,6 +25,22 @@ function getFirebaseApp() {
 
 export const firebaseApp = getFirebaseApp();
 export const db = getFirestore(firebaseApp);
+
+export async function signInWithApple() {
+  const auth = getAuth(firebaseApp);
+  const provider = new OAuthProvider('apple.com');
+  provider.addScope('email');
+  provider.addScope('name');
+  const result = await signInWithPopup(auth, provider);
+  const u = result.user;
+  const parts = (u.displayName ?? '').split(' ');
+  return {
+    email:       u.email ?? '',
+    displayName: parts[0] ?? '',
+    lastName:    parts.slice(1).join(' '),
+    photoURL:    u.photoURL ?? undefined,
+  };
+}
 
 export async function signInWithGoogle() {
   const auth = getAuth(firebaseApp);

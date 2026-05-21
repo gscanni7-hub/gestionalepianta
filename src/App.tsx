@@ -11,7 +11,7 @@ import { UserProfile, Event, Reservation, Venue, FloorPlan, ManagedUser, Table }
 import { motion, AnimatePresence } from 'framer-motion';
 import { cn, COLORS, easeOutQuart, gridContainer, gridItem } from './lib/utils';
 import { isEmailConfigured, sendPasswordResetEmail } from './lib/emailService';
-import { isFirebaseConfigured, signInWithGoogle } from './lib/firebase';
+import { isFirebaseConfigured, signInWithGoogle, signInWithApple } from './lib/firebase';
 import { subscribeToReservations } from './lib/reservationService';
 import FloorPlanViewer from './components/floorplan/FloorPlanViewer';
 import FloorPlanEditor from './components/floorplan/FloorPlanEditor';
@@ -539,6 +539,54 @@ export default function App() {
     }
   };
 
+  const handleAppleSignIn = async () => {
+    const setErr = authScreen === 'register' ? setRegError : setLoginError;
+    setErr('');
+    try {
+      const g = await signInWithApple();
+      const mockUser = MOCK_USERS.find(u => u.email.toLowerCase() === g.email.toLowerCase());
+      if (mockUser) {
+        const profile: UserProfile = { id: mockUser.id, email: mockUser.email, role: mockUser.role, displayName: mockUser.displayName, lastName: mockUser.lastName ?? '', phone: mockUser.phone ?? '', profileImage: g.photoURL };
+        localStorage.setItem('nightplan_user', JSON.stringify(profile));
+        setUser(profile);
+        setView('dashboard');
+        return;
+      }
+      const managed = managedUsers.find(u => u.email.toLowerCase() === g.email.toLowerCase());
+      if (managed) {
+        if (managed.status === 'approved') {
+          const profile: UserProfile = { id: managed.id, email: managed.email, role: 'pr', displayName: managed.displayName, lastName: managed.lastName, phone: managed.phone, profileImage: g.photoURL };
+          localStorage.setItem('nightplan_user', JSON.stringify(profile));
+          setUser(profile);
+          setView('dashboard');
+        } else if (managed.status === 'pending') {
+          setErr('Il tuo account è in attesa di approvazione.');
+        } else {
+          setErr('Il tuo account non è stato approvato.');
+        }
+        return;
+      }
+      const newUser: ManagedUser = {
+        id: `pr_${Date.now()}`,
+        email: g.email,
+        password: '',
+        role: 'pr',
+        displayName: g.displayName || g.email.split('@')[0],
+        lastName: g.lastName,
+        phone: '',
+        status: 'pending',
+        createdAt: new Date().toISOString(),
+        profileImage: g.photoURL,
+      };
+      setManagedUsers(prev => [...prev, newUser]);
+      setErr('Account creato con Apple! In attesa di approvazione dall\'admin.');
+    } catch (err: any) {
+      if (err?.code !== 'auth/popup-closed-by-user') {
+        setErr('Errore durante l\'accesso con Apple. Riprova.');
+      }
+    }
+  };
+
   const handleRegister = (e: React.FormEvent) => {
     e.preventDefault();
     const emailErr = validateEmail(regEmail);
@@ -864,30 +912,6 @@ export default function App() {
                     <p className="text-[#555] text-[9px] font-sans uppercase tracking-[0.25em] mt-1.5">Bentornato nella piattaforma</p>
                   </div>
 
-                  {/* Google — metodo principale */}
-                  <button
-                    type="button"
-                    onClick={handleGoogleSignIn}
-                    className="group w-full flex items-center justify-center gap-3 py-[15px] bg-[#1e1e1e] border border-[#333] hover:border-[#4a4a4a] hover:bg-[#242424] transition-all duration-200 mb-6"
-                  >
-                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
-                      <path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4"/>
-                      <path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/>
-                      <path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l3.66-2.84z" fill="#FBBC05"/>
-                      <path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"/>
-                    </svg>
-                    <span className="text-[10px] hv font-black uppercase tracking-[0.18em] text-[#aaa] group-hover:text-white transition-colors">
-                      Accedi con Google
-                    </span>
-                  </button>
-
-                  {/* Divider */}
-                  <div className="flex items-center gap-3 mb-6">
-                    <div className="flex-1 h-px bg-[#272727]" />
-                    <span className="text-[8px] font-sans uppercase tracking-[0.3em] text-[#444]">oppure con email</span>
-                    <div className="flex-1 h-px bg-[#272727]" />
-                  </div>
-
                   {/* Form email/password */}
                   <form ref={loginFormRef} onSubmit={handleLogin} className="space-y-3">
                     <div className="space-y-1">
@@ -939,11 +963,39 @@ export default function App() {
                     </motion.button>
                   </form>
 
+                  {/* Social — secondario */}
+                  <div className="mt-6">
+                    <div className="flex items-center gap-3 mb-4">
+                      <div className="flex-1 h-px bg-[#232323]" />
+                      <span className="text-[8px] font-sans uppercase tracking-[0.3em] text-[#3a3a3a]">oppure continua con</span>
+                      <div className="flex-1 h-px bg-[#232323]" />
+                    </div>
+                    <div className="grid grid-cols-2 gap-3">
+                      <button type="button" onClick={handleAppleSignIn}
+                        className="group flex items-center justify-center gap-2 py-3 bg-[#1a1a1a] border border-[#2a2a2a] hover:border-[#404040] hover:bg-[#212121] transition-all duration-200">
+                        <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor" className="text-[#888] group-hover:text-white transition-colors">
+                          <path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.8-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M13 3.5c.73-.83 1.94-1.46 2.94-1.5.13 1.17-.34 2.35-1.04 3.19-.69.85-1.83 1.51-2.95 1.42-.15-1.15.41-2.35 1.05-3.11z"/>
+                        </svg>
+                        <span className="text-[9px] hv font-black uppercase tracking-[0.15em] text-[#555] group-hover:text-white transition-colors">Apple</span>
+                      </button>
+                      <button type="button" onClick={handleGoogleSignIn}
+                        className="group flex items-center justify-center gap-2 py-3 bg-[#1a1a1a] border border-[#2a2a2a] hover:border-[#404040] hover:bg-[#212121] transition-all duration-200">
+                        <svg width="13" height="13" viewBox="0 0 24 24" fill="none">
+                          <path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4"/>
+                          <path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/>
+                          <path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l3.66-2.84z" fill="#FBBC05"/>
+                          <path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"/>
+                        </svg>
+                        <span className="text-[9px] hv font-black uppercase tracking-[0.15em] text-[#555] group-hover:text-white transition-colors">Google</span>
+                      </button>
+                    </div>
+                  </div>
+
                   {/* Registrazione */}
-                  <p className="text-center text-[9px] font-sans text-[#444] uppercase tracking-widest mt-8">
+                  <p className="text-center text-[9px] font-sans text-[#3a3a3a] uppercase tracking-widest mt-6">
                     Sei un PR?{' '}
                     <button onClick={() => { setAuthScreen('register'); setRegError(''); setRegDone(false); }}
-                      className="text-[#777] hover:text-accent transition-colors underline underline-offset-2">
+                      className="text-[#666] hover:text-accent transition-colors underline underline-offset-2">
                       Registrati
                     </button>
                   </p>
@@ -1071,30 +1123,6 @@ export default function App() {
                     <p className="text-[#555] text-[9px] font-sans uppercase tracking-[0.25em] mt-1.5">Crea il tuo account PR</p>
                   </div>
 
-                  {/* Google — metodo rapido */}
-                  <button
-                    type="button"
-                    onClick={handleGoogleSignIn}
-                    className="group w-full flex items-center justify-center gap-3 py-[15px] bg-[#1e1e1e] border border-[#333] hover:border-[#4a4a4a] hover:bg-[#242424] transition-all duration-200 mb-6"
-                  >
-                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
-                      <path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4"/>
-                      <path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/>
-                      <path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l3.66-2.84z" fill="#FBBC05"/>
-                      <path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"/>
-                    </svg>
-                    <span className="text-[10px] hv font-black uppercase tracking-[0.18em] text-[#aaa] group-hover:text-white transition-colors">
-                      Registrati con Google
-                    </span>
-                  </button>
-
-                  {/* Divider */}
-                  <div className="flex items-center gap-3 mb-6">
-                    <div className="flex-1 h-px bg-[#272727]" />
-                    <span className="text-[8px] font-sans uppercase tracking-[0.3em] text-[#444]">oppure manualmente</span>
-                    <div className="flex-1 h-px bg-[#272727]" />
-                  </div>
-
                   <form onSubmit={handleRegister} className="space-y-3">
                     <div className="grid grid-cols-2 gap-3">
                       <div className="space-y-1">
@@ -1174,10 +1202,38 @@ export default function App() {
                     </motion.button>
                   </form>
 
-                  <p className="text-center text-[9px] font-sans text-[#444] uppercase tracking-widest mt-8">
+                  {/* Social — secondario */}
+                  <div className="mt-6">
+                    <div className="flex items-center gap-3 mb-4">
+                      <div className="flex-1 h-px bg-[#232323]" />
+                      <span className="text-[8px] font-sans uppercase tracking-[0.3em] text-[#3a3a3a]">oppure continua con</span>
+                      <div className="flex-1 h-px bg-[#232323]" />
+                    </div>
+                    <div className="grid grid-cols-2 gap-3">
+                      <button type="button" onClick={handleAppleSignIn}
+                        className="group flex items-center justify-center gap-2 py-3 bg-[#1a1a1a] border border-[#2a2a2a] hover:border-[#404040] hover:bg-[#212121] transition-all duration-200">
+                        <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor" className="text-[#888] group-hover:text-white transition-colors">
+                          <path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.8-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M13 3.5c.73-.83 1.94-1.46 2.94-1.5.13 1.17-.34 2.35-1.04 3.19-.69.85-1.83 1.51-2.95 1.42-.15-1.15.41-2.35 1.05-3.11z"/>
+                        </svg>
+                        <span className="text-[9px] hv font-black uppercase tracking-[0.15em] text-[#555] group-hover:text-white transition-colors">Apple</span>
+                      </button>
+                      <button type="button" onClick={handleGoogleSignIn}
+                        className="group flex items-center justify-center gap-2 py-3 bg-[#1a1a1a] border border-[#2a2a2a] hover:border-[#404040] hover:bg-[#212121] transition-all duration-200">
+                        <svg width="13" height="13" viewBox="0 0 24 24" fill="none">
+                          <path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4"/>
+                          <path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/>
+                          <path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l3.66-2.84z" fill="#FBBC05"/>
+                          <path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"/>
+                        </svg>
+                        <span className="text-[9px] hv font-black uppercase tracking-[0.15em] text-[#555] group-hover:text-white transition-colors">Google</span>
+                      </button>
+                    </div>
+                  </div>
+
+                  <p className="text-center text-[9px] font-sans text-[#3a3a3a] uppercase tracking-widest mt-6">
                     Hai già un account?{' '}
                     <button onClick={() => { setAuthScreen('login'); setRegError(''); setRegEmailError(''); setRegPhoneError(''); }}
-                      className="text-[#777] hover:text-accent transition-colors underline underline-offset-2">
+                      className="text-[#666] hover:text-accent transition-colors underline underline-offset-2">
                       Accedi
                     </button>
                   </p>

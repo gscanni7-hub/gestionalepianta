@@ -908,14 +908,14 @@ export default function App() {
 
                   {/* Header */}
                   <div className="mb-8">
-                    <h2 className="hv font-black text-2xl uppercase text-white tracking-tight">Accedi</h2>
-                    <p className="text-[#555] text-[9px] font-sans uppercase tracking-[0.25em] mt-1.5">Bentornato nella piattaforma</p>
+                    <h2 className="font-bold text-[22px] text-white tracking-tight">Accedi</h2>
+                    <p className="text-[13px] text-[#666] mt-1.5">Bentornato nella piattaforma</p>
                   </div>
 
                   {/* Form email/password */}
                   <form ref={loginFormRef} onSubmit={handleLogin} className="space-y-3">
                     <div className="space-y-1">
-                      <label className="text-[9px] hv font-black uppercase tracking-[0.2em] text-[#555]">Email</label>
+                      <label className="text-xs font-medium text-[#666]">Email</label>
                       <input
                         type="email"
                         list="nightplan-accounts"
@@ -937,10 +937,10 @@ export default function App() {
                     </div>
                     <div className="space-y-1">
                       <div className="flex items-center justify-between">
-                        <label className="text-[9px] hv font-black uppercase tracking-[0.2em] text-[#555]">Password</label>
+                        <label className="text-xs font-medium text-[#666]">Password</label>
                         <button type="button"
                           onClick={() => { setAuthScreen('forgot'); setForgotError(''); setForgotSent(false); setForgotDevLink(''); }}
-                          className="text-[8px] font-sans text-[#444] hover:text-accent transition-colors uppercase tracking-widest">
+                          className="text-xs font-medium text-[#555] hover:text-accent transition-colors">
                           Dimenticata?
                         </button>
                       </div>
@@ -955,9 +955,9 @@ export default function App() {
                         </button>
                       </div>
                     </div>
-                    {loginError && <p className="text-red-500/80 text-[10px] font-sans uppercase tracking-widest pt-1">{loginError}</p>}
+                    {loginError && <p className="text-red-400 text-xs pt-1">{loginError}</p>}
                     <motion.button type="submit" whileHover={{ scale: 1.01 }} whileTap={{ scale: 0.99 }}
-                      className="group w-full bg-accent text-black py-[15px] text-[10px] hv font-black uppercase tracking-[0.3em] flex items-center justify-between px-6 hover:bg-white transition-all duration-200 mt-1 hover:shadow-[0_0_24px_rgba(212,98,42,0.30)] glow-sm">
+                      className="group w-full bg-accent text-black py-4 text-sm font-semibold rounded-xl flex items-center justify-between px-6 hover:bg-white transition-all duration-200 mt-1 hover:shadow-[0_0_24px_rgba(212,98,42,0.25)]">
                       <span>Accedi</span>
                       <ChevronRight size={13} className="group-hover:translate-x-1 transition-transform" />
                     </motion.button>
@@ -967,32 +967,32 @@ export default function App() {
                   <div className="mt-6">
                     <div className="flex items-center gap-3 mb-4">
                       <div className="flex-1 h-px bg-[#232323]" />
-                      <span className="text-[8px] font-sans uppercase tracking-[0.3em] text-[#3a3a3a]">oppure continua con</span>
+                      <span className="text-[11px] font-medium text-[#444]">oppure continua con</span>
                       <div className="flex-1 h-px bg-[#232323]" />
                     </div>
                     <div className="grid grid-cols-2 gap-3">
                       <button type="button" onClick={handleAppleSignIn}
-                        className="group flex items-center justify-center gap-2 py-3 bg-[#1a1a1a] border border-[#2a2a2a] hover:border-[#404040] hover:bg-[#212121] transition-all duration-200">
+                        className="group flex items-center justify-center gap-2 py-3 bg-[#1e1e1e] border border-[#333] rounded-xl hover:border-[#505050] hover:bg-[#252525] transition-all duration-200">
                         <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor" className="text-[#888] group-hover:text-white transition-colors">
                           <path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.8-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M13 3.5c.73-.83 1.94-1.46 2.94-1.5.13 1.17-.34 2.35-1.04 3.19-.69.85-1.83 1.51-2.95 1.42-.15-1.15.41-2.35 1.05-3.11z"/>
                         </svg>
-                        <span className="text-[9px] hv font-black uppercase tracking-[0.15em] text-[#555] group-hover:text-white transition-colors">Apple</span>
+                        <span className="text-xs font-medium text-[#888] group-hover:text-white transition-colors">Apple</span>
                       </button>
                       <button type="button" onClick={handleGoogleSignIn}
-                        className="group flex items-center justify-center gap-2 py-3 bg-[#1a1a1a] border border-[#2a2a2a] hover:border-[#404040] hover:bg-[#212121] transition-all duration-200">
+                        className="group flex items-center justify-center gap-2 py-3 bg-[#1e1e1e] border border-[#333] rounded-xl hover:border-[#505050] hover:bg-[#252525] transition-all duration-200">
                         <svg width="13" height="13" viewBox="0 0 24 24" fill="none">
                           <path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4"/>
                           <path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/>
                           <path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l3.66-2.84z" fill="#FBBC05"/>
                           <path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"/>
                         </svg>
-                        <span className="text-[9px] hv font-black uppercase tracking-[0.15em] text-[#555] group-hover:text-white transition-colors">Google</span>
+                        <span className="text-xs font-medium text-[#888] group-hover:text-white transition-colors">Google</span>
                       </button>
                     </div>
                   </div>
 
                   {/* Registrazione */}
-                  <p className="text-center text-[9px] font-sans text-[#3a3a3a] uppercase tracking-widest mt-6">
+                  <p className="text-center text-xs text-[#555] mt-6">
                     Sei un PR?{' '}
                     <button onClick={() => { setAuthScreen('register'); setRegError(''); setRegDone(false); }}
                       className="text-[#666] hover:text-accent transition-colors underline underline-offset-2">
@@ -1004,11 +1004,11 @@ export default function App() {
                 <motion.div key="forgot" initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -8 }} transition={{ duration: 0.18 }}>
                   {forgotSent ? (
                     <div className="text-center py-4">
-                      <div className="w-14 h-14 bg-accent/10 border border-accent/20 flex items-center justify-center mx-auto mb-6">
+                      <div className="w-14 h-14 bg-accent/10 border border-accent/20 rounded-2xl flex items-center justify-center mx-auto mb-6">
                         <UserCheck size={24} className="text-accent" />
                       </div>
-                      <h2 className="hv font-black text-xl uppercase text-white mb-3">Email Inviata</h2>
-                      <p className="text-[#999] text-[10px] font-sans uppercase tracking-widest leading-loose">
+                      <h2 className="font-bold text-xl text-white mb-3">Email Inviata</h2>
+                      <p className="text-sm text-[#777] leading-relaxed">
                         Controlla la tua casella di posta<br />e clicca il link per reimpostare<br />la password.
                       </p>
                       {forgotDevLink && (
@@ -1020,34 +1020,34 @@ export default function App() {
                         </div>
                       )}
                       <button onClick={() => { setAuthScreen('login'); setForgotSent(false); setForgotEmail(''); }}
-                        className="mt-8 w-full py-3.5 text-[9px] hv font-black uppercase tracking-[0.2em] border border-[#383838] text-[#888] hover:border-accent/40 hover:text-accent transition-colors">
+                        className="mt-8 w-full py-3.5 text-sm font-medium rounded-xl border border-[#2e2e2e] text-[#777] hover:border-accent/40 hover:text-accent transition-colors">
                         Torna al Login
                       </button>
                     </div>
                   ) : (
                     <>
                       <div className="mb-10">
-                        <h2 className="hv font-black text-2xl uppercase text-white">Password Dimenticata</h2>
-                        <p className="text-[#999] text-[10px] font-sans uppercase tracking-widest mt-2">Inserisci la tua email</p>
+                        <h2 className="font-bold text-[22px] text-white">Password Dimenticata</h2>
+                        <p className="text-[13px] text-[#666] mt-2">Inserisci la tua email</p>
                       </div>
                       <form onSubmit={handleForgotPassword} className="space-y-3">
                         <div className="space-y-1">
-                          <label className="text-[9px] hv font-black uppercase tracking-[0.2em] text-[#666]">Email</label>
+                          <label className="text-xs font-medium text-[#666]">Email</label>
                           <input type="email" required value={forgotEmail}
                             onChange={e => { setForgotEmail(e.target.value); setForgotError(''); }}
                             placeholder="tua@email.it"
                             className="auth-input w-full bg-[#141414] border border-[#383838] px-5 py-4 text-sm text-white placeholder-[#444] font-sans" />
                         </div>
-                        {forgotError && <p className="text-red-500/80 text-[10px] font-sans uppercase tracking-widest pt-1">{forgotError}</p>}
+                        {forgotError && <p className="text-red-400 text-xs pt-1">{forgotError}</p>}
                         <motion.button type="submit" whileHover={{ scale: 1.01 }} whileTap={{ scale: 0.99 }}
-                          className="group w-full bg-accent text-black py-[18px] text-[10px] hv font-black uppercase tracking-[0.3em] flex items-center justify-between px-6 hover:bg-white transition-all duration-200 mt-2 hover:shadow-[0_0_24px_rgba(212,98,42,0.40)] glow-sm">
+                          className="group w-full bg-accent text-black py-4 text-sm font-semibold rounded-xl flex items-center justify-between px-6 hover:bg-white transition-all duration-200 mt-2">
                           <span>Invia Link</span>
                           <ChevronRight size={14} className="group-hover:translate-x-1 transition-transform" />
                         </motion.button>
                       </form>
                       <div className="mt-8 pt-6 border-t border-[#2e2e2e]">
                         <button onClick={() => setAuthScreen('login')}
-                          className="w-full text-[9px] hv font-black uppercase tracking-[0.2em] text-[#666] hover:text-[#999] transition-colors py-2">
+                          className="w-full text-xs font-medium text-[#666] hover:text-[#999] transition-colors py-2">
                           ← Torna al Login
                         </button>
                       </div>
@@ -1058,27 +1058,27 @@ export default function App() {
                 <motion.div key="reset" initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -8 }} transition={{ duration: 0.18 }}>
                   {resetDone ? (
                     <div className="text-center py-4">
-                      <div className="w-14 h-14 bg-accent/10 border border-accent/20 flex items-center justify-center mx-auto mb-6">
+                      <div className="w-14 h-14 bg-accent/10 border border-accent/20 rounded-2xl flex items-center justify-center mx-auto mb-6">
                         <UserCheck size={24} className="text-accent" />
                       </div>
-                      <h2 className="hv font-black text-xl uppercase text-white mb-3">Password Aggiornata</h2>
-                      <p className="text-[#999] text-[10px] font-sans uppercase tracking-widest leading-loose">
+                      <h2 className="font-bold text-xl text-white mb-3">Password Aggiornata</h2>
+                      <p className="text-sm text-[#777] leading-relaxed">
                         La tua password è stata<br />reimpostata con successo.
                       </p>
                       <button onClick={() => { setAuthScreen('login'); setResetDone(false); setNewPassword(''); }}
-                        className="mt-8 w-full py-3.5 text-[9px] hv font-black uppercase tracking-[0.2em] bg-accent text-black hover:bg-white transition-colors">
+                        className="mt-8 w-full py-4 text-sm font-semibold rounded-xl bg-accent text-black hover:bg-white transition-colors">
                         Accedi ora
                       </button>
                     </div>
                   ) : (
                     <>
                       <div className="mb-10">
-                        <h2 className="hv font-black text-2xl uppercase text-white">Nuova Password</h2>
-                        <p className="text-[#999] text-[10px] font-sans uppercase tracking-widest mt-2">{resetEmailState}</p>
+                        <h2 className="font-bold text-[22px] text-white">Nuova Password</h2>
+                        <p className="text-[13px] text-[#666] mt-2">{resetEmailState}</p>
                       </div>
                       <form onSubmit={handleResetPassword} className="space-y-3">
                         <div className="space-y-1">
-                          <label className="text-[9px] hv font-black uppercase tracking-[0.2em] text-[#666]">Nuova Password</label>
+                          <label className="text-xs font-medium text-[#666]">Nuova Password</label>
                           <div className="relative">
                             <input type={showNewPasswordField ? 'text' : 'password'} required minLength={4} value={newPassword}
                               onChange={e => { setNewPassword(e.target.value); setResetError(''); }}
@@ -1090,9 +1090,9 @@ export default function App() {
                             </button>
                           </div>
                         </div>
-                        {resetError && <p className="text-red-500/80 text-[10px] font-sans uppercase tracking-widest pt-1">{resetError}</p>}
+                        {resetError && <p className="text-red-400 text-xs pt-1">{resetError}</p>}
                         <motion.button type="submit" whileHover={{ scale: 1.01 }} whileTap={{ scale: 0.99 }}
-                          className="group w-full bg-accent text-black py-[18px] text-[10px] hv font-black uppercase tracking-[0.3em] flex items-center justify-between px-6 hover:bg-white transition-all duration-200 mt-2 hover:shadow-[0_0_24px_rgba(212,98,42,0.40)] glow-sm">
+                          className="group w-full bg-accent text-black py-4 text-sm font-semibold rounded-xl flex items-center justify-between px-6 hover:bg-white transition-all duration-200 mt-2">
                           <span>Reimposta Password</span>
                           <ChevronRight size={14} className="group-hover:translate-x-1 transition-transform" />
                         </motion.button>
@@ -1103,15 +1103,15 @@ export default function App() {
               ) : regDone ? (
                 <motion.div key="done" initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.18 }}
                   className="text-center py-8">
-                  <div className="w-14 h-14 bg-accent/10 border border-accent/20 flex items-center justify-center mx-auto mb-6">
+                  <div className="w-14 h-14 bg-accent/10 border border-accent/20 rounded-2xl flex items-center justify-center mx-auto mb-6">
                     <UserCheck size={24} className="text-accent" />
                   </div>
-                  <h2 className="hv font-black text-xl uppercase text-white mb-3">Richiesta Inviata</h2>
-                  <p className="text-[#999] text-[10px] font-sans uppercase tracking-widest leading-loose">
+                  <h2 className="font-bold text-xl text-white mb-3">Richiesta Inviata</h2>
+                  <p className="text-sm text-[#777] leading-relaxed">
                     Il tuo account è in attesa<br />di approvazione admin.
                   </p>
                   <button onClick={() => { setAuthScreen('login'); setRegDone(false); setRegName(''); setRegEmail(''); setRegPassword(''); }}
-                    className="mt-8 w-full py-3.5 text-[9px] hv font-black uppercase tracking-[0.2em] border border-[#383838] text-[#888] hover:border-accent/40 hover:text-accent transition-colors">
+                    className="mt-8 w-full py-3.5 text-sm font-medium rounded-xl border border-[#2e2e2e] text-[#777] hover:border-accent/40 hover:text-accent transition-colors">
                     Torna al Login
                   </button>
                 </motion.div>
@@ -1119,27 +1119,27 @@ export default function App() {
                 <motion.div key="register" initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -8 }} transition={{ duration: 0.18 }}>
                   {/* Header */}
                   <div className="mb-8">
-                    <h2 className="hv font-black text-2xl uppercase text-white tracking-tight">Registrati</h2>
-                    <p className="text-[#555] text-[9px] font-sans uppercase tracking-[0.25em] mt-1.5">Crea il tuo account PR</p>
+                    <h2 className="font-bold text-[22px] text-white tracking-tight">Registrati</h2>
+                    <p className="text-[13px] text-[#666] mt-1.5">Crea il tuo account PR</p>
                   </div>
 
                   <form onSubmit={handleRegister} className="space-y-3">
                     <div className="grid grid-cols-2 gap-3">
                       <div className="space-y-1">
-                        <label className="text-[9px] hv font-black uppercase tracking-[0.2em] text-[#666]">Nome</label>
+                        <label className="text-xs font-medium text-[#666]">Nome</label>
                         <input required value={regName} onChange={e => { setRegName(e.target.value); setRegError(''); }}
                           placeholder="Mario"
                           className="auth-input w-full bg-[#141414] border border-[#383838] px-4 py-4 text-sm text-white placeholder-[#444] font-sans" />
                       </div>
                       <div className="space-y-1">
-                        <label className="text-[9px] hv font-black uppercase tracking-[0.2em] text-[#666]">Cognome</label>
+                        <label className="text-xs font-medium text-[#666]">Cognome</label>
                         <input required value={regLastName} onChange={e => { setRegLastName(e.target.value); setRegError(''); }}
                           placeholder="Rossi"
                           className="auth-input w-full bg-[#141414] border border-[#383838] px-4 py-4 text-sm text-white placeholder-[#444] font-sans" />
                       </div>
                     </div>
                     <div className="space-y-1">
-                      <label className="text-[9px] hv font-black uppercase tracking-[0.2em] text-[#666]">Email</label>
+                      <label className="text-xs font-medium text-[#666]">Email</label>
                       <input
                         type="text" inputMode="email" autoComplete="email" required value={regEmail}
                         onChange={e => {
@@ -1159,7 +1159,7 @@ export default function App() {
                       {regEmailError && <p className="text-red-500/80 text-[9px] font-sans uppercase tracking-widest">{regEmailError}</p>}
                     </div>
                     <div className="space-y-1">
-                      <label className="text-[9px] hv font-black uppercase tracking-[0.2em] text-[#666]">Telefono</label>
+                      <label className="text-xs font-medium text-[#666]">Telefono</label>
                       <input
                         type="tel" required value={regPhone}
                         onChange={e => {
@@ -1179,7 +1179,7 @@ export default function App() {
                       {regPhoneError && <p className="text-red-500/80 text-[9px] font-sans uppercase tracking-widest">{regPhoneError}</p>}
                     </div>
                     <div className="space-y-1">
-                      <label className="text-[9px] hv font-black uppercase tracking-[0.2em] text-[#666]">Password</label>
+                      <label className="text-xs font-medium text-[#666]">Password</label>
                       <div className="relative">
                         <input type={showRegPassword ? 'text' : 'password'} required value={regPassword} onChange={e => { setRegPassword(e.target.value); setRegError(''); }}
                           placeholder="••••••••"
@@ -1190,13 +1190,13 @@ export default function App() {
                         </button>
                       </div>
                     </div>
-                    {regError && <p className="text-red-500/80 text-[10px] font-sans uppercase tracking-widest pt-1">{regError}</p>}
+                    {regError && <p className="text-red-400 text-xs pt-1">{regError}</p>}
                     <motion.button
                       type="submit"
                       disabled={!!regEmailError || !!regPhoneError}
                       whileHover={!regEmailError && !regPhoneError ? { scale: 1.01 } : {}}
                       whileTap={!regEmailError && !regPhoneError ? { scale: 0.99 } : {}}
-                      className={`group w-full py-[18px] text-[10px] hv font-black uppercase tracking-[0.3em] flex items-center justify-between px-6 transition-colors mt-2 ${regEmailError || regPhoneError ? 'bg-[#2a2a2a] text-[#777] cursor-not-allowed' : 'bg-accent text-black hover:bg-white'}`}>
+                      className={`group w-full py-4 text-sm font-semibold rounded-xl flex items-center justify-between px-6 transition-colors mt-2 ${regEmailError || regPhoneError ? 'bg-[#2a2a2a] text-[#777] cursor-not-allowed' : 'bg-accent text-black hover:bg-white'}`}>
                       <span>Invia Richiesta</span>
                       <ChevronRight size={14} className="group-hover:translate-x-1 transition-transform" />
                     </motion.button>
@@ -1206,31 +1206,31 @@ export default function App() {
                   <div className="mt-6">
                     <div className="flex items-center gap-3 mb-4">
                       <div className="flex-1 h-px bg-[#232323]" />
-                      <span className="text-[8px] font-sans uppercase tracking-[0.3em] text-[#3a3a3a]">oppure continua con</span>
+                      <span className="text-[11px] font-medium text-[#444]">oppure continua con</span>
                       <div className="flex-1 h-px bg-[#232323]" />
                     </div>
                     <div className="grid grid-cols-2 gap-3">
                       <button type="button" onClick={handleAppleSignIn}
-                        className="group flex items-center justify-center gap-2 py-3 bg-[#1a1a1a] border border-[#2a2a2a] hover:border-[#404040] hover:bg-[#212121] transition-all duration-200">
+                        className="group flex items-center justify-center gap-2 py-3 bg-[#1e1e1e] border border-[#333] rounded-xl hover:border-[#505050] hover:bg-[#252525] transition-all duration-200">
                         <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor" className="text-[#888] group-hover:text-white transition-colors">
                           <path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.8-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M13 3.5c.73-.83 1.94-1.46 2.94-1.5.13 1.17-.34 2.35-1.04 3.19-.69.85-1.83 1.51-2.95 1.42-.15-1.15.41-2.35 1.05-3.11z"/>
                         </svg>
-                        <span className="text-[9px] hv font-black uppercase tracking-[0.15em] text-[#555] group-hover:text-white transition-colors">Apple</span>
+                        <span className="text-xs font-medium text-[#888] group-hover:text-white transition-colors">Apple</span>
                       </button>
                       <button type="button" onClick={handleGoogleSignIn}
-                        className="group flex items-center justify-center gap-2 py-3 bg-[#1a1a1a] border border-[#2a2a2a] hover:border-[#404040] hover:bg-[#212121] transition-all duration-200">
+                        className="group flex items-center justify-center gap-2 py-3 bg-[#1e1e1e] border border-[#333] rounded-xl hover:border-[#505050] hover:bg-[#252525] transition-all duration-200">
                         <svg width="13" height="13" viewBox="0 0 24 24" fill="none">
                           <path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4"/>
                           <path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/>
                           <path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l3.66-2.84z" fill="#FBBC05"/>
                           <path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"/>
                         </svg>
-                        <span className="text-[9px] hv font-black uppercase tracking-[0.15em] text-[#555] group-hover:text-white transition-colors">Google</span>
+                        <span className="text-xs font-medium text-[#888] group-hover:text-white transition-colors">Google</span>
                       </button>
                     </div>
                   </div>
 
-                  <p className="text-center text-[9px] font-sans text-[#3a3a3a] uppercase tracking-widest mt-6">
+                  <p className="text-center text-xs text-[#555] mt-6">
                     Hai già un account?{' '}
                     <button onClick={() => { setAuthScreen('login'); setRegError(''); setRegEmailError(''); setRegPhoneError(''); }}
                       className="text-[#666] hover:text-accent transition-colors underline underline-offset-2">
@@ -2425,24 +2425,24 @@ function ReservationQuickEditModal({ reservation, onClose, onSave }: {
         <form className="p-6 space-y-4 overflow-y-auto" onSubmit={e => { e.preventDefault(); onSave({ ...reservation, guestsCount: guests, budget, bottles, notes }); }}>
           <div className="grid grid-cols-2 gap-4">
             <div>
-              <label className="block text-[9px] hv font-black uppercase tracking-[0.2em] text-[#666] mb-2">N. Ospiti</label>
+              <label className="block text-xs font-medium text-[#666] mb-2">N. Ospiti</label>
               <input type="number" min={1} value={guests} onChange={e => setGuests(Number(e.target.value))}
                 className="w-full bg-[#141414] border border-[#383838] px-4 py-3 text-sm text-white outline-none focus:border-accent/40 transition-colors font-sans" />
             </div>
             <div>
-              <label className="block text-[9px] hv font-black uppercase tracking-[0.2em] text-[#666] mb-2">Budget €</label>
+              <label className="block text-xs font-medium text-[#666] mb-2">Budget €</label>
               <input type="number" min={0} value={budget} onChange={e => setBudget(Number(e.target.value))}
                 className="w-full bg-[#141414] border border-[#383838] px-4 py-3 text-sm text-white outline-none focus:border-accent/40 transition-colors font-sans" />
             </div>
           </div>
           <div>
-            <label className="block text-[9px] hv font-black uppercase tracking-[0.2em] text-[#666] mb-2">Bottiglie</label>
+            <label className="block text-xs font-medium text-[#666] mb-2">Bottiglie</label>
             <input value={bottles} onChange={e => setBottles(e.target.value)}
               placeholder="es. 2 vodka, 1 champagne"
               className="w-full bg-[#141414] border border-[#383838] px-4 py-3 text-sm text-white placeholder-[#444] outline-none focus:border-accent/40 transition-colors font-sans" />
           </div>
           <div>
-            <label className="block text-[9px] hv font-black uppercase tracking-[0.2em] text-[#666] mb-2">Note</label>
+            <label className="block text-xs font-medium text-[#666] mb-2">Note</label>
             <textarea value={notes} onChange={e => setNotes(e.target.value)} rows={3}
               className="w-full bg-[#141414] border border-[#383838] px-4 py-3 text-sm text-white placeholder-[#444] outline-none focus:border-accent/40 transition-colors font-sans resize-none" />
           </div>

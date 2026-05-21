@@ -821,13 +821,9 @@ export default function App() {
           className="hidden lg:flex flex-col justify-between p-14 xl:p-20 border-r border-[#2e2e2e] lg:w-[55%] relative overflow-hidden"
         >
           <div className="absolute inset-0 floorplan-grid opacity-40 pointer-events-none" />
-          <div className="absolute inset-0 pointer-events-none" style={{ background: 'radial-gradient(ellipse 90% 70% at 25% 55%, rgba(212,98,42,0.09) 0%, transparent 65%)' }} />
-          <div className="absolute bottom-0 left-0 right-0 h-48 pointer-events-none" style={{ background: 'linear-gradient(to top, rgba(26,26,26,0.6) 0%, transparent 100%)' }} />
-
-          <span className="relative text-[9px] font-sans font-medium uppercase tracking-[0.55em] text-[#555]">
+          <span className="relative text-[10px] font-sans font-medium uppercase tracking-[0.5em] text-[#999]">
             Table Management Platform
           </span>
-
           <div className="relative">
             <h1 className="hv font-black leading-[0.88] tracking-tighter uppercase text-white"
               style={{ fontSize: 'clamp(80px, 10vw, 130px)' }}>
@@ -835,25 +831,12 @@ export default function App() {
             </h1>
             <div className="mt-8 flex items-center gap-4">
               <div className="h-px w-10 bg-accent shrink-0" />
-              <p className="text-[#888] text-sm font-sans leading-relaxed">
+              <p className="text-[#999] text-sm font-sans leading-relaxed">
                 The operating system<br />for nightlife professionals.
               </p>
             </div>
-            <div className="mt-12 space-y-3.5">
-              {[
-                'Pianta tavoli interattiva in tempo reale',
-                'Check-in ospiti e gestione ingressi',
-                'Analytics PR e ranking performance',
-              ].map(text => (
-                <div key={text} className="flex items-center gap-3">
-                  <div className="w-1 h-1 bg-accent rounded-full shrink-0" />
-                  <span className="text-[10px] font-sans uppercase tracking-[0.22em] text-[#4a4a4a]">{text}</span>
-                </div>
-              ))}
-            </div>
           </div>
-
-          <span className="relative text-[9px] font-sans text-[#3a3a3a] uppercase tracking-[0.4em]">
+          <span className="relative text-[9px] font-sans text-[#555] uppercase tracking-[0.4em]">
             © 2025 Nightplan Management Suite
           </span>
         </motion.div>
@@ -865,13 +848,9 @@ export default function App() {
           className="flex-1 flex flex-col justify-center items-center p-8 lg:p-16 bg-[#1A1A1A]"
         >
           {/* Mobile logo */}
-          <div className="lg:hidden mb-10 -mx-8 px-8 pt-10 pb-8 relative text-center overflow-hidden" style={{ background: 'radial-gradient(ellipse 140% 100% at 50% 0%, rgba(212,98,42,0.13) 0%, transparent 65%)' }}>
-            <h1 className="hv font-black text-[52px] leading-none uppercase tracking-tight text-white">NIGHTPLAN</h1>
-            <div className="flex items-center justify-center gap-3 mt-3">
-              <div className="h-px w-6 bg-accent/50" />
-              <p className="text-[#555] text-[9px] font-sans uppercase tracking-[0.5em]">Management Suite</p>
-              <div className="h-px w-6 bg-accent/50" />
-            </div>
+          <div className="lg:hidden mb-14 text-center">
+            <h1 className="hv font-black text-5xl uppercase tracking-tight text-white">NIGHTPLAN</h1>
+            <p className="text-[#999] text-[10px] font-sans uppercase tracking-[0.4em] mt-2">Management Suite</p>
           </div>
 
           <div className="w-full max-w-xs">

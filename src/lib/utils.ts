@@ -12,7 +12,7 @@ export const COLORS = {
   warning: '#F59E0B',
   danger:  '#EF4444',
   info:    '#38BDF8',
-  neutral: '#2a2a2a',
+  neutral: '#2C2C2E',
 } as const;
 
 /* ── Motion presets ──────────────────────────────────────── */

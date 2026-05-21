@@ -143,13 +143,13 @@ export default function PublicRegistrationForm() {
           initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }}
           className="text-center space-y-4 max-w-xs"
         >
-          <div className="w-10 h-10 bg-[#1a1a1a] border border-[#2a2a2a] flex items-center justify-center mx-auto">
+          <div className="w-10 h-10 bg-[#1C1C1E] border border-[#2C2C2E] flex items-center justify-center mx-auto">
             <AlertCircle size={20} className="text-[#EF4444]" />
           </div>
           <div>
             <p className="text-[8px] font-mono uppercase tracking-[0.4em] text-[#D4622A] mb-2">Nightplan</p>
             <p className="text-white hv font-black text-xl uppercase">Link non valido</p>
-            <p className="text-[#555] text-xs mt-2">Questo link di registrazione non esiste o è scaduto.</p>
+            <p className="text-[#8E8E93] text-xs mt-2">Questo link di registrazione non esiste o è scaduto.</p>
           </div>
         </motion.div>
       </div>
@@ -180,7 +180,7 @@ export default function PublicRegistrationForm() {
             <div className="w-5 h-5 bg-[#D4622A] flex items-center justify-center">
               <span className="text-black font-black text-[8px]" style={{ fontFamily: 'Helvetica Neue, Helvetica, Arial, sans-serif' }}>N</span>
             </div>
-            <span className="text-[9px] font-mono uppercase tracking-[0.45em] text-[#555]">Nightplan</span>
+            <span className="text-[9px] font-mono uppercase tracking-[0.45em] text-[#8E8E93]">Nightplan</span>
           </div>
 
           <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.4 }}>
@@ -190,13 +190,13 @@ export default function PublicRegistrationForm() {
             <h1 className="hv font-black text-4xl uppercase leading-none text-white mb-3">
               {event?.name}
             </h1>
-            <p className="text-[#666] text-[11px] font-mono capitalize">{formattedDate}{event?.time ? ` · ${event.time}` : ''}</p>
+            <p className="text-[#636366] text-[11px] font-mono capitalize">{formattedDate}{event?.time ? ` · ${event.time}` : ''}</p>
           </motion.div>
 
           {pr && (
             <motion.div
               initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }} transition={{ delay: 0.2 }}
-              className="mt-5 inline-flex items-center gap-2 bg-[#1a1a1a] border border-[#2a2a2a] px-4 py-2"
+              className="mt-5 inline-flex items-center gap-2 bg-[#1C1C1E] border border-[#2C2C2E] px-4 py-2"
             >
               <div className="w-1.5 h-1.5 bg-[#D4622A]" />
               <span className="text-[9px] font-mono uppercase tracking-widest text-[#aaa]">
@@ -209,76 +209,76 @@ export default function PublicRegistrationForm() {
 
       {/* Divider */}
       <div className="max-w-md mx-auto px-6">
-        <div className="h-[1px] bg-gradient-to-r from-transparent via-[#2a2a2a] to-transparent mb-8" />
+        <div className="h-[1px] bg-gradient-to-r from-transparent via-[#2C2C2E] to-transparent mb-8" />
       </div>
 
       {/* Form */}
       <div className="px-6 pb-16 max-w-md mx-auto">
-        <p className="text-[8px] font-mono uppercase tracking-[0.4em] text-[#444] text-center mb-6">Compila il modulo per registrarti</p>
+        <p className="text-[8px] font-mono uppercase tracking-[0.4em] text-[#636366] text-center mb-6">Compila il modulo per registrarti</p>
         <form onSubmit={handleSubmit} className="space-y-4">
           <div className="grid grid-cols-2 gap-3">
             <div className="space-y-1.5">
-              <label className="text-[9px] font-mono uppercase tracking-widest text-[#666]">Nome *</label>
+              <label className="text-[9px] font-mono uppercase tracking-widest text-[#636366]">Nome *</label>
               <div className="relative">
-                <User size={13} className="absolute left-3 top-1/2 -translate-y-1/2 text-[#444]" />
+                <User size={13} className="absolute left-3 top-1/2 -translate-y-1/2 text-[#636366]" />
                 <input
                   required
                   value={form.firstName}
                   onChange={e => setForm({ ...form, firstName: e.target.value })}
                   placeholder="Mario"
-                  className="w-full bg-[#1a1a1a] border border-[#2a2a2a] pl-9 pr-3 py-3 text-sm text-white placeholder-[#444] outline-none focus:border-[#D4622A] transition-colors"
+                  className="w-full bg-[#1C1C1E] border border-[#2C2C2E] pl-9 pr-3 py-3 text-sm text-white placeholder-[#636366] outline-none focus:border-[#D4622A] transition-colors"
                 />
               </div>
             </div>
             <div className="space-y-1.5">
-              <label className="text-[9px] font-mono uppercase tracking-widest text-[#666]">Cognome *</label>
+              <label className="text-[9px] font-mono uppercase tracking-widest text-[#636366]">Cognome *</label>
               <input
                 required
                 value={form.lastName}
                 onChange={e => setForm({ ...form, lastName: e.target.value })}
                 placeholder="Rossi"
-                className="w-full bg-[#1a1a1a] border border-[#2a2a2a] px-3 py-3 text-sm text-white placeholder-[#444] outline-none focus:border-[#D4622A] transition-colors"
+                className="w-full bg-[#1C1C1E] border border-[#2C2C2E] px-3 py-3 text-sm text-white placeholder-[#636366] outline-none focus:border-[#D4622A] transition-colors"
               />
             </div>
           </div>
 
           <div className="space-y-1.5">
-            <label className="text-[9px] font-mono uppercase tracking-widest text-[#666]">Email *</label>
+            <label className="text-[9px] font-mono uppercase tracking-widest text-[#636366]">Email *</label>
             <div className="relative">
-              <Mail size={13} className="absolute left-3 top-1/2 -translate-y-1/2 text-[#444]" />
+              <Mail size={13} className="absolute left-3 top-1/2 -translate-y-1/2 text-[#636366]" />
               <input
                 required
                 type="email"
                 value={form.email}
                 onChange={e => setForm({ ...form, email: e.target.value })}
                 placeholder="mario@email.com"
-                className="w-full bg-[#1a1a1a] border border-[#2a2a2a] pl-9 pr-3 py-3 text-sm text-white placeholder-[#444] outline-none focus:border-[#D4622A] transition-colors"
+                className="w-full bg-[#1C1C1E] border border-[#2C2C2E] pl-9 pr-3 py-3 text-sm text-white placeholder-[#636366] outline-none focus:border-[#D4622A] transition-colors"
               />
             </div>
           </div>
 
           <div className="space-y-1.5">
-            <label className="text-[9px] font-mono uppercase tracking-widest text-[#666]">Telefono</label>
+            <label className="text-[9px] font-mono uppercase tracking-widest text-[#636366]">Telefono</label>
             <div className="relative">
-              <Phone size={13} className="absolute left-3 top-1/2 -translate-y-1/2 text-[#444]" />
+              <Phone size={13} className="absolute left-3 top-1/2 -translate-y-1/2 text-[#636366]" />
               <input
                 type="tel"
                 value={form.phone}
                 onChange={e => setForm({ ...form, phone: e.target.value })}
                 placeholder="+39 333 000 0000"
-                className="w-full bg-[#1a1a1a] border border-[#2a2a2a] pl-9 pr-3 py-3 text-sm text-white placeholder-[#444] outline-none focus:border-[#D4622A] transition-colors"
+                className="w-full bg-[#1C1C1E] border border-[#2C2C2E] pl-9 pr-3 py-3 text-sm text-white placeholder-[#636366] outline-none focus:border-[#D4622A] transition-colors"
               />
             </div>
           </div>
 
           <div className="space-y-1.5">
-            <label className="text-[9px] font-mono uppercase tracking-widest text-[#666]">Numero persone *</label>
+            <label className="text-[9px] font-mono uppercase tracking-widest text-[#636366]">Numero persone *</label>
             <div className="relative">
-              <Users size={13} className="absolute left-3 top-1/2 -translate-y-1/2 text-[#444]" />
+              <Users size={13} className="absolute left-3 top-1/2 -translate-y-1/2 text-[#636366]" />
               <select
                 value={form.guestsCount}
                 onChange={e => setForm({ ...form, guestsCount: parseInt(e.target.value) })}
-                className="w-full bg-[#1a1a1a] border border-[#2a2a2a] pl-9 pr-3 py-3 text-sm text-white outline-none focus:border-[#D4622A] transition-colors [color-scheme:dark]"
+                className="w-full bg-[#1C1C1E] border border-[#2C2C2E] pl-9 pr-3 py-3 text-sm text-white outline-none focus:border-[#D4622A] transition-colors [color-scheme:dark]"
               >
                 {[1,2,3,4,5,6,7,8,9,10].map(n => (
                   <option key={n} value={n}>{n} {n === 1 ? 'persona' : 'persone'}</option>
@@ -311,17 +311,17 @@ export default function PublicRegistrationForm() {
             )}
           </motion.button>
 
-          <p className="text-center text-[10px] text-[#444] font-mono">
+          <p className="text-center text-[10px] text-[#636366] font-mono">
             Riceverai il tuo biglietto con QR code
           </p>
         </form>
 
         {/* Footer brand */}
-        <div className="mt-12 pt-6 border-t border-[#1a1a1a] flex items-center justify-center gap-2">
+        <div className="mt-12 pt-6 border-t border-[#1C1C1E] flex items-center justify-center gap-2">
           <div className="w-4 h-4 bg-[#D4622A] flex items-center justify-center">
             <span className="text-black font-black text-[7px]" style={{ fontFamily: 'Helvetica Neue, Helvetica, Arial, sans-serif' }}>N</span>
           </div>
-          <span className="text-[8px] font-mono uppercase tracking-[0.4em] text-[#333]">Powered by Nightplan</span>
+          <span className="text-[8px] font-mono uppercase tracking-[0.4em] text-[#3A3A3C]">Powered by Nightplan</span>
         </div>
       </div>
     </div>

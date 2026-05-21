@@ -30,7 +30,7 @@ export default function PendingApprovalsView({
           <CheckCheck size={28} className="text-green-400" />
         </div>
         <p className="font-bold text-2xl text-white">Tutto in ordine</p>
-        <p className="text-sm text-[#555]">Nessun elemento in attesa di approvazione</p>
+        <p className="text-sm text-[#8E8E93]">Nessun elemento in attesa di approvazione</p>
       </div>
     );
   }
@@ -60,20 +60,20 @@ export default function PendingApprovalsView({
             {pendingResv.map(r => (
               <div
                 key={r.id}
-                className="flex items-center justify-between p-5 bg-[#1a1a1a] border border-[#2a2a2a] hover:border-[#333] transition-colors gap-4 rounded-xl"
+                className="flex items-center justify-between p-5 bg-[#1C1C1E] border border-[#2C2C2E] hover:border-[#48484A] transition-colors gap-4 rounded-xl"
               >
                 <div className="min-w-0 flex-1">
                   <div className="flex items-center gap-3 flex-wrap">
                     <span className="font-semibold text-white text-sm">{r.customerName}</span>
-                    <span className="text-xs font-medium text-[#888] border border-[#383838] rounded-full px-2 py-0.5">
+                    <span className="text-xs font-medium text-[#AEAEB2] border border-[#3A3A3C] rounded-full px-2 py-0.5">
                       Tav. {r.tableName ?? r.tableId}
                     </span>
                   </div>
                   <div className="flex items-center gap-4 mt-2 flex-wrap">
-                    <p className="text-[9px] font-sans text-[#777]">PR: {r.prName}</p>
-                    <p className="text-[9px] font-sans text-[#777]">{r.guestsCount} pax</p>
+                    <p className="text-[9px] font-sans text-[#8E8E93]">PR: {r.prName}</p>
+                    <p className="text-[9px] font-sans text-[#8E8E93]">{r.guestsCount} pax</p>
                     <p className="text-[9px] font-sans text-accent">€{r.budget}</p>
-                    {r.bottles && <p className="text-[9px] font-sans text-[#666]">{r.bottles}</p>}
+                    {r.bottles && <p className="text-[9px] font-sans text-[#636366]">{r.bottles}</p>}
                   </div>
                 </div>
                 <div className="flex items-center gap-2 shrink-0">
@@ -111,18 +111,18 @@ export default function PendingApprovalsView({
             {pendingUsers.map(u => (
               <div
                 key={u.id}
-                className="flex items-center justify-between p-5 bg-[#1a1a1a] border border-[#2a2a2a] hover:border-[#333] transition-colors gap-4 rounded-xl"
+                className="flex items-center justify-between p-5 bg-[#1C1C1E] border border-[#2C2C2E] hover:border-[#48484A] transition-colors gap-4 rounded-xl"
               >
                 <div className="flex items-center gap-4 min-w-0">
-                  <div className="w-9 h-9 bg-[#2a2a2a] border border-[#383838] flex items-center justify-center shrink-0 rounded-xl">
-                    <span className="hv font-black text-[#888] text-xs">
+                  <div className="w-9 h-9 bg-[#2C2C2E] border border-[#3A3A3C] flex items-center justify-center shrink-0 rounded-xl">
+                    <span className="hv font-black text-[#AEAEB2] text-xs">
                       {u.displayName.substring(0, 2).toUpperCase()}
                     </span>
                   </div>
                   <div className="min-w-0">
                     <p className="font-semibold text-white text-[13px]">{u.displayName} {u.lastName}</p>
-                    <p className="text-[9px] font-sans text-[#888] mt-0.5">{u.email}</p>
-                    <p className="text-xs text-[#666] mt-0.5">
+                    <p className="text-[9px] font-sans text-[#AEAEB2] mt-0.5">{u.email}</p>
+                    <p className="text-xs text-[#636366] mt-0.5">
                       {new Date(u.createdAt).toLocaleDateString('it-IT')}
                     </p>
                   </div>

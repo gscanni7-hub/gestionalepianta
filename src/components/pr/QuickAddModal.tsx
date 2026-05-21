@@ -65,13 +65,13 @@ export default function QuickAddModal({ events, venues, user, onClose, onAdd }: 
       <motion.div
         initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.22, ease: 'easeOut' }}
-        className="relative w-full sm:max-w-md bg-[#1a1a1a] border-t border-x sm:border border-[#2a2a2a] overflow-hidden rounded-t-2xl sm:rounded-2xl max-h-[90vh] flex flex-col"
+        className="relative w-full sm:max-w-md bg-[#1C1C1E] border-t border-x sm:border border-[#2C2C2E] overflow-hidden rounded-t-2xl sm:rounded-2xl max-h-[90vh] flex flex-col"
       >
         <div className="h-[2px] bg-[#D4622A] shrink-0" />
 
-        <div className="px-6 py-5 border-b border-[#222] flex items-center justify-between shrink-0">
+        <div className="px-6 py-5 border-b border-[#2C2C2E] flex items-center justify-between shrink-0">
           <h3 className="font-bold text-lg text-white">Aggiungi Prenotazione</h3>
-          <button onClick={onClose} className="text-[#666] hover:text-white transition-colors p-1"><X size={18} /></button>
+          <button onClick={onClose} className="text-[#636366] hover:text-white transition-colors p-1"><X size={18} /></button>
         </div>
 
         {done ? (
@@ -85,7 +85,7 @@ export default function QuickAddModal({ events, venues, user, onClose, onAdd }: 
             </motion.div>
             <div className="text-center">
               <p className="font-bold text-white text-lg">Aggiunta!</p>
-              <p className="text-[#666] text-xs mt-1">In attesa di approvazione admin</p>
+              <p className="text-[#636366] text-xs mt-1">In attesa di approvazione admin</p>
             </div>
             <button onClick={onClose}
               className="w-full py-3.5 rounded-xl bg-[#D4622A] text-black text-sm font-semibold hover:bg-white transition-colors">
@@ -97,11 +97,11 @@ export default function QuickAddModal({ events, venues, user, onClose, onAdd }: 
             {/* Event selector */}
             {activeEvents.length > 1 && (
               <div className="space-y-1.5">
-                <label className="text-xs font-medium text-[#666]">Evento</label>
+                <label className="text-xs font-medium text-[#636366]">Evento</label>
                 <select
                   value={form.eventId}
                   onChange={e => { setForm({ ...form, eventId: e.target.value }); setTableId(''); }}
-                  className="w-full bg-[#111] border border-[#2a2a2a] rounded-xl px-4 py-3 text-sm text-white outline-none focus:border-[#D4622A] transition-colors [color-scheme:dark]"
+                  className="w-full bg-[#111111] border border-[#2C2C2E] rounded-xl px-4 py-3 text-sm text-white outline-none focus:border-[#D4622A] transition-colors [color-scheme:dark]"
                 >
                   {activeEvents.map(ev => (
                     <option key={ev.id} value={ev.id}>{ev.name}</option>
@@ -112,55 +112,55 @@ export default function QuickAddModal({ events, venues, user, onClose, onAdd }: 
 
             {/* Customer name */}
             <div className="space-y-1.5">
-              <label className="text-xs font-medium text-[#666]">Nome cliente *</label>
+              <label className="text-xs font-medium text-[#636366]">Nome cliente *</label>
               <div className="relative">
-                <User size={13} className="absolute left-3 top-1/2 -translate-y-1/2 text-[#444]" />
+                <User size={13} className="absolute left-3 top-1/2 -translate-y-1/2 text-[#636366]" />
                 <input
                   required
                   value={form.customerName}
                   onChange={e => setForm({ ...form, customerName: e.target.value })}
                   placeholder="Mario Rossi"
-                  className="w-full bg-[#111] border border-[#2a2a2a] rounded-xl pl-9 pr-3 py-3 text-sm text-white placeholder-[#444] outline-none focus:border-[#D4622A] transition-colors"
+                  className="w-full bg-[#111111] border border-[#2C2C2E] rounded-xl pl-9 pr-3 py-3 text-sm text-white placeholder-[#636366] outline-none focus:border-[#D4622A] transition-colors"
                 />
               </div>
             </div>
 
             {/* Phone */}
             <div className="space-y-1.5">
-              <label className="text-xs font-medium text-[#666]">Telefono</label>
+              <label className="text-xs font-medium text-[#636366]">Telefono</label>
               <div className="relative">
-                <Phone size={13} className="absolute left-3 top-1/2 -translate-y-1/2 text-[#444]" />
+                <Phone size={13} className="absolute left-3 top-1/2 -translate-y-1/2 text-[#636366]" />
                 <input
                   type="tel"
                   value={form.customerPhone}
                   onChange={e => setForm({ ...form, customerPhone: e.target.value })}
                   placeholder="+39 333 000 0000"
-                  className="w-full bg-[#111] border border-[#2a2a2a] rounded-xl pl-9 pr-3 py-3 text-sm text-white placeholder-[#444] outline-none focus:border-[#D4622A] transition-colors"
+                  className="w-full bg-[#111111] border border-[#2C2C2E] rounded-xl pl-9 pr-3 py-3 text-sm text-white placeholder-[#636366] outline-none focus:border-[#D4622A] transition-colors"
                 />
               </div>
             </div>
 
             {/* Guests */}
             <div className="space-y-1.5">
-              <label className="text-xs font-medium text-[#666]">Numero persone</label>
-              <div className="flex items-center gap-3 bg-[#111] border border-[#2a2a2a] rounded-xl px-4 py-2.5">
-                <Users size={13} className="text-[#444]" />
+              <label className="text-xs font-medium text-[#636366]">Numero persone</label>
+              <div className="flex items-center gap-3 bg-[#111111] border border-[#2C2C2E] rounded-xl px-4 py-2.5">
+                <Users size={13} className="text-[#636366]" />
                 <button type="button" onClick={() => setForm(f => ({ ...f, guestsCount: Math.max(1, f.guestsCount - 1) }))}
-                  className="w-8 h-8 text-[#888] hover:text-white text-xl leading-none flex items-center justify-center transition-colors">−</button>
+                  className="w-8 h-8 text-[#AEAEB2] hover:text-white text-xl leading-none flex items-center justify-center transition-colors">−</button>
                 <span className="hv font-black text-white text-xl w-8 text-center">{form.guestsCount}</span>
                 <button type="button" onClick={() => setForm(f => ({ ...f, guestsCount: f.guestsCount + 1 }))}
-                  className="w-8 h-8 text-[#888] hover:text-white text-xl leading-none flex items-center justify-center transition-colors">+</button>
+                  className="w-8 h-8 text-[#AEAEB2] hover:text-white text-xl leading-none flex items-center justify-center transition-colors">+</button>
               </div>
             </div>
 
             {/* Table (optional) */}
             {tables.length > 0 && (
               <div className="space-y-1.5">
-                <label className="text-xs font-medium text-[#666]">Tavolo (opzionale)</label>
+                <label className="text-xs font-medium text-[#636366]">Tavolo (opzionale)</label>
                 <select
                   value={tableId}
                   onChange={e => setTableId(e.target.value)}
-                  className="w-full bg-[#111] border border-[#2a2a2a] rounded-xl px-4 py-3 text-sm text-white outline-none focus:border-[#D4622A] transition-colors [color-scheme:dark]"
+                  className="w-full bg-[#111111] border border-[#2C2C2E] rounded-xl px-4 py-3 text-sm text-white outline-none focus:border-[#D4622A] transition-colors [color-scheme:dark]"
                 >
                   <option value="">Da assegnare</option>
                   {tables.map(t => (
@@ -172,22 +172,22 @@ export default function QuickAddModal({ events, venues, user, onClose, onAdd }: 
 
             {/* Notes */}
             <div className="space-y-1.5">
-              <label className="text-xs font-medium text-[#666]">Note (opzionale)</label>
+              <label className="text-xs font-medium text-[#636366]">Note (opzionale)</label>
               <div className="relative">
-                <FileText size={13} className="absolute left-3 top-3.5 text-[#444]" />
+                <FileText size={13} className="absolute left-3 top-3.5 text-[#636366]" />
                 <textarea
                   rows={2}
                   value={form.notes}
                   onChange={e => setForm({ ...form, notes: e.target.value })}
                   placeholder="Richieste speciali..."
-                  className="w-full bg-[#111] border border-[#2a2a2a] rounded-xl pl-9 pr-3 py-3 text-sm text-white placeholder-[#444] outline-none focus:border-[#D4622A] transition-colors resize-none"
+                  className="w-full bg-[#111111] border border-[#2C2C2E] rounded-xl pl-9 pr-3 py-3 text-sm text-white placeholder-[#636366] outline-none focus:border-[#D4622A] transition-colors resize-none"
                 />
               </div>
             </div>
 
             <div className="flex gap-3 pt-2">
               <button type="button" onClick={onClose}
-                className="flex-1 py-3.5 rounded-xl border border-[#2a2a2a] text-[#666] text-sm font-medium hover:text-white hover:border-[#3a3a3a] transition-colors">
+                className="flex-1 py-3.5 rounded-xl border border-[#2C2C2E] text-[#636366] text-sm font-medium hover:text-white hover:border-[#3a3a3a] transition-colors">
                 Annulla
               </button>
               <button type="submit"

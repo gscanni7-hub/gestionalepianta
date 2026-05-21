@@ -28,26 +28,26 @@ export default function PRRankingView({ managedUsers, reservations }: Props) {
   if (ranked.length === 0) {
     return (
       <div className="py-12 text-center">
-        <p className="text-[9px] font-sans uppercase tracking-[0.4em] text-[#555]">Nessun PR attivo</p>
+        <p className="text-[9px] font-sans uppercase tracking-[0.4em] text-[#8E8E93]">Nessun PR attivo</p>
       </div>
     );
   }
 
   return (
     <div>
-      <p className="text-xs font-medium text-[#555] mb-5">Ranking PR — per incasso</p>
-      <div className="border border-[#2a2a2a] overflow-hidden rounded-xl">
+      <p className="text-xs font-medium text-[#8E8E93] mb-5">Ranking PR — per incasso</p>
+      <div className="border border-[#2C2C2E] overflow-hidden rounded-xl">
         {/* Header */}
-        <div className="grid grid-cols-[40px_1fr_80px_80px_100px] gap-0 px-5 py-3 bg-[#141414] border-b border-[#2a2a2a]">
-          <span className="text-[8px] font-sans uppercase tracking-[0.3em] text-[#555]">#</span>
-          <span className="text-[8px] font-sans uppercase tracking-[0.3em] text-[#555]">Nome</span>
-          <span className="text-[8px] font-sans uppercase tracking-[0.3em] text-[#555] text-right">Pren.</span>
-          <span className="text-[8px] font-sans uppercase tracking-[0.3em] text-[#555] text-right">Persone</span>
-          <span className="text-[8px] font-sans uppercase tracking-[0.3em] text-[#555] text-right">Incasso</span>
+        <div className="grid grid-cols-[40px_1fr_80px_80px_100px] gap-0 px-5 py-3 bg-[#111111] border-b border-[#2C2C2E]">
+          <span className="text-[8px] font-sans uppercase tracking-[0.3em] text-[#8E8E93]">#</span>
+          <span className="text-[8px] font-sans uppercase tracking-[0.3em] text-[#8E8E93]">Nome</span>
+          <span className="text-[8px] font-sans uppercase tracking-[0.3em] text-[#8E8E93] text-right">Pren.</span>
+          <span className="text-[8px] font-sans uppercase tracking-[0.3em] text-[#8E8E93] text-right">Persone</span>
+          <span className="text-[8px] font-sans uppercase tracking-[0.3em] text-[#8E8E93] text-right">Incasso</span>
         </div>
 
         {/* Rows */}
-        <div className="divide-y divide-[#1e1e1e]">
+        <div className="divide-y divide-[#2C2C2E]">
           {ranked.map(({ pr, totalPren, totalPersone, totalIncasso }, idx) => {
             const rank = idx + 1;
             const medalColor = MEDAL_COLORS[rank];
@@ -57,7 +57,7 @@ export default function PRRankingView({ managedUsers, reservations }: Props) {
               <div
                 key={pr.id}
                 className={`grid grid-cols-[40px_1fr_80px_80px_100px] gap-0 px-5 py-4 items-center transition-colors ${
-                  isTop3 ? 'bg-[#1a1a1a]' : 'bg-[#111]'
+                  isTop3 ? 'bg-[#1C1C1E]' : 'bg-[#111111]'
                 } hover:bg-white/[0.02]`}
                 style={isTop3 ? { borderLeft: `2px solid ${medalColor}40` } : {}}
               >
@@ -73,7 +73,7 @@ export default function PRRankingView({ managedUsers, reservations }: Props) {
                 <div className="flex items-center gap-3 min-w-0">
                   <div
                     className="w-8 h-8 flex items-center justify-center shrink-0 overflow-hidden rounded-xl"
-                    style={{ border: `1px solid ${medalColor ? medalColor + '40' : '#2a2a2a'}` }}
+                    style={{ border: `1px solid ${medalColor ? medalColor + '40' : '#2C2C2E'}` }}
                   >
                     {pr.profileImage
                       ? <img src={pr.profileImage} alt="" className="w-full h-full object-cover" />
@@ -86,7 +86,7 @@ export default function PRRankingView({ managedUsers, reservations }: Props) {
                     <p className="font-semibold text-[13px] text-white truncate">
                       {pr.displayName} {pr.lastName}
                     </p>
-                    <p className="text-[8px] font-sans text-[#555] truncate">{pr.email}</p>
+                    <p className="text-[8px] font-sans text-[#8E8E93] truncate">{pr.email}</p>
                   </div>
                 </div>
 

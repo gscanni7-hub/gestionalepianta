@@ -48,7 +48,7 @@ export default function TicketPage() {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-[#111] flex items-center justify-center">
+      <div className="min-h-screen bg-[#111111] flex items-center justify-center">
         <div className="w-5 h-5 border-2 border-[#D4622A] border-t-transparent rounded-full animate-spin" />
       </div>
     );
@@ -56,11 +56,11 @@ export default function TicketPage() {
 
   if (notFound || !registration) {
     return (
-      <div className="min-h-screen bg-[#111] flex items-center justify-center p-6">
+      <div className="min-h-screen bg-[#111111] flex items-center justify-center p-6">
         <div className="text-center space-y-3">
           <AlertCircle size={40} className="text-[#EF4444] mx-auto" />
           <p className="text-white font-bold text-lg">Biglietto non trovato</p>
-          <p className="text-[#666] text-sm">Questo biglietto non esiste o è stato rimosso.</p>
+          <p className="text-[#636366] text-sm">Questo biglietto non esiste o è stato rimosso.</p>
         </div>
       </div>
     );
@@ -73,7 +73,7 @@ export default function TicketPage() {
   const isCheckedIn = registration.checkedIn;
 
   return (
-    <div className="min-h-screen bg-[#111] flex items-center justify-center p-4">
+    <div className="min-h-screen bg-[#111111] flex items-center justify-center p-4">
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
@@ -81,7 +81,7 @@ export default function TicketPage() {
         className="w-full max-w-sm"
       >
         {/* Ticket card */}
-        <div className="relative bg-[#0a0a0a] border border-[#1e1e1e] overflow-hidden">
+        <div className="relative bg-[#0a0a0a] border border-[#1C1C1E] overflow-hidden">
           {/* Top accent bar */}
           <div className="h-1 bg-[#D4622A]" />
 
@@ -94,7 +94,7 @@ export default function TicketPage() {
           )}
 
           {/* Header */}
-          <div className="px-6 pt-6 pb-4 text-center border-b border-dashed border-[#1e1e1e]">
+          <div className="px-6 pt-6 pb-4 text-center border-b border-dashed border-[#1C1C1E]">
             <p className="text-[8px] font-mono uppercase tracking-[0.3em] text-[#D4622A] mb-2">
               {registration.venueName}
             </p>
@@ -105,11 +105,11 @@ export default function TicketPage() {
               {registration.eventName}
             </h1>
             <div className="mt-3 space-y-1">
-              <div className="flex items-center justify-center gap-1.5 text-[#666] text-[10px] font-mono capitalize">
+              <div className="flex items-center justify-center gap-1.5 text-[#636366] text-[10px] font-mono capitalize">
                 <Calendar size={10} />
                 {formattedDate}
               </div>
-              <div className="flex items-center justify-center gap-1.5 text-[#666] text-[10px] font-mono">
+              <div className="flex items-center justify-center gap-1.5 text-[#636366] text-[10px] font-mono">
                 <MapPin size={10} />
                 {registration.venueName}
               </div>
@@ -117,24 +117,24 @@ export default function TicketPage() {
           </div>
 
           {/* QR Code */}
-          <div className="flex flex-col items-center py-6 border-b border-dashed border-[#1e1e1e]">
+          <div className="flex flex-col items-center py-6 border-b border-dashed border-[#1C1C1E]">
             <canvas ref={canvasRef} className="rounded" />
-            <p className="text-[9px] font-mono text-[#444] mt-3 uppercase tracking-widest">
+            <p className="text-[9px] font-mono text-[#636366] mt-3 uppercase tracking-widest">
               Mostra all'ingresso
             </p>
           </div>
 
           {/* Guest info */}
-          <div className="px-6 py-4 border-b border-dashed border-[#1e1e1e]">
+          <div className="px-6 py-4 border-b border-dashed border-[#1C1C1E]">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-[8px] font-mono uppercase tracking-widest text-[#555] mb-0.5">Intestatario</p>
+                <p className="text-[8px] font-mono uppercase tracking-widest text-[#8E8E93] mb-0.5">Intestatario</p>
                 <p className="text-sm font-bold text-white">
                   {registration.firstName} {registration.lastName}
                 </p>
               </div>
               <div className="text-right">
-                <p className="text-[8px] font-mono uppercase tracking-widest text-[#555] mb-0.5">Persone</p>
+                <p className="text-[8px] font-mono uppercase tracking-widest text-[#8E8E93] mb-0.5">Persone</p>
                 <div className="flex items-center gap-1 justify-end">
                   <Users size={12} className="text-[#D4622A]" />
                   <span className="text-sm font-bold text-white">{registration.guestsCount}</span>
@@ -142,21 +142,21 @@ export default function TicketPage() {
               </div>
             </div>
             {registration.prName && (
-              <div className="mt-3 pt-3 border-t border-[#1a1a1a]">
-                <p className="text-[8px] font-mono uppercase tracking-widest text-[#555] mb-0.5">Invitato da</p>
-                <p className="text-xs text-[#888]">{registration.prName}</p>
+              <div className="mt-3 pt-3 border-t border-[#1C1C1E]">
+                <p className="text-[8px] font-mono uppercase tracking-widest text-[#8E8E93] mb-0.5">Invitato da</p>
+                <p className="text-xs text-[#AEAEB2]">{registration.prName}</p>
               </div>
             )}
           </div>
 
           {/* Ticket ID */}
           <div className="px-6 py-3 flex items-center justify-between">
-            <p className="text-[8px] font-mono text-[#333] uppercase tracking-widest">
+            <p className="text-[8px] font-mono text-[#3A3A3C] uppercase tracking-widest">
               #{registration.id.slice(0, 8).toUpperCase()}
             </p>
             <div className="flex items-center gap-1">
               <div className="w-1 h-1 rounded-full bg-[#D4622A]" />
-              <p className="text-[8px] font-mono text-[#555] uppercase tracking-widest">Nightplan</p>
+              <p className="text-[8px] font-mono text-[#8E8E93] uppercase tracking-widest">Nightplan</p>
             </div>
           </div>
         </div>
@@ -165,13 +165,13 @@ export default function TicketPage() {
         <motion.button
           onClick={handleSave}
           whileTap={{ scale: 0.97 }}
-          className="w-full mt-3 border border-[#2a2a2a] py-3.5 text-[#888] hover:text-white hover:border-[#3a3a3a] transition-colors flex items-center justify-center gap-2 text-[10px] font-mono uppercase tracking-widest"
+          className="w-full mt-3 border border-[#2C2C2E] py-3.5 text-[#AEAEB2] hover:text-white hover:border-[#3a3a3a] transition-colors flex items-center justify-center gap-2 text-[10px] font-mono uppercase tracking-widest"
         >
           <Download size={13} />
           Salva biglietto
         </motion.button>
 
-        <p className="text-center text-[9px] font-mono text-[#333] mt-4 uppercase tracking-widest">
+        <p className="text-center text-[9px] font-mono text-[#3A3A3C] mt-4 uppercase tracking-widest">
           Powered by Nightplan
         </p>
       </motion.div>

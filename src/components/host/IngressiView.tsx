@@ -94,8 +94,8 @@ export default function IngressiView({ activeEvent }: Props) {
   if (!activeEvent) {
     return (
       <div className="py-24 text-center">
-        <ScanLine size={28} className="text-[#333] mx-auto mb-3" />
-        <p className="text-sm text-[#555]">Nessun evento attivo stasera</p>
+        <ScanLine size={28} className="text-[#3A3A3C] mx-auto mb-3" />
+        <p className="text-sm text-[#8E8E93]">Nessun evento attivo stasera</p>
       </div>
     );
   }
@@ -113,13 +113,13 @@ export default function IngressiView({ activeEvent }: Props) {
     <div className="max-w-xl mx-auto w-full">
       {/* Stats bar */}
       <div className="flex items-center gap-3 mb-5">
-        <div className="flex-1 h-1 bg-[#222] overflow-hidden rounded-full">
+        <div className="flex-1 h-1 bg-[#2C2C2E] overflow-hidden rounded-full">
           <motion.div className="h-full bg-[#22C55E]" initial={{ width: 0 }}
             animate={{ width: total > 0 ? `${Math.round(checkedInCount / total * 100)}%` : '0%' }}
             transition={{ duration: 0.6, ease: 'easeOut' }} />
         </div>
         <span className="hv font-black text-white text-sm shrink-0">
-          {checkedInCount}<span className="text-[#555] font-normal text-xs">/{total}</span>
+          {checkedInCount}<span className="text-[#8E8E93] font-normal text-xs">/{total}</span>
         </span>
       </div>
 
@@ -130,7 +130,7 @@ export default function IngressiView({ activeEvent }: Props) {
         className={cn(
           'w-full flex items-center justify-center gap-2 py-4 mb-4 text-sm font-semibold rounded-xl transition-colors',
           scanning
-            ? 'border border-[#333] text-[#666] hover:text-white hover:border-[#444]'
+            ? 'border border-[#3A3A3C] text-[#636366] hover:text-white hover:border-[#48484A]'
             : 'bg-[#D4622A] text-black hover:bg-white'
         )}
       >
@@ -166,7 +166,7 @@ export default function IngressiView({ activeEvent }: Props) {
                 {scanResult.message}
               </p>
             </div>
-            <button onClick={() => setScanResult(null)} className="text-[#555] hover:text-white transition-colors">
+            <button onClick={() => setScanResult(null)} className="text-[#8E8E93] hover:text-white transition-colors">
               <X size={14} />
             </button>
           </motion.div>
@@ -181,10 +181,10 @@ export default function IngressiView({ activeEvent }: Props) {
             placeholder="Cerca nome, PR…"
             value={search}
             onChange={e => setSearch(e.target.value)}
-            className="w-full bg-[#1e1e1e] border border-[#2e2e2e] rounded-xl px-4 py-3 text-sm font-sans text-white placeholder-[#444] outline-none focus:border-[#D4622A]/40 transition-colors"
+            className="w-full bg-[#1C1C1E] border border-[#2C2C2E] rounded-xl px-4 py-3 text-sm font-sans text-white placeholder-[#636366] outline-none focus:border-[#D4622A]/40 transition-colors"
           />
           {search && (
-            <button onClick={() => setSearch('')} className="absolute right-3 top-1/2 -translate-y-1/2 text-[#555] hover:text-white">
+            <button onClick={() => setSearch('')} className="absolute right-3 top-1/2 -translate-y-1/2 text-[#8E8E93] hover:text-white">
               <X size={14} />
             </button>
           )}
@@ -199,17 +199,17 @@ export default function IngressiView({ activeEvent }: Props) {
 
       {!loading && registrations.length === 0 && (
         <div className="py-16 text-center">
-          <p className="text-sm text-[#444]">Nessuna registrazione per questa serata</p>
+          <p className="text-sm text-[#636366]">Nessuna registrazione per questa serata</p>
         </div>
       )}
 
       {/* Da fare */}
       {pending.length > 0 && (
         <div className="mb-4">
-          <p className="text-xs font-medium text-[#555] mb-2 px-1">
+          <p className="text-xs font-medium text-[#8E8E93] mb-2 px-1">
             Da fare — {pending.length}
           </p>
-          <div className="border border-[#2a2a2a] bg-[#1a1a1a] overflow-hidden rounded-xl">
+          <div className="border border-[#2C2C2E] bg-[#1C1C1E] overflow-hidden rounded-xl">
             {pending.map(reg => (
               <RegistrationRow key={reg.id} reg={reg} onUndoCheckIn={handleUndoCheckIn} />
             ))}
@@ -222,7 +222,7 @@ export default function IngressiView({ activeEvent }: Props) {
         <div>
           <button
             onClick={() => setShowEntered(o => !o)}
-            className="flex items-center gap-2 text-xs font-medium text-[#555] hover:text-[#888] transition-colors mb-2 px-1 w-full"
+            className="flex items-center gap-2 text-xs font-medium text-[#8E8E93] hover:text-[#AEAEB2] transition-colors mb-2 px-1 w-full"
           >
             <ChevronDown size={11} className={cn('transition-transform duration-200', showEntered && 'rotate-180')} />
             Entrati — {entered.length}
@@ -231,7 +231,7 @@ export default function IngressiView({ activeEvent }: Props) {
             {showEntered && (
               <motion.div initial={{ height: 0, opacity: 0 }} animate={{ height: 'auto', opacity: 1 }}
                 exit={{ height: 0, opacity: 0 }} transition={{ duration: 0.2 }} className="overflow-hidden">
-                <div className="border border-[#2a2a2a] bg-[#1a1a1a] overflow-hidden rounded-xl">
+                <div className="border border-[#2C2C2E] bg-[#1C1C1E] overflow-hidden rounded-xl">
                   {entered.map(reg => (
                     <RegistrationRow key={reg.id} reg={reg} onUndoCheckIn={handleUndoCheckIn} />
                   ))}
@@ -250,17 +250,17 @@ function RegistrationRow({ reg, onUndoCheckIn }: { reg: Registration; onUndoChec
   const isIn = reg.checkedIn;
 
   return (
-    <div className={cn('border-b border-[#222] last:border-0', isIn && 'bg-[#22C55E]/[0.03]')}>
+    <div className={cn('border-b border-[#2C2C2E] last:border-0', isIn && 'bg-[#22C55E]/[0.03]')}>
       <button
         onClick={() => setOpen(o => !o)}
         className="w-full px-5 py-4 flex items-center gap-4 text-left hover:bg-white/[0.02] transition-colors"
       >
-        <div className={cn('w-2.5 h-2.5 rounded-full shrink-0', isIn ? 'bg-[#22C55E]' : 'bg-[#2e2e2e]')} />
+        <div className={cn('w-2.5 h-2.5 rounded-full shrink-0', isIn ? 'bg-[#22C55E]' : 'bg-[#2C2C2E]')} />
         <div className="flex-1 min-w-0">
           <p className={cn('font-bold text-sm truncate', isIn ? 'text-[#aaa]' : 'text-white')}>
             {reg.firstName} {reg.lastName}
           </p>
-          <p className="text-[9px] font-mono text-[#555] mt-0.5 truncate">
+          <p className="text-[9px] font-mono text-[#8E8E93] mt-0.5 truncate">
             <Users size={9} className="inline mr-1" />{reg.guestsCount}
             {reg.prName && <> · PR {reg.prName}</>}
             {isIn && <span className="text-[#22C55E] ml-2">· Entrato</span>}
@@ -268,7 +268,7 @@ function RegistrationRow({ reg, onUndoCheckIn }: { reg: Registration; onUndoChec
         </div>
         {isIn
           ? <CheckCircle2 size={15} className="text-[#22C55E] shrink-0" />
-          : <ChevronDown size={13} className={cn('text-[#555] shrink-0 transition-transform', open && 'rotate-180')} />
+          : <ChevronDown size={13} className={cn('text-[#8E8E93] shrink-0 transition-transform', open && 'rotate-180')} />
         }
       </button>
 
@@ -276,16 +276,16 @@ function RegistrationRow({ reg, onUndoCheckIn }: { reg: Registration; onUndoChec
         {open && (
           <motion.div initial={{ height: 0, opacity: 0 }} animate={{ height: 'auto', opacity: 1 }}
             exit={{ height: 0, opacity: 0 }} transition={{ duration: 0.15 }} className="overflow-hidden">
-            <div className="px-5 pb-4 pt-1 border-t border-[#222] space-y-3">
-              <div className="text-[9px] font-mono text-[#555] space-y-1">
-                <p>Email: <span className="text-[#888]">{reg.email}</span></p>
-                {reg.phone && <p>Tel: <span className="text-[#888]">{reg.phone}</span></p>}
-                {reg.prName && <p>Invitato da: <span className="text-[#888]">{reg.prName}</span></p>}
+            <div className="px-5 pb-4 pt-1 border-t border-[#2C2C2E] space-y-3">
+              <div className="text-[9px] font-mono text-[#8E8E93] space-y-1">
+                <p>Email: <span className="text-[#AEAEB2]">{reg.email}</span></p>
+                {reg.phone && <p>Tel: <span className="text-[#AEAEB2]">{reg.phone}</span></p>}
+                {reg.prName && <p>Invitato da: <span className="text-[#AEAEB2]">{reg.prName}</span></p>}
               </div>
               {isIn && (
                 <button
                   onClick={() => onUndoCheckIn(reg.id)}
-                  className="w-full py-2 rounded-xl border border-[#333] text-[#666] text-xs font-medium hover:border-[#EF4444]/40 hover:text-[#EF4444] transition-colors"
+                  className="w-full py-2 rounded-xl border border-[#3A3A3C] text-[#636366] text-xs font-medium hover:border-[#EF4444]/40 hover:text-[#EF4444] transition-colors"
                 >
                   Annulla entrata
                 </button>

@@ -52,7 +52,7 @@ function AdminDashboard({ user, events, venues, reservations, managedUsers, pend
   const kpis = [
     { label: 'Tavoli', value: `${activeRes.length}/${totalTables}`, sub: `${occupancy}% occupancy`, color: 'text-[#D4622A]', icon: <MapPin size={14}/> },
     { label: 'Incasso est.', value: revenueEst >= 1000 ? `€${(revenueEst/1000).toFixed(1)}K` : `€${revenueEst}`, sub: 'prenotazioni approvate', color: 'text-[#22C55E]', icon: <TrendingUp size={14}/> },
-    { label: 'Da approvare', value: String(pendingCount), sub: 'in attesa', color: pendingCount > 0 ? 'text-[#F59E0B]' : 'text-[#555]', icon: <Bell size={14}/> },
+    { label: 'Da approvare', value: String(pendingCount), sub: 'in attesa', color: pendingCount > 0 ? 'text-[#F59E0B]' : 'text-[#8E8E93]', icon: <Bell size={14}/> },
     { label: 'Entrati', value: String(checkedIn.length), sub: `di ${activeRes.length} prenotati`, color: 'text-[#38BDF8]', icon: <CheckCircle2 size={14}/> },
   ];
 
@@ -73,12 +73,12 @@ function AdminDashboard({ user, events, venues, reservations, managedUsers, pend
             key={k.label}
             initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.3, delay: i * 0.06 }}
-            className="border border-[#2a2a2a] bg-[#1a1a1a] p-4 rounded-xl"
+            className="border border-[#2C2C2E] bg-[#1C1C1E] p-4 rounded-xl"
           >
             <div className={cn('mb-3', k.color)}>{k.icon}</div>
             <div className={cn('hv font-black text-3xl leading-none', k.color)}>{k.value}</div>
-            <div className="text-xs text-[#555] mt-2">{k.label}</div>
-            <div className="text-[9px] font-sans text-[#444] mt-0.5">{k.sub}</div>
+            <div className="text-xs text-[#8E8E93] mt-2">{k.label}</div>
+            <div className="text-[9px] font-sans text-[#636366] mt-0.5">{k.sub}</div>
           </motion.div>
         ))}
       </div>
@@ -86,7 +86,7 @@ function AdminDashboard({ user, events, venues, reservations, managedUsers, pend
       {/* Serate attive */}
       {activeEvents.length > 0 && (
         <div>
-          <p className="text-xs font-medium text-[#555] mb-3">Serate in corso</p>
+          <p className="text-xs font-medium text-[#8E8E93] mb-3">Serate in corso</p>
           <div className="space-y-2">
             {activeEvents.map(ev => {
               const venue = venues.find(v => v.id === ev.venueId);
@@ -96,14 +96,14 @@ function AdminDashboard({ user, events, venues, reservations, managedUsers, pend
                   key={ev.id}
                   onClick={() => onOpenEvent(ev)}
                   whileTap={{ scale: 0.985 }}
-                  className="w-full flex items-center gap-4 border border-[#2a2a2a] bg-[#1a1a1a] hover:border-[#D4622A]/30 transition-colors p-4 text-left rounded-xl"
+                  className="w-full flex items-center gap-4 border border-[#2C2C2E] bg-[#1C1C1E] hover:border-[#D4622A]/30 transition-colors p-4 text-left rounded-xl"
                 >
                   <div className="w-2 h-2 rounded-full bg-[#D4622A] shrink-0 mt-0.5" />
                   <div className="flex-1 min-w-0">
                     <p className="font-semibold text-white text-sm truncate">{ev.name}</p>
-                    <p className="text-[9px] font-mono text-[#555] mt-0.5">{venue?.name ?? ''} · {evRes.length} tavoli</p>
+                    <p className="text-[9px] font-mono text-[#8E8E93] mt-0.5">{venue?.name ?? ''} · {evRes.length} tavoli</p>
                   </div>
-                  <ChevronRight size={14} className="text-[#555] shrink-0" />
+                  <ChevronRight size={14} className="text-[#8E8E93] shrink-0" />
                 </motion.button>
               );
             })}
@@ -113,7 +113,7 @@ function AdminDashboard({ user, events, venues, reservations, managedUsers, pend
 
       {/* Quick actions */}
       <div>
-        <p className="text-xs font-medium text-[#555] mb-3">Azioni rapide</p>
+        <p className="text-xs font-medium text-[#8E8E93] mb-3">Azioni rapide</p>
         <div className="grid grid-cols-2 gap-2">
           {[
             { label: 'Approva', icon: <Bell size={14}/>, view: 'approvals', badge: pendingCount },
@@ -124,10 +124,10 @@ function AdminDashboard({ user, events, venues, reservations, managedUsers, pend
             <button
               key={a.view}
               onClick={() => onNav(a.view)}
-              className="relative flex items-center gap-3 border border-[#2a2a2a] bg-[#1a1a1a] hover:border-[#D4622A]/30 hover:bg-[#1e1e1e] transition-colors px-4 py-3 text-left rounded-xl"
+              className="relative flex items-center gap-3 border border-[#2C2C2E] bg-[#1C1C1E] hover:border-[#D4622A]/30 hover:bg-[#1C1C1E] transition-colors px-4 py-3 text-left rounded-xl"
             >
               <span className="text-[#D4622A]">{a.icon}</span>
-              <span className="text-xs font-medium text-[#888]">{a.label}</span>
+              <span className="text-xs font-medium text-[#AEAEB2]">{a.label}</span>
               {a.badge !== undefined && a.badge > 0 && (
                 <span className="absolute top-2 right-2 min-w-[16px] h-4 px-1 rounded-full bg-[#F59E0B] text-black text-[8px] font-black flex items-center justify-center">
                   {a.badge}
@@ -175,24 +175,24 @@ function PRDashboard({ user, events, venues, reservations, prPendingCount, onNav
         {[
           { label: 'Prenotate', value: myActiveRes.length, color: 'text-white' },
           { label: 'Approvate', value: myApproved.length, color: 'text-[#22C55E]' },
-          { label: 'In attesa', value: prPendingCount, color: prPendingCount > 0 ? 'text-[#F59E0B]' : 'text-[#555]' },
+          { label: 'In attesa', value: prPendingCount, color: prPendingCount > 0 ? 'text-[#F59E0B]' : 'text-[#8E8E93]' },
         ].map((s, i) => (
           <motion.div
             key={s.label}
             initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.28, delay: i * 0.06 }}
-            className="border border-[#2a2a2a] bg-[#1a1a1a] p-4 text-center rounded-xl"
+            className="border border-[#2C2C2E] bg-[#1C1C1E] p-4 text-center rounded-xl"
           >
             <div className={cn('hv font-black text-3xl leading-none', s.color)}>{s.value}</div>
-            <div className="text-xs text-[#555] mt-2">{s.label}</div>
+            <div className="text-xs text-[#8E8E93] mt-2">{s.label}</div>
           </motion.div>
         ))}
       </div>
 
       {myBudget > 0 && (
-        <div className="border border-[#2a2a2a] bg-[#1a1a1a] p-4 flex items-center justify-between rounded-xl">
+        <div className="border border-[#2C2C2E] bg-[#1C1C1E] p-4 flex items-center justify-between rounded-xl">
           <div>
-            <p className="text-xs text-[#555]">Budget generato stasera</p>
+            <p className="text-xs text-[#8E8E93]">Budget generato stasera</p>
             <p className="hv font-black text-2xl text-[#22C55E] mt-1">
               {myBudget >= 1000 ? `€${(myBudget/1000).toFixed(1)}K` : `€${myBudget}`}
             </p>
@@ -204,7 +204,7 @@ function PRDashboard({ user, events, venues, reservations, prPendingCount, onNav
       {/* CTA principale */}
       {activeEvents.length > 0 && (
         <div>
-          <p className="text-xs font-medium text-[#555] mb-3">Serate attive</p>
+          <p className="text-xs font-medium text-[#8E8E93] mb-3">Serate attive</p>
           <div className="space-y-2">
             {activeEvents.map(ev => {
               const venue = venues.find(v => v.id === ev.venueId);
@@ -231,16 +231,16 @@ function PRDashboard({ user, events, venues, reservations, prPendingCount, onNav
       {/* Il mio link */}
       {activeWithToken.length > 0 && (
         <div>
-          <p className="text-xs font-medium text-[#555] mb-3">Il tuo link</p>
+          <p className="text-xs font-medium text-[#8E8E93] mb-3">Il tuo link</p>
           <div className="space-y-2">
             {activeWithToken.map(ev => {
               const link = `${window.location.origin}/r/${ev.registrationToken}?pr=${user.id}`;
               return (
-                <div key={ev.id} className="border border-[#2a2a2a] bg-[#1a1a1a] p-4 space-y-3 rounded-xl">
+                <div key={ev.id} className="border border-[#2C2C2E] bg-[#1C1C1E] p-4 space-y-3 rounded-xl">
                   <p className="font-semibold text-white text-xs">{ev.name}</p>
                   <div className="flex items-center gap-2">
-                    <div className="flex-1 bg-[#111] border border-[#222] px-3 py-2 overflow-hidden rounded-lg">
-                      <p className="text-[9px] font-mono text-[#555] truncate">{link}</p>
+                    <div className="flex-1 bg-[#111111] border border-[#2C2C2E] px-3 py-2 overflow-hidden rounded-lg">
+                      <p className="text-[9px] font-mono text-[#8E8E93] truncate">{link}</p>
                     </div>
                     <button
                       onClick={() => navigator.clipboard.writeText(link)}
@@ -265,10 +265,10 @@ function PRDashboard({ user, events, venues, reservations, prPendingCount, onNav
           <button
             key={a.view}
             onClick={() => onNav(a.view)}
-            className="relative flex items-center gap-3 border border-[#2a2a2a] bg-[#1a1a1a] hover:border-[#D4622A]/30 transition-colors px-4 py-3 rounded-xl"
+            className="relative flex items-center gap-3 border border-[#2C2C2E] bg-[#1C1C1E] hover:border-[#D4622A]/30 transition-colors px-4 py-3 rounded-xl"
           >
             <span className="text-[#D4622A]">{a.icon}</span>
-            <span className="text-xs font-medium text-[#888]">{a.label}</span>
+            <span className="text-xs font-medium text-[#AEAEB2]">{a.label}</span>
             {a.badge !== undefined && a.badge > 0 && (
               <span className="absolute top-2 right-2 min-w-[16px] h-4 px-1 rounded-full bg-[#F59E0B] text-black text-[8px] font-black flex items-center justify-center">
                 {a.badge}
@@ -310,27 +310,27 @@ function HostDashboard({ user, events, venues, reservations, onNav }: {
       </div>
 
       {!activeEvent ? (
-        <div className="py-20 text-center border border-[#2a2a2a] rounded-xl">
-          <DoorOpen size={32} className="text-[#333] mx-auto mb-3" />
-          <p className="text-sm text-[#555]">Nessun evento attivo stasera</p>
+        <div className="py-20 text-center border border-[#2C2C2E] rounded-xl">
+          <DoorOpen size={32} className="text-[#3A3A3C] mx-auto mb-3" />
+          <p className="text-sm text-[#8E8E93]">Nessun evento attivo stasera</p>
         </div>
       ) : (
         <>
           {/* Evento in corso */}
           <div className="border-l-2 border-[#D4622A] pl-4">
-            <p className="text-xs text-[#555]">{venue?.name ?? ''}</p>
+            <p className="text-xs text-[#8E8E93]">{venue?.name ?? ''}</p>
             <p className="font-bold text-white text-lg">{activeEvent.name}</p>
           </div>
 
           {/* Grande numero */}
-          <div className="border border-[#2a2a2a] bg-[#1a1a1a] p-8 text-center rounded-xl">
+          <div className="border border-[#2C2C2E] bg-[#1C1C1E] p-8 text-center rounded-xl">
             <div className="hv font-black text-white leading-none" style={{ fontSize: 72 }}>
               {checkedIn.length}
             </div>
-            <div className="text-[#555] hv font-black text-xl mt-1">/ {approved.length}</div>
-            <p className="text-xs text-[#555] mt-3">Persone entrate</p>
+            <div className="text-[#8E8E93] hv font-black text-xl mt-1">/ {approved.length}</div>
+            <p className="text-xs text-[#8E8E93] mt-3">Persone entrate</p>
             {/* Progress bar */}
-            <div className="mt-4 h-1 bg-[#222] overflow-hidden rounded-full">
+            <div className="mt-4 h-1 bg-[#2C2C2E] overflow-hidden rounded-full">
               <motion.div
                 className="h-full bg-[#22C55E]"
                 initial={{ width: 0 }}
@@ -338,7 +338,7 @@ function HostDashboard({ user, events, venues, reservations, onNav }: {
                 transition={{ duration: 0.8, ease: 'easeOut' }}
               />
             </div>
-            <p className="text-[9px] font-mono text-[#555] mt-2">{pct}%</p>
+            <p className="text-[9px] font-mono text-[#8E8E93] mt-2">{pct}%</p>
           </div>
 
           {/* CTA principale */}

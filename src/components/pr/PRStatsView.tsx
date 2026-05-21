@@ -34,10 +34,10 @@ export default function PRStatsView({ prId, reservations, events }: Props) {
       {/* KPIs */}
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 mb-10">
         {kpis.map(({ icon, value, label }) => (
-          <div key={label} className="border border-[#2a2a2a] bg-[#1a1a1a] px-6 py-6 rounded-xl">
+          <div key={label} className="border border-[#2C2C2E] bg-[#1C1C1E] px-6 py-6 rounded-xl">
             <div className="text-accent mb-4">{icon}</div>
             <div className="hv font-black text-3xl text-white leading-none">{value}</div>
-            <div className="text-xs text-[#555] mt-3">{label}</div>
+            <div className="text-xs text-[#8E8E93] mt-3">{label}</div>
           </div>
         ))}
       </div>
@@ -45,11 +45,11 @@ export default function PRStatsView({ prId, reservations, events }: Props) {
       {/* Per-event breakdown */}
       {eventIds.length === 0 ? (
         <div className="py-16 text-center">
-          <p className="text-sm text-[#444]">Nessuna prenotazione ancora</p>
+          <p className="text-sm text-[#636366]">Nessuna prenotazione ancora</p>
         </div>
       ) : (
         <div>
-          <p className="text-xs font-medium text-[#555] mb-5">Dettaglio per serata</p>
+          <p className="text-xs font-medium text-[#8E8E93] mb-5">Dettaglio per serata</p>
           <div className="space-y-3">
             {eventIds.map(eid => {
               const event = events.find(e => e.id === eid);
@@ -59,38 +59,38 @@ export default function PRStatsView({ prId, reservations, events }: Props) {
               const barPct = Math.round((evBudget / maxBudget) * 100);
 
               return (
-                <div key={eid} className="border border-[#2a2a2a] bg-[#1a1a1a] px-5 py-4 rounded-xl">
+                <div key={eid} className="border border-[#2C2C2E] bg-[#1C1C1E] px-5 py-4 rounded-xl">
                   <div className="flex items-center justify-between mb-3 flex-wrap gap-2">
                     <div>
                       <p className="font-semibold text-sm text-white">{event?.name ?? eid}</p>
                       {event && (
-                        <p className="text-[9px] font-sans text-[#555] mt-0.5">{event.date}</p>
+                        <p className="text-[9px] font-sans text-[#8E8E93] mt-0.5">{event.date}</p>
                       )}
                     </div>
                     <div className="flex items-center gap-5 shrink-0">
                       <div className="text-right">
                         <p className="hv font-black text-lg text-white">{evRes.length}</p>
-                        <p className="text-xs text-[#555]">pren.</p>
+                        <p className="text-xs text-[#8E8E93]">pren.</p>
                       </div>
                       <div className="text-right">
                         <p className="hv font-black text-lg text-white">{evGuests}</p>
-                        <p className="text-xs text-[#555]">ospiti</p>
+                        <p className="text-xs text-[#8E8E93]">ospiti</p>
                       </div>
                       <div className="text-right">
                         <p className="hv font-black text-lg text-accent">€{evBudget >= 1000 ? `${(evBudget / 1000).toFixed(1)}K` : evBudget}</p>
-                        <p className="text-xs text-[#555]">budget</p>
+                        <p className="text-xs text-[#8E8E93]">budget</p>
                       </div>
                     </div>
                   </div>
                   {/* CSS bar chart */}
                   <div className="flex items-center gap-2 mt-2">
-                    <div className="flex-1 h-1.5 bg-[#252525] overflow-hidden rounded-full">
+                    <div className="flex-1 h-1.5 bg-[#1C1C1E] overflow-hidden rounded-full">
                       <div
                         className="h-full bg-accent transition-all duration-700"
                         style={{ width: `${barPct}%` }}
                       />
                     </div>
-                    <span className="text-[8px] font-mono text-[#555] shrink-0 w-8 text-right">{barPct}%</span>
+                    <span className="text-[8px] font-mono text-[#8E8E93] shrink-0 w-8 text-right">{barPct}%</span>
                   </div>
                 </div>
               );

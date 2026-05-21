@@ -87,7 +87,7 @@ export default function FloorPlanViewer({
       {/* Canvas + legend wrapper */}
       <div className="flex-1 flex flex-col gap-0 min-w-0">
         <div ref={containerRef}
-          className="flex-1 bg-[#080808] border border-[#2a2a2a] border-b-0 overflow-hidden relative floorplan-grid"
+          className="flex-1 bg-[#080808] border border-[#2C2C2E] border-b-0 overflow-hidden relative floorplan-grid"
           style={{ minHeight: 400 }}>
           <Stage width={containerWidth} height={stageH} scaleX={scale} scaleY={scale}>
             <Layer>
@@ -144,36 +144,36 @@ export default function FloorPlanViewer({
           </Stage>
         </div>
 
-        <div className="border border-[#2a2a2a] px-5 py-3 flex items-center gap-6 bg-[#080808]">
-          <span className="text-[8px] font-sans uppercase tracking-[0.4em] text-[#666] border-r border-[#2a2a2a] pr-5 shrink-0">Tavoli</span>
+        <div className="border border-[#2C2C2E] px-5 py-3 flex items-center gap-6 bg-[#080808]">
+          <span className="text-[8px] font-sans uppercase tracking-[0.4em] text-[#636366] border-r border-[#2C2C2E] pr-5 shrink-0">Tavoli</span>
           {hostMode ? (
             <>
               <div className="flex items-center gap-2 shrink-0">
                 <span className="w-2 h-2 shrink-0" style={{ background: COLORS.success }} />
-                <span className="text-[8px] font-sans uppercase tracking-widest text-[#666]">Entrato</span>
+                <span className="text-[8px] font-sans uppercase tracking-widest text-[#636366]">Entrato</span>
               </div>
               <div className="flex items-center gap-2 shrink-0">
                 <span className="w-2 h-2 shrink-0" style={{ background: COLORS.accent }} />
-                <span className="text-[8px] font-sans uppercase tracking-widest text-[#666]">Atteso</span>
+                <span className="text-[8px] font-sans uppercase tracking-widest text-[#636366]">Atteso</span>
               </div>
               <div className="flex items-center gap-2 shrink-0">
                 <span className="w-2 h-2 shrink-0" style={{ background: COLORS.neutral }} />
-                <span className="text-[8px] font-sans uppercase tracking-widest text-[#666]">Libero</span>
+                <span className="text-[8px] font-sans uppercase tracking-widest text-[#636366]">Libero</span>
               </div>
             </>
           ) : (
             <>
               <div className="flex items-center gap-2 shrink-0">
                 <span className="w-2 h-2 shrink-0" style={{ background: COLORS.danger }} />
-                <span className="text-[8px] font-sans uppercase tracking-widest text-[#666]">Confirmed</span>
+                <span className="text-[8px] font-sans uppercase tracking-widest text-[#636366]">Confirmed</span>
               </div>
               <div className="flex items-center gap-2 shrink-0">
                 <span className="w-2 h-2 shrink-0" style={{ background: COLORS.warning }} />
-                <span className="text-[8px] font-sans uppercase tracking-widest text-[#666]">In attesa</span>
+                <span className="text-[8px] font-sans uppercase tracking-widest text-[#636366]">In attesa</span>
               </div>
               <div className="flex items-center gap-2 shrink-0">
                 <span className="w-2 h-2 shrink-0" style={{ background: COLORS.success }} />
-                <span className="text-[8px] font-sans uppercase tracking-widest text-[#666]">Free</span>
+                <span className="text-[8px] font-sans uppercase tracking-widest text-[#636366]">Free</span>
               </div>
             </>
           )}
@@ -186,9 +186,9 @@ export default function FloorPlanViewer({
           {!selectedTable ? (
             <motion.div key="prompt"
               initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
-              className="flex-1 border border-dashed border-[#2a2a2a] flex flex-col items-center justify-center text-center p-8 min-h-[200px]">
-              <Info size={24} className="text-[#1e1e1e] mb-4" />
-              <p className="text-[9px] font-sans uppercase tracking-widest text-[#666] leading-loose">
+              className="flex-1 border border-dashed border-[#2C2C2E] flex flex-col items-center justify-center text-center p-8 min-h-[200px]">
+              <Info size={24} className="text-[#1C1C1E] mb-4" />
+              <p className="text-[9px] font-sans uppercase tracking-widest text-[#636366] leading-loose">
                 Seleziona un tavolo<br />per i dettagli
               </p>
             </motion.div>
@@ -196,14 +196,14 @@ export default function FloorPlanViewer({
             <motion.div key={selectedTable.id}
               initial={{ opacity: 0, x: 16 }} animate={{ opacity: 1, x: 0 }}
               exit={{ opacity: 0, x: 16 }}
-              className="flex-1 bg-card border border-[#2a2a2a] flex flex-col overflow-hidden">
+              className="flex-1 bg-card border border-[#2C2C2E] flex flex-col overflow-hidden">
 
-              <div className="px-6 py-4 border-b border-[#1e1e1e] flex items-center justify-between bg-[#080808]">
+              <div className="px-6 py-4 border-b border-[#1C1C1E] flex items-center justify-between bg-[#080808]">
                 <div>
                   <h3 className="hv font-black uppercase text-white text-lg">Tavolo {selectedTable.name}</h3>
-                  <p className="text-[8px] font-sans uppercase tracking-widest text-[#666] mt-0.5">{selectedTable.area}</p>
+                  <p className="text-[8px] font-sans uppercase tracking-widest text-[#636366] mt-0.5">{selectedTable.area}</p>
                 </div>
-                <button onClick={() => setSelectedTable(null)} className="text-[#333] hover:text-white transition-colors p-1">
+                <button onClick={() => setSelectedTable(null)} className="text-[#3A3A3C] hover:text-white transition-colors p-1">
                   <X size={15} />
                 </button>
               </div>
@@ -237,8 +237,8 @@ export default function FloorPlanViewer({
                       </div>
 
                       {res.bottles && (
-                        <div className="border border-[#2a2a2a] p-4">
-                          <p className="text-[8px] font-sans uppercase tracking-widest text-[#333] mb-2">Bottiglie</p>
+                        <div className="border border-[#2C2C2E] p-4">
+                          <p className="text-[8px] font-sans uppercase tracking-widest text-[#3A3A3C] mb-2">Bottiglie</p>
                           <p className="font-mono text-[10px] text-white leading-relaxed">{res.bottles}</p>
                         </div>
                       )}
@@ -246,7 +246,7 @@ export default function FloorPlanViewer({
                       {res.notes && (
                         <div className="border-l-2 border-accent pl-4">
                           <p className="text-[8px] font-sans uppercase tracking-widest text-accent mb-1">Note</p>
-                          <p className="text-xs font-sans text-[#555] italic leading-relaxed">"{res.notes}"</p>
+                          <p className="text-xs font-sans text-[#8E8E93] italic leading-relaxed">"{res.notes}"</p>
                         </div>
                       )}
 
@@ -254,19 +254,19 @@ export default function FloorPlanViewer({
                         <div className="flex gap-2 pt-2">
                           <button
                             onClick={() => openEdit(res)}
-                            className="flex-1 py-3 text-[8px] hv font-black uppercase tracking-widest border border-[#2a2a2a] text-[#333] hover:text-white hover:border-[#333] transition-all">
+                            className="flex-1 py-3 text-[8px] hv font-black uppercase tracking-widest border border-[#2C2C2E] text-[#3A3A3C] hover:text-white hover:border-[#48484A] transition-all">
                             Modifica
                           </button>
                           <button
                             onClick={() => handleFree(res)}
-                            className="flex-1 py-3 text-[8px] hv font-black uppercase tracking-widest border border-[#300] text-[#555] hover:border-red-900 hover:text-red-500 transition-all">
+                            className="flex-1 py-3 text-[8px] hv font-black uppercase tracking-widest border border-[#300] text-[#8E8E93] hover:border-red-900 hover:text-red-500 transition-all">
                             Libera
                           </button>
                         </div>
                       ) : (
                         <div className="flex items-center gap-2 pt-2 px-1">
-                          <Lock size={11} className="text-[#333] shrink-0" />
-                          <p className="text-[8px] font-sans uppercase tracking-widest text-[#333] leading-relaxed">
+                          <Lock size={11} className="text-[#3A3A3C] shrink-0" />
+                          <p className="text-[8px] font-sans uppercase tracking-widest text-[#3A3A3C] leading-relaxed">
                             Prenotazione di un altro PR
                           </p>
                         </div>
@@ -290,17 +290,17 @@ export default function FloorPlanViewer({
               onClick={() => setSelectedTable(null)}
             />
             <motion.div
-              className="lg:hidden fixed inset-x-0 bottom-0 z-50 bg-[#0c0c0c] border-t border-[#2a2a2a] rounded-t-2xl overflow-hidden max-h-[70vh] flex flex-col"
+              className="lg:hidden fixed inset-x-0 bottom-0 z-50 bg-[#0c0c0c] border-t border-[#2C2C2E] rounded-t-2xl overflow-hidden max-h-[70vh] flex flex-col"
               initial={{ y: '100%' }} animate={{ y: 0 }} exit={{ y: '100%' }}
               transition={{ type: 'spring', damping: 28, stiffness: 280 }}
             >
-              <div className="w-10 h-1 bg-[#2a2a2a] rounded-full mx-auto mt-3 shrink-0" />
-              <div className="px-5 py-4 border-b border-[#1e1e1e] flex items-center justify-between shrink-0">
+              <div className="w-10 h-1 bg-[#2C2C2E] rounded-full mx-auto mt-3 shrink-0" />
+              <div className="px-5 py-4 border-b border-[#1C1C1E] flex items-center justify-between shrink-0">
                 <div>
                   <h3 className="hv font-black uppercase text-white text-base">Tavolo {selectedTable.name}</h3>
-                  <p className="text-[8px] font-sans uppercase tracking-widest text-[#666] mt-0.5">{selectedTable.area}</p>
+                  <p className="text-[8px] font-sans uppercase tracking-widest text-[#636366] mt-0.5">{selectedTable.area}</p>
                 </div>
-                <button onClick={() => setSelectedTable(null)} className="text-[#333] hover:text-white transition-colors p-1">
+                <button onClick={() => setSelectedTable(null)} className="text-[#3A3A3C] hover:text-white transition-colors p-1">
                   <X size={15} />
                 </button>
               </div>
@@ -331,26 +331,26 @@ export default function FloorPlanViewer({
                         )}
                       </div>
                       {res.bottles && (
-                        <div className="border border-[#2a2a2a] p-3">
-                          <p className="text-[8px] font-sans uppercase tracking-widest text-[#333] mb-1.5">Bottiglie</p>
+                        <div className="border border-[#2C2C2E] p-3">
+                          <p className="text-[8px] font-sans uppercase tracking-widest text-[#3A3A3C] mb-1.5">Bottiglie</p>
                           <p className="font-mono text-[10px] text-white">{res.bottles}</p>
                         </div>
                       )}
                       {!hostMode && (allowed ? (
                         <div className="flex gap-2 pb-2">
                           <button onClick={() => { openEdit(res); }}
-                            className="flex-1 py-3 text-[8px] hv font-black uppercase tracking-widest border border-[#2a2a2a] text-[#333] hover:text-white hover:border-[#333] transition-all">
+                            className="flex-1 py-3 text-[8px] hv font-black uppercase tracking-widest border border-[#2C2C2E] text-[#3A3A3C] hover:text-white hover:border-[#48484A] transition-all">
                             Modifica
                           </button>
                           <button onClick={() => handleFree(res)}
-                            className="flex-1 py-3 text-[8px] hv font-black uppercase tracking-widest border border-[#300] text-[#555] hover:border-red-900 hover:text-red-500 transition-all">
+                            className="flex-1 py-3 text-[8px] hv font-black uppercase tracking-widest border border-[#300] text-[#8E8E93] hover:border-red-900 hover:text-red-500 transition-all">
                             Libera
                           </button>
                         </div>
                       ) : (
                         <div className="flex items-center gap-2 px-1 pb-2">
-                          <Lock size={11} className="text-[#333] shrink-0" />
-                          <p className="text-[8px] font-sans uppercase tracking-widest text-[#333]">Prenotazione di un altro PR</p>
+                          <Lock size={11} className="text-[#3A3A3C] shrink-0" />
+                          <p className="text-[8px] font-sans uppercase tracking-widest text-[#3A3A3C]">Prenotazione di un altro PR</p>
                         </div>
                       ))}
                     </div>
@@ -394,11 +394,11 @@ export default function FloorPlanViewer({
 function InfoRow({ label, value, accent, mono }: { label: string; value?: string; accent?: boolean; mono?: boolean }) {
   if (!value) return null;
   return (
-    <div className="flex justify-between items-center py-2.5 border-b border-[#1a1a1a]">
-      <span className="text-[8px] font-sans uppercase tracking-widest text-[#666]">{label}</span>
+    <div className="flex justify-between items-center py-2.5 border-b border-[#1C1C1E]">
+      <span className="text-[8px] font-sans uppercase tracking-widest text-[#636366]">{label}</span>
       <span className={cn(
         'text-[11px] font-sans',
-        accent ? 'hv font-black uppercase text-accent' : mono ? 'font-mono text-[#555]' : 'font-medium text-white'
+        accent ? 'hv font-black uppercase text-accent' : mono ? 'font-mono text-[#8E8E93]' : 'font-medium text-white'
       )}>{value}</span>
     </div>
   );
@@ -449,7 +449,7 @@ function BookingModal({ table, initialReservation, defaultPrName, onClose, onSub
   const updateBottle = (i: number, patch: Partial<BottleItem>) =>
     setBottleItems(prev => prev.map((b, idx) => idx === i ? { ...b, ...patch } : b));
 
-  const inp = "w-full bg-bg border border-[#2a2a2a] px-4 py-3 text-xs font-sans text-white placeholder-[#444] outline-none transition-colors";
+  const inp = "w-full bg-bg border border-[#2C2C2E] px-4 py-3 text-xs font-sans text-white placeholder-[#636366] outline-none transition-colors";
 
   return (
     <div className="fixed inset-0 z-[100] flex items-center justify-center p-4">
@@ -458,19 +458,19 @@ function BookingModal({ table, initialReservation, defaultPrName, onClose, onSub
 
       <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.2, ease: [0.16, 1, 0.3, 1] }}
-        className="relative w-full max-w-lg bg-card border border-[#2a2a2a] overflow-hidden max-h-[90vh] flex flex-col">
+        className="relative w-full max-w-lg bg-card border border-[#2C2C2E] overflow-hidden max-h-[90vh] flex flex-col">
         <div className="h-[2px] bg-accent shrink-0" />
 
-        <div className="px-8 py-5 border-b border-[#1e1e1e] flex items-center justify-between shrink-0">
+        <div className="px-8 py-5 border-b border-[#1C1C1E] flex items-center justify-between shrink-0">
           <div>
             <h3 className="hv font-black text-xl uppercase text-white">
               {isEdit ? 'Modifica Prenotazione' : 'Prenotazione'}
             </h3>
-            <p className="text-[8px] font-sans uppercase tracking-widest text-[#777] mt-0.5">
+            <p className="text-[8px] font-sans uppercase tracking-widest text-[#8E8E93] mt-0.5">
               Tavolo {table.name} · Min €{table.minSpend}
             </p>
           </div>
-          <button onClick={onClose} className="text-[#777] hover:text-white transition-colors p-1"><X size={18} /></button>
+          <button onClick={onClose} className="text-[#8E8E93] hover:text-white transition-colors p-1"><X size={18} /></button>
         </div>
 
         <form className="p-8 space-y-5 overflow-y-auto"
@@ -484,7 +484,7 @@ function BookingModal({ table, initialReservation, defaultPrName, onClose, onSub
                 value={form.customerName} onChange={e => setForm({ ...form, customerName: e.target.value })} />
             </BField>
             <BField label="PR">
-              <input readOnly className={cn(inp, 'uppercase tracking-widest cursor-default select-none text-[#777] bg-[#0a0a0a] border-[#1a1a1a]')}
+              <input readOnly className={cn(inp, 'uppercase tracking-widest cursor-default select-none text-[#8E8E93] bg-[#0a0a0a] border-[#1C1C1E]')}
                 value={form.prName} onChange={() => {}} />
             </BField>
             <BField label="PAX">
@@ -508,7 +508,7 @@ function BookingModal({ table, initialReservation, defaultPrName, onClose, onSub
                   <select
                     value={bottle.qty}
                     onChange={e => updateBottle(i, { qty: +e.target.value })}
-                    className="bg-bg border border-[#2a2a2a] px-3 py-3 text-xs font-sans text-white outline-none transition-colors w-20 shrink-0 [color-scheme:dark]">
+                    className="bg-bg border border-[#2C2C2E] px-3 py-3 text-xs font-sans text-white outline-none transition-colors w-20 shrink-0 [color-scheme:dark]">
                     {Array.from({ length: 10 }, (_, n) => n + 1).map(n => (
                       <option key={n} value={n}>{n}</option>
                     ))}
@@ -520,13 +520,13 @@ function BookingModal({ table, initialReservation, defaultPrName, onClose, onSub
                     onChange={e => updateBottle(i, { name: e.target.value.toUpperCase() })}
                   />
                   <button type="button" onClick={() => removeBottle(i)}
-                    className="text-[#555] hover:text-red-500 transition-colors p-1 shrink-0">
+                    className="text-[#8E8E93] hover:text-red-500 transition-colors p-1 shrink-0">
                     <X size={14} />
                   </button>
                 </div>
               ))}
               <button type="button" onClick={addBottle}
-                className="flex items-center gap-2 w-full py-2.5 border border-dashed border-[#2a2a2a] text-[#555] hover:border-accent/50 hover:text-accent transition-colors text-[9px] hv font-black uppercase tracking-widest justify-center mt-1">
+                className="flex items-center gap-2 w-full py-2.5 border border-dashed border-[#2C2C2E] text-[#8E8E93] hover:border-accent/50 hover:text-accent transition-colors text-[9px] hv font-black uppercase tracking-widest justify-center mt-1">
                 <Plus size={11} /> Aggiungi Bottiglia
               </button>
             </div>
@@ -550,7 +550,7 @@ function BookingModal({ table, initialReservation, defaultPrName, onClose, onSub
 function BField({ label, children }: { label: string; children: React.ReactNode }) {
   return (
     <div className="space-y-1.5">
-      <label className="text-[8px] font-sans font-bold uppercase tracking-widest text-[#666]">{label}</label>
+      <label className="text-[8px] font-sans font-bold uppercase tracking-widest text-[#636366]">{label}</label>
       {children}
     </div>
   );

@@ -248,30 +248,30 @@ export default function FloorPlanEditor({ floorPlan, onSave, onClose }: FloorPla
     <div className="fixed inset-0 z-[200] bg-[#080808] flex flex-col select-none">
 
       {/* ── Toolbar ── */}
-      <div className="h-[52px] bg-[#0f0f0f] border-b border-[#1e1e1e] flex items-center px-3 gap-1.5 shrink-0">
+      <div className="h-[52px] bg-[#0f0f0f] border-b border-[#1C1C1E] flex items-center px-3 gap-1.5 shrink-0">
 
         {/* Close */}
         <button onClick={onClose}
-          className="w-8 h-8 flex items-center justify-center text-[#555] hover:text-white hover:bg-[#1a1a1a] transition-colors mr-1">
+          className="w-8 h-8 flex items-center justify-center text-[#8E8E93] hover:text-white hover:bg-[#1C1C1E] transition-colors mr-1">
           <X size={15} />
         </button>
-        <div className="w-px h-5 bg-[#1e1e1e] mx-1" />
+        <div className="w-px h-5 bg-[#1C1C1E] mx-1" />
 
         {/* Name */}
         <input
-          className="w-44 bg-transparent border border-[#1e1e1e] px-3 py-1.5 text-[10px] hv font-black uppercase tracking-widest text-white placeholder-[#333] outline-none focus:border-[#333] transition-colors"
+          className="w-44 bg-transparent border border-[#1C1C1E] px-3 py-1.5 text-[10px] hv font-black uppercase tracking-widest text-white placeholder-[#3A3A3C] outline-none focus:border-[#3A3A3C] transition-colors"
           placeholder="NOME PIANTA"
           value={fpName}
           onChange={e => setFpName(e.target.value)}
         />
-        <div className="w-px h-5 bg-[#1e1e1e] mx-1" />
+        <div className="w-px h-5 bg-[#1C1C1E] mx-1" />
 
         {/* Letter selector */}
-        <div className="flex items-center gap-0.5 bg-[#0a0a0a] border border-[#1e1e1e] px-1.5 py-1">
+        <div className="flex items-center gap-0.5 bg-[#0a0a0a] border border-[#1C1C1E] px-1.5 py-1">
           {LETTERS.map(l => (
             <button key={l} onClick={() => setSelectedLetter(l)}
               title={`Lettera ${l}`}
-              className={`w-6 h-6 text-[9px] hv font-black transition-colors ${selectedLetter === l ? 'bg-accent text-black' : 'text-[#555] hover:text-white'}`}>
+              className={`w-6 h-6 text-[9px] hv font-black transition-colors ${selectedLetter === l ? 'bg-accent text-black' : 'text-[#8E8E93] hover:text-white'}`}>
               {l}
             </button>
           ))}
@@ -279,14 +279,14 @@ export default function FloorPlanEditor({ floorPlan, onSave, onClose }: FloorPla
 
         {/* Shapes */}
         <button onClick={() => addTable('rect')} title="Aggiungi tavolo quadrato"
-          className="flex items-center gap-1.5 px-2.5 py-1.5 bg-[#0a0a0a] border border-[#1e1e1e] text-[9px] hv font-black text-[#888] hover:text-white hover:border-[#333] transition-all">
+          className="flex items-center gap-1.5 px-2.5 py-1.5 bg-[#0a0a0a] border border-[#1C1C1E] text-[9px] hv font-black text-[#AEAEB2] hover:text-white hover:border-[#48484A] transition-all">
           <Square size={11} /> Quadrato
         </button>
         <button onClick={() => addTable('circle')} title="Aggiungi tavolo rotondo"
-          className="flex items-center gap-1.5 px-2.5 py-1.5 bg-[#0a0a0a] border border-[#1e1e1e] text-[9px] hv font-black text-[#888] hover:text-white hover:border-[#333] transition-all">
+          className="flex items-center gap-1.5 px-2.5 py-1.5 bg-[#0a0a0a] border border-[#1C1C1E] text-[9px] hv font-black text-[#AEAEB2] hover:text-white hover:border-[#48484A] transition-all">
           <CircleIcon size={11} /> Rotondo
         </button>
-        <div className="w-px h-5 bg-[#1e1e1e] mx-1" />
+        <div className="w-px h-5 bg-[#1C1C1E] mx-1" />
 
         {/* Fixtures */}
         <button onClick={() => addFixture('bar')} title="Aggiungi bancone bar"
@@ -297,19 +297,19 @@ export default function FloorPlanEditor({ floorPlan, onSave, onClose }: FloorPla
           className="px-2.5 py-1.5 bg-[#120820] border border-[#9b5ef5]/30 text-[9px] hv font-black text-[#9b5ef5] hover:border-[#9b5ef5] transition-all">
           Consolle
         </button>
-        <div className="w-px h-5 bg-[#1e1e1e] mx-1" />
+        <div className="w-px h-5 bg-[#1C1C1E] mx-1" />
 
         {/* Canvas size */}
-        <div className="flex items-center gap-1 text-[9px] font-sans text-[#555]">
+        <div className="flex items-center gap-1 text-[9px] font-sans text-[#8E8E93]">
           <span className="uppercase tracking-widest">W</span>
           <input type="number" min={400} max={4000} step={50} value={paperW}
             onChange={e => setPaperW(Math.max(400, Math.min(4000, Number(e.target.value))))}
-            className="w-16 bg-[#0a0a0a] border border-[#1e1e1e] px-2 py-1 text-[10px] font-sans text-white outline-none focus:border-[#333] text-center" />
+            className="w-16 bg-[#0a0a0a] border border-[#1C1C1E] px-2 py-1 text-[10px] font-sans text-white outline-none focus:border-[#3A3A3C] text-center" />
           <span>×</span>
           <span className="uppercase tracking-widest">H</span>
           <input type="number" min={300} max={3000} step={50} value={paperH}
             onChange={e => setPaperH(Math.max(300, Math.min(3000, Number(e.target.value))))}
-            className="w-16 bg-[#0a0a0a] border border-[#1e1e1e] px-2 py-1 text-[10px] font-sans text-white outline-none focus:border-[#333] text-center" />
+            className="w-16 bg-[#0a0a0a] border border-[#1C1C1E] px-2 py-1 text-[10px] font-sans text-white outline-none focus:border-[#3A3A3C] text-center" />
         </div>
 
         <div className="flex-1" />
@@ -326,7 +326,7 @@ export default function FloorPlanEditor({ floorPlan, onSave, onClose }: FloorPla
         <button onClick={() => { setAiMsg(null); fileRef.current?.click(); }}
           disabled={analyzing}
           title="Carica una pianta PNG/JPG/PDF e ricreala con AI"
-          className="flex items-center gap-1.5 px-3 py-1.5 bg-[#0a0a0a] border border-[#2a2a2a] text-[9px] hv font-black text-[#888] hover:border-accent/40 hover:text-accent transition-all disabled:opacity-50">
+          className="flex items-center gap-1.5 px-3 py-1.5 bg-[#0a0a0a] border border-[#2C2C2E] text-[9px] hv font-black text-[#AEAEB2] hover:border-accent/40 hover:text-accent transition-all disabled:opacity-50">
           {analyzing ? <Loader2 size={11} className="animate-spin" /> : <Sparkles size={11} />}
           {analyzing ? 'Analisi...' : 'Analizza Pianta'}
         </button>
@@ -351,7 +351,7 @@ export default function FloorPlanEditor({ floorPlan, onSave, onClose }: FloorPla
           <div style={{ minWidth: paperW + 80, minHeight: paperH + 80, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: 40 }}>
             <div style={{
               width: paperW, height: paperH, flexShrink: 0,
-              boxShadow: '0 0 0 1px #1e1e1e, 0 20px 60px rgba(0,0,0,0.8)',
+              boxShadow: '0 0 0 1px #1C1C1E, 0 20px 60px rgba(0,0,0,0.8)',
               background: '#111',
               position: 'relative',
             }}>
@@ -381,7 +381,7 @@ export default function FloorPlanEditor({ floorPlan, onSave, onClose }: FloorPla
               {/* Empty state */}
               {tables.length === 0 && !analyzing && (
                 <div className="absolute inset-0 flex flex-col items-center justify-center pointer-events-none gap-3">
-                  <p className="text-[11px] font-sans uppercase tracking-[0.4em] text-[#2a2a2a]">Piano vuoto</p>
+                  <p className="text-[11px] font-sans uppercase tracking-[0.4em] text-[#2C2C2E]">Piano vuoto</p>
                   <p className="text-[9px] font-sans uppercase tracking-[0.3em] text-[#222]">Aggiungi elementi dalla toolbar o analizza una pianta</p>
                 </div>
               )}
@@ -391,14 +391,14 @@ export default function FloorPlanEditor({ floorPlan, onSave, onClose }: FloorPla
 
         {/* ── Right properties panel ── */}
         {selectedTable && (
-          <div className="w-64 border-l border-[#1a1a1a] bg-[#0c0c0c] flex flex-col shrink-0 overflow-y-auto">
+          <div className="w-64 border-l border-[#1C1C1E] bg-[#0c0c0c] flex flex-col shrink-0 overflow-y-auto">
             {/* Header */}
-            <div className="px-4 py-3.5 border-b border-[#1a1a1a] flex items-center justify-between">
-              <p className="text-[9px] hv font-black uppercase tracking-[0.2em] text-[#555]">
+            <div className="px-4 py-3.5 border-b border-[#1C1C1E] flex items-center justify-between">
+              <p className="text-[9px] hv font-black uppercase tracking-[0.2em] text-[#8E8E93]">
                 {selectedTable.isFixture ? 'Elemento fisso' : 'Tavolo'}
               </p>
               <button onClick={deleteSelected}
-                className="w-6 h-6 flex items-center justify-center text-[#333] hover:text-red-500 transition-colors" title="Elimina (Delete)">
+                className="w-6 h-6 flex items-center justify-center text-[#3A3A3C] hover:text-red-500 transition-colors" title="Elimina (Delete)">
                 <Trash2 size={13} />
               </button>
             </div>
@@ -423,7 +423,7 @@ export default function FloorPlanEditor({ floorPlan, onSave, onClose }: FloorPla
                     <div className="flex gap-0.5">
                       {LETTERS.map(l => (
                         <button key={l} onClick={() => changeLetter(l)}
-                          className={`flex-1 py-1.5 text-[10px] hv font-black transition-colors ${selectedTable.letter === l ? 'bg-accent text-black' : 'bg-[#0a0a0a] border border-[#1e1e1e] text-[#555] hover:text-white'}`}>
+                          className={`flex-1 py-1.5 text-[10px] hv font-black transition-colors ${selectedTable.letter === l ? 'bg-accent text-black' : 'bg-[#0a0a0a] border border-[#1C1C1E] text-[#8E8E93] hover:text-white'}`}>
                           {l}
                         </button>
                       ))}
@@ -443,14 +443,14 @@ export default function FloorPlanEditor({ floorPlan, onSave, onClose }: FloorPla
                     <Field label="Pax">
                       <div className="flex items-center gap-1">
                         <button onClick={() => updateTable(selectedTable.id, { capacity: Math.max(1, selectedTable.capacity - 1) })}
-                          className="w-6 h-8 flex items-center justify-center text-[#555] hover:text-white bg-[#0a0a0a] border border-[#1e1e1e] transition-colors">
+                          className="w-6 h-8 flex items-center justify-center text-[#8E8E93] hover:text-white bg-[#0a0a0a] border border-[#1C1C1E] transition-colors">
                           <Minus size={10} />
                         </button>
                         <input type="number" min={1} className={`${INPUT} text-center flex-1`}
                           value={selectedTable.capacity}
                           onChange={e => updateTable(selectedTable.id, { capacity: Math.max(1, parseInt(e.target.value) || 1) })} />
                         <button onClick={() => updateTable(selectedTable.id, { capacity: selectedTable.capacity + 1 })}
-                          className="w-6 h-8 flex items-center justify-center text-[#555] hover:text-white bg-[#0a0a0a] border border-[#1e1e1e] transition-colors">
+                          className="w-6 h-8 flex items-center justify-center text-[#8E8E93] hover:text-white bg-[#0a0a0a] border border-[#1C1C1E] transition-colors">
                           <Plus size={10} />
                         </button>
                       </div>
@@ -465,7 +465,7 @@ export default function FloorPlanEditor({ floorPlan, onSave, onClose }: FloorPla
               )}
 
               {/* Dimensions info */}
-              <div className="pt-3 border-t border-[#1a1a1a] grid grid-cols-2 gap-1 text-[8px] font-sans uppercase tracking-widest text-[#333]">
+              <div className="pt-3 border-t border-[#1C1C1E] grid grid-cols-2 gap-1 text-[8px] font-sans uppercase tracking-widest text-[#3A3A3C]">
                 <span>X {Math.round(selectedTable.x)}</span>
                 <span>Y {Math.round(selectedTable.y)}</span>
                 <span>W {Math.round(selectedTable.width)}</span>
@@ -477,7 +477,7 @@ export default function FloorPlanEditor({ floorPlan, onSave, onClose }: FloorPla
 
         {/* Keyboard hint */}
         {selectedTable && (
-          <div className="absolute bottom-3 left-1/2 -translate-x-1/2 text-[8px] font-sans uppercase tracking-widest text-[#2a2a2a] pointer-events-none">
+          <div className="absolute bottom-3 left-1/2 -translate-x-1/2 text-[8px] font-sans uppercase tracking-widest text-[#2C2C2E] pointer-events-none">
             Delete / Backspace per eliminare
           </div>
         )}
@@ -487,7 +487,7 @@ export default function FloorPlanEditor({ floorPlan, onSave, onClose }: FloorPla
           <div className="absolute inset-0 bg-black/70 backdrop-blur-sm flex flex-col items-center justify-center gap-4 z-10">
             <Loader2 size={32} className="text-accent animate-spin" />
             <p className="text-[11px] hv font-black uppercase tracking-[0.3em] text-white">Analisi pianta in corso…</p>
-            <p className="text-[9px] font-sans uppercase tracking-widest text-[#666]">Claude sta esaminando il file e ricostruendo il layout</p>
+            <p className="text-[9px] font-sans uppercase tracking-widest text-[#636366]">Claude sta esaminando il file e ricostruendo il layout</p>
           </div>
         )}
       </div>
@@ -500,12 +500,12 @@ export default function FloorPlanEditor({ floorPlan, onSave, onClose }: FloorPla
 }
 
 /* ── Shared styles ───────────────────────────────────────── */
-const INPUT = 'w-full bg-[#0a0a0a] border border-[#1e1e1e] px-3 py-2 text-xs font-sans uppercase tracking-widest text-white outline-none focus:border-[#2e2e2e] transition-colors';
+const INPUT = 'w-full bg-[#0a0a0a] border border-[#1C1C1E] px-3 py-2 text-xs font-sans uppercase tracking-widest text-white outline-none focus:border-[#2C2C2E] transition-colors';
 
 function Field({ label, children }: { label: string; children: React.ReactNode }) {
   return (
     <div className="space-y-1.5">
-      <label className="text-[8px] hv font-black uppercase tracking-[0.25em] text-[#444]">{label}</label>
+      <label className="text-[8px] hv font-black uppercase tracking-[0.25em] text-[#636366]">{label}</label>
       {children}
     </div>
   );

@@ -5,9 +5,9 @@
   --font-sans: 'Inter', ui-sans-serif, system-ui, sans-serif;
   --font-mono: 'Roboto Mono', ui-monospace, monospace;
 
-  --color-bg:           #1A1A1A;
-  --color-card:         #252525;
-  --color-border:       #383838;
+  --color-bg:           #000000;
+  --color-card:         #1C1C1E;
+  --color-border:       #3A3A3C;
 
   /* Primary brand accent — caldo */
   --color-accent:       #D4622A;

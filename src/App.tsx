@@ -861,47 +861,31 @@ export default function App() {
   /* ── LOGIN ──────────────────────────────────────────────── */
   if (!user) {
     return (
-      <div className="min-h-screen bg-[#1C1C1E] flex flex-col lg:flex-row">
-        {/* Brand panel — desktop */}
+      <div className="min-h-screen bg-black flex items-center justify-center p-4 relative overflow-hidden">
+        {/* Watermark */}
+        <div aria-hidden className="absolute inset-0 flex items-center justify-center pointer-events-none select-none overflow-hidden">
+          <span className="hv font-black text-white/[0.025] select-none whitespace-nowrap" style={{ fontSize: 'clamp(80px, 20vw, 260px)', letterSpacing: '-0.05em' }}>NIGHTPLAN</span>
+        </div>
+        {/* Accent glow */}
+        <div className="absolute inset-0 bg-[radial-gradient(ellipse_70%_60%_at_50%_70%,rgba(212,98,42,0.07)_0%,transparent_100%)] pointer-events-none" />
+
         <motion.div
-          initial={{ opacity: 0, x: -40 }} animate={{ opacity: 1, x: 0 }}
-          transition={{ duration: 0.6, ease: 'easeOut' }}
-          className="hidden lg:flex flex-col justify-between p-14 xl:p-20 border-r border-[#2C2C2E] lg:w-[55%] relative overflow-hidden"
+          initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.38, ease: 'easeOut' }}
+          className="relative w-full max-w-sm z-10"
         >
-          <div className="absolute inset-0 floorplan-grid opacity-40 pointer-events-none" />
-          <span className="relative text-[10px] font-sans font-medium uppercase tracking-[0.5em] text-[#AEAEB2]">
-            Table Management Platform
-          </span>
-          <div className="relative">
-            <h1 className="hv font-black leading-[0.88] tracking-tighter uppercase text-white"
-              style={{ fontSize: 'clamp(80px, 10vw, 130px)' }}>
-              NIGHT<br />PLAN
-            </h1>
-            <div className="mt-8 flex items-center gap-4">
-              <div className="h-px w-10 bg-accent shrink-0" />
-              <p className="text-[#AEAEB2] text-sm font-sans leading-relaxed">
-                The operating system<br />for nightlife professionals.
-              </p>
+          {/* Brand */}
+          <div className="flex items-center gap-3 mb-6 px-1">
+            <img src="/Logo.png" alt="Nightplan" className="w-9 h-9 object-contain" />
+            <div>
+              <p className="hv font-black text-white text-[15px] leading-tight">Nightplan</p>
+              <p className="text-[9px] font-sans text-accent uppercase tracking-[0.45em]">Management</p>
             </div>
           </div>
-          <span className="relative text-[9px] font-sans text-[#8E8E93] uppercase tracking-[0.4em]">
-            © 2025 Nightplan Management Suite
-          </span>
-        </motion.div>
 
-        {/* Login form panel */}
-        <motion.div
-          initial={{ opacity: 0 }} animate={{ opacity: 1 }}
-          transition={{ duration: 0.4, delay: 0.1 }}
-          className="flex-1 flex flex-col justify-center items-center p-8 lg:p-16 bg-[#1C1C1E]"
-        >
-          {/* Mobile logo */}
-          <div className="lg:hidden mb-14 text-center">
-            <h1 className="hv font-black text-5xl uppercase tracking-tight text-white">NIGHTPLAN</h1>
-            <p className="text-[#AEAEB2] text-[10px] font-sans uppercase tracking-[0.4em] mt-2">Management Suite</p>
-          </div>
-
-          <div className="w-full max-w-xs">
+          {/* Card */}
+          <div className="bg-[#1C1C1E]/80 backdrop-blur-2xl border border-white/[0.07] rounded-2xl p-8 shadow-[0_32px_80px_rgba(0,0,0,0.6)]">
+            <div className="w-full">
             <AnimatePresence mode="wait">
               {authScreen === 'login' ? (
                 <motion.div key="login" initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -8 }} transition={{ duration: 0.18 }}>
@@ -1240,8 +1224,10 @@ export default function App() {
                 </motion.div>
               )}
             </AnimatePresence>
+            </div>
           </div>
         </motion.div>
+        <p className="absolute bottom-5 text-[9px] font-sans text-[#2C2C2E] uppercase tracking-[0.3em]">© 2025 Nightplan</p>
       </div>
     );
   }
@@ -2905,170 +2891,140 @@ function SidebarContent({ user, view, onNav, onLogout, occupancyPct = 0, revenue
   return (
     <>
       {/* Brand */}
-      <div className="px-6 py-6 border-b border-[#2C2C2E] shrink-0">
-        <div className="flex items-center gap-4">
-          <div className="w-12 h-12 shrink-0 flex items-center justify-center">
-            <img
-              src="/Logo.png"
-              alt="Nightplan"
-              className="w-full h-full object-contain"
-            />
+      <div className="px-5 py-4 border-b border-[#2C2C2E] shrink-0">
+        <div className="flex items-center gap-3">
+          <div className="w-8 h-8 shrink-0 flex items-center justify-center">
+            <img src="/Logo.png" alt="Nightplan" className="w-full h-full object-contain" />
           </div>
           <div className="flex flex-col justify-center">
-            <span className="font-semibold text-[13px] text-white leading-tight">Nightplan</span>
-            <span className="text-[10px] font-sans text-[#D4622A] mt-0.5">Management</span>
+            <span className="hv font-black text-[13px] text-white leading-tight">Nightplan</span>
+            <span className="text-[9px] font-sans text-accent uppercase tracking-[0.3em]">Management</span>
           </div>
         </div>
       </div>
 
       {/* KPIs — admin only */}
       {user.role === 'admin' && (
-        <div className="px-6 py-6 border-b border-[#2C2C2E] space-y-5 shrink-0">
-          <div>
-            <div className="hv font-black leading-none text-white glow-text" style={{ fontSize: 52 }}>
-              {occupancyPct}<span className="text-[28px] text-[#8E8E93]">%</span>
+        <div className="px-5 py-4 border-b border-[#2C2C2E] flex items-center gap-4 shrink-0">
+          <div className="flex-1">
+            <div className="flex items-baseline gap-1">
+              <span className="hv font-black text-[22px] text-white leading-none">{occupancyPct}</span>
+              <span className="text-xs text-[#8E8E93]">%</span>
             </div>
-            <div className="mt-2.5 h-px bg-[#2C2C2E] relative overflow-hidden">
-              <motion.div className="h-px bg-accent absolute inset-y-0 left-0"
-                initial={{ width: 0 }} animate={{ width: `${occupancyPct}%` }}
-                transition={{ duration: 1.2, delay: 0.3, ease: 'easeOut' }} />
-            </div>
-            <p className="text-[10px] text-[#AEAEB2] mt-1.5">Occupancy</p>
+            <p className="text-[9px] text-[#8E8E93] mt-0.5">Occupancy</p>
           </div>
-          <div>
-            <div className="hv font-black text-accent leading-none glow-text" style={{ fontSize: 36 }}>{revenueDisplay}</div>
-            <p className="text-[10px] text-[#AEAEB2] mt-1">Revenue Est.</p>
+          <div className="w-px h-8 bg-[#2C2C2E]" />
+          <div className="flex-1">
+            <div className="hv font-black text-[22px] text-accent leading-none">{revenueDisplay}</div>
+            <p className="text-[9px] text-[#8E8E93] mt-0.5">Revenue</p>
+          </div>
+          <div className="w-1 h-10 bg-[#2C2C2E] rounded-full overflow-hidden">
+            <motion.div className="w-full bg-accent rounded-full"
+              initial={{ height: '0%' }} animate={{ height: `${occupancyPct}%` }}
+              transition={{ duration: 1.2, delay: 0.3, ease: 'easeOut' }}
+              style={{ marginTop: `${100 - occupancyPct}%` }} />
           </div>
         </div>
       )}
 
       {/* Nav */}
-      <nav className="flex-1 px-3 py-5 overflow-y-auto">
+      <nav className="flex-1 px-3 py-4 overflow-y-auto space-y-1">
         {user.role === 'admin' ? (
           <>
-            <div className="space-y-0.5">
-              <NavLink icon={<TrendingUp size={14}/>} label="Home"
+            <NavSection label="Panoramica">
+              <NavLink icon={<TrendingUp size={14}/>} label="Dashboard"
                 active={view==='dashboard'}
                 onClick={() => onNav('dashboard')} />
-              <NavLink icon={<Calendar size={14}/>} label="Prossimi eventi"
+            </NavSection>
+            <NavSection label="Serata">
+              <NavLink icon={<Calendar size={14}/>} label="Serate"
                 active={view==='active-events'||view==='plan'}
                 onClick={() => onNav('active-events')} />
-              <NavLink icon={<Building2 size={14}/>} label="Club"
+              <NavLink icon={<Building2 size={14}/>} label="Venue"
                 active={view==='venues'||view==='venue-events'||view==='editor'}
                 onClick={() => onNav('venues')} />
-            </div>
-            <div className="mx-3 my-4 h-px bg-[#242424]" />
-            <div className="space-y-0.5">
+            </NavSection>
+            <NavSection label="Gestione">
               <NavLink icon={<BarChart3 size={14}/>} label="Prenotazioni"
-                active={view==='reservations'}
-                onClick={() => onNav('reservations')} />
-              <NavLink icon={<Bell size={14}/>} label="Approvazioni"
-                active={view==='approvals'}
-                onClick={() => onNav('approvals')}
+                active={view==='reservations'||view==='approvals'}
+                onClick={() => onNav('reservations')}
                 badge={pendingCount} />
-            </div>
-            <div className="mx-3 my-4 h-px bg-[#242424]" />
-            <div className="space-y-0.5">
-              <NavLink icon={<Users size={14}/>} label="I Miei PR"
+              <NavLink icon={<Users size={14}/>} label="Team PR"
                 active={view==='pr-management'}
                 onClick={() => onNav('pr-management')} />
               <NavLink icon={<DoorOpen size={14}/>} label="Ingresso"
                 active={view==='checkin'}
                 onClick={() => onNav('checkin')} />
-            </div>
+            </NavSection>
           </>
         ) : user.role === 'host' ? (
-          <div className="space-y-0.5">
-            <NavLink icon={<TrendingUp size={14}/>} label="Home"
+          <NavSection label="Menu">
+            <NavLink icon={<TrendingUp size={14}/>} label="Dashboard"
               active={view==='dashboard'}
               onClick={() => onNav('dashboard')} />
-            <NavLink icon={<DoorOpen size={14}/>} label="Ingresso Serata"
+            <NavLink icon={<DoorOpen size={14}/>} label="Ingresso"
               active={view==='checkin'}
               onClick={() => onNav('checkin')} />
-          </div>
+          </NavSection>
         ) : (
-          <div className="space-y-0.5">
-            <NavLink icon={<TrendingUp size={14}/>} label="Home"
+          <NavSection label="Menu">
+            <NavLink icon={<TrendingUp size={14}/>} label="Dashboard"
               active={view==='dashboard'}
               onClick={() => onNav('dashboard')} />
-            <NavLink icon={<Calendar size={14}/>} label="Eventi"
+            <NavLink icon={<Calendar size={14}/>} label="Serate"
               active={view==='events'||view==='plan'}
               onClick={() => onNav('events')} />
             <NavLink icon={<BarChart3 size={14}/>} label="Prenotazioni"
               active={view==='reservations'}
               onClick={() => onNav('reservations')}
               badge={prPendingCount} />
-            <NavLink icon={<Clock size={14}/>} label="Il Mio Storico"
+            <NavLink icon={<Clock size={14}/>} label="Storico"
               active={view==='history'}
               onClick={() => onNav('history')} />
-          </div>
+          </NavSection>
         )}
       </nav>
 
       {/* User */}
-      <div className="px-6 py-6 border-t border-[#2C2C2E] shrink-0">
-        <button
-          onClick={() => user.role === 'pr' ? onNav('profile') : undefined}
-          className={cn('flex items-center gap-3 mb-5 w-full text-left', user.role === 'pr' && 'group cursor-pointer')}
-        >
-          <div className="w-9 h-9 bg-[#2C2C2E] border border-[#3A3A3C] flex items-center justify-center shrink-0 overflow-hidden group-hover:border-accent/30 transition-colors rounded-xl">
-            {user.profileImage
-              ? <img src={user.profileImage} alt="" className="w-full h-full object-cover" />
-              : <span className="hv font-black text-accent text-xs">{user.displayName.substring(0, 2).toUpperCase()}</span>
-            }
-          </div>
-          <div className="min-w-0">
-            <p className="text-[13px] font-semibold text-white truncate group-hover:text-accent transition-colors">
-              {user.displayName}{user.lastName ? ' ' + user.lastName : ''}
-            </p>
-            <p className="text-xs text-[#8E8E93] mt-0.5 capitalize">{user.role}</p>
-          </div>
-        </button>
-        <button onClick={onLogout}
-          className="flex items-center gap-2 text-[#AEAEB2] hover:text-accent transition-colors text-xs w-full">
-          <LogOut size={12} /> Sign Out
-        </button>
+      <div className="px-4 py-4 border-t border-[#2C2C2E] shrink-0">
+        <div className="flex items-center gap-3">
+          <button
+            onClick={() => user.role === 'pr' ? onNav('profile') : undefined}
+            className={cn('flex items-center gap-2.5 flex-1 min-w-0 text-left', user.role === 'pr' && 'group cursor-pointer')}
+          >
+            <div className="w-7 h-7 bg-[#2C2C2E] border border-[#3A3A3C] flex items-center justify-center shrink-0 overflow-hidden group-hover:border-accent/30 transition-colors rounded-lg">
+              {user.profileImage
+                ? <img src={user.profileImage} alt="" className="w-full h-full object-cover" />
+                : <span className="hv font-black text-accent text-[9px]">{user.displayName.substring(0, 2).toUpperCase()}</span>
+              }
+            </div>
+            <div className="min-w-0">
+              <p className="text-[12px] font-semibold text-white truncate group-hover:text-accent transition-colors leading-tight">
+                {user.displayName}{user.lastName ? ' ' + user.lastName : ''}
+              </p>
+              <p className="text-[9px] text-[#8E8E93] capitalize">{user.role}</p>
+            </div>
+          </button>
+          <button onClick={onLogout}
+            className="text-[#48484A] hover:text-accent transition-colors shrink-0 p-1.5 rounded-lg hover:bg-white/[0.04]">
+            <LogOut size={13} />
+          </button>
+        </div>
       </div>
     </>
   );
 }
 
 /* ── NavSection ──────────────────────────────────────────── */
-function NavSection({ label, children, defaultOpen = true }: { label: string; children: React.ReactNode; defaultOpen?: boolean }) {
-  const [open, setOpen] = useState(defaultOpen);
+function NavSection({ label, children }: { label: string; children: React.ReactNode }) {
   return (
-    <div className="mb-2">
-      <button
-        onClick={() => setOpen(o => !o)}
-        className="flex items-center justify-between w-full px-3 pt-1 pb-2 group"
-      >
-        <span className="text-[8px] font-sans uppercase tracking-[0.3em] text-[#636366] group-hover:text-[#AEAEB2] transition-colors">
-          {label}
-        </span>
-        <motion.span
-          animate={{ rotate: open ? 0 : -90 }}
-          transition={{ duration: 0.2 }}
-          className="text-[#8E8E93] group-hover:text-[#8E8E93] transition-colors"
-        >
-          <ChevronDown size={10} />
-        </motion.span>
-      </button>
-      <AnimatePresence initial={false}>
-        {open && (
-          <motion.div
-            key="content"
-            initial={{ height: 0, opacity: 0 }}
-            animate={{ height: 'auto', opacity: 1 }}
-            exit={{ height: 0, opacity: 0 }}
-            transition={{ duration: 0.22, ease: 'easeInOut' }}
-            className="overflow-hidden"
-          >
-            <div className="space-y-0.5 pb-3">
-              {children}
-            </div>
-          </motion.div>
-        )}
-      </AnimatePresence>
+    <div className="pb-3">
+      <p className="px-3 pt-1 pb-1.5 text-[8px] font-sans uppercase tracking-[0.35em] text-[#48484A]">
+        {label}
+      </p>
+      <div className="space-y-0.5">
+        {children}
+      </div>
     </div>
   );
 }

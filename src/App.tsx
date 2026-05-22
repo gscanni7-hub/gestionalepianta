@@ -878,10 +878,14 @@ export default function App() {
           className="relative w-full max-w-sm z-10 px-6"
         >
           {/* Brand */}
-          <div className="flex items-center justify-center gap-3 mb-8">
+          <button
+            onClick={() => setShowSplash(true)}
+            style={{ background: 'none', border: 'none', padding: 0, cursor: 'pointer' }}
+            className="flex items-center justify-center gap-3 mb-8"
+          >
             <img src="/Logo.png" alt="Nightplan" className="w-9 h-9 object-contain" />
             <p className="hv font-black text-white text-[15px] leading-tight">Nightplan</p>
-          </div>
+          </button>
           {/* Card */}
           <div className="bg-[#141412] border border-white/[0.06] rounded-2xl p-8 shadow-[0_24px_60px_rgba(0,0,0,0.5)]">
             <div className="w-full">

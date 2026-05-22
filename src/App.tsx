@@ -4,7 +4,7 @@ import {
   Calendar, Settings, BarChart3, LogOut, ChevronRight, ChevronDown,
   Plus, Download, Filter, Building2, X, ArrowLeft, Menu, Map, Pencil, Trash2,
   UserCheck, Bell, Clock, TrendingUp, CheckCircle2, XCircle, Users, Eye, EyeOff,
-  DoorOpen, LogIn, Search, MapPin, QrCode
+  DoorOpen, LogIn, Search
 } from 'lucide-react';
 import { MOCK_USERS, INITIAL_VENUES, INITIAL_EVENTS, INITIAL_RESERVATIONS, INITIAL_MANAGED_USERS } from './constants';
 import { UserProfile, Event, Reservation, Venue, FloorPlan, ManagedUser, Table } from './types';
@@ -13,6 +13,7 @@ import { cn, COLORS, easeOutQuart, gridContainer, gridItem } from './lib/utils';
 import { isEmailConfigured, sendPasswordResetEmail } from './lib/emailService';
 import { isFirebaseConfigured, signInWithGoogle, signInWithApple } from './lib/firebase';
 import { subscribeToReservations } from './lib/reservationService';
+import SplashScreen from './components/SplashScreen';
 import FloorPlanViewer from './components/floorplan/FloorPlanViewer';
 import FloorPlanEditor from './components/floorplan/FloorPlanEditor';
 import IngressiView from './components/host/IngressiView';
@@ -187,7 +188,6 @@ export default function App() {
   });
   const [authScreen, setAuthScreen] = useState<'login' | 'register' | 'forgot' | 'reset'>('login');
   const [showSplash, setShowSplash] = useState(true);
-  const [splashPhase, setSplashPhase] = useState<'floating' | 'landing'>('floating');
   const [loginEmail, setLoginEmail] = useState('');
   const [loginPassword, setLoginPassword] = useState('');
   const [loginError, setLoginError] = useState('');
@@ -261,12 +261,6 @@ export default function App() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [view, selectedPR]);
 
-  /* Splash: auto-advance floating → landing after 2.6 s */
-  useEffect(() => {
-    if (!showSplash || splashPhase !== 'floating') return;
-    const t = setTimeout(() => setSplashPhase('landing'), 2600);
-    return () => clearTimeout(t);
-  }, [showSplash, splashPhase]);
 
   const PAGE = navDirection === 'forward'
     ? PAGE_FORWARD
@@ -870,98 +864,9 @@ export default function App() {
   /* ── LOGIN ──────────────────────────────────────────────── */
   if (!user) {
 
-    /* Splash icons config */
-    const splashIcons = [
-      { Icon: Calendar,  bg: '#0d2035', color: '#4a9eff', dx: -130, dy: -115 },
-      { Icon: QrCode,    bg: '#2a160a', color: '#D4622A', dx: 130,  dy: -95  },
-      { Icon: BarChart3, bg: '#0a2518', color: '#30d158', dx: 152,  dy: 25   },
-      { Icon: Users,     bg: '#1a0a2c', color: '#bf5af2', dx: 88,   dy: 135  },
-      { Icon: DoorOpen,  bg: '#280a15', color: '#ff375f', dx: -102, dy: 125  },
-      { Icon: MapPin,    bg: '#0a1820', color: '#5ac8fa', dx: -148, dy: 15   },
-    ];
-
     /* ── SPLASH ── */
     if (showSplash) {
-      return (
-        <div className="min-h-screen flex flex-col items-center justify-center overflow-hidden" style={{ backgroundColor: '#0a0908' }}>
-          {/* Orbit zone */}
-          <div className="relative" style={{ width: 340, height: 340 }}>
-            {/* Central logo */}
-            <div className="absolute" style={{ left: '50%', top: '50%', marginLeft: -32, marginTop: -32, zIndex: 10 }}>
-              <motion.img
-                src="/Logo.png" alt="Nightplan"
-                className="object-contain"
-                style={{ width: 64, height: 64 }}
-                initial={{ opacity: 0, scale: 0 }}
-                animate={{ opacity: 1, scale: splashPhase === 'landing' ? 2.1 : 1 }}
-                transition={{
-                  opacity: { duration: 0.5 },
-                  scale: splashPhase === 'landing'
-                    ? { duration: 0.75, ease: [0.16, 1, 0.3, 1], delay: 0.08 }
-                    : { duration: 0.4, ease: [0.34, 1.56, 0.64, 1] },
-                }}
-              />
-            </div>
-            {/* Floating icons */}
-            {splashIcons.map(({ Icon, bg, color, dx, dy }, i) => (
-              <motion.div
-                key={i}
-                className="absolute flex items-center justify-center"
-                style={{ width: 52, height: 52, left: '50%', top: '50%', marginLeft: -26, marginTop: -26, backgroundColor: bg, borderRadius: 14 }}
-                initial={{ opacity: 0, scale: 0, x: 0, y: 0 }}
-                animate={
-                  splashPhase === 'floating'
-                    ? { opacity: 1, scale: 1, x: dx, y: [dy - 9, dy + 9, dy - 9] }
-                    : { opacity: 0, scale: 0.2, x: dx * 3.8, y: dy * 3.8 }
-                }
-                transition={
-                  splashPhase === 'floating'
-                    ? {
-                        opacity: { duration: 0.4, delay: 0.2 + i * 0.07 },
-                        scale:   { duration: 0.4, ease: [0.34, 1.56, 0.64, 1], delay: 0.2 + i * 0.07 },
-                        x:       { duration: 0.65, ease: [0.16, 1, 0.3, 1], delay: 0.2 + i * 0.07 },
-                        y:       { duration: 2.8 + i * 0.3, repeat: Infinity, ease: 'easeInOut', delay: 0.85 + i * 0.12 },
-                      }
-                    : { duration: 0.45, delay: i * 0.04, ease: 'easeIn' }
-                }
-              >
-                <Icon size={22} color={color} />
-              </motion.div>
-            ))}
-          </div>
-          {/* Text + Accedi */}
-          <AnimatePresence>
-            {splashPhase === 'landing' && (
-              <motion.div
-                key="splash-text"
-                className="flex flex-col items-center -mt-6"
-                initial={{ opacity: 0, y: 22 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.65, delay: 0.5, ease: [0.16, 1, 0.3, 1] }}
-              >
-                <h1 className="font-black text-white" style={{ fontSize: 46, letterSpacing: '-0.035em', lineHeight: 1 }}>
-                  Nightplan
-                </h1>
-                <p className="text-[10px] font-medium tracking-[0.22em] uppercase mt-2.5" style={{ color: '#3a3835' }}>
-                  Management Platform
-                </p>
-                <motion.button
-                  onClick={() => setShowSplash(false)}
-                  className="mt-10 px-12 py-3.5 rounded-full font-semibold text-[13px] text-white"
-                  style={{ backgroundColor: '#D4622A' }}
-                  initial={{ opacity: 0, y: 8 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: 0.85, duration: 0.4 }}
-                  whileHover={{ scale: 1.04, backgroundColor: '#e8702f' }}
-                  whileTap={{ scale: 0.97 }}
-                >
-                  Accedi
-                </motion.button>
-              </motion.div>
-            )}
-          </AnimatePresence>
-        </div>
-      );
+      return <SplashScreen onAccedi={() => setShowSplash(false)} />;
     }
 
     return (

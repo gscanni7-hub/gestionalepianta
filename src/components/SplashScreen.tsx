@@ -2,19 +2,30 @@ import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { Calendar, QrCode, BarChart3, Users, DoorOpen, MapPin } from 'lucide-react';
 
+/*
+ * Mirrors iCloud.com hero:
+ * - Large central logo (like the iCloud cloud)
+ * - 6 coloured app-style icons orbit around it at varying radii & sizes
+ * - Title, button, tagline always visible below (never gated)
+ * - Everything vertically centred in 100vh — no scroll needed
+ */
+
+const ORBIT_DURATION = 16; // seconds per full revolution
+const ICONS_FADE_AFTER = 8000; // ms
+
+// Icon configs — varying sizes & radii like iCloud's Pages/Mail/Photos mix
 const ICONS = [
-  { Icon: Calendar,  bg: '#0e2540', color: '#5ba3f5' },
-  { Icon: QrCode,    bg: '#2b1a0e', color: '#D4622A' },
-  { Icon: BarChart3, bg: '#0d2a1a', color: '#32d67a' },
-  { Icon: Users,     bg: '#1e0e30', color: '#c47af5' },
-  { Icon: DoorOpen,  bg: '#2b0e18', color: '#ff3a5c' },
-  { Icon: MapPin,    bg: '#0e1e2a', color: '#5ac8fa' },
+  { Icon: BarChart3, bg: '#1db954', color: '#fff', size: 72, r: 148, startDeg: 75  },
+  { Icon: Calendar,  bg: '#3b82f6', color: '#fff', size: 64, r: 136, startDeg: 148 },
+  { Icon: DoorOpen,  bg: '#D4622A', color: '#fff', size: 60, r: 128, startDeg: 218 },
+  { Icon: MapPin,    bg: '#06b6d4', color: '#fff', size: 52, r: 134, startDeg: 278 },
+  { Icon: QrCode,    bg: '#8b5cf6', color: '#fff', size: 66, r: 144, startDeg: 335 },
+  { Icon: Users,     bg: '#f59e0b', color: '#fff', size: 58, r: 136, startDeg: 25  },
 ];
 
-/* orbit radius: icon centres land R px from logo centre */
-const R = 100;
-const ORBIT_DURATION = 14; /* seconds per full revolution */
-const ICONS_FADE_AFTER = 8000; /* ms before icons disappear */
+// Orbit container side — large enough for biggest icon at max radius
+// max icon half-size = 36, max r = 148 → extent = 184px from centre → 368px diameter → use 400
+const ORBIT_SIDE = 400;
 
 export default function SplashScreen({ onAccedi }: { onAccedi: () => void }) {
   const [iconsOut, setIconsOut] = useState(false);
@@ -26,119 +37,141 @@ export default function SplashScreen({ onAccedi }: { onAccedi: () => void }) {
 
   return (
     <div
-      className="min-h-screen flex flex-col items-center"
-      style={{ backgroundColor: '#0a0908' }}
+      style={{
+        width: '100vw',
+        height: '100vh',
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
+        justifyContent: 'center',
+        backgroundColor: '#0a0908',
+        overflow: 'hidden',
+      }}
     >
-      {/* ── Logo + orbit cluster (upper ~42 % of a 900 px viewport) ── */}
+      {/* ── Logo + orbit cluster ───────────────────────────────── */}
       <div
-        className="relative flex items-center justify-center w-full"
-        style={{ height: '42vh', minHeight: 320 }}
+        style={{
+          position: 'relative',
+          width: ORBIT_SIDE,
+          height: ORBIT_SIDE,
+          flexShrink: 0,
+        }}
       >
-        {/* Central logo */}
+        {/* Central logo — absolutely centred in the container */}
         <motion.img
           src="/Logo.png"
           alt="Nightplan"
-          className="object-contain"
-          style={{ width: 130, height: 130, position: 'relative', zIndex: 10 }}
+          style={{
+            position: 'absolute',
+            width: 180,
+            height: 180,
+            left: '50%',
+            top: '50%',
+            marginLeft: -90,
+            marginTop: -90,
+            objectFit: 'contain',
+            zIndex: 10,
+          }}
           initial={{ opacity: 0, scale: 0 }}
           animate={{ opacity: 1, scale: 1 }}
-          transition={{ duration: 0.65, ease: [0.34, 1.56, 0.64, 1] }}
+          transition={{ duration: 0.7, ease: [0.34, 1.56, 0.64, 1] }}
         />
 
-        {/* Orbiting arms — zero-size anchor at exact logo centre */}
-        {ICONS.map(({ Icon, bg, color }, i) => {
-          const startDeg = (i / ICONS.length) * 360;
-          return (
+        {/* Orbiting icon arms — 0×0 pivots centred on the container */}
+        {ICONS.map(({ Icon, bg, color, size, r, startDeg }, i) => (
+          <motion.div
+            key={i}
+            style={{
+              position: 'absolute',
+              left: '50%',
+              top: '50%',
+              width: 0,
+              height: 0,
+            }}
+            initial={{ rotate: startDeg, opacity: 0 }}
+            animate={
+              iconsOut
+                ? { opacity: 0 }
+                : { rotate: startDeg + 360, opacity: 1 }
+            }
+            transition={
+              iconsOut
+                ? { opacity: { duration: 0.6, delay: i * 0.07 } }
+                : {
+                    rotate: { duration: ORBIT_DURATION, repeat: Infinity, ease: 'linear' },
+                    opacity: { duration: 0.4, delay: 0.4 + i * 0.09 },
+                  }
+            }
+          >
+            {/* Icon counter-rotated to stay upright */}
             <motion.div
-              key={i}
-              /* zero-size div centred on the logo */
-              style={{
-                position: 'absolute',
-                left: '50%',
-                top: '50%',
-                width: 0,
-                height: 0,
-              }}
-              /* arm rotates: startDeg → startDeg + 360, repeat */
-              initial={{ rotate: startDeg, opacity: 0 }}
-              animate={
-                iconsOut
-                  ? { opacity: 0 }
-                  : { rotate: startDeg + 360, opacity: 1 }
-              }
+              style={{ position: 'absolute', left: r - size / 2, top: -(size / 2) }}
+              initial={{ rotate: -startDeg }}
+              animate={iconsOut ? {} : { rotate: -(startDeg + 360) }}
               transition={
                 iconsOut
-                  ? { opacity: { duration: 0.5, delay: i * 0.06 } }
-                  : {
-                      rotate: {
-                        duration: ORBIT_DURATION,
-                        repeat: Infinity,
-                        ease: 'linear',
-                      },
-                      opacity: { duration: 0.4, delay: 0.6 + i * 0.09 },
-                    }
+                  ? {}
+                  : { duration: ORBIT_DURATION, repeat: Infinity, ease: 'linear' }
               }
             >
-              {/* Icon placed at R px from arm pivot, counter-rotated to stay upright */}
-              <motion.div
-                style={{ position: 'absolute', left: R - 26, top: -26 }}
-                initial={{ rotate: -startDeg }}
-                animate={iconsOut ? {} : { rotate: -(startDeg + 360) }}
-                transition={
-                  iconsOut
-                    ? {}
-                    : {
-                        duration: ORBIT_DURATION,
-                        repeat: Infinity,
-                        ease: 'linear',
-                      }
-                }
+              <div
+                style={{
+                  width: size,
+                  height: size,
+                  backgroundColor: bg,
+                  borderRadius: Math.round(size * 0.26),
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  boxShadow: '0 6px 28px rgba(0,0,0,0.55)',
+                }}
               >
-                <div
-                  style={{
-                    width: 52,
-                    height: 52,
-                    backgroundColor: bg,
-                    borderRadius: 14,
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                  }}
-                >
-                  <Icon size={22} color={color} />
-                </div>
-              </motion.div>
+                <Icon size={Math.round(size * 0.42)} color={color} />
+              </div>
             </motion.div>
-          );
-        })}
+          </motion.div>
+        ))}
       </div>
 
-      {/* ── Static content — always visible, just like iCloud ── */}
+      {/* ── Static text section — always visible ─────────────────── */}
       <motion.div
-        className="flex flex-col items-center text-center px-6"
-        initial={{ opacity: 0, y: 24 }}
+        style={{ marginTop: 44, textAlign: 'center', paddingLeft: 24, paddingRight: 24 }}
+        initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.7, delay: 0.4, ease: [0.16, 1, 0.3, 1] }}
+        transition={{ duration: 0.75, delay: 0.25, ease: [0.16, 1, 0.3, 1] }}
       >
-        {/* Title */}
+        {/* Title — same weight as "iCloud" (~105 px on full desktop) */}
         <h1
-          className="font-black text-white leading-none"
-          style={{ fontSize: 'clamp(52px, 8vw, 76px)', letterSpacing: '-0.04em' }}
+          style={{
+            fontSize: 'clamp(68px, 9vw, 104px)',
+            fontWeight: 900,
+            color: '#ffffff',
+            letterSpacing: '-0.045em',
+            lineHeight: 1,
+            margin: 0,
+          }}
         >
           Nightplan
         </h1>
 
-        {/* Accedi button — always clickable */}
+        {/* Accedi — compact pill, always clickable */}
         <motion.button
           onClick={onAccedi}
-          className="mt-8 font-semibold text-white rounded-full"
           style={{
+            marginTop: 36,
             backgroundColor: '#D4622A',
-            paddingLeft: 44,
-            paddingRight: 44,
-            paddingTop: 13,
-            paddingBottom: 13,
-            fontSize: 14,
+            color: '#fff',
+            fontWeight: 600,
+            fontSize: 15,
+            paddingLeft: 52,
+            paddingRight: 52,
+            paddingTop: 16,
+            paddingBottom: 16,
+            borderRadius: 9999,
+            border: 'none',
+            cursor: 'pointer',
+            letterSpacing: '-0.01em',
+            display: 'inline-block',
           }}
           whileHover={{ scale: 1.04, backgroundColor: '#e8702f' }}
           whileTap={{ scale: 0.97 }}
@@ -146,13 +179,20 @@ export default function SplashScreen({ onAccedi }: { onAccedi: () => void }) {
           Accedi
         </motion.button>
 
-        {/* Tagline — large body, dim colour, like iCloud */}
+        {/* Tagline — large bold body like iCloud's ("Il luogo ideale…") */}
         <p
-          className="text-center leading-relaxed mt-10 max-w-sm"
-          style={{ fontSize: 'clamp(17px, 2.2vw, 22px)', color: '#2e2c2a', fontWeight: 500, lineHeight: 1.45 }}
+          style={{
+            marginTop: 40,
+            fontSize: 'clamp(20px, 2.6vw, 28px)',
+            fontWeight: 600,
+            color: '#4a4846',
+            lineHeight: 1.35,
+            maxWidth: 480,
+            margin: '40px auto 0',
+          }}
         >
-          La piattaforma per gestire prenotazioni,<br />
-          tavoli e serate in modo semplice.
+          La piattaforma ideale per gestire<br />
+          prenotazioni, tavoli e serate.
         </p>
       </motion.div>
     </div>

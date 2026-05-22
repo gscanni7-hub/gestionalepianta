@@ -881,12 +881,12 @@ export default function App() {
           <button
             onClick={() => setShowSplash(true)}
             style={{ background: 'none', border: 'none', padding: 0, cursor: 'pointer' }}
-            className="flex flex-col items-center justify-center gap-2 mb-8"
+            className="flex items-center justify-center gap-3 mb-8"
           >
             <img src="/Logo.png" alt="Nightplan" className="w-9 h-9 object-contain" />
-            <div className="flex flex-col items-center">
+            <div className="flex flex-col justify-center">
               <span className="hv font-black text-white text-[15px] leading-tight">Nightplan</span>
-              <span className="text-[9px] font-sans text-accent uppercase tracking-[0.3em]">Management</span>
+              <span className="text-[9px] font-sans text-accent uppercase tracking-[0.3em] mt-[2px]">Management</span>
             </div>
           </button>
           {/* Card */}

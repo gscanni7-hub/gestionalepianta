@@ -57,24 +57,14 @@ export default function SplashScreen({ onAccedi }: { onAccedi: () => void }) {
         Nightplan
       </motion.h1>
 
-      {/* Management label */}
-      <motion.span
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ duration: 0.5, delay: 0.38, ease: EASE }}
-        style={{
-          fontSize: 11,
-          fontWeight: 600,
-          color: '#D4622A',
-          letterSpacing: '0.3em',
-          textTransform: 'uppercase',
-          marginTop: 12,
-          position: 'relative',
-          zIndex: 1,
-        }}
-      >
-        Management
-      </motion.span>
+      {/* Orange accent line */}
+      <motion.div
+        aria-hidden="true"
+        initial={{ scaleX: 0, originX: 0 }}
+        animate={{ scaleX: 1 }}
+        transition={{ duration: 0.45, delay: 0.38, ease: [0.4, 0, 0.2, 1] }}
+        style={{ width: 44, height: 2, backgroundColor: '#D4622A', marginTop: 20, position: 'relative', zIndex: 1 }}
+      />
 
       {/* Subtitle */}
       <motion.p

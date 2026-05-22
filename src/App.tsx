@@ -884,7 +884,10 @@ export default function App() {
             className="flex items-center justify-center gap-3 mb-8"
           >
             <img src="/Logo.png" alt="Nightplan" className="w-9 h-9 object-contain" />
-            <p className="hv font-black text-white text-[15px] leading-tight">Nightplan</p>
+            <div className="flex flex-col justify-center">
+              <span className="hv font-black text-white text-[15px] leading-tight">Nightplan</span>
+              <span className="text-[9px] font-sans text-accent uppercase tracking-[0.3em]">Management</span>
+            </div>
           </button>
           {/* Card */}
           <div className="bg-[#141412] border border-white/[0.06] rounded-2xl p-8 shadow-[0_24px_60px_rgba(0,0,0,0.5)]">

@@ -329,73 +329,31 @@ export default function SplashScreen({ onAccedi }: { onAccedi: () => void }) {
               }}
             >
               {/* Large background circle */}
-              <div
-                style={{
-                  position: 'absolute',
-                  width: 148,
-                  height: 148,
-                  borderRadius: '50%',
-                  background: 'radial-gradient(circle at 35% 40%, #2a1a0e, #1a0e05)',
-                  border: '1px solid #2a2420',
-                  left: 0,
-                  top: 0,
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                }}
-              >
-                {PRO_ICONS[0] && (
-                  <div style={{ width: 52, height: 52, backgroundColor: PRO_ICONS[0].bg, borderRadius: 13, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                    <PRO_ICONS[0].Icon size={24} color="#fff" />
+              {(() => { const { Icon: I0, bg: bg0 } = PRO_ICONS[0]; return (
+                <div style={{ position: 'absolute', width: 148, height: 148, borderRadius: '50%', background: 'radial-gradient(circle at 35% 40%, #2a1a0e, #1a0e05)', border: '1px solid #2a2420', left: 0, top: 0, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                  <div style={{ width: 52, height: 52, backgroundColor: bg0, borderRadius: 13, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                    <I0 size={24} color="#fff" />
                   </div>
-                )}
-              </div>
+                </div>
+              ); })()}
 
               {/* Middle circle */}
-              <div
-                style={{
-                  position: 'absolute',
-                  width: 124,
-                  height: 124,
-                  borderRadius: '50%',
-                  background: 'radial-gradient(circle at 40% 40%, #12181f, #0a0f15)',
-                  border: '1px solid #1e2530',
-                  left: 96,
-                  top: 12,
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                }}
-              >
-                {PRO_ICONS[1] && (
-                  <div style={{ width: 44, height: 44, backgroundColor: PRO_ICONS[1].bg, borderRadius: 11, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                    <PRO_ICONS[1].Icon size={20} color="#fff" />
+              {(() => { const { Icon: I1, bg: bg1 } = PRO_ICONS[1]; return (
+                <div style={{ position: 'absolute', width: 124, height: 124, borderRadius: '50%', background: 'radial-gradient(circle at 40% 40%, #12181f, #0a0f15)', border: '1px solid #1e2530', left: 96, top: 12, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                  <div style={{ width: 44, height: 44, backgroundColor: bg1, borderRadius: 11, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                    <I1 size={20} color="#fff" />
                   </div>
-                )}
-              </div>
+                </div>
+              ); })()}
 
               {/* Smaller circle */}
-              <div
-                style={{
-                  position: 'absolute',
-                  width: 100,
-                  height: 100,
-                  borderRadius: '50%',
-                  background: 'radial-gradient(circle at 40% 40%, #181210, #0f0c09)',
-                  border: '1px solid #2a2218',
-                  left: 184,
-                  top: 24,
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                }}
-              >
-                {PRO_ICONS[2] && (
-                  <div style={{ width: 38, height: 38, backgroundColor: PRO_ICONS[2].bg, borderRadius: 9, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                    <PRO_ICONS[2].Icon size={17} color="#fff" />
+              {(() => { const { Icon: I2, bg: bg2 } = PRO_ICONS[2]; return (
+                <div style={{ position: 'absolute', width: 100, height: 100, borderRadius: '50%', background: 'radial-gradient(circle at 40% 40%, #181210, #0f0c09)', border: '1px solid #2a2218', left: 184, top: 24, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                  <div style={{ width: 38, height: 38, backgroundColor: bg2, borderRadius: 9, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                    <I2 size={17} color="#fff" />
                   </div>
-                )}
-              </div>
+                </div>
+              ); })()}
             </div>
 
             {/* Text */}

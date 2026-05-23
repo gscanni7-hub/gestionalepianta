@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import {
-  Calendar, Bell, Users, DoorOpen, TrendingUp,
-  ChevronRight, MapPin, Link2, BarChart3, CheckCircle2, Clock, Info, X
+  Calendar, Bell, DoorOpen, TrendingUp,
+  ChevronRight, MapPin, BarChart3, CheckCircle2, Clock, Info, X
 } from 'lucide-react';
 import { UserProfile, Event, Venue, Reservation, ManagedUser } from '../../types';
 import { cn } from '../../lib/utils';
@@ -113,13 +113,11 @@ function AdminDashboard({ user, events, venues, reservations, managedUsers, pend
 
       {/* Quick actions */}
       <div>
-        <p className="text-xs font-medium text-[#8E8E93] mb-3">Azioni rapide</p>
+        <p className="text-xs font-medium text-[#8E8E93] mb-3">Operazioni serata</p>
         <div className="grid grid-cols-2 gap-2">
           {[
             { label: 'Approva', icon: <Bell size={14}/>, view: 'approvals', badge: pendingCount },
-            { label: 'PR Team', icon: <Users size={14}/>, view: 'pr-management' },
             { label: 'Ingresso', icon: <DoorOpen size={14}/>, view: 'checkin' },
-            { label: 'Club', icon: <MapPin size={14}/>, view: 'venues' },
           ].map(a => (
             <button
               key={a.view}

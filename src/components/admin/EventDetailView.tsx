@@ -12,12 +12,15 @@ interface Props {
   event: Event;
   venue: Venue;
   reservations: Reservation[];
+  onApproveReservation: (id: string) => void;
+  onRejectReservation: (id: string) => void;
   onOpenPlan: () => void;
   onBack: () => void;
 }
 
-export default function EventDetailView({ event, venue, reservations, onOpenPlan, onBack }: Props) {
-  const [tab, setTab] = useState<'tavoli' | 'registrazioni'>('tavoli');
+export default function EventDetailView({ event, venue, reservations, onApproveReservation, onRejectReservation, onOpenPlan, onBack }: Props) {
+  const [tab, setTab] = useState<'tavoli' | 'approva' | 'registrazioni'>('tavoli');
+  const [confirmReject, setConfirmReject] = useState<string | null>(null);
   const [registrations, setRegistrations] = useState<Registration[]>([]);
   const [loadingReg, setLoadingReg] = useState(false);
   const [regError, setRegError] = useState(false);
@@ -133,7 +136,7 @@ export default function EventDetailView({ event, venue, reservations, onOpenPlan
 
       {/* Tabs */}
       <div className="flex border border-[#2C2C2E] mb-5 rounded-xl overflow-hidden">
-        {(['tavoli', 'registrazioni'] as const).map(t => (
+        {(['tavoli', 'approva', 'registrazioni'] as const).map(t => (
           <button key={t}
             onClick={() => setTab(t)}
             className={cn(
@@ -141,7 +144,14 @@ export default function EventDetailView({ event, venue, reservations, onOpenPlan
               tab === t ? 'bg-[#D4622A] text-black' : 'text-[#8E8E93] hover:text-white'
             )}
           >
-            {t === 'tavoli' ? `Tavoli (${approvedRes.length})` : `Registrazioni (${registrations.length})`}
+            {t === 'tavoli'
+              ? `Tavoli (${approvedRes.length})`
+              : t === 'approva'
+              ? `Approva${pendingRes.length > 0 ? ` (${pendingRes.length})` : ''}`
+              : `Registrazioni (${registrations.length})`}
+            {t === 'approva' && pendingRes.length > 0 && tab !== 'approva' && (
+              <span className="absolute top-1.5 right-2 w-1.5 h-1.5 rounded-full bg-[#F59E0B]" />
+            )}
           </button>
         ))}
       </div>
@@ -184,6 +194,59 @@ export default function EventDetailView({ event, venue, reservations, onOpenPlan
                 </div>
               ))}
             </div>
+          )}
+        </div>
+      )}
+
+      {/* Tab: Approva */}
+      {tab === 'approva' && (
+        <div className="space-y-2">
+          {pendingRes.length === 0 ? (
+            <div className="py-16 text-center border border-[#2C2C2E] rounded-xl flex flex-col items-center gap-3">
+              <CheckCircle2 size={28} className="text-[#22C55E]" />
+              <p className="text-sm text-[#8E8E93]">Nessuna prenotazione da approvare</p>
+            </div>
+          ) : (
+            pendingRes.map(r => (
+              <div key={r.id}
+                className="flex items-center justify-between p-4 bg-[#1C1C1E] border border-[#2C2C2E] hover:border-[#48484A] transition-colors gap-4 rounded-xl">
+                <div className="min-w-0 flex-1">
+                  <div className="flex items-center gap-3 flex-wrap">
+                    <span className="font-semibold text-white text-sm">{r.customerName}</span>
+                    <span className="text-xs font-medium text-[#AEAEB2] border border-[#3A3A3C] rounded-full px-2 py-0.5">
+                      Tav. {r.tableName ?? r.tableId}
+                    </span>
+                  </div>
+                  <div className="flex items-center gap-4 mt-1.5 flex-wrap">
+                    <p className="text-[10px] text-[#8E8E93]">PR: {r.prName}</p>
+                    <p className="text-[10px] text-[#8E8E93]">{r.guestsCount} pax</p>
+                    <p className="text-[10px] text-[#D4622A]">€{r.budget}</p>
+                    {r.bottles && <p className="text-[10px] text-[#636366]">{r.bottles}</p>}
+                  </div>
+                </div>
+                <div className="flex items-center gap-2 shrink-0">
+                  <button
+                    onClick={() => onApproveReservation(r.id)}
+                    className="flex items-center gap-1.5 px-4 py-2 rounded-xl bg-green-500/10 text-green-400 border border-green-500/20 text-xs font-semibold hover:bg-green-500/20 transition-colors">
+                    <CheckCircle2 size={12} /> Approva
+                  </button>
+                  <button
+                    onClick={() => {
+                      if (confirmReject === r.id) { onRejectReservation(r.id); setConfirmReject(null); }
+                      else setConfirmReject(r.id);
+                    }}
+                    onBlur={() => setConfirmReject(null)}
+                    className={cn(
+                      'flex items-center gap-1.5 px-4 py-2 rounded-xl border text-xs font-semibold transition-colors',
+                      confirmReject === r.id
+                        ? 'bg-red-500/25 text-red-300 border-red-500/50'
+                        : 'bg-red-500/10 text-red-400 border-red-500/20 hover:bg-red-500/20'
+                    )}>
+                    <XCircle size={12} /> {confirmReject === r.id ? 'Confermi?' : 'Rifiuta'}
+                  </button>
+                </div>
+              </div>
+            ))
           )}
         </div>
       )}

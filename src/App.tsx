@@ -1651,6 +1651,8 @@ export default function App() {
                     event={selectedEvent}
                     venue={evVenue}
                     reservations={reservations}
+                    onApproveReservation={handleApproveReservation}
+                    onRejectReservation={handleRejectReservation}
                     onOpenPlan={() => setView('plan')}
                     onBack={() => { setSelectedEvent(null); setView(selectedVenue ? 'venue-events' : 'active-events'); }}
                   />

@@ -50,7 +50,7 @@ function AdminDashboard({ user, events, venues, reservations, managedUsers, pend
   const occupancy = totalTables > 0 ? Math.round((activeRes.length / totalTables) * 100) : 0;
 
   const kpis = [
-    { label: 'Tavoli', value: `${activeRes.length}/${totalTables}`, sub: `${occupancy}% occupancy`, color: 'text-[#D4622A]', icon: <MapPin size={14}/> },
+    { label: 'Tavoli', value: `${activeRes.length}/${totalTables}`, sub: `${occupancy}% occupazione`, color: 'text-[#D4622A]', icon: <MapPin size={14}/> },
     { label: 'Incasso est.', value: revenueEst >= 1000 ? `€${(revenueEst/1000).toFixed(1)}K` : `€${revenueEst}`, sub: 'prenotazioni approvate', color: 'text-[#22C55E]', icon: <TrendingUp size={14}/> },
     { label: 'Da approvare', value: String(pendingCount), sub: 'in attesa', color: pendingCount > 0 ? 'text-[#F59E0B]' : 'text-[#8E8E93]', icon: <Bell size={14}/> },
     { label: 'Entrati', value: String(checkedIn.length), sub: `di ${activeRes.length} prenotati`, color: 'text-[#38BDF8]', icon: <CheckCircle2 size={14}/> },

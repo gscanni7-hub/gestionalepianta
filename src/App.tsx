@@ -28,7 +28,7 @@ import AIChat from './components/ai/AIChat';
 
 type AppView = 'dashboard' | 'venues' | 'venue-events' | 'event-detail' | 'events' | 'active-events' | 'plan' | 'editor' | 'reservations' | 'approvals' | 'profile' | 'history' | 'pr-management' | 'checkin';
 
-interface Toast { id: string; message: string; sub?: string; }
+interface Toast { id: string; message: string; sub?: string; action?: { label: string; onClick: () => void }; }
 
 const DISPOSABLE_DOMAINS = new Set([
   'mailinator.com','guerrillamail.com','guerrillamail.net','guerrillamail.org','guerrillamail.de',
@@ -659,9 +659,9 @@ export default function App() {
     localStorage.setItem('nightplan_user', JSON.stringify(updated));
   };
 
-  const addToast = (message: string, sub?: string) => {
+  const addToast = (message: string, sub?: string, action?: { label: string; onClick: () => void }) => {
     const id = Date.now().toString();
-    setToasts(prev => [...prev, { id, message, sub }]);
+    setToasts(prev => [...prev, { id, message, sub, action }]);
     setTimeout(() => setToasts(prev => prev.filter(t => t.id !== id)), 5000);
   };
 
@@ -697,14 +697,30 @@ export default function App() {
     addToast(`${res.customerName} — aggiornato`, `${actualPeople} ospiti · ${budgetStr}`);
   };
 
-  const handleApproveUser = (id: string) =>
-    setManagedUsers(prev => prev.map(u => u.id === id ? { ...u, status: 'approved' } : u));
-  const handleRejectUser = (id: string) =>
-    setManagedUsers(prev => prev.map(u => u.id === id ? { ...u, status: 'rejected' } : u));
-  const handleApproveReservation = (id: string) =>
-    setReservations(prev => prev.map(r => r.id === id ? { ...r, approvalStatus: 'approved' } : r));
-  const handleRejectReservation = (id: string) =>
-    setReservations(prev => prev.map(r => r.id === id ? { ...r, approvalStatus: 'rejected' } : r));
+  const handleApproveUser = (id: string) => {
+    const u = managedUsers.find(x => x.id === id);
+    setManagedUsers(prev => prev.map(x => x.id === id ? { ...x, status: 'approved' } : x));
+    addToast('PR approvato', u ? `${u.displayName} ${u.lastName}` : undefined,
+      { label: 'Annulla', onClick: () => setManagedUsers(prev => prev.map(x => x.id === id ? { ...x, status: 'pending' } : x)) });
+  };
+  const handleRejectUser = (id: string) => {
+    const u = managedUsers.find(x => x.id === id);
+    setManagedUsers(prev => prev.map(x => x.id === id ? { ...x, status: 'rejected' } : x));
+    addToast('PR rifiutato', u ? `${u.displayName} ${u.lastName}` : undefined,
+      { label: 'Annulla', onClick: () => setManagedUsers(prev => prev.map(x => x.id === id ? { ...x, status: 'pending' } : x)) });
+  };
+  const handleApproveReservation = (id: string) => {
+    const r = reservations.find(x => x.id === id);
+    setReservations(prev => prev.map(x => x.id === id ? { ...x, approvalStatus: 'approved' } : x));
+    addToast('Prenotazione approvata', r?.customerName,
+      { label: 'Annulla', onClick: () => setReservations(prev => prev.map(x => x.id === id ? { ...x, approvalStatus: 'pending' } : x)) });
+  };
+  const handleRejectReservation = (id: string) => {
+    const r = reservations.find(x => x.id === id);
+    setReservations(prev => prev.map(x => x.id === id ? { ...x, approvalStatus: 'rejected' } : x));
+    addToast('Prenotazione rifiutata', r?.customerName,
+      { label: 'Annulla', onClick: () => setReservations(prev => prev.map(x => x.id === id ? { ...x, approvalStatus: 'pending' } : x)) });
+  };
 
   const exportGuestList = (eventId?: string) => {
     const target = eventId
@@ -1927,11 +1943,19 @@ export default function App() {
               animate={{ opacity: 1, y: 0, scale: 1 }}
               exit={{ opacity: 0, y: 8, scale: 0.96 }}
               transition={{ duration: 0.2 }}
-              className="bg-[#1C1C1E] border border-[#2C2C2E] border-l-4 border-l-accent px-5 py-4 min-w-[260px] shadow-2xl rounded-xl"
+              className="bg-[#1C1C1E] border border-[#2C2C2E] px-5 py-4 min-w-[260px] shadow-2xl rounded-xl"
             >
               <div className="flex items-center gap-2">
                 <CheckCircle2 size={13} className="text-accent shrink-0" />
                 <span className="font-semibold text-white text-sm">{t.message}</span>
+                {t.action && (
+                  <button
+                    onClick={() => { t.action!.onClick(); setToasts(prev => prev.filter(x => x.id !== t.id)); }}
+                    className="ml-auto text-xs font-semibold text-accent hover:text-white transition-colors pointer-events-auto pl-3"
+                  >
+                    {t.action.label}
+                  </button>
+                )}
               </div>
               {t.sub && <p className="text-xs text-[#8E8E93] mt-1.5 pl-5">{t.sub}</p>}
             </motion.div>
@@ -2471,7 +2495,7 @@ function HistoryEventRow({ event, venueName, reservations, approvedCount, totalB
 }) {
   const [open, setOpen] = useState(false);
   const rejected = reservations.filter(r => r.approvalStatus === 'rejected').length;
-  const borderColor = rejected > 0 ? 'border-l-red-500/50' : approvedCount === reservations.length ? 'border-l-green-500/40' : 'border-l-[#3A3A3C]';
+  const statusColor = rejected > 0 ? '#EF4444' : approvedCount === reservations.length ? '#22C55E' : '#3A3A3C';
   const statusLabel = (s: string) =>
     s === 'approved' ? 'Approvata' : s === 'rejected' ? 'Rifiutata' : 'In attesa';
 
@@ -2482,14 +2506,15 @@ function HistoryEventRow({ event, venueName, reservations, approvedCount, totalB
   };
 
   return (
-    <div className={cn('border border-[#2C2C2E] border-l-4 bg-card overflow-hidden rounded-xl', borderColor)}>
+    <div className="border border-[#2C2C2E] bg-card overflow-hidden rounded-xl">
       <button
         onClick={() => setOpen(o => !o)}
         className="w-full px-6 py-5 flex items-center justify-between hover:bg-white/[0.02] transition-colors text-left"
       >
         <div className="flex items-center gap-5 min-w-0">
-          <div className="w-10 h-10 bg-[#1C1C1E] border border-[#3A3A3C] flex items-center justify-center shrink-0 rounded-xl">
-            <Calendar size={14} className="text-accent" />
+          <div className="w-10 h-10 bg-[#1C1C1E] flex items-center justify-center shrink-0 rounded-xl border"
+            style={{ borderColor: statusColor + '66' }}>
+            <Calendar size={14} style={{ color: statusColor === '#3A3A3C' ? '#D4622A' : statusColor }} />
           </div>
           <div className="min-w-0">
             <p className="font-semibold text-sm text-white truncate">{event.name}</p>
@@ -2927,12 +2952,12 @@ function SidebarContent({ user, view, onNav, onLogout, occupancyPct = 0, revenue
               <span className="hv font-black text-[22px] text-white leading-none">{occupancyPct}</span>
               <span className="text-xs text-[#8E8E93]">%</span>
             </div>
-            <p className="text-[9px] text-[#8E8E93] mt-0.5">Occupancy</p>
+            <p className="text-[9px] text-[#8E8E93] mt-0.5">Occupazione</p>
           </div>
           <div className="w-px h-8 bg-[#2C2C2E]" />
           <div className="flex-1">
             <div className="hv font-black text-[22px] text-accent leading-none">{revenueDisplay}</div>
-            <p className="text-[9px] text-[#8E8E93] mt-0.5">Revenue</p>
+            <p className="text-[9px] text-[#8E8E93] mt-0.5">Incasso</p>
           </div>
           <div className="w-1 h-10 bg-[#2C2C2E] rounded-full overflow-hidden">
             <motion.div className="w-full bg-accent rounded-full"

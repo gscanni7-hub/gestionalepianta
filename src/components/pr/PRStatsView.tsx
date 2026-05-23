@@ -26,7 +26,7 @@ export default function PRStatsView({ prId, reservations, events }: Props) {
     { icon: <BarChart3 size={18} />, value: myRes.length, label: 'Prenotazioni' },
     { icon: <CheckCircle2 size={18} />, value: totalGuests, label: 'Ospiti totali' },
     { icon: <TrendingUp size={18} />, value: `€${totalBudget >= 1000 ? `${(totalBudget / 1000).toFixed(1)}K` : totalBudget}`, label: 'Budget totale' },
-    { icon: <Calendar size={18} />, value: `${checkinRate}%`, label: 'Check-in rate' },
+    { icon: <Calendar size={18} />, value: `${checkinRate}%`, label: 'Tasso ingressi' },
   ];
 
   return (

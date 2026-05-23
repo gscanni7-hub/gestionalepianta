@@ -4,7 +4,7 @@ import {
   Map, Users, Link2, Copy, Check, Calendar, Clock,
   ChevronDown, CheckCircle2, XCircle, ArrowLeft, ExternalLink, AlertCircle
 } from 'lucide-react';
-import { Event, Venue, Reservation, Registration, ManagedUser } from '../../types';
+import { Event, Venue, Reservation, Registration, ManagedUser, PrGroup } from '../../types';
 import { getRegistrationsByEvent } from '../../lib/registrationService';
 import { cn } from '../../lib/utils';
 import IngressiView from '../host/IngressiView';
@@ -14,6 +14,7 @@ interface Props {
   venue: Venue;
   reservations: Reservation[];
   prUsers: ManagedUser[];
+  prGroups: PrGroup[];
   onApproveReservation: (id: string) => void;
   onRejectReservation: (id: string) => void;
   onUpdateEvent: (patch: Partial<Event>) => void;
@@ -21,7 +22,7 @@ interface Props {
   onBack: () => void;
 }
 
-export default function EventDetailView({ event, venue, reservations, prUsers, onApproveReservation, onRejectReservation, onUpdateEvent, onOpenPlan, onBack }: Props) {
+export default function EventDetailView({ event, venue, reservations, prUsers, prGroups, onApproveReservation, onRejectReservation, onUpdateEvent, onOpenPlan, onBack }: Props) {
   const [tab, setTab] = useState<'tavoli' | 'approva' | 'registrazioni' | 'ingresso'>('tavoli');
   const [confirmReject, setConfirmReject] = useState<string | null>(null);
   const [showVisibility, setShowVisibility] = useState(false);
@@ -176,24 +177,42 @@ export default function EventDetailView({ event, venue, reservations, prUsers, o
                     className="w-4 h-4 accent-[#D4622A]" />
                 </label>
                 {event.assignedPrIds !== undefined && (
-                  <div className="space-y-1 max-h-44 overflow-y-auto border border-[#2C2C2E] rounded-xl p-2">
-                    {prUsers.length === 0 ? (
-                      <p className="text-xs text-[#636366] px-2 py-3 text-center">Nessun PR approvato</p>
-                    ) : (
-                      prUsers.map(pr => {
-                        const ids = event.assignedPrIds ?? [];
-                        const checked = ids.includes(pr.id);
-                        return (
-                          <label key={pr.id} className="flex items-center gap-3 px-2 py-2 rounded-lg hover:bg-white/[0.03] cursor-pointer">
-                            <input type="checkbox" checked={checked}
-                              onChange={() => onUpdateEvent({ assignedPrIds: checked ? ids.filter(x => x !== pr.id) : [...ids, pr.id] })}
-                              className="w-4 h-4 accent-[#D4622A]" />
-                            <span className="text-sm text-[#AEAEB2]">{pr.displayName} {pr.lastName}</span>
-                          </label>
-                        );
-                      })
+                  <>
+                    {prGroups.length > 0 && (
+                      <div className="flex flex-wrap gap-1.5">
+                        {prGroups.map(g => {
+                          const ids = event.assignedPrIds ?? [];
+                          const allIn = g.prIds.length > 0 && g.prIds.every(id => ids.includes(id));
+                          return (
+                            <button type="button" key={g.id}
+                              onClick={() => onUpdateEvent({ assignedPrIds: allIn ? ids.filter(id => !g.prIds.includes(id)) : [...new Set([...ids, ...g.prIds])] })}
+                              className={cn('px-3 py-1.5 rounded-full text-xs font-medium border transition-colors',
+                                allIn ? 'bg-accent text-black border-accent' : 'border-[#3A3A3C] text-[#AEAEB2] hover:border-[#48484A]')}>
+                              {g.name} <span className="opacity-60">({g.prIds.length})</span>
+                            </button>
+                          );
+                        })}
+                      </div>
                     )}
-                  </div>
+                    <div className="space-y-1 max-h-44 overflow-y-auto border border-[#2C2C2E] rounded-xl p-2">
+                      {prUsers.length === 0 ? (
+                        <p className="text-xs text-[#636366] px-2 py-3 text-center">Nessun PR approvato</p>
+                      ) : (
+                        prUsers.map(pr => {
+                          const ids = event.assignedPrIds ?? [];
+                          const checked = ids.includes(pr.id);
+                          return (
+                            <label key={pr.id} className="flex items-center gap-3 px-2 py-2 rounded-lg hover:bg-white/[0.03] cursor-pointer">
+                              <input type="checkbox" checked={checked}
+                                onChange={() => onUpdateEvent({ assignedPrIds: checked ? ids.filter(x => x !== pr.id) : [...ids, pr.id] })}
+                                className="w-4 h-4 accent-[#D4622A]" />
+                              <span className="text-sm text-[#AEAEB2]">{pr.displayName} {pr.lastName}</span>
+                            </label>
+                          );
+                        })
+                      )}
+                    </div>
+                  </>
                 )}
               </div>
             </motion.div>

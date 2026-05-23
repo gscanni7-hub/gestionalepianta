@@ -7,7 +7,7 @@ import {
   DoorOpen, LogIn, Search
 } from 'lucide-react';
 import { MOCK_USERS, INITIAL_VENUES, INITIAL_EVENTS, INITIAL_RESERVATIONS, INITIAL_MANAGED_USERS } from './constants';
-import { UserProfile, Event, Reservation, Venue, FloorPlan, ManagedUser, Table } from './types';
+import { UserProfile, Event, Reservation, Venue, FloorPlan, ManagedUser, Table, PrGroup } from './types';
 import { motion, AnimatePresence } from 'framer-motion';
 import { cn, COLORS, easeOutQuart, gridContainer, gridItem, isEventVisibleToPr, isEventVisibleToHost } from './lib/utils';
 import { isEmailConfigured, sendPasswordResetEmail } from './lib/emailService';
@@ -240,6 +240,12 @@ export default function App() {
   const [venueTab, setVenueTab] = useState<'events' | 'layout'>('events');
   const [editingReservation, setEditingReservation] = useState<Reservation | null>(null);
   const [selectedPR, setSelectedPR] = useState<ManagedUser | null>(null);
+  const [prGroups, setPrGroups] = useState<PrGroup[]>(() => {
+    try {
+      const saved = localStorage.getItem('nightplan_pr_groups');
+      return saved ? JSON.parse(saved) : [];
+    } catch { return []; }
+  });
 
   /* ── Page transition direction ───────────────────────────── */
   const prevDepthRef = useRef<number>(1);
@@ -402,6 +408,10 @@ export default function App() {
   useEffect(() => {
     localStorage.setItem('nightplan_reservations', JSON.stringify(reservations));
   }, [reservations]);
+
+  useEffect(() => {
+    localStorage.setItem('nightplan_pr_groups', JSON.stringify(prGroups));
+  }, [prGroups]);
 
   /* ── Firestore real-time sync for reservations ───────────── */
   useEffect(() => {
@@ -1656,6 +1666,7 @@ export default function App() {
                     venue={evVenue}
                     reservations={reservations}
                     prUsers={managedUsers.filter(u => u.role === 'pr' && u.status === 'approved')}
+                    prGroups={prGroups}
                     onApproveReservation={handleApproveReservation}
                     onRejectReservation={handleRejectReservation}
                     onUpdateEvent={(patch) => {
@@ -1792,10 +1803,13 @@ export default function App() {
                   managedUsers={managedUsers}
                   reservations={reservations}
                   events={events}
+                  prGroups={prGroups}
                   selectedPR={selectedPR}
                   onSelectPR={setSelectedPR}
                   onBack={() => setSelectedPR(null)}
                   onUpdateStatus={(id, status) => setManagedUsers(prev => prev.map(u => u.id === id ? { ...u, status } : u))}
+                  onSaveGroup={(g) => setPrGroups(prev => prev.some(x => x.id === g.id) ? prev.map(x => x.id === g.id ? g : x) : [...prev, g])}
+                  onDeleteGroup={(id) => setPrGroups(prev => prev.filter(x => x.id !== id))}
                 />
               </motion.div>
             )}
@@ -1980,6 +1994,7 @@ export default function App() {
           venue={selectedVenue}
           floorPlans={venues.find(v => v.id === selectedVenue.id)?.floorPlans ?? []}
           prUsers={managedUsers.filter(u => u.role === 'pr' && u.status === 'approved')}
+          prGroups={prGroups}
           onClose={() => setShowNewEventModal(false)}
           onSubmit={(data, token) => {
             setEvents(prev => [...prev, {
@@ -2025,6 +2040,7 @@ export default function App() {
           venue={selectedVenue}
           floorPlans={venues.find(v => v.id === selectedVenue.id)?.floorPlans ?? []}
           prUsers={managedUsers.filter(u => u.role === 'pr' && u.status === 'approved')}
+          prGroups={prGroups}
           initialData={editingEvent}
           onClose={() => setEditingEvent(null)}
           onSubmit={(data) => {
@@ -2207,16 +2223,22 @@ const SAVED_ACCOUNTS = [
 ];
 
 /* ── PRManagementPage ────────────────────────────────────── */
-function PRManagementPage({ managedUsers, reservations, events, selectedPR, onSelectPR, onBack, onUpdateStatus }: {
+function PRManagementPage({ managedUsers, reservations, events, prGroups, selectedPR, onSelectPR, onBack, onUpdateStatus, onSaveGroup, onDeleteGroup }: {
   managedUsers: ManagedUser[];
   reservations: Reservation[];
   events: Event[];
+  prGroups: PrGroup[];
   selectedPR: ManagedUser | null;
   onSelectPR: (pr: ManagedUser) => void;
   onBack: () => void;
   onUpdateStatus: (id: string, status: 'approved' | 'rejected') => void;
+  onSaveGroup: (g: PrGroup) => void;
+  onDeleteGroup: (id: string) => void;
 }) {
   const prUsers = managedUsers.filter(u => u.role === 'pr');
+  const approvedPrs = prUsers.filter(u => u.status === 'approved');
+  const [editingGroup, setEditingGroup] = useState<PrGroup | 'new' | null>(null);
+  const [confirmDeleteGroup, setConfirmDeleteGroup] = useState<string | null>(null);
 
   const prStats = (prId: string) => {
     const res = reservations.filter(r => r.prId === prId);
@@ -2246,6 +2268,59 @@ function PRManagementPage({ managedUsers, reservations, events, selectedPR, onSe
         <div className="mb-10">
           <PRRankingView managedUsers={managedUsers} reservations={reservations} />
         </div>
+      )}
+
+      {/* Gruppi PR */}
+      <div className="mb-10">
+        <div className="flex items-center justify-between mb-4">
+          <p className="text-xs font-medium text-[#8E8E93]">Gruppi PR</p>
+          <button onClick={() => setEditingGroup('new')}
+            className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-accent text-black text-xs font-semibold hover:bg-white transition-colors">
+            <Plus size={12} /> Crea gruppo
+          </button>
+        </div>
+        {prGroups.length === 0 ? (
+          <p className="text-xs text-[#636366] border border-[#2C2C2E] rounded-xl px-4 py-5 text-center">
+            Nessun gruppo. Crea un gruppo per assegnare più PR a un evento con un tap.
+          </p>
+        ) : (
+          <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-3">
+            {prGroups.map(g => (
+              <div key={g.id} className="border border-[#2C2C2E] bg-card rounded-xl px-4 py-3 flex items-center justify-between gap-3">
+                <div className="min-w-0">
+                  <p className="text-sm font-semibold text-white truncate">{g.name}</p>
+                  <p className="text-[10px] text-[#8E8E93] mt-0.5">{g.prIds.length} PR</p>
+                </div>
+                <div className="flex items-center gap-1 shrink-0">
+                  <button onClick={() => setEditingGroup(g)}
+                    className="w-8 h-8 flex items-center justify-center text-[#8E8E93] hover:text-white rounded-lg hover:bg-white/[0.04] transition-colors" title="Modifica">
+                    <Pencil size={13} />
+                  </button>
+                  <button
+                    onClick={() => {
+                      if (confirmDeleteGroup === g.id) { onDeleteGroup(g.id); setConfirmDeleteGroup(null); }
+                      else setConfirmDeleteGroup(g.id);
+                    }}
+                    onBlur={() => setConfirmDeleteGroup(null)}
+                    className={cn('w-8 h-8 flex items-center justify-center rounded-lg transition-colors',
+                      confirmDeleteGroup === g.id ? 'text-red-500 bg-red-500/10' : 'text-[#8E8E93] hover:text-red-500 hover:bg-white/[0.04]')}
+                    title={confirmDeleteGroup === g.id ? 'Confermi?' : 'Elimina'}>
+                    <Trash2 size={13} />
+                  </button>
+                </div>
+              </div>
+            ))}
+          </div>
+        )}
+      </div>
+
+      {editingGroup && (
+        <GroupEditorModal
+          group={editingGroup === 'new' ? null : editingGroup}
+          prUsers={approvedPrs}
+          onClose={() => setEditingGroup(null)}
+          onSave={(g) => { onSaveGroup(g); setEditingGroup(null); }}
+        />
       )}
 
       {prUsers.length === 0 ? (
@@ -2296,6 +2371,70 @@ function PRManagementPage({ managedUsers, reservations, events, selectedPR, onSe
           })}
         </div>
       )}
+    </div>
+  );
+}
+
+/* ── GroupEditorModal ────────────────────────────────────── */
+function GroupEditorModal({ group, prUsers, onClose, onSave }: {
+  group: PrGroup | null;
+  prUsers: ManagedUser[];
+  onClose: () => void;
+  onSave: (g: PrGroup) => void;
+}) {
+  const [name, setName] = useState(group?.name ?? '');
+  const [prIds, setPrIds] = useState<string[]>(group?.prIds ?? []);
+  const toggle = (id: string) =>
+    setPrIds(prev => prev.includes(id) ? prev.filter(x => x !== id) : [...prev, id]);
+  const canSave = name.trim().length > 0;
+
+  return (
+    <div className="fixed inset-0 z-[100] flex items-end justify-center sm:items-center p-0 sm:p-4">
+      <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
+        className="absolute inset-0 bg-black/90 backdrop-blur-sm" onClick={onClose} />
+      <motion.div initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.22, ease: 'easeOut' }}
+        className="relative w-full sm:max-w-md bg-card border-t border-x sm:border border-[#3A3A3C] overflow-hidden rounded-t-2xl sm:rounded-2xl max-h-[90vh] flex flex-col">
+        <div className="h-[2px] bg-accent shrink-0" />
+        <div className="px-6 sm:px-8 py-5 border-b border-[#2C2C2E] flex items-center justify-between shrink-0">
+          <h3 className="font-bold text-xl text-white">{group ? 'Modifica gruppo' : 'Nuovo gruppo'}</h3>
+          <button onClick={onClose} className="text-[#AEAEB2] hover:text-white transition-colors p-1"><X size={18} /></button>
+        </div>
+        <form className="p-6 sm:p-8 space-y-5 overflow-y-auto"
+          onSubmit={(e) => { e.preventDefault(); if (!canSave) return; onSave({ id: group?.id ?? `g_${Date.now()}`, name: name.trim(), prIds }); }}>
+          <Field label="Nome gruppo">
+            <input required autoFocus placeholder="Es. Team Sabato"
+              className="w-full bg-bg border border-[#3A3A3C] rounded-xl px-4 py-3 text-sm text-white placeholder-[#8E8E93] outline-none focus:border-[#D4622A] transition-colors"
+              value={name} onChange={e => setName(e.target.value)} />
+          </Field>
+          <Field label={`Membri (${prIds.length})`}>
+            {prUsers.length === 0 ? (
+              <p className="text-xs text-[#636366] px-2 py-3 text-center border border-[#2C2C2E] rounded-xl">Nessun PR approvato</p>
+            ) : (
+              <div className="space-y-1 max-h-60 overflow-y-auto border border-[#2C2C2E] rounded-xl p-2">
+                {prUsers.map(pr => (
+                  <label key={pr.id} className="flex items-center gap-3 px-2 py-2 rounded-lg hover:bg-white/[0.03] cursor-pointer">
+                    <input type="checkbox" checked={prIds.includes(pr.id)} onChange={() => toggle(pr.id)}
+                      className="w-4 h-4 accent-[#D4622A]" />
+                    <span className="text-sm text-[#AEAEB2]">{pr.displayName} {pr.lastName}</span>
+                  </label>
+                ))}
+              </div>
+            )}
+          </Field>
+          <div className="flex gap-3 pt-2">
+            <button type="button" onClick={onClose}
+              className="flex-1 py-3.5 text-sm font-medium rounded-xl border border-[#2C2C2E] text-[#8E8E93] hover:text-white hover:border-[#48484A] transition-all">
+              Annulla
+            </button>
+            <button type="submit" disabled={!canSave}
+              className={cn('flex-1 py-3.5 text-sm font-semibold rounded-xl transition-colors',
+                canSave ? 'bg-accent text-black hover:bg-white' : 'bg-[#2C2C2E] text-[#8E8E93] cursor-not-allowed')}>
+              {group ? 'Salva' : 'Crea gruppo'}
+            </button>
+          </div>
+        </form>
+      </motion.div>
     </div>
   );
 }
@@ -3491,18 +3630,23 @@ function ReservationsTable({ reservations, userRole, events, onDelete, onEdit }:
 }
 
 /* ── NewEventModal ───────────────────────────────────────── */
-function NewEventModal({ venue, floorPlans, prUsers, onClose, onSubmit, initialData }: {
+function NewEventModal({ venue, floorPlans, prUsers, prGroups, onClose, onSubmit, initialData }: {
   venue: Venue;
   floorPlans: FloorPlan[];
   prUsers: ManagedUser[];
+  prGroups: PrGroup[];
   onClose: () => void;
   onSubmit: (d: { name: string; date: string; time: string; description: string; coverImage: string; maxCapacity: number | undefined; floorPlanId: string; assignedPrIds: string[] | undefined; visibleToHost: boolean }, token?: string) => void;
   initialData?: Event;
 }) {
   const isEdit = !!initialData;
+  const today = new Date().toISOString().slice(0, 10);
+  // La data evento non può essere retroattiva. In modifica di un evento già passato
+  // si tiene la sua data come minimo, per non bloccare l'editing.
+  const minDate = initialData?.date && initialData.date < today ? initialData.date : today;
   const [form, setForm] = useState({
     name: initialData?.name ?? '',
-    date: initialData?.date ?? '2026-01-01',
+    date: initialData?.date ?? today,
     time: initialData?.time ?? '22:00',
     description: initialData?.description ?? '',
     coverImage: initialData?.coverImage ?? '',
@@ -3516,6 +3660,10 @@ function NewEventModal({ venue, floorPlans, prUsers, onClose, onSubmit, initialD
   const [visibleToHost, setVisibleToHost] = useState<boolean>(initialData?.visibleToHost ?? isEdit);
   const togglePr = (id: string) =>
     setAssignedPrIds(prev => prev.includes(id) ? prev.filter(x => x !== id) : [...prev, id]);
+  const toggleGroup = (g: PrGroup) => {
+    const allIn = g.prIds.length > 0 && g.prIds.every(id => assignedPrIds.includes(id));
+    setAssignedPrIds(prev => allIn ? prev.filter(id => !g.prIds.includes(id)) : [...new Set([...prev, ...g.prIds])]);
+  };
   const [createdLink, setCreatedLink] = useState<string | null>(null);
   const [copied, setCopied] = useState(false);
 
@@ -3596,7 +3744,7 @@ function NewEventModal({ venue, floorPlans, prUsers, onClose, onSubmit, initialD
 
             <div className="grid grid-cols-2 gap-3">
               <Field label="Data">
-                <input required type="date" min="2026-01-01"
+                <input required type="date" min={minDate}
                   className="w-full bg-bg border border-[#3A3A3C] px-4 py-3 text-xs font-sans text-white outline-none transition-colors [color-scheme:dark]"
                   value={form.date} onChange={e => setForm({ ...form, date: e.target.value })} />
               </Field>
@@ -3663,20 +3811,36 @@ function NewEventModal({ venue, floorPlans, prUsers, onClose, onSubmit, initialD
                   className="w-4 h-4 accent-[#D4622A]" />
               </label>
               {!assignAll && (
-                <div className="mt-2 space-y-1 max-h-44 overflow-y-auto border border-[#2C2C2E] rounded-xl p-2">
-                  {prUsers.length === 0 ? (
-                    <p className="text-xs text-[#636366] px-2 py-3 text-center">Nessun PR approvato</p>
-                  ) : (
-                    prUsers.map(pr => (
-                      <label key={pr.id} className="flex items-center gap-3 px-2 py-2 rounded-lg hover:bg-white/[0.03] cursor-pointer">
-                        <input type="checkbox" checked={assignedPrIds.includes(pr.id)}
-                          onChange={() => togglePr(pr.id)}
-                          className="w-4 h-4 accent-[#D4622A]" />
-                        <span className="text-sm text-[#AEAEB2]">{pr.displayName} {pr.lastName}</span>
-                      </label>
-                    ))
+                <>
+                  {prGroups.length > 0 && (
+                    <div className="mt-2 flex flex-wrap gap-1.5">
+                      {prGroups.map(g => {
+                        const allIn = g.prIds.length > 0 && g.prIds.every(id => assignedPrIds.includes(id));
+                        return (
+                          <button type="button" key={g.id} onClick={() => toggleGroup(g)}
+                            className={cn('px-3 py-1.5 rounded-full text-xs font-medium border transition-colors',
+                              allIn ? 'bg-accent text-black border-accent' : 'border-[#3A3A3C] text-[#AEAEB2] hover:border-[#48484A]')}>
+                            {g.name} <span className="opacity-60">({g.prIds.length})</span>
+                          </button>
+                        );
+                      })}
+                    </div>
                   )}
-                </div>
+                  <div className="mt-2 space-y-1 max-h-44 overflow-y-auto border border-[#2C2C2E] rounded-xl p-2">
+                    {prUsers.length === 0 ? (
+                      <p className="text-xs text-[#636366] px-2 py-3 text-center">Nessun PR approvato</p>
+                    ) : (
+                      prUsers.map(pr => (
+                        <label key={pr.id} className="flex items-center gap-3 px-2 py-2 rounded-lg hover:bg-white/[0.03] cursor-pointer">
+                          <input type="checkbox" checked={assignedPrIds.includes(pr.id)}
+                            onChange={() => togglePr(pr.id)}
+                            className="w-4 h-4 accent-[#D4622A]" />
+                          <span className="text-sm text-[#AEAEB2]">{pr.displayName} {pr.lastName}</span>
+                        </label>
+                      ))
+                    )}
+                  </div>
+                </>
               )}
             </Field>
 

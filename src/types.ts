@@ -120,3 +120,9 @@ export interface Venue {
   address: string;
   floorPlans: FloorPlan[];
 }
+
+export interface PrGroup {
+  id: string;
+  name: string;
+  prIds: string[];
+}

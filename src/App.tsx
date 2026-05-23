@@ -24,6 +24,7 @@ import Dashboard from './components/dashboard/Dashboard';
 import EventDetailView from './components/admin/EventDetailView';
 import PendingApprovalsView from './components/admin/PendingApprovalsView';
 import PRRankingView from './components/admin/PRRankingView';
+import AIChat from './components/ai/AIChat';
 
 type AppView = 'dashboard' | 'venues' | 'venue-events' | 'event-detail' | 'events' | 'active-events' | 'plan' | 'editor' | 'reservations' | 'approvals' | 'profile' | 'history' | 'pr-management' | 'checkin';
 
@@ -2067,6 +2068,18 @@ export default function App() {
             setReservations(prev => prev.map(r => r.id === updated.id ? updated : r));
             setEditingReservation(null);
           }}
+        />
+      )}
+
+      {/* AI Chat — solo admin */}
+      {user.role === 'admin' && (
+        <AIChat
+          user={user}
+          events={events}
+          venues={venues}
+          reservations={reservations}
+          managedUsers={managedUsers}
+          pendingCount={pendingCount}
         />
       )}
     </div>

@@ -486,7 +486,7 @@ export default function App() {
     const profile: UserProfile = { id: found.id, email: found.email, role: found.role, displayName: found.displayName, lastName: found.lastName, phone: found.phone, profileImage: found.profileImage };
     localStorage.setItem('nightplan_user', JSON.stringify(profile));
     setUser(profile);
-    setView('dashboard');
+    setView(profile.role === 'host' ? 'checkin' : 'dashboard');
     setLoginError('');
   };
 
@@ -502,7 +502,7 @@ export default function App() {
         const profile: UserProfile = { id: mockUser.id, email: mockUser.email, role: mockUser.role, displayName: mockUser.displayName, lastName: mockUser.lastName ?? '', phone: mockUser.phone ?? '', profileImage: g.photoURL };
         localStorage.setItem('nightplan_user', JSON.stringify(profile));
         setUser(profile);
-        setView('dashboard');
+        setView(profile.role === 'host' ? 'checkin' : 'dashboard');
         return;
       }
 
@@ -512,7 +512,7 @@ export default function App() {
           const profile: UserProfile = { id: managed.id, email: managed.email, role: 'pr', displayName: managed.displayName, lastName: managed.lastName, phone: managed.phone, profileImage: g.photoURL };
           localStorage.setItem('nightplan_user', JSON.stringify(profile));
           setUser(profile);
-          setView('dashboard');
+          setView(profile.role === 'host' ? 'checkin' : 'dashboard');
         } else if (managed.status === 'pending') {
           setErr('Il tuo account è in attesa di approvazione.');
         } else {
@@ -553,7 +553,7 @@ export default function App() {
         const profile: UserProfile = { id: mockUser.id, email: mockUser.email, role: mockUser.role, displayName: mockUser.displayName, lastName: mockUser.lastName ?? '', phone: mockUser.phone ?? '', profileImage: g.photoURL };
         localStorage.setItem('nightplan_user', JSON.stringify(profile));
         setUser(profile);
-        setView('dashboard');
+        setView(profile.role === 'host' ? 'checkin' : 'dashboard');
         return;
       }
       const managed = managedUsers.find(u => u.email.toLowerCase() === g.email.toLowerCase());
@@ -562,7 +562,7 @@ export default function App() {
           const profile: UserProfile = { id: managed.id, email: managed.email, role: 'pr', displayName: managed.displayName, lastName: managed.lastName, phone: managed.phone, profileImage: g.photoURL };
           localStorage.setItem('nightplan_user', JSON.stringify(profile));
           setUser(profile);
-          setView('dashboard');
+          setView(profile.role === 'host' ? 'checkin' : 'dashboard');
         } else if (managed.status === 'pending') {
           setErr('Il tuo account è in attesa di approvazione.');
         } else {

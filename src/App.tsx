@@ -884,9 +884,9 @@ export default function App() {
             className="flex items-center justify-center gap-3 mb-8"
           >
             <img src="/Logo.png" alt="Nightplan" className="w-9 h-9 object-contain" />
-            <div className="flex flex-col justify-center">
+            <div className="flex flex-col justify-center items-end">
               <span className="hv font-black text-white text-[15px] leading-tight">Nightplan</span>
-              <span className="text-[9px] font-sans text-accent uppercase tracking-[0.3em] mt-[2px]">Management</span>
+              <span className="text-[9px] font-sans text-accent uppercase tracking-[0.3em] -mr-[0.3em] mt-[2px]">Management</span>
             </div>
           </button>
           {/* Card */}
@@ -2899,9 +2899,9 @@ function SidebarContent({ user, view, onNav, onLogout, occupancyPct = 0, revenue
           <div className="w-8 h-8 shrink-0 flex items-center justify-center">
             <img src="/Logo.png" alt="Nightplan" className="w-full h-full object-contain" />
           </div>
-          <div className="flex flex-col justify-center">
+          <div className="flex flex-col justify-center items-end">
             <span className="hv font-black text-[13px] text-white leading-tight">Nightplan</span>
-            <span className="text-[9px] font-sans text-accent uppercase tracking-[0.3em]">Management</span>
+            <span className="text-[9px] font-sans text-accent uppercase tracking-[0.3em] -mr-[0.3em]">Management</span>
           </div>
         </div>
       </div>

@@ -1,6 +1,7 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { CheckCircle2, XCircle, CheckCheck } from 'lucide-react';
 import { Reservation, ManagedUser } from '../../types';
+import { cn } from '../../lib/utils';
 
 interface Props {
   reservations: Reservation[];
@@ -22,6 +23,19 @@ export default function PendingApprovalsView({
   const pendingResv = reservations.filter(r => r.approvalStatus === 'pending');
   const pendingUsers = managedUsers.filter(u => u.status === 'pending');
   const totalPending = pendingResv.length + pendingUsers.length;
+
+  // Conferma a due step: il primo click "arma", il secondo esegue. id univoco per riga, 'all' per il bulk.
+  const [confirmReject, setConfirmReject] = useState<string | null>(null);
+  const [confirmAll, setConfirmAll] = useState(false);
+
+  const armOrReject = (id: string, action: () => void) => {
+    if (confirmReject === id) { action(); setConfirmReject(null); }
+    else setConfirmReject(id);
+  };
+  const armOrApproveAll = () => {
+    if (confirmAll) { pendingResv.forEach(r => onApproveReservation(r.id)); setConfirmAll(false); }
+    else setConfirmAll(true);
+  };
 
   if (totalPending === 0) {
     return (
@@ -50,10 +64,16 @@ export default function PendingApprovalsView({
               </span>
             </div>
             <button
-              onClick={() => pendingResv.forEach(r => onApproveReservation(r.id))}
-              className="flex items-center gap-2 px-4 py-2 rounded-xl bg-accent text-black text-xs font-semibold hover:bg-white transition-colors"
+              onClick={armOrApproveAll}
+              onBlur={() => setConfirmAll(false)}
+              className={cn(
+                'flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-semibold transition-colors',
+                confirmAll
+                  ? 'bg-white text-black ring-2 ring-accent'
+                  : 'bg-accent text-black hover:bg-white'
+              )}
             >
-              <CheckCheck size={12} /> Approva tutte
+              <CheckCheck size={12} /> {confirmAll ? `Confermi? (${pendingResv.length})` : 'Approva tutte'}
             </button>
           </div>
           <div className="space-y-2">
@@ -84,10 +104,16 @@ export default function PendingApprovalsView({
                     <CheckCircle2 size={12} /> Approva
                   </button>
                   <button
-                    onClick={() => onRejectReservation(r.id)}
-                    className="flex items-center gap-1.5 px-4 py-2 rounded-xl bg-red-500/10 text-red-400 border border-red-500/20 text-xs font-semibold hover:bg-red-500/20 transition-colors"
+                    onClick={() => armOrReject(`res_${r.id}`, () => onRejectReservation(r.id))}
+                    onBlur={() => setConfirmReject(null)}
+                    className={cn(
+                      'flex items-center gap-1.5 px-4 py-2 rounded-xl border text-xs font-semibold transition-colors',
+                      confirmReject === `res_${r.id}`
+                        ? 'bg-red-500/25 text-red-300 border-red-500/50'
+                        : 'bg-red-500/10 text-red-400 border-red-500/20 hover:bg-red-500/20'
+                    )}
                   >
-                    <XCircle size={12} /> Rifiuta
+                    <XCircle size={12} /> {confirmReject === `res_${r.id}` ? 'Confermi?' : 'Rifiuta'}
                   </button>
                 </div>
               </div>
@@ -135,10 +161,16 @@ export default function PendingApprovalsView({
                     <CheckCircle2 size={12} /> Approva
                   </button>
                   <button
-                    onClick={() => onRejectUser(u.id)}
-                    className="flex items-center gap-1.5 px-4 py-2 rounded-xl bg-red-500/10 text-red-400 border border-red-500/20 text-xs font-semibold hover:bg-red-500/20 transition-colors"
+                    onClick={() => armOrReject(`user_${u.id}`, () => onRejectUser(u.id))}
+                    onBlur={() => setConfirmReject(null)}
+                    className={cn(
+                      'flex items-center gap-1.5 px-4 py-2 rounded-xl border text-xs font-semibold transition-colors',
+                      confirmReject === `user_${u.id}`
+                        ? 'bg-red-500/25 text-red-300 border-red-500/50'
+                        : 'bg-red-500/10 text-red-400 border-red-500/20 hover:bg-red-500/20'
+                    )}
                   >
-                    <XCircle size={12} /> Rifiuta
+                    <XCircle size={12} /> {confirmReject === `user_${u.id}` ? 'Confermi?' : 'Rifiuta'}
                   </button>
                 </div>
               </div>

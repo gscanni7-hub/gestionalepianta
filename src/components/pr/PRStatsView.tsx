@@ -84,7 +84,7 @@ export default function PRStatsView({ prId, reservations, events }: Props) {
                   </div>
                   {/* CSS bar chart */}
                   <div className="flex items-center gap-2 mt-2">
-                    <div className="flex-1 h-1.5 bg-[#1C1C1E] overflow-hidden rounded-full">
+                    <div className="flex-1 h-1.5 bg-[#2C2C2E] overflow-hidden rounded-full">
                       <div
                         className="h-full bg-accent transition-all duration-700"
                         style={{ width: `${barPct}%` }}

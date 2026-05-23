@@ -17,7 +17,8 @@ export default function PRRankingView({ managedUsers, reservations }: Props) {
 
   const ranked = prUsers
     .map(pr => {
-      const res = reservations.filter(r => r.prId === pr.id);
+      // Solo prenotazioni approvate: pending/rifiutate non devono gonfiare incasso e classifica.
+      const res = reservations.filter(r => r.prId === pr.id && r.approvalStatus === 'approved');
       const totalPren = res.length;
       const totalPersone = res.reduce((s, r) => s + r.guestsCount, 0);
       const totalIncasso = res.reduce((s, r) => s + (r.actualBudget ?? r.budget), 0);

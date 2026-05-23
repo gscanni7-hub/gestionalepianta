@@ -23,6 +23,13 @@ const STATUS_COLORS = {
   free:      COLORS.success,
 } as const;
 
+const STATUS_LABELS: Record<string, string> = {
+  confirmed: 'Confermato',
+  pending:   'In attesa',
+  blocked:   'Bloccato',
+  free:      'Libero',
+};
+
 const HOST_COLORS = {
   checkedIn:  COLORS.success,
   reserved:   COLORS.accent,
@@ -37,8 +44,12 @@ export default function FloorPlanViewer({
   const [selectedTable, setSelectedTable]       = useState<Table | null>(null);
   const [showBookingModal, setShowBookingModal]  = useState(false);
   const [editingReservation, setEditingReservation] = useState<Reservation | null>(null);
+  const [confirmingFree, setConfirmingFree]     = useState(false);
   const containerRef = useRef<HTMLDivElement>(null);
   const [containerWidth, setContainerWidth] = useState(0);
+
+  // Reset della conferma quando cambio tavolo: evita che resti "armata" su un altro.
+  useEffect(() => { setConfirmingFree(false); }, [selectedTable?.id]);
 
   const canvasW = floorPlan.canvasWidth  ?? 800;
   const canvasH = floorPlan.canvasHeight ?? 600;
@@ -73,7 +84,9 @@ export default function FloorPlanViewer({
   };
 
   const handleFree = (res: Reservation) => {
+    if (!confirmingFree) { setConfirmingFree(true); return; }
     onReservationRemoved(res.id);
+    setConfirmingFree(false);
     setSelectedTable(null);
   };
 
@@ -165,7 +178,7 @@ export default function FloorPlanViewer({
             <>
               <div className="flex items-center gap-2 shrink-0">
                 <span className="w-2 h-2 shrink-0" style={{ background: COLORS.danger }} />
-                <span className="text-[8px] font-sans uppercase tracking-widest text-[#636366]">Confirmed</span>
+                <span className="text-[8px] font-sans uppercase tracking-widest text-[#636366]">Confermato</span>
               </div>
               <div className="flex items-center gap-2 shrink-0">
                 <span className="w-2 h-2 shrink-0" style={{ background: COLORS.warning }} />
@@ -173,7 +186,7 @@ export default function FloorPlanViewer({
               </div>
               <div className="flex items-center gap-2 shrink-0">
                 <span className="w-2 h-2 shrink-0" style={{ background: COLORS.success }} />
-                <span className="text-[8px] font-sans uppercase tracking-widest text-[#636366]">Free</span>
+                <span className="text-[8px] font-sans uppercase tracking-widest text-[#636366]">Libero</span>
               </div>
             </>
           )}
@@ -212,7 +225,7 @@ export default function FloorPlanViewer({
                 <div className="space-y-0">
                   <InfoRow label="Pax"       value={String(selectedTable.capacity)} />
                   <InfoRow label="Min. Spesa" value={`€${selectedTable.minSpend}`} accent />
-                  <InfoRow label="Stato"      value={getStatus(selectedTable.id)} accent />
+                  <InfoRow label="Stato"      value={STATUS_LABELS[getStatus(selectedTable.id)]} accent />
                 </div>
 
                 {(() => {
@@ -259,8 +272,13 @@ export default function FloorPlanViewer({
                           </button>
                           <button
                             onClick={() => handleFree(res)}
-                            className="flex-1 py-3 text-[8px] hv font-black uppercase tracking-widest border border-[#300] text-[#8E8E93] hover:border-red-900 hover:text-red-500 transition-all">
-                            Libera
+                            className={cn(
+                              'flex-1 py-3 text-[8px] hv font-black uppercase tracking-widest border transition-all',
+                              confirmingFree
+                                ? 'border-red-500 bg-red-500/10 text-red-500'
+                                : 'border-[#300] text-[#8E8E93] hover:border-red-900 hover:text-red-500'
+                            )}>
+                            {confirmingFree ? 'Confermi?' : 'Libera'}
                           </button>
                         </div>
                       ) : (
@@ -308,7 +326,7 @@ export default function FloorPlanViewer({
                 <div className="space-y-0">
                   <InfoRow label="Pax"        value={String(selectedTable.capacity)} />
                   <InfoRow label="Min. Spesa" value={`€${selectedTable.minSpend}`} accent />
-                  <InfoRow label="Stato"      value={getStatus(selectedTable.id)} accent />
+                  <InfoRow label="Stato"      value={STATUS_LABELS[getStatus(selectedTable.id)]} accent />
                 </div>
                 {(() => {
                   const res = getReservation(selectedTable.id);
@@ -343,8 +361,13 @@ export default function FloorPlanViewer({
                             Modifica
                           </button>
                           <button onClick={() => handleFree(res)}
-                            className="flex-1 py-3 text-[8px] hv font-black uppercase tracking-widest border border-[#300] text-[#8E8E93] hover:border-red-900 hover:text-red-500 transition-all">
-                            Libera
+                            className={cn(
+                              'flex-1 py-3 text-[8px] hv font-black uppercase tracking-widest border transition-all',
+                              confirmingFree
+                                ? 'border-red-500 bg-red-500/10 text-red-500'
+                                : 'border-[#300] text-[#8E8E93] hover:border-red-900 hover:text-red-500'
+                            )}>
+                            {confirmingFree ? 'Confermi?' : 'Libera'}
                           </button>
                         </div>
                       ) : (

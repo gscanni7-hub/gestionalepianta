@@ -13,6 +13,7 @@ interface Props {
 export default function IngressiView({ activeEvent }: Props) {
   const [registrations, setRegistrations] = useState<Registration[]>([]);
   const [loading, setLoading] = useState(false);
+  const [loadError, setLoadError] = useState(false);
   const [scanning, setScanning] = useState(false);
   const [scanResult, setScanResult] = useState<{ ok: boolean; message: string; name?: string } | null>(null);
   const [showEntered, setShowEntered] = useState(false);
@@ -20,14 +21,17 @@ export default function IngressiView({ activeEvent }: Props) {
   const scannerRef = useRef<Html5Qrcode | null>(null);
   const scannerDivId = 'qr-reader';
 
-  useEffect(() => {
+  const loadRegistrations = () => {
     if (!activeEvent) return;
     setLoading(true);
+    setLoadError(false);
     getRegistrationsByEvent(activeEvent.id)
       .then(setRegistrations)
-      .catch(() => setRegistrations([]))
+      .catch(() => { setRegistrations([]); setLoadError(true); })
       .finally(() => setLoading(false));
-  }, [activeEvent]);
+  };
+
+  useEffect(() => { loadRegistrations(); /* eslint-disable-next-line react-hooks/exhaustive-deps */ }, [activeEvent]);
 
   const startScanner = async () => {
     setScanning(true);
@@ -197,7 +201,20 @@ export default function IngressiView({ activeEvent }: Props) {
         </div>
       )}
 
-      {!loading && registrations.length === 0 && (
+      {!loading && loadError && (
+        <div className="py-16 text-center flex flex-col items-center gap-4">
+          <AlertCircle size={28} className="text-[#EF4444]" />
+          <p className="text-sm text-[#8E8E93]">Impossibile caricare le registrazioni</p>
+          <button
+            onClick={loadRegistrations}
+            className="px-5 py-2.5 rounded-xl bg-[#D4622A] text-black text-sm font-semibold hover:bg-white transition-colors"
+          >
+            Riprova
+          </button>
+        </div>
+      )}
+
+      {!loading && !loadError && registrations.length === 0 && (
         <div className="py-16 text-center">
           <p className="text-sm text-[#636366]">Nessuna registrazione per questa serata</p>
         </div>
@@ -277,7 +294,7 @@ function RegistrationRow({ reg, onUndoCheckIn }: { reg: Registration; onUndoChec
           <motion.div initial={{ height: 0, opacity: 0 }} animate={{ height: 'auto', opacity: 1 }}
             exit={{ height: 0, opacity: 0 }} transition={{ duration: 0.15 }} className="overflow-hidden">
             <div className="px-5 pb-4 pt-1 border-t border-[#2C2C2E] space-y-3">
-              <div className="text-[9px] font-mono text-[#8E8E93] space-y-1">
+              <div className="text-[11px] font-mono text-[#8E8E93] space-y-1">
                 <p>Email: <span className="text-[#AEAEB2]">{reg.email}</span></p>
                 {reg.phone && <p>Tel: <span className="text-[#AEAEB2]">{reg.phone}</span></p>}
                 {reg.prName && <p>Invitato da: <span className="text-[#AEAEB2]">{reg.prName}</span></p>}

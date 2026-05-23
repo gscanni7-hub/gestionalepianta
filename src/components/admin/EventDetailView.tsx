@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
   Map, Users, Link2, Copy, Check, Calendar, Clock,
-  ChevronDown, CheckCircle2, XCircle, ArrowLeft, ExternalLink
+  ChevronDown, CheckCircle2, XCircle, ArrowLeft, ExternalLink, AlertCircle
 } from 'lucide-react';
 import { Event, Venue, Reservation, Registration } from '../../types';
 import { getRegistrationsByEvent } from '../../lib/registrationService';
@@ -20,19 +20,26 @@ export default function EventDetailView({ event, venue, reservations, onOpenPlan
   const [tab, setTab] = useState<'tavoli' | 'registrazioni'>('tavoli');
   const [registrations, setRegistrations] = useState<Registration[]>([]);
   const [loadingReg, setLoadingReg] = useState(false);
+  const [regError, setRegError] = useState(false);
   const [copiedLink, setCopiedLink] = useState(false);
 
   const genericLink = event.registrationToken
     ? `${window.location.origin}/r/${event.registrationToken}`
     : null;
 
-  useEffect(() => {
-    if (tab !== 'registrazioni') return;
+  const loadRegistrations = () => {
     setLoadingReg(true);
+    setRegError(false);
     getRegistrationsByEvent(event.id)
       .then(setRegistrations)
-      .catch(() => setRegistrations([]))
+      .catch(() => { setRegistrations([]); setRegError(true); })
       .finally(() => setLoadingReg(false));
+  };
+
+  useEffect(() => {
+    if (tab !== 'registrazioni') return;
+    loadRegistrations();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [tab, event.id]);
 
   const handleCopyLink = () => {
@@ -187,6 +194,15 @@ export default function EventDetailView({ event, venue, reservations, onOpenPlan
           {loadingReg ? (
             <div className="py-12 flex justify-center">
               <div className="w-5 h-5 border-2 border-[#D4622A] border-t-transparent rounded-full animate-spin" />
+            </div>
+          ) : regError ? (
+            <div className="py-16 text-center flex flex-col items-center gap-4">
+              <AlertCircle size={28} className="text-[#EF4444]" />
+              <p className="text-sm text-[#8E8E93]">Impossibile caricare le registrazioni</p>
+              <button onClick={loadRegistrations}
+                className="px-5 py-2.5 rounded-xl bg-[#D4622A] text-black text-sm font-semibold hover:bg-white transition-colors">
+                Riprova
+              </button>
             </div>
           ) : (
             <>

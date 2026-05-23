@@ -1,8 +1,8 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import {
   Calendar, Bell, Users, DoorOpen, TrendingUp,
-  ChevronRight, MapPin, Link2, BarChart3, CheckCircle2, Clock
+  ChevronRight, MapPin, Link2, BarChart3, CheckCircle2, Clock, Info, X
 } from 'lucide-react';
 import { UserProfile, Event, Venue, Reservation, ManagedUser } from '../../types';
 import { cn } from '../../lib/utils';
@@ -158,6 +158,14 @@ function PRDashboard({ user, events, venues, reservations, prPendingCount, onNav
   const hour = now.getHours();
   const greeting = hour < 18 ? 'Ciao' : 'Buonasera';
 
+  const [hintSeen, setHintSeen] = useState(() => {
+    try { return localStorage.getItem('nightplan_pr_hint') === '1'; } catch { return false; }
+  });
+  const dismissHint = () => {
+    setHintSeen(true);
+    try { localStorage.setItem('nightplan_pr_hint', '1'); } catch { /* storage non disponibile */ }
+  };
+
   return (
     <div className="space-y-8">
       {/* Greeting */}
@@ -169,6 +177,22 @@ function PRDashboard({ user, events, venues, reservations, prPendingCount, onNav
           {greeting},<br />{user.displayName}
         </h1>
       </div>
+
+      {/* Hint primo-uso */}
+      {!hintSeen && activeWithToken.length > 0 && (
+        <div className="border border-[#D4622A]/30 bg-[#D4622A]/[0.06] rounded-xl p-4 flex items-start gap-3">
+          <Info size={15} className="text-[#D4622A] shrink-0 mt-0.5" />
+          <div className="flex-1 min-w-0">
+            <p className="text-sm font-semibold text-white">Come funziona</p>
+            <p className="text-xs text-[#AEAEB2] mt-1 leading-relaxed">
+              Copia il tuo link personale e condividilo con i clienti: ogni registrazione viene conteggiata a te e la ritrovi nelle tue statistiche.
+            </p>
+          </div>
+          <button onClick={dismissHint} className="text-[#8E8E93] hover:text-white transition-colors shrink-0" aria-label="Chiudi">
+            <X size={14} />
+          </button>
+        </div>
+      )}
 
       {/* Stats stasera */}
       <div className="grid grid-cols-3 gap-3">

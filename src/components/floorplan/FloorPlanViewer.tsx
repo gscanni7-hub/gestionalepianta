@@ -472,7 +472,7 @@ function BookingModal({ table, initialReservation, defaultPrName, onClose, onSub
   const updateBottle = (i: number, patch: Partial<BottleItem>) =>
     setBottleItems(prev => prev.map((b, idx) => idx === i ? { ...b, ...patch } : b));
 
-  const inp = "w-full bg-bg border border-[#2C2C2E] px-4 py-3 text-xs font-sans text-white placeholder-[#636366] outline-none transition-colors";
+  const inp = "w-full bg-bg border border-[#2C2C2E] rounded-xl px-4 py-3 text-sm font-sans text-white placeholder-[#636366] outline-none focus:border-[#D4622A] transition-colors";
 
   return (
     <div className="fixed inset-0 z-[100] flex items-center justify-center p-4">
@@ -481,15 +481,15 @@ function BookingModal({ table, initialReservation, defaultPrName, onClose, onSub
 
       <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.2, ease: [0.16, 1, 0.3, 1] }}
-        className="relative w-full max-w-lg bg-card border border-[#2C2C2E] overflow-hidden max-h-[90vh] flex flex-col">
+        className="relative w-full max-w-lg bg-card border border-[#2C2C2E] rounded-2xl overflow-hidden max-h-[90vh] flex flex-col">
         <div className="h-[2px] bg-accent shrink-0" />
 
         <div className="px-8 py-5 border-b border-[#1C1C1E] flex items-center justify-between shrink-0">
           <div>
-            <h3 className="hv font-black text-xl uppercase text-white">
+            <h3 className="font-bold text-lg text-white">
               {isEdit ? 'Modifica Prenotazione' : 'Prenotazione'}
             </h3>
-            <p className="text-[8px] font-sans uppercase tracking-widest text-[#8E8E93] mt-0.5">
+            <p className="text-[11px] font-sans text-[#8E8E93] mt-0.5">
               Tavolo {table.name} · Min €{table.minSpend}
             </p>
           </div>
@@ -503,11 +503,11 @@ function BookingModal({ table, initialReservation, defaultPrName, onClose, onSub
           }}>
           <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
             <BField label="Cliente">
-              <input required className={cn(inp, 'uppercase tracking-widest')} placeholder="NOME COMPLETO"
+              <input required className={inp} placeholder="Mario Rossi"
                 value={form.customerName} onChange={e => setForm({ ...form, customerName: e.target.value })} />
             </BField>
             <BField label="PR">
-              <input readOnly className={cn(inp, 'uppercase tracking-widest cursor-default select-none text-[#8E8E93] bg-[#0a0a0a] border-[#1C1C1E]')}
+              <input readOnly className={cn(inp, 'cursor-default select-none text-[#8E8E93] bg-[#0a0a0a] border-[#1C1C1E]')}
                 value={form.prName} onChange={() => {}} />
             </BField>
             <BField label="PAX">
@@ -531,16 +531,16 @@ function BookingModal({ table, initialReservation, defaultPrName, onClose, onSub
                   <select
                     value={bottle.qty}
                     onChange={e => updateBottle(i, { qty: +e.target.value })}
-                    className="bg-bg border border-[#2C2C2E] px-3 py-3 text-xs font-sans text-white outline-none transition-colors w-20 shrink-0 [color-scheme:dark]">
+                    className="bg-bg border border-[#2C2C2E] rounded-xl px-3 py-3 text-sm font-sans text-white outline-none focus:border-[#D4622A] transition-colors w-20 shrink-0 [color-scheme:dark]">
                     {Array.from({ length: 10 }, (_, n) => n + 1).map(n => (
                       <option key={n} value={n}>{n}</option>
                     ))}
                   </select>
                   <input
-                    className={cn(inp, 'uppercase tracking-widest')}
-                    placeholder="NOME BOTTIGLIA"
+                    className={inp}
+                    placeholder="Nome bottiglia"
                     value={bottle.name}
-                    onChange={e => updateBottle(i, { name: e.target.value.toUpperCase() })}
+                    onChange={e => updateBottle(i, { name: e.target.value })}
                   />
                   <button type="button" onClick={() => removeBottle(i)}
                     className="text-[#8E8E93] hover:text-red-500 transition-colors p-1 shrink-0">
@@ -556,12 +556,12 @@ function BookingModal({ table, initialReservation, defaultPrName, onClose, onSub
           </BField>
 
           <BField label="Note">
-            <textarea rows={2} className={cn(inp, 'resize-none italic')} placeholder="NOTE..."
+            <textarea rows={2} className={cn(inp, 'resize-none')} placeholder="Richieste speciali..."
               value={form.notes} onChange={e => setForm({ ...form, notes: e.target.value })} />
           </BField>
 
           <button type="submit"
-            className="w-full py-4 bg-accent text-black text-[10px] hv font-black uppercase tracking-[0.3em] hover:bg-white transition-colors">
+            className="w-full py-4 rounded-xl bg-accent text-black text-sm font-semibold hover:bg-white transition-colors">
             {isEdit ? 'Salva Modifiche' : 'Conferma Prenotazione'}
           </button>
         </form>
@@ -573,7 +573,7 @@ function BookingModal({ table, initialReservation, defaultPrName, onClose, onSub
 function BField({ label, children }: { label: string; children: React.ReactNode }) {
   return (
     <div className="space-y-1.5">
-      <label className="text-[8px] font-sans font-bold uppercase tracking-widest text-[#636366]">{label}</label>
+      <label className="text-xs font-medium text-[#636366]">{label}</label>
       {children}
     </div>
   );

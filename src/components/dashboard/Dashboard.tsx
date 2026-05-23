@@ -5,7 +5,7 @@ import {
   ChevronRight, MapPin, BarChart3, CheckCircle2, Clock, Info, X
 } from 'lucide-react';
 import { UserProfile, Event, Venue, Reservation, ManagedUser } from '../../types';
-import { cn } from '../../lib/utils';
+import { cn, isEventVisibleToPr, isEventVisibleToHost } from '../../lib/utils';
 
 interface Props {
   user: UserProfile;
@@ -144,7 +144,7 @@ function PRDashboard({ user, events, venues, reservations, prPendingCount, onNav
   user: UserProfile; events: Event[]; venues: Venue[]; reservations: Reservation[];
   prPendingCount: number; onNav: (v: string) => void; onOpenEvent: (e: Event) => void;
 }) {
-  const activeEvents = events.filter(e => e.status === 'active');
+  const activeEvents = events.filter(e => e.status === 'active' && isEventVisibleToPr(e, user.id));
   const myRes = reservations.filter(r => r.prId === user.id);
   const myActiveRes = myRes.filter(r => activeEvents.some(e => e.id === r.eventId));
   const myApproved = myActiveRes.filter(r => r.approvalStatus === 'approved');
@@ -308,7 +308,7 @@ function HostDashboard({ user, events, venues, reservations, onNav }: {
   user: UserProfile; events: Event[]; venues: Venue[];
   reservations: Reservation[]; onNav: (v: string) => void;
 }) {
-  const activeEvents = events.filter(e => e.status === 'active');
+  const activeEvents = events.filter(e => e.status === 'active' && isEventVisibleToHost(e));
   const activeEvent = activeEvents[0] ?? null;
   const venue = activeEvent ? venues.find(v => v.id === activeEvent.venueId) : null;
   const approved = reservations.filter(r => r.approvalStatus === 'approved' && activeEvents.some(e => e.id === r.eventId));

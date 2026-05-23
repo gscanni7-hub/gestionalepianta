@@ -9,7 +9,7 @@ import {
 import { MOCK_USERS, INITIAL_VENUES, INITIAL_EVENTS, INITIAL_RESERVATIONS, INITIAL_MANAGED_USERS } from './constants';
 import { UserProfile, Event, Reservation, Venue, FloorPlan, ManagedUser, Table } from './types';
 import { motion, AnimatePresence } from 'framer-motion';
-import { cn, COLORS, easeOutQuart, gridContainer, gridItem } from './lib/utils';
+import { cn, COLORS, easeOutQuart, gridContainer, gridItem, isEventVisibleToPr, isEventVisibleToHost } from './lib/utils';
 import { isEmailConfigured, sendPasswordResetEmail } from './lib/emailService';
 import { isFirebaseConfigured, signInWithGoogle, signInWithApple } from './lib/firebase';
 import { subscribeToReservations } from './lib/reservationService';
@@ -779,6 +779,10 @@ export default function App() {
   };
 
   const activeEvents  = events.filter(e => e.status === 'active');
+  // Liste filtrate per ruolo: l'admin vede tutto, il PR solo gli eventi a lui assegnati,
+  // l'host solo quelli attivati per l'ingresso.
+  const prVisibleEvents   = user ? activeEvents.filter(e => isEventVisibleToPr(e, user.id)) : activeEvents;
+  const hostVisibleEvents = activeEvents.filter(isEventVisibleToHost);
   const venueEvents   = selectedVenue ? events.filter(e => e.venueId === selectedVenue.id) : [];
   const showBack      = view === 'plan' || view === 'venue-events' || view === 'active-events';
 
@@ -1590,7 +1594,7 @@ export default function App() {
               <motion.div key="events" {...PAGE}>
                 <div className="flex items-start justify-between mb-0 gap-4">
                   <PageTitle title="Prossimi eventi" sub="Seleziona un evento per accedere alla pianta" />
-                  {user.role === 'pr' && activeEvents.length > 0 && (
+                  {user.role === 'pr' && prVisibleEvents.length > 0 && (
                     <button
                       onClick={() => setShowQuickAdd(true)}
                       className="flex items-center gap-2 bg-accent text-black px-4 py-2.5 text-sm font-semibold rounded-xl hover:bg-white transition-colors shrink-0 mt-1"
@@ -1599,14 +1603,14 @@ export default function App() {
                     </button>
                   )}
                 </div>
-                {activeEvents.length === 0 ? (
+                {prVisibleEvents.length === 0 ? (
                   <EmptyState icon={<Calendar size={28} />} label="Nessun evento attivo." />
                 ) : (
                   <motion.div
                     className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-4 mt-8"
                     variants={gridContainer} initial="initial" animate="animate"
                   >
-                    {activeEvents.map((event) => (
+                    {prVisibleEvents.map((event) => (
                       <motion.div key={event.id} variants={gridItem}>
                         <EventCard event={event}
                           venueName={venues.find(v => v.id === event.venueId)?.name}
@@ -1616,7 +1620,7 @@ export default function App() {
                   </motion.div>
                 )}
                 {user.role === 'pr' && (
-                  <PRLinkGenerator events={activeEvents} venues={venues} user={user} />
+                  <PRLinkGenerator events={prVisibleEvents} venues={venues} user={user} />
                 )}
               </motion.div>
             )}
@@ -1970,6 +1974,7 @@ export default function App() {
         <NewEventModal
           venue={selectedVenue}
           floorPlans={venues.find(v => v.id === selectedVenue.id)?.floorPlans ?? []}
+          prUsers={managedUsers.filter(u => u.role === 'pr' && u.status === 'approved')}
           onClose={() => setShowNewEventModal(false)}
           onSubmit={(data, token) => {
             setEvents(prev => [...prev, {
@@ -2014,6 +2019,7 @@ export default function App() {
         <NewEventModal
           venue={selectedVenue}
           floorPlans={venues.find(v => v.id === selectedVenue.id)?.floorPlans ?? []}
+          prUsers={managedUsers.filter(u => u.role === 'pr' && u.status === 'approved')}
           initialData={editingEvent}
           onClose={() => setEditingEvent(null)}
           onSubmit={(data) => {
@@ -2025,7 +2031,7 @@ export default function App() {
 
       {showQuickAdd && user && (
         <QuickAddModal
-          events={events}
+          events={prVisibleEvents}
           venues={venues}
           user={user}
           onClose={() => setShowQuickAdd(false)}
@@ -2723,7 +2729,10 @@ function HostCheckinView({ reservations, events, venues, userRole, currentUser, 
   const [showEntered, setShowEntered] = useState(false);
   const [tab, setTab] = useState<'lista' | 'pianta' | 'ingressi'>('lista');
 
-  const activeEvents = events.filter(e => e.status === 'active');
+  // Host: solo eventi attivati per l'ingresso. Admin (check-in globale): tutti.
+  const activeEvents = events.filter(e =>
+    e.status === 'active' && (userRole === 'host' ? isEventVisibleToHost(e) : true)
+  );
   const [selectedEventId, setSelectedEventId] = useState<string>('');
 
   // Keep selectedEventId in sync with available events
@@ -3477,11 +3486,12 @@ function ReservationsTable({ reservations, userRole, events, onDelete, onEdit }:
 }
 
 /* ── NewEventModal ───────────────────────────────────────── */
-function NewEventModal({ venue, floorPlans, onClose, onSubmit, initialData }: {
+function NewEventModal({ venue, floorPlans, prUsers, onClose, onSubmit, initialData }: {
   venue: Venue;
   floorPlans: FloorPlan[];
+  prUsers: ManagedUser[];
   onClose: () => void;
-  onSubmit: (d: { name: string; date: string; time: string; description: string; coverImage: string; maxCapacity: number | undefined; floorPlanId: string }, token?: string) => void;
+  onSubmit: (d: { name: string; date: string; time: string; description: string; coverImage: string; maxCapacity: number | undefined; floorPlanId: string; assignedPrIds: string[] | undefined; visibleToHost: boolean }, token?: string) => void;
   initialData?: Event;
 }) {
   const isEdit = !!initialData;
@@ -3494,6 +3504,13 @@ function NewEventModal({ venue, floorPlans, onClose, onSubmit, initialData }: {
     maxCapacity: initialData?.maxCapacity ? String(initialData.maxCapacity) : '',
     floorPlanId: initialData?.floorPlanId ?? floorPlans[0]?.id ?? '',
   });
+  // Visibilità: nuovo evento = nessun PR + ingresso spento (l'admin decide).
+  // In modifica, eventi legacy (campi undefined) = "Tutti i PR" e ingresso visibile.
+  const [assignAll, setAssignAll] = useState(isEdit ? initialData!.assignedPrIds === undefined : false);
+  const [assignedPrIds, setAssignedPrIds] = useState<string[]>(initialData?.assignedPrIds ?? []);
+  const [visibleToHost, setVisibleToHost] = useState<boolean>(initialData?.visibleToHost ?? isEdit);
+  const togglePr = (id: string) =>
+    setAssignedPrIds(prev => prev.includes(id) ? prev.filter(x => x !== id) : [...prev, id]);
   const [createdLink, setCreatedLink] = useState<string | null>(null);
   const [copied, setCopied] = useState(false);
 
@@ -3557,6 +3574,8 @@ function NewEventModal({ venue, floorPlans, onClose, onSubmit, initialData }: {
             onSubmit({
               ...form,
               maxCapacity: form.maxCapacity ? parseInt(form.maxCapacity) : undefined,
+              assignedPrIds: assignAll ? undefined : assignedPrIds,
+              visibleToHost,
             }, token);
             if (!isEdit && token) {
               setCreatedLink(`${window.location.origin}/r/${token}`);
@@ -3618,6 +3637,43 @@ function NewEventModal({ venue, floorPlans, onClose, onSubmit, initialData }: {
                 </select>
               </Field>
             )}
+
+            {/* Visibilità ingresso (host) */}
+            <Field label="Ingresso">
+              <label className="flex items-center justify-between bg-bg border border-[#3A3A3C] rounded-xl px-4 py-3 cursor-pointer">
+                <span className="text-sm text-white">Attiva per l'ingresso</span>
+                <input type="checkbox" checked={visibleToHost}
+                  onChange={e => setVisibleToHost(e.target.checked)}
+                  className="w-4 h-4 accent-[#D4622A]" />
+              </label>
+              <p className="text-[10px] text-[#636366] mt-1">Quando è attivo, lo staff all'ingresso vede l'evento per il check-in.</p>
+            </Field>
+
+            {/* Assegnazione PR */}
+            <Field label="Chi può lavorarlo (PR)">
+              <label className="flex items-center justify-between bg-bg border border-[#3A3A3C] rounded-xl px-4 py-3 cursor-pointer">
+                <span className="text-sm text-white">Tutti i PR</span>
+                <input type="checkbox" checked={assignAll}
+                  onChange={e => setAssignAll(e.target.checked)}
+                  className="w-4 h-4 accent-[#D4622A]" />
+              </label>
+              {!assignAll && (
+                <div className="mt-2 space-y-1 max-h-44 overflow-y-auto border border-[#2C2C2E] rounded-xl p-2">
+                  {prUsers.length === 0 ? (
+                    <p className="text-xs text-[#636366] px-2 py-3 text-center">Nessun PR approvato</p>
+                  ) : (
+                    prUsers.map(pr => (
+                      <label key={pr.id} className="flex items-center gap-3 px-2 py-2 rounded-lg hover:bg-white/[0.03] cursor-pointer">
+                        <input type="checkbox" checked={assignedPrIds.includes(pr.id)}
+                          onChange={() => togglePr(pr.id)}
+                          className="w-4 h-4 accent-[#D4622A]" />
+                        <span className="text-sm text-[#AEAEB2]">{pr.displayName} {pr.lastName}</span>
+                      </label>
+                    ))
+                  )}
+                </div>
+              )}
+            </Field>
 
             <div className="flex gap-3 pt-2">
               <button type="button" onClick={onClose}

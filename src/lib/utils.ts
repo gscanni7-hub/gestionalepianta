@@ -1,8 +1,25 @@
 import { clsx, type ClassValue } from 'clsx';
 import { twMerge } from 'tailwind-merge';
+import type { Event } from '../types';
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
+}
+
+/* ── Visibilità eventi per ruolo ─────────────────────────────
+   L'admin sceglie quali eventi mostrare ai PR (per id) e quando
+   attivarli all'ingresso (host). Retro-compatibilità: un campo
+   undefined = visibile (vale per i dati creati prima di questa logica).
+   - assignedPrIds undefined  → visibile a tutti i PR ("Tutti")
+   - assignedPrIds []         → nessun PR
+   - assignedPrIds [ids]      → solo quei PR
+   - visibleToHost undefined  → visibile (legacy); false = nascosto all'ingresso */
+export function isEventVisibleToPr(event: Event, prId: string): boolean {
+  return event.assignedPrIds === undefined || event.assignedPrIds.includes(prId);
+}
+
+export function isEventVisibleToHost(event: Event): boolean {
+  return event.visibleToHost !== false;
 }
 
 /* ── Design tokens — status palette ──────────────────────── */

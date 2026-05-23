@@ -69,6 +69,8 @@ export interface Event {
   floorPlanId: string;
   status: 'draft' | 'active' | 'completed';
   registrationToken?: string;
+  assignedPrIds?: string[];   // PR che possono vedere/lavorare l'evento; undefined = tutti
+  visibleToHost?: boolean;    // l'host vede l'evento all'ingresso; undefined = visibile (legacy)
 }
 
 export interface Registration {

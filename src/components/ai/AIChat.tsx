@@ -1,6 +1,6 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { X, Send, Sparkles, Loader2 } from 'lucide-react';
+import { X, Send, Sparkles, Loader2, MessageCircle } from 'lucide-react';
 import { UserProfile, Event, Venue, Reservation, ManagedUser } from '../../types';
 
 interface Message {
@@ -305,7 +305,7 @@ export default function AIChat({ user, events, venues, reservations, managedUser
             </motion.span>
           ) : (
             <motion.span key="s" initial={{ rotate: 90, opacity: 0 }} animate={{ rotate: 0, opacity: 1 }} exit={{ rotate: -90, opacity: 0 }} transition={{ duration: 0.15 }}>
-              <Sparkles size={18} />
+              <MessageCircle size={20} />
             </motion.span>
           )}
         </AnimatePresence>

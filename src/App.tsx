@@ -1655,8 +1655,13 @@ export default function App() {
                     event={selectedEvent}
                     venue={evVenue}
                     reservations={reservations}
+                    prUsers={managedUsers.filter(u => u.role === 'pr' && u.status === 'approved')}
                     onApproveReservation={handleApproveReservation}
                     onRejectReservation={handleRejectReservation}
+                    onUpdateEvent={(patch) => {
+                      setEvents(prev => prev.map(e => e.id === selectedEvent.id ? { ...e, ...patch } : e));
+                      setSelectedEvent(prev => prev ? { ...prev, ...patch } : prev);
+                    }}
                     onOpenPlan={() => setView('plan')}
                     onBack={() => { setSelectedEvent(null); setView(selectedVenue ? 'venue-events' : 'active-events'); }}
                   />

@@ -4,7 +4,7 @@ import {
   Map, Users, Link2, Copy, Check, Calendar, Clock,
   ChevronDown, CheckCircle2, XCircle, ArrowLeft, ExternalLink, AlertCircle
 } from 'lucide-react';
-import { Event, Venue, Reservation, Registration } from '../../types';
+import { Event, Venue, Reservation, Registration, ManagedUser } from '../../types';
 import { getRegistrationsByEvent } from '../../lib/registrationService';
 import { cn } from '../../lib/utils';
 import IngressiView from '../host/IngressiView';
@@ -13,15 +13,18 @@ interface Props {
   event: Event;
   venue: Venue;
   reservations: Reservation[];
+  prUsers: ManagedUser[];
   onApproveReservation: (id: string) => void;
   onRejectReservation: (id: string) => void;
+  onUpdateEvent: (patch: Partial<Event>) => void;
   onOpenPlan: () => void;
   onBack: () => void;
 }
 
-export default function EventDetailView({ event, venue, reservations, onApproveReservation, onRejectReservation, onOpenPlan, onBack }: Props) {
+export default function EventDetailView({ event, venue, reservations, prUsers, onApproveReservation, onRejectReservation, onUpdateEvent, onOpenPlan, onBack }: Props) {
   const [tab, setTab] = useState<'tavoli' | 'approva' | 'registrazioni' | 'ingresso'>('tavoli');
   const [confirmReject, setConfirmReject] = useState<string | null>(null);
+  const [showVisibility, setShowVisibility] = useState(false);
   const [registrations, setRegistrations] = useState<Registration[]>([]);
   const [loadingReg, setLoadingReg] = useState(false);
   const [regError, setRegError] = useState(false);
@@ -134,6 +137,69 @@ export default function EventDetailView({ event, venue, reservations, onApproveR
       >
         <Map size={14} /> Apri Pianta
       </button>
+
+      {/* Visibilità — richiudibile, modifiche immediate */}
+      <div className="border border-[#2C2C2E] rounded-xl mb-6 overflow-hidden">
+        <button
+          onClick={() => setShowVisibility(o => !o)}
+          className="w-full px-4 py-3 flex items-center justify-between hover:bg-white/[0.02] transition-colors text-left"
+        >
+          <div className="flex items-center gap-2.5 min-w-0">
+            <Users size={14} className="text-[#D4622A] shrink-0" />
+            <span className="text-sm font-semibold text-white shrink-0">Visibilità</span>
+            <span className="text-[10px] text-[#636366] truncate">
+              {event.visibleToHost !== false ? 'Ingresso attivo' : 'Ingresso spento'}
+              {' · '}
+              {event.assignedPrIds === undefined ? 'Tutti i PR' : `${event.assignedPrIds.length} PR`}
+            </span>
+          </div>
+          <ChevronDown size={14} className={cn('text-[#8E8E93] shrink-0 transition-transform', showVisibility && 'rotate-180')} />
+        </button>
+        <AnimatePresence>
+          {showVisibility && (
+            <motion.div initial={{ height: 0, opacity: 0 }} animate={{ height: 'auto', opacity: 1 }}
+              exit={{ height: 0, opacity: 0 }} transition={{ duration: 0.2 }} className="overflow-hidden">
+              <div className="px-4 pb-4 pt-1 space-y-3 border-t border-[#1C1C1E]">
+                {/* Host */}
+                <label className="flex items-center justify-between bg-[#1C1C1E] border border-[#2C2C2E] rounded-xl px-4 py-3 cursor-pointer">
+                  <span className="text-sm text-white">Attiva per l'ingresso</span>
+                  <input type="checkbox" checked={event.visibleToHost !== false}
+                    onChange={e => onUpdateEvent({ visibleToHost: e.target.checked })}
+                    className="w-4 h-4 accent-[#D4622A]" />
+                </label>
+
+                {/* PR */}
+                <label className="flex items-center justify-between bg-[#1C1C1E] border border-[#2C2C2E] rounded-xl px-4 py-3 cursor-pointer">
+                  <span className="text-sm text-white">Tutti i PR</span>
+                  <input type="checkbox" checked={event.assignedPrIds === undefined}
+                    onChange={e => onUpdateEvent({ assignedPrIds: e.target.checked ? undefined : [] })}
+                    className="w-4 h-4 accent-[#D4622A]" />
+                </label>
+                {event.assignedPrIds !== undefined && (
+                  <div className="space-y-1 max-h-44 overflow-y-auto border border-[#2C2C2E] rounded-xl p-2">
+                    {prUsers.length === 0 ? (
+                      <p className="text-xs text-[#636366] px-2 py-3 text-center">Nessun PR approvato</p>
+                    ) : (
+                      prUsers.map(pr => {
+                        const ids = event.assignedPrIds ?? [];
+                        const checked = ids.includes(pr.id);
+                        return (
+                          <label key={pr.id} className="flex items-center gap-3 px-2 py-2 rounded-lg hover:bg-white/[0.03] cursor-pointer">
+                            <input type="checkbox" checked={checked}
+                              onChange={() => onUpdateEvent({ assignedPrIds: checked ? ids.filter(x => x !== pr.id) : [...ids, pr.id] })}
+                              className="w-4 h-4 accent-[#D4622A]" />
+                            <span className="text-sm text-[#AEAEB2]">{pr.displayName} {pr.lastName}</span>
+                          </label>
+                        );
+                      })
+                    )}
+                  </div>
+                )}
+              </div>
+            </motion.div>
+          )}
+        </AnimatePresence>
+      </div>
 
       {/* Tabs */}
       <div className="flex border border-[#2C2C2E] mb-5 rounded-xl overflow-x-auto">

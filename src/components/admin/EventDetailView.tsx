@@ -7,6 +7,7 @@ import {
 import { Event, Venue, Reservation, Registration } from '../../types';
 import { getRegistrationsByEvent } from '../../lib/registrationService';
 import { cn } from '../../lib/utils';
+import IngressiView from '../host/IngressiView';
 
 interface Props {
   event: Event;
@@ -19,7 +20,7 @@ interface Props {
 }
 
 export default function EventDetailView({ event, venue, reservations, onApproveReservation, onRejectReservation, onOpenPlan, onBack }: Props) {
-  const [tab, setTab] = useState<'tavoli' | 'approva' | 'registrazioni'>('tavoli');
+  const [tab, setTab] = useState<'tavoli' | 'approva' | 'registrazioni' | 'ingresso'>('tavoli');
   const [confirmReject, setConfirmReject] = useState<string | null>(null);
   const [registrations, setRegistrations] = useState<Registration[]>([]);
   const [loadingReg, setLoadingReg] = useState(false);
@@ -135,12 +136,12 @@ export default function EventDetailView({ event, venue, reservations, onApproveR
       </button>
 
       {/* Tabs */}
-      <div className="flex border border-[#2C2C2E] mb-5 rounded-xl overflow-hidden">
-        {(['tavoli', 'approva', 'registrazioni'] as const).map(t => (
+      <div className="flex border border-[#2C2C2E] mb-5 rounded-xl overflow-x-auto">
+        {(['tavoli', 'approva', 'registrazioni', 'ingresso'] as const).map(t => (
           <button key={t}
             onClick={() => setTab(t)}
             className={cn(
-              'flex-1 py-3 text-sm font-semibold transition-colors relative',
+              'flex-1 min-w-[84px] py-3 text-xs sm:text-sm font-semibold transition-colors relative whitespace-nowrap',
               tab === t ? 'bg-[#D4622A] text-black' : 'text-[#8E8E93] hover:text-white'
             )}
           >
@@ -148,7 +149,9 @@ export default function EventDetailView({ event, venue, reservations, onApproveR
               ? `Tavoli (${approvedRes.length})`
               : t === 'approva'
               ? `Approva${pendingRes.length > 0 ? ` (${pendingRes.length})` : ''}`
-              : `Registrazioni (${registrations.length})`}
+              : t === 'registrazioni'
+              ? `Registrazioni (${registrations.length})`
+              : 'Ingresso'}
             {t === 'approva' && pendingRes.length > 0 && tab !== 'approva' && (
               <span className="absolute top-1.5 right-2 w-1.5 h-1.5 rounded-full bg-[#F59E0B]" />
             )}
@@ -314,6 +317,11 @@ export default function EventDetailView({ event, venue, reservations, onApproveR
             </>
           )}
         </div>
+      )}
+
+      {/* Tab: Ingresso */}
+      {tab === 'ingresso' && (
+        <IngressiView activeEvent={event} />
       )}
     </div>
   );

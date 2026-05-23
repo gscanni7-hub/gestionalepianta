@@ -10,223 +10,207 @@
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 :root{
-  --bg:#0d0c0b;--bg2:#141412;--bg3:#1c1a17;
-  --accent:#D4622A;--accent2:#e8702f;
+  --bg:#0d0c0b;--bg2:#131210;--bg3:#1a1815;
+  --accent:#D4622A;--accent2:#e8702f;--green:#22c55e;
   --text:#f0ede8;--dim:rgba(240,237,232,.46);--muted:rgba(240,237,232,.18);
-  --border:rgba(255,255,255,.07);
+  --border:rgba(255,255,255,.07);--border2:rgba(255,255,255,.04);
   --fs:'Syne',sans-serif;--fb:'Inter',sans-serif;
 }
-html,body{width:100%;height:100%;background:var(--bg);color:var(--text);font-family:var(--fb);overflow:hidden;-webkit-font-smoothing:antialiased}
+html,body{width:100%;height:100%;background:var(--bg);color:var(--text);font-family:var(--fb);overflow:hidden;-webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility}
 
 /* ── DECK ── */
 .deck{width:100vw;height:100vh;position:relative;overflow:hidden}
-.slide{
-  position:absolute;inset:0;padding:56px 80px;
-  opacity:0;transform:translateX(48px);
-  transition:opacity .46s cubic-bezier(.16,1,.3,1),transform .46s cubic-bezier(.16,1,.3,1);
-  pointer-events:none;
-}
+.slide{position:absolute;inset:0;padding:52px 80px;display:flex;flex-direction:column;opacity:0;transform:translateX(52px);transition:opacity .46s cubic-bezier(.16,1,.3,1),transform .46s cubic-bezier(.16,1,.3,1);pointer-events:none}
 .slide.active{opacity:1;transform:translateX(0);pointer-events:all}
 
 /* ── SHARED ── */
-.dots{position:absolute;inset:0;background-image:radial-gradient(circle,rgba(255,255,255,.02) 1px,transparent 1px);background-size:24px 24px;pointer-events:none}
-.glow{position:absolute;border-radius:50%;pointer-events:none;background:radial-gradient(ellipse,rgba(212,98,42,.075) 0%,transparent 65%)}
-.lbl{font-family:var(--fb);font-size:10px;font-weight:600;letter-spacing:.22em;text-transform:uppercase;color:var(--accent)}
-.D{font-family:var(--fs);font-weight:800;line-height:.96;color:var(--text)}
+.dots{position:absolute;inset:0;background-image:radial-gradient(circle,rgba(255,255,255,.022) 1px,transparent 1px);background-size:24px 24px;pointer-events:none;z-index:0}
+.glow{position:absolute;border-radius:50%;pointer-events:none;background:radial-gradient(ellipse,rgba(212,98,42,.08) 0%,transparent 65%);z-index:0}
+.lbl{font-family:var(--fb);font-size:10px;font-weight:600;letter-spacing:.22em;text-transform:uppercase;color:var(--accent);position:relative;z-index:1}
+.D{font-family:var(--fs);font-weight:800;line-height:.95;color:var(--text);position:relative;z-index:1}
 
 /* ── NAV ── */
-.nav{position:fixed;bottom:26px;left:50%;transform:translateX(-50%);display:flex;align-items:center;gap:16px;z-index:99}
-.nb{width:34px;height:34px;border:1px solid rgba(255,255,255,.1);background:rgba(255,255,255,.03);color:rgba(255,255,255,.4);border-radius:50%;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:13px;transition:all .2s;font-family:var(--fb)}
+.nav{position:fixed;bottom:24px;left:50%;transform:translateX(-50%);display:flex;align-items:center;gap:14px;z-index:99}
+.nb{width:32px;height:32px;border:1px solid rgba(255,255,255,.1);background:rgba(255,255,255,.03);color:rgba(255,255,255,.4);border-radius:50%;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:12px;transition:all .2s;font-family:var(--fb)}
 .nb:hover{border-color:var(--accent);color:var(--accent);background:rgba(212,98,42,.08)}
-.nc{font-size:11px;color:rgba(255,255,255,.25);letter-spacing:.1em;min-width:36px;text-align:center;font-family:var(--fb)}
+.nc{font-size:11px;color:rgba(255,255,255,.22);letter-spacing:.1em;min-width:38px;text-align:center;font-family:var(--fb)}
 .bar{position:fixed;bottom:0;left:0;height:2px;background:var(--accent);transition:width .46s cubic-bezier(.16,1,.3,1);z-index:99}
-.hint{position:fixed;top:20px;left:24px;font-size:9px;color:rgba(255,255,255,.15);letter-spacing:.08em;text-transform:uppercase;font-family:var(--fb)}
-.fs-btn{position:fixed;top:20px;right:24px;font-size:9px;color:rgba(255,255,255,.2);letter-spacing:.08em;text-transform:uppercase;cursor:pointer;transition:color .2s;font-family:var(--fb)}
-.fs-btn:hover{color:rgba(255,255,255,.5)}
+.hint{position:fixed;top:18px;left:22px;font-size:9px;color:rgba(255,255,255,.14);letter-spacing:.08em;text-transform:uppercase;font-family:var(--fb)}
+.fs-btn{position:fixed;top:18px;right:22px;font-size:9px;color:rgba(255,255,255,.18);letter-spacing:.08em;text-transform:uppercase;cursor:pointer;transition:color .2s;font-family:var(--fb)}
+.fs-btn:hover{color:rgba(255,255,255,.45)}
 
-/* ── SLIDE LAYOUT HELPERS ── */
-.two-col{display:grid;grid-template-columns:1fr 1fr;gap:64px;align-items:center;height:100%}
-.two-col-wide{display:grid;grid-template-columns:1fr 1.1fr;gap:64px;align-items:center;height:100%}
+/* ── LAYOUT ── */
+.two-col{display:grid;grid-template-columns:1fr 1fr;gap:60px;align-items:center;flex:1}
+.two-col-wide{display:grid;grid-template-columns:1fr 1.15fr;gap:60px;align-items:center;flex:1}
 
-/* ── FEATURE LEFT PANEL ── */
-.feat-num{font-family:var(--fs);font-size:96px;font-weight:800;color:rgba(212,98,42,.06);line-height:1;margin-bottom:-16px}
-.feat-title{font-family:var(--fs);font-weight:800;font-size:clamp(32px,4vw,52px);letter-spacing:-.03em;line-height:1.04}
-.feat-desc{font-family:var(--fb);font-size:15px;color:var(--dim);margin-top:16px;line-height:1.65;max-width:380px}
-.feat-list{margin-top:24px;display:flex;flex-direction:column;gap:8px}
-.feat-item{font-family:var(--fb);display:flex;align-items:flex-start;gap:10px;font-size:13.5px;color:rgba(240,237,232,.58);line-height:1.45}
+/* ── FEATURE PANEL ── */
+.feat-num{font-family:var(--fs);font-size:88px;font-weight:800;color:rgba(212,98,42,.055);line-height:1;margin-bottom:-12px;letter-spacing:-.04em}
+.feat-title{font-family:var(--fs);font-weight:800;font-size:clamp(30px,3.8vw,50px);letter-spacing:-.035em;line-height:1.04}
+.feat-desc{font-family:var(--fb);font-size:14.5px;color:var(--dim);margin-top:14px;line-height:1.68;max-width:360px}
+.feat-list{margin-top:22px;display:flex;flex-direction:column;gap:8px}
+.feat-item{font-family:var(--fb);display:flex;align-items:flex-start;gap:10px;font-size:13px;color:rgba(240,237,232,.55);line-height:1.45}
 .feat-item::before{content:'';width:4px;height:4px;border-radius:50%;background:var(--accent);flex-shrink:0;margin-top:7px}
 
-/* ── MOCK SHELL (browser window) ── */
-.mock{background:var(--bg2);border:1px solid var(--border);border-radius:8px;overflow:hidden;box-shadow:0 28px 64px rgba(0,0,0,.55);display:flex;flex-direction:column}
-.mock-chrome{height:32px;background:rgba(255,255,255,.025);border-bottom:1px solid var(--border);display:flex;align-items:center;padding:0 14px;gap:6px;flex-shrink:0}
-.mock-dot{width:7px;height:7px;border-radius:50%;background:rgba(255,255,255,.1)}
-.mock-url{height:14px;flex:1;background:rgba(255,255,255,.04);border-radius:3px;margin:0 20px}
+/* ── MOCK BROWSER ── */
+.mock{background:var(--bg2);border:1px solid var(--border);border-radius:8px;overflow:hidden;box-shadow:0 32px 72px rgba(0,0,0,.6);display:flex;flex-direction:column}
+.mock-chrome{height:30px;background:rgba(255,255,255,.022);border-bottom:1px solid var(--border);display:flex;align-items:center;padding:0 12px;gap:6px;flex-shrink:0}
+.mock-dot{width:7px;height:7px;border-radius:50%;background:rgba(255,255,255,.09)}
+.mock-url{height:13px;flex:1;background:rgba(255,255,255,.035);border-radius:3px;margin:0 16px}
+.mock-domain{font-family:var(--fb);font-size:7.5px;color:rgba(255,255,255,.18);margin-right:4px;white-space:nowrap}
 
-/* ═══════════════════════════════════
-   SLIDE 1 — COVER
-═══════════════════════════════════ */
-#s1{display:flex;flex-direction:column;justify-content:flex-end;padding-bottom:86px}
-#s1 .logo{width:46px;height:46px;object-fit:contain;margin-bottom:32px;opacity:.88}
-#s1 h1{font-family:var(--fs);font-weight:800;font-size:clamp(80px,11vw,140px);letter-spacing:-.045em;line-height:.94;color:var(--text)}
-#s1 .tag{font-family:var(--fb);font-size:clamp(16px,1.8vw,21px);font-weight:300;color:var(--dim);margin-top:22px;max-width:520px;line-height:1.48}
-#s1 .line{width:52px;height:2px;background:var(--accent);margin-top:30px}
-#s1 .yr{font-family:var(--fb);font-size:11px;color:var(--muted);letter-spacing:.14em;text-transform:uppercase;margin-top:36px}
+/* ══ S1 — COVER ══ */
+#s1{justify-content:flex-end;padding-bottom:88px}
+#s1 .s1-logo{width:44px;height:44px;object-fit:contain;opacity:.85;margin-bottom:28px;position:relative;z-index:1}
+#s1 h1{font-family:var(--fs);font-weight:800;font-size:clamp(80px,11.5vw,144px);letter-spacing:-.048em;line-height:.92;color:var(--text);position:relative;z-index:1}
+#s1 .s1-tag{font-family:var(--fb);font-size:clamp(16px,1.9vw,22px);font-weight:300;color:var(--dim);margin-top:20px;max-width:500px;line-height:1.5;position:relative;z-index:1}
+#s1 .s1-line{width:48px;height:2px;background:var(--accent);margin-top:28px;position:relative;z-index:1}
+#s1 .s1-yr{font-family:var(--fb);font-size:10px;color:var(--muted);letter-spacing:.16em;text-transform:uppercase;margin-top:32px;position:relative;z-index:1}
 
-/* ═══════════════════════════════════
-   SLIDE 2 — PROBLEMA
-═══════════════════════════════════ */
-#s2{display:flex;flex-direction:column;justify-content:center}
-#s2 h2{font-family:var(--fs);font-weight:800;font-size:clamp(30px,3.8vw,50px);letter-spacing:-.035em;margin-top:10px;line-height:1.06}
-.pgrid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-top:36px}
-.pc{background:var(--bg2);border:1px solid var(--border);padding:28px 24px;position:relative}
-.pc .ico{font-size:22px;margin-bottom:14px;display:block;opacity:.6}
-.pc .pn{font-family:var(--fs);font-weight:700;font-size:20px;letter-spacing:-.02em;margin-bottom:10px}
-.pc .pd{font-family:var(--fb);font-size:13.5px;color:var(--dim);line-height:1.6}
-.pc .x{position:absolute;top:14px;right:16px;font-size:14px;color:#f87171;opacity:.45}
-.pfoot{margin-top:28px;padding:20px 24px;border-left:2px solid var(--accent);background:rgba(212,98,42,.04)}
-.pfoot p{font-family:var(--fb);font-size:15px;color:var(--dim);line-height:1.6}
+/* ══ S2 — PROBLEMA ══ */
+#s2{justify-content:center}
+#s2 h2{font-family:var(--fs);font-weight:800;font-size:clamp(28px,3.6vw,48px);letter-spacing:-.035em;margin-top:10px;line-height:1.06;position:relative;z-index:1}
+.pgrid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-top:32px;position:relative;z-index:1}
+.pc{background:var(--bg2);border:1px solid var(--border);padding:26px 22px;position:relative}
+.pc .ico{font-size:20px;margin-bottom:12px;display:block;opacity:.5}
+.pc .pn{font-family:var(--fs);font-weight:700;font-size:18px;letter-spacing:-.02em;margin-bottom:8px}
+.pc .pd{font-family:var(--fb);font-size:13px;color:var(--dim);line-height:1.62}
+.pc .x{position:absolute;top:12px;right:14px;font-size:12px;color:#f87171;opacity:.4}
+.pfoot{margin-top:24px;padding:18px 22px;border-left:2px solid var(--accent);background:rgba(212,98,42,.04);position:relative;z-index:1}
+.pfoot p{font-family:var(--fb);font-size:14.5px;color:var(--dim);line-height:1.62}
 .pfoot strong{color:var(--text);font-weight:600}
 
-/* ═══════════════════════════════════
-   SLIDE 3 — SOLUZIONE
-═══════════════════════════════════ */
-#s3 .sol-pts{margin-top:24px;display:flex;flex-direction:column;gap:9px}
-#s3 .sol-pt{display:flex;gap:10px;align-items:flex-start}
-#s3 .sol-d{width:5px;height:5px;border-radius:50%;background:var(--accent);margin-top:8px;flex-shrink:0}
-#s3 .sol-pt span{font-family:var(--fb);font-size:13.5px;color:var(--dim);line-height:1.5}
-/* dashboard mockup for slide 3 */
-.dash-mock{display:flex;flex-direction:column;height:100%}
-.dash-mock .mock-chrome{height:30px}
-.dash-inner{display:flex;flex:1;overflow:hidden}
-.dash-sb{width:100px;background:rgba(255,255,255,.018);border-right:1px solid var(--border);padding:10px 6px;display:flex;flex-direction:column;gap:2px;flex-shrink:0}
-.dash-ni{height:24px;border-radius:3px;display:flex;align-items:center;padding:0 8px;font-family:var(--fb);font-size:8.5px;color:rgba(255,255,255,.25);gap:5px}
+/* ══ S3 — SOLUZIONE ══ */
+#s3{padding-top:44px}
+.sol-pts{margin-top:20px;display:flex;flex-direction:column;gap:8px}
+.sol-pt{display:flex;gap:10px;align-items:flex-start}
+.sol-d{width:5px;height:5px;border-radius:50%;background:var(--accent);margin-top:7px;flex-shrink:0}
+.sol-pt span{font-family:var(--fb);font-size:13px;color:var(--dim);line-height:1.5}
+.dash-mock{display:flex;flex-direction:column}
+.dash-inner{display:flex;flex:1;overflow:hidden;min-height:0}
+.dash-sb{width:92px;background:rgba(255,255,255,.016);border-right:1px solid var(--border);padding:10px 6px;display:flex;flex-direction:column;gap:2px;flex-shrink:0}
+.dash-sb-logo{padding:8px 7px 10px;border-bottom:1px solid var(--border);margin-bottom:4px}
+.dash-sb-icon{width:22px;height:22px;background:rgba(212,98,42,.2);border-radius:3px;display:flex;align-items:center;justify-content:center}
+.dash-sb-dot{width:10px;height:10px;border-radius:1px;background:var(--accent);opacity:.8}
+.dash-ni{height:22px;border-radius:3px;display:flex;align-items:center;padding:0 7px;font-family:var(--fb);font-size:8px;color:rgba(255,255,255,.22);gap:5px}
 .dash-ni.on{background:rgba(212,98,42,.12);color:var(--accent)}
-.dash-nd{width:4px;height:4px;border-radius:50%;background:currentColor;opacity:.5}
-.dash-main{flex:1;padding:12px;display:flex;flex-direction:column;gap:8px}
-.dash-kpis{display:grid;grid-template-columns:repeat(3,1fr);gap:7px}
-.dash-kpi{background:rgba(255,255,255,.025);border:1px solid var(--border);border-radius:4px;padding:10px 10px 8px}
-.dash-kv{font-family:var(--fs);font-weight:700;font-size:18px;line-height:1}
-.dash-kl{font-family:var(--fb);font-size:8px;color:rgba(255,255,255,.28);margin-top:3px;text-transform:uppercase;letter-spacing:.04em}
-.dash-plan{flex:1;background:rgba(255,255,255,.012);border:1px solid var(--border);border-radius:4px;position:relative;overflow:hidden;min-height:120px}
+.dash-nd{width:4px;height:4px;border-radius:50%;background:currentColor;opacity:.5;flex-shrink:0}
+.dash-main{flex:1;padding:10px;display:flex;flex-direction:column;gap:7px;min-width:0}
+.dash-date{font-family:var(--fb);font-size:8.5px;color:rgba(255,255,255,.2);margin-bottom:2px;letter-spacing:.04em;text-transform:uppercase}
+.dash-kpis{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;flex-shrink:0}
+.dash-kpi{background:rgba(255,255,255,.022);border:1px solid var(--border);border-radius:4px;padding:9px 9px 7px}
+.dash-kv{font-family:var(--fs);font-weight:700;font-size:17px;line-height:1}
+.dash-kl{font-family:var(--fb);font-size:7.5px;color:rgba(255,255,255,.25);margin-top:3px;text-transform:uppercase;letter-spacing:.04em}
+.dash-plan{flex:1;background:rgba(255,255,255,.01);border:1px solid var(--border);border-radius:4px;overflow:hidden;min-height:100px}
 
-/* ═══════════════════════════════════
-   SLIDE 4 — PIANTA INTERATTIVA
-═══════════════════════════════════ */
-.floor-wrap{height:100%;background:var(--bg2);border:1px solid var(--border);border-radius:8px;position:relative;overflow:hidden;box-shadow:0 20px 56px rgba(0,0,0,.4)}
-.floor-wrap .legend{position:absolute;bottom:14px;left:14px;display:flex;gap:14px}
-.floor-wrap .leg-item{display:flex;align-items:center;gap:5px;font-family:var(--fb);font-size:8px;color:rgba(255,255,255,.3)}
-.floor-wrap .leg-dot{width:7px;height:7px;border-radius:50%}
+/* ══ S4 — COME FUNZIONA ══ */
+#s4{padding-top:48px}
+.flow-wrap{display:grid;grid-template-columns:1fr 44px 1fr 44px 1fr;gap:0;flex:1;margin-top:28px;align-items:stretch;position:relative;z-index:1}
+.flow-arrow{display:flex;align-items:center;justify-content:center;color:var(--accent);opacity:.3;font-size:18px;padding-top:16px}
+.flow-card{background:var(--bg2);border:1px solid var(--border);border-radius:6px;padding:22px 20px;display:flex;flex-direction:column}
+.flow-step{font-family:var(--fb);font-size:9px;font-weight:600;color:var(--accent);letter-spacing:.2em;text-transform:uppercase;margin-bottom:14px}
+.flow-visual{flex:1;min-height:120px;border-radius:4px;overflow:hidden;margin-bottom:16px;border:1px solid var(--border2);background:var(--bg3);position:relative}
+.flow-title{font-family:var(--fs);font-weight:700;font-size:17px;letter-spacing:-.02em;color:var(--text);line-height:1.2}
+.flow-desc{font-family:var(--fb);font-size:12.5px;color:var(--dim);margin-top:6px;line-height:1.6}
 
-/* ═══════════════════════════════════
-   SLIDE 5 — GESTIONE PR
-═══════════════════════════════════ */
-.pr-mock{display:flex;flex-direction:column}
-.pr-mock .mock-chrome{height:30px}
-.pr-body{flex:1;padding:0}
-.pr-header{padding:14px 16px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between}
-.pr-htitle{font-family:var(--fs);font-weight:700;font-size:12px;letter-spacing:-.01em}
-.pr-badge{font-family:var(--fb);font-size:8px;color:var(--accent);background:rgba(212,98,42,.1);padding:3px 9px;border-radius:99px}
-.pr-list{padding:10px;display:flex;flex-direction:column;gap:5px}
-.pr-row{display:flex;align-items:center;gap:10px;padding:11px 12px;background:rgba(255,255,255,.025);border-radius:5px;border:1px solid transparent}
-.pr-row.top{border-color:rgba(212,98,42,.25);background:rgba(212,98,42,.03)}
+/* ══ S5 — PIANTA ══ */
+.floor-wrap{background:var(--bg2);border:1px solid var(--border);border-radius:8px;position:relative;overflow:hidden;box-shadow:0 24px 60px rgba(0,0,0,.45);display:flex;flex-direction:column}
+.floor-wrap svg{flex:1;min-height:0;display:block}
+.floor-legend{display:flex;gap:16px;padding:11px 16px;border-top:1px solid var(--border);background:rgba(255,255,255,.01);flex-shrink:0}
+.leg-item{display:flex;align-items:center;gap:5px;font-family:var(--fb);font-size:8.5px;color:rgba(255,255,255,.3)}
+.leg-dot{width:7px;height:7px;border-radius:50%;flex-shrink:0}
+
+/* ══ S6 — PR ══ */
+.pr-body{flex:1;display:flex;flex-direction:column;overflow:hidden}
+.pr-header{padding:12px 14px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;flex-shrink:0}
+.pr-htitle{font-family:var(--fs);font-weight:700;font-size:11.5px;letter-spacing:-.01em}
+.pr-badge{font-family:var(--fb);font-size:8px;color:var(--accent);background:rgba(212,98,42,.1);padding:3px 8px;border-radius:99px}
+.pr-list{padding:8px;display:flex;flex-direction:column;gap:4px;flex:1}
+.pr-row{display:flex;align-items:center;gap:9px;padding:10px 11px;background:rgba(255,255,255,.022);border-radius:5px;border:1px solid transparent}
+.pr-row.top{border-color:rgba(212,98,42,.22);background:rgba(212,98,42,.03)}
 .pr-av{width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:var(--fs);font-size:9px;font-weight:700;flex-shrink:0}
-.pr-name{font-family:var(--fb);font-size:12px;font-weight:600;color:var(--text)}
-.pr-stat{font-family:var(--fb);font-size:10px;color:var(--dim);margin-top:2px}
-.pr-rev{font-family:var(--fs);font-weight:700;font-size:14px;color:var(--text)}
-.pr-total{margin:4px 10px 12px;padding:13px 15px;background:rgba(255,255,255,.025);border:1px solid var(--border);border-radius:5px;display:flex;justify-content:space-between;align-items:center}
-.pr-total-lbl{font-family:var(--fb);font-size:11px;color:var(--dim)}
-.pr-total-val{font-family:var(--fs);font-weight:800;font-size:24px}
+.pr-info{flex:1;min-width:0}
+.pr-name{font-family:var(--fb);font-size:11.5px;font-weight:600;color:var(--text)}
+.pr-stat{font-family:var(--fb);font-size:9.5px;color:var(--dim);margin-top:1px}
+.pr-right{display:flex;flex-direction:column;align-items:flex-end;gap:4px}
+.pr-rev{font-family:var(--fs);font-weight:700;font-size:13px;color:var(--text)}
+.pr-bar-wrap{width:52px;height:3px;background:rgba(255,255,255,.08);border-radius:2px;overflow:hidden}
+.pr-bar-fill{height:100%;background:var(--accent);border-radius:2px}
+.pr-total{margin:0 8px 8px;padding:11px 13px;background:rgba(255,255,255,.022);border:1px solid var(--border);border-radius:5px;display:flex;justify-content:space-between;align-items:center;flex-shrink:0}
+.pr-total-lbl{font-family:var(--fb);font-size:10.5px;color:var(--dim)}
+.pr-total-val{font-family:var(--fs);font-weight:800;font-size:22px}
 
-/* ═══════════════════════════════════
-   SLIDE 6 — CHECK-IN
-═══════════════════════════════════ */
-.ck-mock{display:flex;flex-direction:column}
-.ck-mock .mock-chrome{height:30px}
-.ck-head{padding:13px 16px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between}
-.ck-title{font-family:var(--fs);font-weight:700;font-size:12px}
-.live-badge{font-family:var(--fb);font-size:8px;color:#22c55e;background:rgba(34,197,94,.08);border:1px solid rgba(34,197,94,.2);padding:3px 9px;border-radius:99px;display:flex;align-items:center;gap:4px}
-.ldot{width:5px;height:5px;background:#22c55e;border-radius:50%;animation:pulse 1.5s infinite}
-@keyframes pulse{0%,100%{opacity:1}50%{opacity:.25}}
-.ck-nums{padding:14px 16px 12px;display:flex;gap:24px;border-bottom:1px solid var(--border)}
-.ck-num .v{font-family:var(--fs);font-weight:800;font-size:28px;line-height:1}
-.ck-num .l{font-family:var(--fb);font-size:9px;color:var(--dim);margin-top:3px;text-transform:uppercase;letter-spacing:.06em}
-.ck-list{padding:9px;display:flex;flex-direction:column;gap:4px}
-.ck-row{display:flex;align-items:center;gap:10px;padding:10px 11px;border-radius:5px;background:rgba(255,255,255,.02)}
+/* ══ S7 — CHECK-IN ══ */
+.ck-head{padding:12px 14px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;flex-shrink:0}
+.ck-title{font-family:var(--fs);font-weight:700;font-size:11.5px}
+.live-badge{font-family:var(--fb);font-size:8px;color:var(--green);background:rgba(34,197,94,.08);border:1px solid rgba(34,197,94,.2);padding:3px 8px;border-radius:99px;display:flex;align-items:center;gap:4px}
+.ldot{width:5px;height:5px;background:var(--green);border-radius:50%;animation:pulse 1.4s infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.2}}
+.ck-nums{padding:12px 14px 10px;display:flex;gap:20px;border-bottom:1px solid var(--border);flex-shrink:0}
+.ck-num .v{font-family:var(--fs);font-weight:800;font-size:26px;line-height:1}
+.ck-num .l{font-family:var(--fb);font-size:8.5px;color:var(--dim);margin-top:3px;text-transform:uppercase;letter-spacing:.06em}
+.ck-list{padding:7px;display:flex;flex-direction:column;gap:4px;flex:1}
+.ck-row{display:flex;align-items:center;gap:9px;padding:9px 10px;border-radius:5px;background:rgba(255,255,255,.018)}
 .ck-row.done{background:rgba(34,197,94,.04);border:1px solid rgba(34,197,94,.1)}
-.ck-ic{width:26px;height:26px;border-radius:5px;display:flex;align-items:center;justify-content:center;font-size:11px;flex-shrink:0}
-.ck-name{font-family:var(--fb);font-size:12px;font-weight:600;color:var(--text)}
-.ck-detail{font-family:var(--fb);font-size:9.5px;color:var(--dim);margin-top:2px}
-.ck-status{font-family:var(--fb);font-size:10px;font-weight:600}
+.ck-ic{width:24px;height:24px;border-radius:4px;display:flex;align-items:center;justify-content:center;font-size:10px;flex-shrink:0}
+.ck-name{font-family:var(--fb);font-size:11.5px;font-weight:600;color:var(--text)}
+.ck-detail{font-family:var(--fb);font-size:9px;color:var(--dim);margin-top:1px}
+.ck-status{font-family:var(--fb);font-size:9.5px;font-weight:600;white-space:nowrap}
 
-/* ═══════════════════════════════════
-   SLIDE 7 — STATS
-═══════════════════════════════════ */
-#s7{display:flex;flex-direction:column;justify-content:center}
-#s7 h2{font-family:var(--fs);font-weight:800;font-size:clamp(30px,3.8vw,50px);letter-spacing:-.035em;margin-top:10px;line-height:1.06}
-.sg{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-top:36px}
-.sc{background:var(--bg2);border:1px solid var(--border);padding:26px 22px}
-.sv{font-family:var(--fs);font-weight:800;font-size:48px;line-height:1}
+/* ══ S8 — STATS ══ */
+#s8{justify-content:center}
+.sg{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-top:32px;position:relative;z-index:1}
+.sc{background:var(--bg2);border:1px solid var(--border);padding:24px 20px}
+.sv{font-family:var(--fs);font-weight:800;font-size:52px;line-height:1;letter-spacing:-.04em}
 .sv em{color:var(--accent);font-style:normal}
-.sl{font-family:var(--fb);font-size:13px;color:var(--dim);margin-top:8px;line-height:1.45}
-.sch{margin-top:16px;display:flex;align-items:flex-end;gap:3px;height:28px}
-.sb{flex:1;background:rgba(212,98,42,.18);border-radius:2px;min-height:4px}
+.sl{font-family:var(--fb);font-size:12.5px;color:var(--dim);margin-top:8px;line-height:1.48}
+.sch{margin-top:18px;display:flex;align-items:flex-end;gap:3px;height:28px}
+.sb{flex:1;background:rgba(212,98,42,.15);border-radius:2px;min-height:4px}
 .sb.pk{background:var(--accent)}
 
-/* ═══════════════════════════════════
-   SLIDE 8 — MERCATO
-═══════════════════════════════════ */
-#s8 h2{font-family:var(--fs);font-weight:800;font-size:clamp(30px,3.8vw,50px);letter-spacing:-.035em;margin-top:10px;line-height:1.06}
-.mnums{display:flex;flex-direction:column;gap:0}
-.mnum{border-bottom:1px solid var(--border);padding:22px 0}
+/* ══ S9 — MERCATO ══ */
+.mnums{display:flex;flex-direction:column;gap:0;position:relative;z-index:1}
+.mnum{border-bottom:1px solid var(--border);padding:20px 0}
 .mnum:first-child{padding-top:0}
 .mnum:last-child{border:none;padding-bottom:0}
-.mnum .v{font-family:var(--fs);font-weight:800;font-size:clamp(40px,5vw,62px);line-height:1}
+.mnum .v{font-family:var(--fs);font-weight:800;font-size:clamp(38px,4.8vw,60px);line-height:1;letter-spacing:-.04em}
 .mnum .v em{color:var(--accent);font-style:normal}
-.mnum .d{font-family:var(--fb);font-size:14px;color:var(--dim);margin-top:6px;line-height:1.5}
+.mnum .d{font-family:var(--fb);font-size:13.5px;color:var(--dim);margin-top:5px;line-height:1.5}
 .mnum .d strong{color:var(--text);font-weight:600}
 
-/* ═══════════════════════════════════
-   SLIDE 9 — PRICING
-═══════════════════════════════════ */
-#s9{display:flex;flex-direction:column;justify-content:center}
-#s9 h2{font-family:var(--fs);font-weight:800;font-size:clamp(26px,3.2vw,44px);letter-spacing:-.035em;margin-top:10px;line-height:1.06}
-.pgrd{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-top:36px}
-.prc{background:var(--bg2);border:1px solid var(--border);padding:28px 24px;display:flex;flex-direction:column;position:relative}
-.prc.feat{border-color:var(--accent);background:rgba(212,98,42,.04)}
-.prc.feat::before{content:'PIÙ SCELTO';position:absolute;top:-1px;left:50%;transform:translateX(-50%);background:var(--accent);color:#fff;font-family:var(--fb);font-size:7px;font-weight:700;letter-spacing:.18em;padding:3px 11px}
+/* ══ S10 — PRICING ══ */
+#s10{justify-content:center}
+.pgrd{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-top:32px;position:relative;z-index:1}
+.prc{background:var(--bg2);border:1px solid var(--border);padding:26px 22px;display:flex;flex-direction:column;position:relative;border-radius:4px}
+.prc.feat{border-color:var(--accent);background:rgba(212,98,42,.035)}
+.prc.feat::before{content:'PIÙ SCELTO';position:absolute;top:-1px;left:50%;transform:translateX(-50%);background:var(--accent);color:#fff;font-family:var(--fb);font-size:7px;font-weight:700;letter-spacing:.18em;padding:3px 10px;border-radius:0 0 3px 3px;white-space:nowrap}
 .pt{font-family:var(--fb);font-size:10px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:var(--dim)}
-.pv{font-family:var(--fs);font-weight:800;font-size:52px;line-height:1;margin-top:16px}
-.pv sup{font-size:22px;vertical-align:top;margin-top:10px}
-.pp{font-family:var(--fb);font-size:12px;color:var(--dim);margin-top:5px}
-.pdiv{height:1px;background:var(--border);margin:22px 0}
-.pfs{display:flex;flex-direction:column;gap:8px}
-.pf{font-family:var(--fb);font-size:13px;color:var(--dim);display:flex;gap:8px;line-height:1.4}
+.pv{font-family:var(--fs);font-weight:800;font-size:50px;line-height:1;margin-top:14px;letter-spacing:-.03em}
+.pv sup{font-size:20px;vertical-align:top;margin-top:9px}
+.pp{font-family:var(--fb);font-size:11.5px;color:var(--dim);margin-top:4px}
+.pdiv{height:1px;background:var(--border);margin:18px 0}
+.pfs{display:flex;flex-direction:column;gap:8px;flex:1}
+.pf{font-family:var(--fb);font-size:12.5px;color:var(--dim);display:flex;gap:8px;line-height:1.4;align-items:flex-start}
 .pf::before{content:'–';color:var(--accent);flex-shrink:0}
 
-/* ═══════════════════════════════════
-   SLIDE 10 — PERCHÉ NIGHTPLAN (2×2 cards)
-═══════════════════════════════════ */
-#s10{display:flex;flex-direction:column}
-#s10 h2{font-family:var(--fs);font-weight:800;font-size:clamp(28px,3.5vw,46px);letter-spacing:-.035em;margin-top:10px;line-height:1.06}
-.why-grid{display:grid;grid-template-columns:1fr 1fr;grid-template-rows:1fr 1fr;gap:16px;flex:1;margin-top:28px}
-.why-card{background:var(--bg2);border:1px solid var(--border);padding:30px 28px;display:flex;flex-direction:column;gap:12px;transition:border-color .2s}
-.why-card:hover{border-color:rgba(212,98,42,.3)}
-.why-n{font-family:var(--fs);font-weight:800;font-size:11px;color:var(--accent);letter-spacing:.14em}
-.why-title{font-family:var(--fs);font-weight:700;font-size:20px;letter-spacing:-.02em;color:var(--text);line-height:1.2}
-.why-desc{font-family:var(--fb);font-size:13.5px;color:var(--dim);line-height:1.6}
+/* ══ S11 — PERCHÉ ══ */
+#s11{padding-top:44px}
+.why-grid{display:grid;grid-template-columns:1fr 1fr;grid-template-rows:1fr 1fr;gap:14px;flex:1;margin-top:24px;position:relative;z-index:1}
+.why-card{background:var(--bg2);border:1px solid var(--border);padding:28px 26px;display:flex;flex-direction:column;gap:10px;transition:border-color .2s}
+.why-card:hover{border-color:rgba(212,98,42,.28)}
+.why-n{font-family:var(--fs);font-weight:800;font-size:10px;color:var(--accent);letter-spacing:.16em}
+.why-title{font-family:var(--fs);font-weight:700;font-size:19px;letter-spacing:-.02em;color:var(--text);line-height:1.2}
+.why-desc{font-family:var(--fb);font-size:13px;color:var(--dim);line-height:1.62}
 
-/* ═══════════════════════════════════
-   SLIDE 11 — CTA
-═══════════════════════════════════ */
-#s11{display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center}
-#s11 h2{font-family:var(--fs);font-weight:800;font-size:clamp(52px,9vw,116px);letter-spacing:-.045em;line-height:.94}
-#s11 .sub{font-family:var(--fb);font-size:18px;color:var(--dim);margin-top:24px;font-weight:300}
-#s11 .ctarow{margin-top:44px;display:flex;gap:16px;align-items:center;justify-content:center;flex-wrap:wrap}
-.ctabtn{padding:15px 52px;background:var(--accent);color:#fff;font-family:var(--fb);font-size:15px;font-weight:600;border:none;border-radius:9999px;cursor:pointer;letter-spacing:-.01em;transition:background .15s}
+/* ══ S12 — CTA ══ */
+#s12{align-items:center;justify-content:center;text-align:center}
+#s12 h2{font-family:var(--fs);font-weight:800;font-size:clamp(50px,9vw,118px);letter-spacing:-.048em;line-height:.92;position:relative;z-index:1}
+#s12 .sub{font-family:var(--fb);font-size:17px;color:var(--dim);margin-top:22px;font-weight:300;position:relative;z-index:1}
+#s12 .ctarow{margin-top:40px;display:flex;gap:14px;align-items:center;justify-content:center;flex-wrap:wrap;position:relative;z-index:1}
+.ctabtn{padding:14px 50px;background:var(--accent);color:#fff;font-family:var(--fb);font-size:14px;font-weight:600;border:none;border-radius:9999px;cursor:pointer;letter-spacing:-.01em;transition:background .15s}
 .ctabtn:hover{background:var(--accent2)}
-.ctaemail{font-family:var(--fb);font-size:14px;color:var(--dim)}
+.ctaemail{font-family:var(--fb);font-size:13.5px;color:var(--dim)}
 .ctaemail strong{color:var(--text);font-weight:600}
-#s11 .wm{position:absolute;bottom:48px;font-family:var(--fb);font-size:10px;color:var(--muted);letter-spacing:.14em;text-transform:uppercase}
+#s12 .wm{position:absolute;bottom:44px;font-family:var(--fb);font-size:10px;color:var(--muted);letter-spacing:.14em;text-transform:uppercase;z-index:1}
 
 /* ── PRINT ── */
 @media print{
@@ -244,41 +228,44 @@ html,body{width:100%;height:100%;background:var(--bg);color:var(--text);font-fam
 <!-- ══ 1 — COVER ══ -->
 <div class="slide" id="s1">
   <div class="dots"></div>
-  <div class="glow" style="width:720px;height:520px;bottom:-200px;right:-160px"></div>
-  <img src="/Logo.png" alt="Nightplan" class="logo">
+  <div class="glow" style="width:800px;height:600px;bottom:-240px;right:-160px"></div>
+  <div aria-hidden="true" style="position:absolute;right:80px;top:0;bottom:0;width:1px;background:linear-gradient(to bottom,transparent,rgba(212,98,42,.14) 35%,rgba(212,98,42,.14) 65%,transparent);pointer-events:none;z-index:0"></div>
+  <div aria-hidden="true" style="position:absolute;right:76px;top:50%;transform:translateY(-50%);width:9px;height:9px;border-radius:50%;background:var(--accent);box-shadow:0 0 20px rgba(212,98,42,.7);z-index:0"></div>
+  <img src="/Logo.png" alt="Nightplan" class="s1-logo">
   <h1 class="D">Nightplan</h1>
-  <p class="tag">La piattaforma operativa per chi governa la notte.</p>
-  <div class="line"></div>
-  <p class="yr">Presentazione Commerciale — 2025</p>
+  <p class="s1-tag">La piattaforma operativa per chi governa la notte.</p>
+  <div class="s1-line"></div>
+  <p class="s1-yr">Presentazione Commerciale — 2025</p>
 </div>
 
 <!-- ══ 2 — PROBLEMA ══ -->
 <div class="slide" id="s2">
   <div class="dots"></div>
+  <div class="glow" style="width:500px;height:400px;top:-120px;right:-80px"></div>
   <span class="lbl">Il problema</span>
-  <h2 class="D">I locali più esclusivi d'Italia<br>gestiscono ancora così.</h2>
+  <h2 class="D">Il 90% dei locali gestisce ancora così.</h2>
   <div class="pgrid">
     <div class="pc">
       <span class="ico">📊</span>
-      <div class="pn">Excel</div>
-      <div class="pd">Fogli condivisi su WhatsApp, versioni diverse, nessuno sa qual è l'ultima. Una serata con 30 tavoli diventa un incubo di coordinamento.</div>
+      <div class="pn">Excel &amp; Fogli condivisi</div>
+      <div class="pd">Versioni diverse in circolazione, nessuno sa qual è l'aggiornata. Una serata con 40 tavoli diventa un incubo di coordinamento. Un errore costa un cliente VIP.</div>
       <span class="x">✕</span>
     </div>
     <div class="pc">
       <span class="ico">💬</span>
       <div class="pn">WhatsApp</div>
-      <div class="pd">I PR mandano prenotazioni in chat. Il gestore risponde di sera, sotto pressione, senza visione d'insieme. Doppie prenotazioni garantite.</div>
+      <div class="pd">I PR mandano prenotazioni in chat, il gestore risponde di sera con 50 messaggi non letti. Doppie prenotazioni garantite. La lista si assembla nel caos.</div>
       <span class="x">✕</span>
     </div>
     <div class="pc">
       <span class="ico">📋</span>
-      <div class="pn">Carta</div>
-      <div class="pd">La lista dell'ingresso stampata alle 22:00. Se cambia qualcosa — e cambia sempre — si riscrive a mano. Il botteghino va in tilt.</div>
+      <div class="pn">Carta &amp; Stampe</div>
+      <div class="pd">La lista stampata alle 22:00 è già obsoleta alle 22:15. Si riscrive a mano. Il botteghino rallenta. La fila cresce. L'esperienza cliente va in fumo.</div>
       <span class="x">✕</span>
     </div>
   </div>
   <div class="pfoot">
-    <p>Il risultato? <strong>Tavoli doppiamente prenotati. PR senza visibilità. Gestori che spengono incendi invece di gestire la serata.</strong></p>
+    <p>Il risultato? <strong>Tavoli doppi, PR invisibili, gestori che spengono incendi invece di fare i gestori.</strong></p>
   </div>
 </div>
 
@@ -286,69 +273,68 @@ html,body{width:100%;height:100%;background:var(--bg);color:var(--text);font-fam
 <div class="slide" id="s3">
   <div class="dots"></div>
   <div class="two-col-wide">
-    <!-- LEFT: text -->
-    <div>
+    <div style="position:relative;z-index:1">
       <span class="lbl">La soluzione</span>
-      <h2 class="D" style="font-size:clamp(32px,4vw,52px);letter-spacing:-.035em;margin-top:10px;line-height:1.04">Tutto il locale.<br>Un'unica schermata.</h2>
-      <p style="font-family:var(--fb);font-size:15px;color:var(--dim);margin-top:18px;line-height:1.65;max-width:380px">Nightplan centralizza prenotazioni, pianta interattiva, gestione PR e check-in in un'unica piattaforma. Real-time. Zero carte. Zero WhatsApp.</p>
+      <h2 class="D" style="font-size:clamp(30px,3.8vw,50px);letter-spacing:-.035em;margin-top:10px;line-height:1.04">Tutto il locale.<br>Un'unica schermata.</h2>
+      <p style="font-family:var(--fb);font-size:14.5px;color:var(--dim);margin-top:16px;line-height:1.68;max-width:360px">Nightplan unifica prenotazioni, pianta interattiva, gestione PR e check-in in un'unica piattaforma. Real-time. Zero fogli. Zero WhatsApp.</p>
       <div class="sol-pts">
-        <div class="sol-pt"><div class="sol-d"></div><span>Pianta interattiva aggiornata in tempo reale</span></div>
-        <div class="sol-pt"><div class="sol-d"></div><span>I PR prenotano dal loro device, il gestore approva</span></div>
-        <div class="sol-pt"><div class="sol-d"></div><span>Check-in all'ingresso con lista sempre sincronizzata</span></div>
-        <div class="sol-pt"><div class="sol-d"></div><span>Dashboard con statistiche, ranking PR e storico serate</span></div>
+        <div class="sol-pt"><div class="sol-d"></div><span>Pianta del locale aggiornata in tempo reale su ogni schermo</span></div>
+        <div class="sol-pt"><div class="sol-d"></div><span>I PR prenotano dal loro dispositivo, il gestore approva con un click</span></div>
+        <div class="sol-pt"><div class="sol-d"></div><span>Check-in digitale all'ingresso — lista sempre sincronizzata</span></div>
+        <div class="sol-pt"><div class="sol-d"></div><span>Dashboard con KPI, ranking PR e storico per ogni serata</span></div>
       </div>
     </div>
-    <!-- RIGHT: full dashboard mockup -->
-    <div class="mock dash-mock" style="height:440px">
+    <div class="mock dash-mock" style="height:430px;position:relative;z-index:1">
       <div class="mock-chrome">
         <div class="mock-dot"></div><div class="mock-dot"></div><div class="mock-dot"></div>
         <div class="mock-url"></div>
+        <span class="mock-domain">app.nightplan.it</span>
       </div>
       <div class="dash-inner">
         <div class="dash-sb">
+          <div class="dash-sb-logo"><div class="dash-sb-icon"><div class="dash-sb-dot"></div></div></div>
           <div class="dash-ni on"><div class="dash-nd"></div>Dashboard</div>
-          <div class="dash-ni"><div class="dash-nd"></div>Clubs</div>
+          <div class="dash-ni"><div class="dash-nd"></div>Locali</div>
           <div class="dash-ni"><div class="dash-nd"></div>Serate</div>
-          <div class="dash-ni"><div class="dash-nd"></div>Prenotazioni</div>
+          <div class="dash-ni"><div class="dash-nd"></div>Prenotaz.</div>
           <div class="dash-ni"><div class="dash-nd"></div>PR Team</div>
           <div class="dash-ni"><div class="dash-nd"></div>Ingresso</div>
+          <div class="dash-ni"><div class="dash-nd"></div>Statistiche</div>
         </div>
         <div class="dash-main">
+          <div class="dash-date">Sabato 14 Giugno — Live</div>
           <div class="dash-kpis">
             <div class="dash-kpi"><div class="dash-kv" style="color:var(--accent)">78%</div><div class="dash-kl">Occupazione</div></div>
             <div class="dash-kpi"><div class="dash-kv">€14.2k</div><div class="dash-kl">Revenue est.</div></div>
-            <div class="dash-kpi"><div class="dash-kv">23</div><div class="dash-kl">Tavoli attivi</div></div>
+            <div class="dash-kpi"><div class="dash-kv" style="color:var(--green)">23</div><div class="dash-kl">Confermati</div></div>
           </div>
           <div class="dash-plan">
-            <svg width="100%" height="100%" viewBox="0 0 360 220" style="opacity:.7">
-              <rect x="6" y="6" width="348" height="28" rx="3" fill="rgba(255,255,255,.012)" stroke="rgba(255,255,255,.05)" stroke-dasharray="3"/>
-              <text x="180" y="24" text-anchor="middle" fill="rgba(255,255,255,.15)" font-size="7.5" letter-spacing="2.5" font-family="Inter,sans-serif">STAGE</text>
-              <!-- VIP booths -->
-              <rect x="6" y="44" width="75" height="42" rx="3" fill="rgba(212,98,42,.18)" stroke="#D4622A" stroke-width="1.2"/>
-              <text x="43" y="62" text-anchor="middle" fill="#D4622A" font-size="8.5" font-weight="700" font-family="Inter,sans-serif">VIP 1</text>
-              <text x="43" y="76" text-anchor="middle" fill="rgba(212,98,42,.6)" font-size="7" font-family="Inter,sans-serif">4p · €800</text>
-              <rect x="91" y="44" width="75" height="42" rx="3" fill="rgba(255,255,255,.02)" stroke="rgba(255,255,255,.08)" stroke-width="1"/>
-              <text x="128" y="66" text-anchor="middle" fill="rgba(255,255,255,.28)" font-size="8.5" font-family="Inter,sans-serif">VIP 2</text>
-              <rect x="176" y="44" width="75" height="42" rx="3" fill="rgba(212,98,42,.18)" stroke="#D4622A" stroke-width="1.2"/>
-              <text x="213" y="62" text-anchor="middle" fill="#D4622A" font-size="8.5" font-weight="700" font-family="Inter,sans-serif">VIP 3</text>
-              <text x="213" y="76" text-anchor="middle" fill="rgba(212,98,42,.6)" font-size="7" font-family="Inter,sans-serif">6p · €1.2k</text>
-              <rect x="261" y="44" width="93" height="42" rx="3" fill="rgba(34,197,94,.1)" stroke="rgba(34,197,94,.4)" stroke-width="1.2"/>
-              <text x="307" y="62" text-anchor="middle" fill="rgba(34,197,94,.8)" font-size="8.5" font-weight="700" font-family="Inter,sans-serif">PRIVÉ</text>
-              <text x="307" y="76" text-anchor="middle" fill="rgba(34,197,94,.55)" font-size="7" font-family="Inter,sans-serif">check-in ✓</text>
-              <!-- Round tables -->
-              <circle cx="42" cy="152" r="23" fill="rgba(212,98,42,.15)" stroke="#D4622A" stroke-width="1.2"/>
-              <text x="42" y="156" text-anchor="middle" fill="#D4622A" font-size="9" font-weight="700" font-family="Inter,sans-serif">T1</text>
-              <circle cx="106" cy="152" r="23" fill="rgba(255,255,255,.02)" stroke="rgba(255,255,255,.1)" stroke-width="1"/>
-              <text x="106" y="156" text-anchor="middle" fill="rgba(255,255,255,.28)" font-size="9" font-family="Inter,sans-serif">T2</text>
-              <circle cx="170" cy="152" r="23" fill="rgba(212,98,42,.15)" stroke="#D4622A" stroke-width="1.2"/>
-              <text x="170" y="156" text-anchor="middle" fill="#D4622A" font-size="9" font-weight="700" font-family="Inter,sans-serif">T3</text>
-              <circle cx="234" cy="152" r="23" fill="rgba(212,98,42,.15)" stroke="#D4622A" stroke-width="1.2"/>
-              <text x="234" y="156" text-anchor="middle" fill="#D4622A" font-size="9" font-weight="700" font-family="Inter,sans-serif">T4</text>
-              <circle cx="298" cy="152" r="23" fill="rgba(255,255,255,.02)" stroke="rgba(255,255,255,.1)" stroke-width="1"/>
-              <text x="298" y="156" text-anchor="middle" fill="rgba(255,255,255,.28)" font-size="9" font-family="Inter,sans-serif">T5</text>
-              <!-- Bar -->
-              <rect x="6" y="192" width="348" height="22" rx="3" fill="rgba(255,255,255,.012)" stroke="rgba(255,255,255,.05)"/>
-              <text x="180" y="207" text-anchor="middle" fill="rgba(255,255,255,.12)" font-size="7.5" letter-spacing="2.5" font-family="Inter,sans-serif">BAR</text>
+            <svg width="100%" height="100%" viewBox="0 0 280 168" preserveAspectRatio="xMidYMid meet" style="opacity:.78">
+              <rect x="6" y="6" width="268" height="20" rx="2" fill="rgba(255,255,255,.01)" stroke="rgba(255,255,255,.04)" stroke-dasharray="3"/>
+              <text x="140" y="19" text-anchor="middle" fill="rgba(255,255,255,.12)" font-size="5.5" letter-spacing="2.5" font-family="Inter,sans-serif">STAGE</text>
+              <rect x="6" y="33" width="56" height="32" rx="2" fill="rgba(212,98,42,.18)" stroke="#D4622A" stroke-width="1"/>
+              <text x="34" y="47" text-anchor="middle" fill="#D4622A" font-size="7" font-weight="700" font-family="Inter,sans-serif">VIP 1</text>
+              <text x="34" y="58" text-anchor="middle" fill="rgba(212,98,42,.55)" font-size="5.5" font-family="Inter,sans-serif">4p·€800</text>
+              <rect x="70" y="33" width="56" height="32" rx="2" fill="rgba(255,255,255,.015)" stroke="rgba(255,255,255,.07)" stroke-width=".8"/>
+              <text x="98" y="51" text-anchor="middle" fill="rgba(255,255,255,.22)" font-size="7" font-family="Inter,sans-serif">VIP 2</text>
+              <rect x="134" y="33" width="56" height="32" rx="2" fill="rgba(212,98,42,.18)" stroke="#D4622A" stroke-width="1"/>
+              <text x="162" y="47" text-anchor="middle" fill="#D4622A" font-size="7" font-weight="700" font-family="Inter,sans-serif">VIP 3</text>
+              <text x="162" y="58" text-anchor="middle" fill="rgba(212,98,42,.55)" font-size="5.5" font-family="Inter,sans-serif">6p·€1.2k</text>
+              <rect x="198" y="33" width="76" height="32" rx="2" fill="rgba(34,197,94,.09)" stroke="rgba(34,197,94,.35)" stroke-width="1"/>
+              <text x="236" y="47" text-anchor="middle" fill="rgba(34,197,94,.8)" font-size="7" font-weight="700" font-family="Inter,sans-serif">PRIVÉ</text>
+              <text x="236" y="58" text-anchor="middle" fill="rgba(34,197,94,.5)" font-size="5.5" font-family="Inter,sans-serif">check-in ✓</text>
+              <circle cx="34" cy="116" r="17" fill="rgba(212,98,42,.14)" stroke="#D4622A" stroke-width="1"/>
+              <text x="34" y="120" text-anchor="middle" fill="#D4622A" font-size="7" font-weight="700" font-family="Inter,sans-serif">T1</text>
+              <circle cx="80" cy="116" r="17" fill="rgba(255,255,255,.015)" stroke="rgba(255,255,255,.07)" stroke-width=".8"/>
+              <text x="80" y="120" text-anchor="middle" fill="rgba(255,255,255,.22)" font-size="7" font-family="Inter,sans-serif">T2</text>
+              <circle cx="126" cy="116" r="17" fill="rgba(212,98,42,.14)" stroke="#D4622A" stroke-width="1"/>
+              <text x="126" y="120" text-anchor="middle" fill="#D4622A" font-size="7" font-weight="700" font-family="Inter,sans-serif">T3</text>
+              <circle cx="172" cy="116" r="17" fill="rgba(212,98,42,.14)" stroke="#D4622A" stroke-width="1"/>
+              <text x="172" y="120" text-anchor="middle" fill="#D4622A" font-size="7" font-weight="700" font-family="Inter,sans-serif">T4</text>
+              <circle cx="218" cy="116" r="17" fill="rgba(255,255,255,.015)" stroke="rgba(255,255,255,.07)" stroke-width=".8"/>
+              <text x="218" y="120" text-anchor="middle" fill="rgba(255,255,255,.22)" font-size="7" font-family="Inter,sans-serif">T5</text>
+              <rect x="6" y="148" width="268" height="14" rx="2" fill="rgba(255,255,255,.01)" stroke="rgba(255,255,255,.04)"/>
+              <text x="140" y="158" text-anchor="middle" fill="rgba(255,255,255,.1)" font-size="5.5" letter-spacing="2.5" font-family="Inter,sans-serif">BAR</text>
             </svg>
           </div>
         </div>
@@ -357,58 +343,162 @@ html,body{width:100%;height:100%;background:var(--bg);color:var(--text);font-fam
   </div>
 </div>
 
-<!-- ══ 4 — PIANTA INTERATTIVA ══ -->
+<!-- ══ 4 — COME FUNZIONA ══ -->
 <div class="slide" id="s4">
   <div class="dots"></div>
+  <span class="lbl" style="position:relative;z-index:1">Come funziona</span>
+  <h2 class="D" style="font-size:clamp(28px,3.5vw,46px);letter-spacing:-.035em;margin-top:10px;line-height:1.04;position:relative;z-index:1">Operativo in meno<br>di un'ora.</h2>
+  <div class="flow-wrap">
+    <!-- STEP 1 -->
+    <div class="flow-card">
+      <div class="flow-step">Passo 01</div>
+      <div class="flow-visual">
+        <svg width="100%" height="100%" viewBox="0 0 200 126" style="opacity:.82">
+          <rect width="200" height="126" fill="var(--bg3)"/>
+          <rect x="8" y="8" width="184" height="14" rx="2" fill="rgba(255,255,255,.01)" stroke="rgba(255,255,255,.04)" stroke-dasharray="3"/>
+          <text x="100" y="18" text-anchor="middle" fill="rgba(255,255,255,.12)" font-size="5" letter-spacing="2" font-family="Inter,sans-serif">STAGE</text>
+          <rect x="8" y="28" width="56" height="34" rx="2" fill="rgba(212,98,42,.16)" stroke="#D4622A" stroke-width="1"/>
+          <text x="36" y="48" text-anchor="middle" fill="#D4622A" font-size="7" font-weight="700" font-family="Inter,sans-serif">VIP 1</text>
+          <rect x="72" y="28" width="56" height="34" rx="2" fill="rgba(255,255,255,.018)" stroke="rgba(255,255,255,.07)" stroke-width=".7"/>
+          <text x="100" y="48" text-anchor="middle" fill="rgba(255,255,255,.2)" font-size="7" font-family="Inter,sans-serif">VIP 2</text>
+          <rect x="136" y="28" width="56" height="34" rx="2" fill="rgba(255,255,255,.018)" stroke="rgba(255,255,255,.07)" stroke-width=".7"/>
+          <text x="164" y="48" text-anchor="middle" fill="rgba(255,255,255,.2)" font-size="7" font-family="Inter,sans-serif">VIP 3</text>
+          <circle cx="28" cy="92" r="14" fill="rgba(212,98,42,.13)" stroke="#D4622A" stroke-width=".9"/>
+          <text x="28" y="96" text-anchor="middle" fill="#D4622A" font-size="6.5" font-weight="700" font-family="Inter,sans-serif">T1</text>
+          <circle cx="64" cy="92" r="14" fill="rgba(255,255,255,.015)" stroke="rgba(255,255,255,.06)" stroke-width=".7"/>
+          <text x="64" y="96" text-anchor="middle" fill="rgba(255,255,255,.2)" font-size="6.5" font-family="Inter,sans-serif">T2</text>
+          <circle cx="100" cy="92" r="14" fill="rgba(212,98,42,.13)" stroke="#D4622A" stroke-width=".9"/>
+          <text x="100" y="96" text-anchor="middle" fill="#D4622A" font-size="6.5" font-weight="700" font-family="Inter,sans-serif">T3</text>
+          <circle cx="136" cy="92" r="14" fill="rgba(255,255,255,.015)" stroke="rgba(255,255,255,.06)" stroke-width=".7"/>
+          <text x="136" y="96" text-anchor="middle" fill="rgba(255,255,255,.2)" font-size="6.5" font-family="Inter,sans-serif">T4</text>
+          <rect x="158" y="26" width="34" height="20" rx="2" fill="rgba(212,98,42,.2)" stroke="rgba(212,98,42,.5)" stroke-width=".7"/>
+          <text x="175" y="39" text-anchor="middle" fill="var(--accent)" font-size="10" font-family="Inter,sans-serif">✥</text>
+        </svg>
+      </div>
+      <div class="flow-title">Configura il locale</div>
+      <div class="flow-desc">Costruisci la pianta con drag & drop. Tavoli, zone VIP, aree speciali. Salva — è pronto.</div>
+    </div>
+    <div class="flow-arrow">→</div>
+    <!-- STEP 2 -->
+    <div class="flow-card">
+      <div class="flow-step">Passo 02</div>
+      <div class="flow-visual">
+        <svg width="100%" height="100%" viewBox="0 0 200 126" style="opacity:.85">
+          <rect width="200" height="126" fill="var(--bg3)"/>
+          <rect width="200" height="22" fill="rgba(255,255,255,.015)"/>
+          <text x="10" y="14" fill="rgba(255,255,255,.4)" font-size="8" font-weight="700" font-family="Inter,sans-serif">PR Team</text>
+          <rect x="148" y="5" width="44" height="12" rx="3" fill="rgba(212,98,42,.2)"/>
+          <text x="170" y="14" text-anchor="middle" fill="#D4622A" font-size="6.5" font-weight="600" font-family="Inter,sans-serif">+ Invita PR</text>
+          <rect x="6" y="28" width="188" height="26" rx="3" fill="rgba(255,255,255,.025)"/>
+          <circle cx="22" cy="41" r="8" fill="rgba(212,98,42,.25)"/>
+          <text x="22" y="44" text-anchor="middle" fill="#D4622A" font-size="7" font-weight="700" font-family="Inter,sans-serif">MR</text>
+          <text x="36" y="39" fill="rgba(255,255,255,.7)" font-size="7.5" font-weight="600" font-family="Inter,sans-serif">Marco Rossi</text>
+          <text x="36" y="49" fill="rgba(255,255,255,.28)" font-size="6" font-family="Inter,sans-serif">nightplan.it/marco</text>
+          <rect x="154" y="32" width="34" height="13" rx="3" fill="rgba(34,197,94,.12)" stroke="rgba(34,197,94,.3)" stroke-width=".7"/>
+          <text x="171" y="41" text-anchor="middle" fill="rgba(34,197,94,.8)" font-size="6.5" font-family="Inter,sans-serif">Attivo</text>
+          <rect x="6" y="58" width="188" height="26" rx="3" fill="rgba(255,255,255,.018)"/>
+          <circle cx="22" cy="71" r="8" fill="rgba(255,255,255,.08)"/>
+          <text x="22" y="74" text-anchor="middle" fill="rgba(255,255,255,.4)" font-size="7" font-weight="700" font-family="Inter,sans-serif">LS</text>
+          <text x="36" y="69" fill="rgba(255,255,255,.6)" font-size="7.5" font-weight="600" font-family="Inter,sans-serif">Laura Scarpa</text>
+          <text x="36" y="79" fill="rgba(255,255,255,.25)" font-size="6" font-family="Inter,sans-serif">nightplan.it/laura</text>
+          <rect x="154" y="62" width="34" height="13" rx="3" fill="rgba(34,197,94,.12)" stroke="rgba(34,197,94,.3)" stroke-width=".7"/>
+          <text x="171" y="71" text-anchor="middle" fill="rgba(34,197,94,.8)" font-size="6.5" font-family="Inter,sans-serif">Attivo</text>
+          <rect x="6" y="88" width="188" height="26" rx="3" fill="rgba(255,255,255,.018)"/>
+          <circle cx="22" cy="101" r="8" fill="rgba(255,255,255,.08)"/>
+          <text x="22" y="104" text-anchor="middle" fill="rgba(255,255,255,.4)" font-size="7" font-weight="700" font-family="Inter,sans-serif">AF</text>
+          <text x="36" y="99" fill="rgba(255,255,255,.6)" font-size="7.5" font-weight="600" font-family="Inter,sans-serif">Alessandro F.</text>
+          <text x="36" y="109" fill="rgba(255,255,255,.25)" font-size="6" font-family="Inter,sans-serif">nightplan.it/alex</text>
+          <rect x="154" y="92" width="34" height="13" rx="3" fill="rgba(34,197,94,.12)" stroke="rgba(34,197,94,.3)" stroke-width=".7"/>
+          <text x="171" y="101" text-anchor="middle" fill="rgba(34,197,94,.8)" font-size="6.5" font-family="Inter,sans-serif">Attivo</text>
+        </svg>
+      </div>
+      <div class="flow-title">Attiva il team PR</div>
+      <div class="flow-desc">Ogni PR riceve un link personale. I clienti prenotano in autonomia. Tutto arriva al gestore in tempo reale.</div>
+    </div>
+    <div class="flow-arrow">→</div>
+    <!-- STEP 3 -->
+    <div class="flow-card">
+      <div class="flow-step">Passo 03</div>
+      <div class="flow-visual">
+        <svg width="100%" height="100%" viewBox="0 0 200 126" style="opacity:.85">
+          <rect width="200" height="126" fill="var(--bg3)"/>
+          <rect width="200" height="22" fill="rgba(255,255,255,.015)"/>
+          <text x="10" y="14" fill="rgba(255,255,255,.4)" font-size="8" font-weight="700" font-family="Inter,sans-serif">Ingresso Live</text>
+          <circle cx="146" cy="11" r="4" fill="#22c55e" opacity=".8"/>
+          <text x="155" y="14" fill="rgba(34,197,94,.8)" font-size="6.5" font-family="Inter,sans-serif">Live</text>
+          <rect x="6" y="27" width="90" height="28" rx="3" fill="rgba(255,255,255,.022)"/>
+          <text x="51" y="38" text-anchor="middle" fill="rgba(255,255,255,.75)" font-size="13" font-weight="800" font-family="Inter,sans-serif">14</text>
+          <text x="51" y="49" text-anchor="middle" fill="rgba(255,255,255,.22)" font-size="5.5" font-family="Inter,sans-serif">ENTRATI</text>
+          <rect x="104" y="27" width="90" height="28" rx="3" fill="rgba(255,255,255,.022)"/>
+          <text x="149" y="38" text-anchor="middle" fill="rgba(212,98,42,.9)" font-size="13" font-weight="800" font-family="Inter,sans-serif">€8.4k</text>
+          <text x="149" y="49" text-anchor="middle" fill="rgba(255,255,255,.22)" font-size="5.5" font-family="Inter,sans-serif">REVENUE ATT.</text>
+          <rect x="6" y="61" width="188" height="20" rx="3" fill="rgba(34,197,94,.05)" stroke="rgba(34,197,94,.15)" stroke-width=".7"/>
+          <rect x="11" y="66" width="10" height="10" rx="2" fill="rgba(34,197,94,.2)"/>
+          <text x="16" y="74" text-anchor="middle" fill="rgba(34,197,94,.7)" font-size="7">✓</text>
+          <text x="27" y="69" fill="rgba(255,255,255,.7)" font-size="7" font-weight="600" font-family="Inter,sans-serif">Marco Bianchi</text>
+          <text x="27" y="78" fill="rgba(255,255,255,.25)" font-size="5.5" font-family="Inter,sans-serif">VIP 1 · 4 ospiti · M. Rossi</text>
+          <text x="167" y="73" text-anchor="middle" fill="rgba(34,197,94,.8)" font-size="6.5" font-weight="600" font-family="Inter,sans-serif">Entrato</text>
+          <rect x="6" y="85" width="188" height="20" rx="3" fill="rgba(34,197,94,.05)" stroke="rgba(34,197,94,.15)" stroke-width=".7"/>
+          <rect x="11" y="90" width="10" height="10" rx="2" fill="rgba(34,197,94,.2)"/>
+          <text x="16" y="98" text-anchor="middle" fill="rgba(34,197,94,.7)" font-size="7">✓</text>
+          <text x="27" y="93" fill="rgba(255,255,255,.7)" font-size="7" font-weight="600" font-family="Inter,sans-serif">Sofia Romano</text>
+          <text x="27" y="102" fill="rgba(255,255,255,.25)" font-size="5.5" font-family="Inter,sans-serif">T3 · 6 ospiti · L. Scarpa</text>
+          <text x="167" y="97" text-anchor="middle" fill="rgba(34,197,94,.8)" font-size="6.5" font-weight="600" font-family="Inter,sans-serif">Entrata</text>
+          <rect x="6" y="109" width="188" height="14" rx="3" fill="rgba(255,255,255,.015)"/>
+          <text x="27" y="119" fill="rgba(255,255,255,.3)" font-size="6.5" font-family="Inter,sans-serif">Luca Ferrari · T5 · In attesa</text>
+        </svg>
+      </div>
+      <div class="flow-title">Apri l'ingresso</div>
+      <div class="flow-desc">La serata è live. Pianta, lista e revenue si aggiornano su tutti i dispositivi del team — istantaneamente.</div>
+    </div>
+  </div>
+</div>
+
+<!-- ══ 5 — PIANTA INTERATTIVA ══ -->
+<div class="slide" id="s5">
+  <div class="dots"></div>
   <div class="two-col">
-    <!-- LEFT -->
-    <div>
+    <div style="position:relative;z-index:1">
       <div class="feat-num">01</div>
       <h2 class="D feat-title">Pianta<br>interattiva.</h2>
-      <p class="feat-desc">Il locale in scala reale, aggiornato in tempo reale. Ogni tavolo mostra lo stato: libero, opzionato, confermato, bloccato. Admin e PR vedono sempre la stessa mappa.</p>
+      <p class="feat-desc">Il locale in scala reale, sempre aggiornato. Ogni tavolo mostra stato, nome, capienza e PR assegnato. Admin e tutto il team vedono la stessa mappa.</p>
       <div class="feat-list">
-        <div class="feat-item">Drag &amp; Drop per riposizionare i tavoli</div>
-        <div class="feat-item">Sincronizzazione live via Firebase Firestore</div>
-        <div class="feat-item">Editor avanzato per costruire la pianta del locale</div>
-        <div class="feat-item">Visualizzazione per stato, nome e capienza tavolo</div>
+        <div class="feat-item">Drag &amp; Drop per costruire e riposizionare tavoli e zone</div>
+        <div class="feat-item">Sincronizzazione in tempo reale su tutti i dispositivi connessi</div>
+        <div class="feat-item">Editor avanzato per personalizzare la pianta del locale</div>
+        <div class="feat-item">Stato per tavolo: libero, opzionato, confermato, bloccato</div>
       </div>
     </div>
-    <!-- RIGHT: large floor plan -->
-    <div class="floor-wrap">
-      <svg width="100%" height="100%" viewBox="0 0 440 340" style="opacity:.82">
-        <!-- Stage -->
-        <rect x="10" y="10" width="420" height="38" rx="4" fill="rgba(255,255,255,.015)" stroke="rgba(255,255,255,.055)" stroke-dasharray="5"/>
-        <text x="220" y="33" text-anchor="middle" fill="rgba(255,255,255,.2)" font-size="10" letter-spacing="3.5" font-family="Inter,sans-serif">STAGE</text>
-        <!-- VIP booths -->
-        <rect x="10" y="60" width="96" height="56" rx="4" fill="rgba(212,98,42,.18)" stroke="#D4622A" stroke-width="1.5"/>
-        <text x="58" y="84" text-anchor="middle" fill="#D4622A" font-size="10" font-weight="700" font-family="Inter,sans-serif">VIP 1</text>
-        <text x="58" y="100" text-anchor="middle" fill="rgba(212,98,42,.65)" font-size="8.5" font-family="Inter,sans-serif">4 pers · €800</text>
-        <rect x="116" y="60" width="96" height="56" rx="4" fill="rgba(255,255,255,.025)" stroke="rgba(255,255,255,.08)" stroke-width="1"/>
-        <text x="164" y="84" text-anchor="middle" fill="rgba(255,255,255,.3)" font-size="10" font-family="Inter,sans-serif">VIP 2</text>
-        <text x="164" y="100" text-anchor="middle" fill="rgba(255,255,255,.18)" font-size="8.5" font-family="Inter,sans-serif">libero</text>
-        <rect x="222" y="60" width="96" height="56" rx="4" fill="rgba(212,98,42,.18)" stroke="#D4622A" stroke-width="1.5"/>
-        <text x="270" y="84" text-anchor="middle" fill="#D4622A" font-size="10" font-weight="700" font-family="Inter,sans-serif">VIP 3</text>
-        <text x="270" y="100" text-anchor="middle" fill="rgba(212,98,42,.65)" font-size="8.5" font-family="Inter,sans-serif">6 pers · €1.2k</text>
-        <rect x="328" y="60" width="102" height="56" rx="4" fill="rgba(34,197,94,.1)" stroke="rgba(34,197,94,.4)" stroke-width="1.5"/>
-        <text x="379" y="82" text-anchor="middle" fill="rgba(34,197,94,.85)" font-size="10" font-weight="700" font-family="Inter,sans-serif">PRIVÉ</text>
-        <text x="379" y="98" text-anchor="middle" fill="rgba(34,197,94,.6)" font-size="8.5" font-family="Inter,sans-serif">check-in ✓</text>
-        <!-- Round tables -->
-        <circle cx="58" cy="210" r="32" fill="rgba(212,98,42,.14)" stroke="#D4622A" stroke-width="1.5"/>
-        <text x="58" y="215" text-anchor="middle" fill="#D4622A" font-size="12" font-weight="700" font-family="Inter,sans-serif">T1</text>
-        <circle cx="148" cy="210" r="32" fill="rgba(255,255,255,.025)" stroke="rgba(255,255,255,.1)" stroke-width="1"/>
-        <text x="148" y="215" text-anchor="middle" fill="rgba(255,255,255,.3)" font-size="12" font-family="Inter,sans-serif">T2</text>
-        <circle cx="238" cy="210" r="32" fill="rgba(212,98,42,.14)" stroke="#D4622A" stroke-width="1.5"/>
-        <text x="238" y="215" text-anchor="middle" fill="#D4622A" font-size="12" font-weight="700" font-family="Inter,sans-serif">T3</text>
-        <circle cx="328" cy="210" r="32" fill="rgba(212,98,42,.14)" stroke="#D4622A" stroke-width="1.5"/>
-        <text x="328" y="215" text-anchor="middle" fill="#D4622A" font-size="12" font-weight="700" font-family="Inter,sans-serif">T4</text>
-        <circle cx="408" cy="210" r="24" fill="rgba(255,255,255,.025)" stroke="rgba(255,255,255,.1)" stroke-width="1"/>
-        <text x="408" y="215" text-anchor="middle" fill="rgba(255,255,255,.3)" font-size="11" font-family="Inter,sans-serif">T5</text>
-        <!-- Bar -->
-        <rect x="10" y="292" width="420" height="34" rx="4" fill="rgba(255,255,255,.015)" stroke="rgba(255,255,255,.055)"/>
-        <text x="220" y="314" text-anchor="middle" fill="rgba(255,255,255,.16)" font-size="10" letter-spacing="3.5" font-family="Inter,sans-serif">BAR</text>
+    <div class="floor-wrap" style="position:relative;z-index:1">
+      <svg width="100%" viewBox="0 0 440 300" style="opacity:.86;display:block">
+        <rect x="10" y="10" width="420" height="32" rx="3" fill="rgba(255,255,255,.012)" stroke="rgba(255,255,255,.05)" stroke-dasharray="5"/>
+        <text x="220" y="30" text-anchor="middle" fill="rgba(255,255,255,.18)" font-size="9" letter-spacing="3.5" font-family="Inter,sans-serif">STAGE</text>
+        <rect x="10" y="53" width="94" height="56" rx="3" fill="rgba(212,98,42,.17)" stroke="#D4622A" stroke-width="1.5"/>
+        <text x="57" y="77" text-anchor="middle" fill="#D4622A" font-size="10" font-weight="700" font-family="Inter,sans-serif">VIP 1</text>
+        <text x="57" y="92" text-anchor="middle" fill="rgba(212,98,42,.65)" font-size="8" font-family="Inter,sans-serif">4 pers · €800</text>
+        <rect x="114" y="53" width="94" height="56" rx="3" fill="rgba(255,255,255,.022)" stroke="rgba(255,255,255,.08)" stroke-width="1"/>
+        <text x="161" y="77" text-anchor="middle" fill="rgba(255,255,255,.28)" font-size="10" font-family="Inter,sans-serif">VIP 2</text>
+        <text x="161" y="92" text-anchor="middle" fill="rgba(255,255,255,.16)" font-size="8" font-family="Inter,sans-serif">libero</text>
+        <rect x="218" y="53" width="94" height="56" rx="3" fill="rgba(212,98,42,.17)" stroke="#D4622A" stroke-width="1.5"/>
+        <text x="265" y="77" text-anchor="middle" fill="#D4622A" font-size="10" font-weight="700" font-family="Inter,sans-serif">VIP 3</text>
+        <text x="265" y="92" text-anchor="middle" fill="rgba(212,98,42,.65)" font-size="8" font-family="Inter,sans-serif">6 pers · €1.2k</text>
+        <rect x="322" y="53" width="108" height="56" rx="3" fill="rgba(34,197,94,.09)" stroke="rgba(34,197,94,.38)" stroke-width="1.5"/>
+        <text x="376" y="75" text-anchor="middle" fill="rgba(34,197,94,.85)" font-size="10" font-weight="700" font-family="Inter,sans-serif">PRIVÉ</text>
+        <text x="376" y="90" text-anchor="middle" fill="rgba(34,197,94,.55)" font-size="8" font-family="Inter,sans-serif">check-in ✓</text>
+        <circle cx="52" cy="180" r="30" fill="rgba(212,98,42,.13)" stroke="#D4622A" stroke-width="1.5"/>
+        <text x="52" y="185" text-anchor="middle" fill="#D4622A" font-size="12" font-weight="700" font-family="Inter,sans-serif">T1</text>
+        <circle cx="140" cy="180" r="30" fill="rgba(255,255,255,.022)" stroke="rgba(255,255,255,.09)" stroke-width="1"/>
+        <text x="140" y="185" text-anchor="middle" fill="rgba(255,255,255,.28)" font-size="12" font-family="Inter,sans-serif">T2</text>
+        <circle cx="228" cy="180" r="30" fill="rgba(212,98,42,.13)" stroke="#D4622A" stroke-width="1.5"/>
+        <text x="228" y="185" text-anchor="middle" fill="#D4622A" font-size="12" font-weight="700" font-family="Inter,sans-serif">T3</text>
+        <circle cx="316" cy="180" r="30" fill="rgba(212,98,42,.13)" stroke="#D4622A" stroke-width="1.5"/>
+        <text x="316" y="185" text-anchor="middle" fill="#D4622A" font-size="12" font-weight="700" font-family="Inter,sans-serif">T4</text>
+        <circle cx="400" cy="180" r="22" fill="rgba(255,255,255,.022)" stroke="rgba(255,255,255,.09)" stroke-width="1"/>
+        <text x="400" y="185" text-anchor="middle" fill="rgba(255,255,255,.28)" font-size="11" font-family="Inter,sans-serif">T5</text>
+        <rect x="10" y="258" width="420" height="30" rx="3" fill="rgba(255,255,255,.012)" stroke="rgba(255,255,255,.045)"/>
+        <text x="220" y="277" text-anchor="middle" fill="rgba(255,255,255,.14)" font-size="9" letter-spacing="3.5" font-family="Inter,sans-serif">BAR</text>
       </svg>
-      <!-- Legend -->
-      <div class="legend">
+      <div class="floor-legend">
         <div class="leg-item"><div class="leg-dot" style="background:var(--accent);opacity:.7"></div>Prenotato</div>
         <div class="leg-item"><div class="leg-dot" style="background:rgba(255,255,255,.2)"></div>Libero</div>
         <div class="leg-item"><div class="leg-dot" style="background:#22c55e;opacity:.7"></div>Check-in</div>
@@ -417,41 +507,41 @@ html,body{width:100%;height:100%;background:var(--bg);color:var(--text);font-fam
   </div>
 </div>
 
-<!-- ══ 5 — GESTIONE PR ══ -->
-<div class="slide" id="s5">
+<!-- ══ 6 — GESTIONE PR ══ -->
+<div class="slide" id="s6">
   <div class="dots"></div>
   <div class="two-col">
-    <!-- LEFT: PR mockup -->
-    <div class="mock pr-mock">
+    <div class="mock" style="position:relative;z-index:1">
       <div class="mock-chrome">
         <div class="mock-dot"></div><div class="mock-dot"></div><div class="mock-dot"></div>
         <div class="mock-url"></div>
+        <span class="mock-domain">app.nightplan.it/pr</span>
       </div>
       <div class="pr-body">
         <div class="pr-header">
-          <span class="pr-htitle">PR Team — Ranking Serata</span>
+          <span class="pr-htitle">Ranking PR — Sabato 14 Giu</span>
           <span class="pr-badge">● Live</span>
         </div>
         <div class="pr-list">
           <div class="pr-row top">
             <div class="pr-av" style="background:rgba(212,98,42,.2);color:var(--accent)">MR</div>
-            <div style="flex:1"><div class="pr-name">Marco Rossi</div><div class="pr-stat">8 prenotazioni · 34 ospiti</div></div>
-            <div class="pr-rev">€6.400</div>
+            <div class="pr-info"><div class="pr-name">Marco Rossi</div><div class="pr-stat">8 prenotazioni · 34 ospiti</div></div>
+            <div class="pr-right"><div class="pr-rev">€6.400</div><div class="pr-bar-wrap"><div class="pr-bar-fill" style="width:100%"></div></div></div>
           </div>
           <div class="pr-row">
-            <div class="pr-av" style="background:rgba(255,255,255,.06);color:rgba(255,255,255,.45)">LS</div>
-            <div style="flex:1"><div class="pr-name">Laura Scarpa</div><div class="pr-stat">6 prenotazioni · 22 ospiti</div></div>
-            <div class="pr-rev">€4.200</div>
+            <div class="pr-av" style="background:rgba(255,255,255,.06);color:rgba(255,255,255,.4)">LS</div>
+            <div class="pr-info"><div class="pr-name">Laura Scarpa</div><div class="pr-stat">6 prenotazioni · 22 ospiti</div></div>
+            <div class="pr-right"><div class="pr-rev">€4.200</div><div class="pr-bar-wrap"><div class="pr-bar-fill" style="width:66%"></div></div></div>
           </div>
           <div class="pr-row">
-            <div class="pr-av" style="background:rgba(255,255,255,.06);color:rgba(255,255,255,.45)">AF</div>
-            <div style="flex:1"><div class="pr-name">Alessandro F.</div><div class="pr-stat">5 prenotazioni · 18 ospiti</div></div>
-            <div class="pr-rev">€3.100</div>
+            <div class="pr-av" style="background:rgba(255,255,255,.06);color:rgba(255,255,255,.4)">AF</div>
+            <div class="pr-info"><div class="pr-name">Alessandro F.</div><div class="pr-stat">5 prenotazioni · 18 ospiti</div></div>
+            <div class="pr-right"><div class="pr-rev">€3.100</div><div class="pr-bar-wrap"><div class="pr-bar-fill" style="width:48%"></div></div></div>
           </div>
           <div class="pr-row">
-            <div class="pr-av" style="background:rgba(255,255,255,.06);color:rgba(255,255,255,.45)">GM</div>
-            <div style="flex:1"><div class="pr-name">Giorgia M.</div><div class="pr-stat">3 prenotazioni · 11 ospiti</div></div>
-            <div class="pr-rev">€2.400</div>
+            <div class="pr-av" style="background:rgba(255,255,255,.06);color:rgba(255,255,255,.4)">GM</div>
+            <div class="pr-info"><div class="pr-name">Giorgia M.</div><div class="pr-stat">3 prenotazioni · 11 ospiti</div></div>
+            <div class="pr-right"><div class="pr-rev">€2.400</div><div class="pr-bar-wrap"><div class="pr-bar-fill" style="width:37%"></div></div></div>
           </div>
         </div>
         <div class="pr-total">
@@ -460,43 +550,42 @@ html,body{width:100%;height:100%;background:var(--bg);color:var(--text);font-fam
         </div>
       </div>
     </div>
-    <!-- RIGHT: text -->
-    <div>
+    <div style="position:relative;z-index:1">
       <div class="feat-num">02</div>
       <h2 class="D feat-title">Rete PR<br>sotto controllo.</h2>
-      <p class="feat-desc">Ogni PR ha la sua dashboard personale: vede la pianta, prenota tavoli e genera link personalizzati per i clienti. Il gestore vede tutto, approva tutto.</p>
+      <p class="feat-desc">Ogni PR ha il suo link unico e tracciabile. Il cliente prenota online. Il gestore approva. Zero chiamate, zero messaggi, zero confusione.</p>
       <div class="feat-list">
-        <div class="feat-item">Link di prenotazione unico e tracciabile per ogni PR</div>
-        <div class="feat-item">Il cliente prenota online in autonomia, senza chiamate</div>
-        <div class="feat-item">Approvazione prenotazioni a discrezione del gestore</div>
+        <div class="feat-item">Link prenotazione unico e tracciabile per ogni PR</div>
+        <div class="feat-item">Il cliente prenota in autonomia — il gestore approva con un click</div>
         <div class="feat-item">Ranking PR in tempo reale per revenue generato</div>
-        <div class="feat-item">Storico performance e statistiche per ogni PR</div>
+        <div class="feat-item">Storico performance, presenze e conversioni per ogni PR</div>
+        <div class="feat-item">Visibilità completa: ogni prenotazione tracciata dalla source</div>
       </div>
     </div>
   </div>
 </div>
 
-<!-- ══ 6 — CHECK-IN ══ -->
-<div class="slide" id="s6">
+<!-- ══ 7 — CHECK-IN ══ -->
+<div class="slide" id="s7">
   <div class="dots"></div>
   <div class="two-col">
-    <!-- LEFT: text -->
-    <div>
+    <div style="position:relative;z-index:1">
       <div class="feat-num">03</div>
       <h2 class="D feat-title">Ingresso<br>senza caos.</h2>
-      <p class="feat-desc">Il botteghino lavora con la lista digitale, sempre aggiornata in tempo reale. Check-in con un tap, conteggio ospiti reali, budget ricalcolato automaticamente.</p>
+      <p class="feat-desc">Il botteghino lavora con la lista digitale, sempre aggiornata. Check-in con un tap. Nessun errore. Nessuna fila inutile. Revenue aggiornato in automatico.</p>
       <div class="feat-list">
-        <div class="feat-item">Lista ospiti sincronizzata su tutti i dispositivi</div>
-        <div class="feat-item">Check-in rapido per nome, tavolo o PR</div>
-        <div class="feat-item">Conteggio ospiti effettivi vs. prenotati</div>
+        <div class="feat-item">Lista ospiti sincronizzata su tutti i dispositivi del team</div>
+        <div class="feat-item">Check-in per nome, tavolo o PR — in un secondo</div>
+        <div class="feat-item">Conteggio ospiti effettivi vs. prenotati in tempo reale</div>
         <div class="feat-item">Undo check-in istantaneo in caso di errore</div>
+        <div class="feat-item">Revenue attesa aggiornata automaticamente ad ogni ingresso</div>
       </div>
     </div>
-    <!-- RIGHT: check-in mockup -->
-    <div class="mock ck-mock">
+    <div class="mock" style="position:relative;z-index:1">
       <div class="mock-chrome">
         <div class="mock-dot"></div><div class="mock-dot"></div><div class="mock-dot"></div>
         <div class="mock-url"></div>
+        <span class="mock-domain">app.nightplan.it/ingresso</span>
       </div>
       <div class="ck-head">
         <span class="ck-title">Ingresso — Sabato 14 Giu</span>
@@ -505,30 +594,27 @@ html,body{width:100%;height:100%;background:var(--bg);color:var(--text);font-fam
       <div class="ck-nums">
         <div class="ck-num"><div class="v">14</div><div class="l">Entrati</div></div>
         <div class="ck-num"><div class="v">23</div><div class="l">Totale</div></div>
-        <div class="ck-num" style="margin-left:auto;text-align:right">
-          <div class="v" style="color:var(--accent)">€8.4k</div>
-          <div class="l">Revenue att.</div>
-        </div>
+        <div class="ck-num" style="margin-left:auto;text-align:right"><div class="v" style="color:var(--accent)">€8.4k</div><div class="l">Revenue att.</div></div>
       </div>
       <div class="ck-list">
         <div class="ck-row done">
-          <div class="ck-ic" style="background:rgba(34,197,94,.1)">✓</div>
-          <div style="flex:1"><div class="ck-name">Marco Bianchi</div><div class="ck-detail">VIP 1 · 4 ospiti · PR: M. Rossi</div></div>
+          <div class="ck-ic" style="background:rgba(34,197,94,.1);color:#22c55e">✓</div>
+          <div style="flex:1;min-width:0"><div class="ck-name">Marco Bianchi</div><div class="ck-detail">VIP 1 · 4 ospiti · PR: M. Rossi</div></div>
           <div class="ck-status" style="color:#22c55e">Entrato</div>
         </div>
         <div class="ck-row done">
-          <div class="ck-ic" style="background:rgba(34,197,94,.1)">✓</div>
-          <div style="flex:1"><div class="ck-name">Sofia Romano</div><div class="ck-detail">T3 · 6 ospiti · PR: L. Scarpa</div></div>
+          <div class="ck-ic" style="background:rgba(34,197,94,.1);color:#22c55e">✓</div>
+          <div style="flex:1;min-width:0"><div class="ck-name">Sofia Romano</div><div class="ck-detail">T3 · 6 ospiti · PR: L. Scarpa</div></div>
           <div class="ck-status" style="color:#22c55e">Entrata</div>
         </div>
         <div class="ck-row">
-          <div class="ck-ic" style="background:rgba(255,255,255,.04);font-size:9px">●●●</div>
-          <div style="flex:1"><div class="ck-name">Luca Ferrari</div><div class="ck-detail">T5 · 8 ospiti · PR: A. Ferrari</div></div>
+          <div class="ck-ic" style="background:rgba(255,255,255,.04);font-size:8px;color:rgba(255,255,255,.2)">···</div>
+          <div style="flex:1;min-width:0"><div class="ck-name">Luca Ferrari</div><div class="ck-detail">T5 · 8 ospiti · PR: A. Ferrari</div></div>
           <div class="ck-status" style="color:var(--dim)">In attesa</div>
         </div>
         <div class="ck-row">
-          <div class="ck-ic" style="background:rgba(255,255,255,.04);font-size:9px">●●●</div>
-          <div style="flex:1"><div class="ck-name">Gruppo Milanesi</div><div class="ck-detail">VIP 3 · 5 ospiti · PR: M. Rossi</div></div>
+          <div class="ck-ic" style="background:rgba(255,255,255,.04);font-size:8px;color:rgba(255,255,255,.2)">···</div>
+          <div style="flex:1;min-width:0"><div class="ck-name">Gruppo Milanesi</div><div class="ck-detail">VIP 3 · 5 ospiti · PR: M. Rossi</div></div>
           <div class="ck-status" style="color:var(--dim)">In attesa</div>
         </div>
       </div>
@@ -536,61 +622,65 @@ html,body{width:100%;height:100%;background:var(--bg);color:var(--text);font-fam
   </div>
 </div>
 
-<!-- ══ 7 — STATS ══ -->
-<div class="slide" id="s7">
+<!-- ══ 8 — STATS ══ -->
+<div class="slide" id="s8">
   <div class="dots"></div>
-  <span class="lbl">Controllo totale</span>
-  <h2 class="D" style="font-size:clamp(30px,3.8vw,50px);letter-spacing:-.035em;margin-top:10px;line-height:1.06">Dati chiari.<br>Decisioni veloci.</h2>
+  <div class="glow" style="width:600px;height:400px;top:-100px;right:-100px"></div>
+  <span class="lbl" style="position:relative;z-index:1">Controllo totale</span>
+  <h2 class="D" style="font-size:clamp(28px,3.6vw,48px);letter-spacing:-.035em;margin-top:10px;line-height:1.06;position:relative;z-index:1">Dati chiari.<br>Decisioni veloci.</h2>
   <div class="sg">
     <div class="sc">
       <div class="sv"><em>78</em>%</div>
       <div class="sl">Occupazione media tavoli nelle ultime 4 serate</div>
-      <div class="sch"><div class="sb" style="height:40%"></div><div class="sb" style="height:60%"></div><div class="sb" style="height:55%"></div><div class="sb" style="height:82%"></div><div class="sb pk" style="height:78%"></div></div>
+      <div class="sch"><div class="sb" style="height:42%"></div><div class="sb" style="height:61%"></div><div class="sb" style="height:55%"></div><div class="sb" style="height:84%"></div><div class="sb pk" style="height:78%"></div></div>
     </div>
     <div class="sc">
       <div class="sv">€<em>14</em>k</div>
-      <div class="sl">Revenue stimato dalla serata corrente</div>
-      <div class="sch"><div class="sb" style="height:50%"></div><div class="sb" style="height:65%"></div><div class="sb" style="height:70%"></div><div class="sb" style="height:90%"></div><div class="sb pk" style="height:85%"></div></div>
+      <div class="sl">Revenue stimato dalla serata corrente in tempo reale</div>
+      <div class="sch"><div class="sb" style="height:48%"></div><div class="sb" style="height:64%"></div><div class="sb" style="height:72%"></div><div class="sb" style="height:88%"></div><div class="sb pk" style="height:85%"></div></div>
     </div>
     <div class="sc">
       <div class="sv"><em>6</em></div>
       <div class="sl">PR attivi con prenotazioni confermate questa settimana</div>
-      <div class="sch"><div class="sb" style="height:30%"></div><div class="sb" style="height:50%"></div><div class="sb" style="height:60%"></div><div class="sb" style="height:70%"></div><div class="sb pk" style="height:100%"></div></div>
+      <div class="sch"><div class="sb" style="height:30%"></div><div class="sb" style="height:48%"></div><div class="sb" style="height:62%"></div><div class="sb" style="height:72%"></div><div class="sb pk" style="height:100%"></div></div>
     </div>
     <div class="sc">
       <div class="sv" style="color:#22c55e"><em>0</em></div>
       <div class="sl">Doppie prenotazioni dall'adozione di Nightplan</div>
       <div class="sch" style="align-items:center">
-        <div style="width:100%;height:2px;background:rgba(34,197,94,.3);border-radius:1px;position:relative">
-          <div style="position:absolute;right:0;top:-3px;width:8px;height:8px;border-radius:50%;background:#22c55e"></div>
+        <div style="width:100%;height:2px;background:rgba(34,197,94,.22);border-radius:1px;position:relative">
+          <div style="position:absolute;right:0;top:50%;transform:translateY(-50%);width:8px;height:8px;border-radius:50%;background:#22c55e;box-shadow:0 0 10px rgba(34,197,94,.5)"></div>
         </div>
       </div>
     </div>
   </div>
 </div>
 
-<!-- ══ 8 — MERCATO ══ -->
-<div class="slide" id="s8">
+<!-- ══ 9 — MERCATO ══ -->
+<div class="slide" id="s9">
   <div class="dots"></div>
   <div class="two-col">
-    <div>
+    <div style="position:relative;z-index:1">
       <span class="lbl">Il mercato</span>
-      <h2 class="D" style="font-size:clamp(30px,3.8vw,50px);letter-spacing:-.035em;margin-top:10px;line-height:1.06">Un verticale intatto.<br>Nessun competitor diretto.</h2>
-      <p style="font-family:var(--fb);font-size:15px;color:var(--dim);margin-top:18px;line-height:1.65;max-width:380px">La gestione operativa dei locali notturni è ancora analogica. Nessun software verticale domina questo spazio in Italia e in Europa.</p>
+      <h2 class="D" style="font-size:clamp(28px,3.6vw,48px);letter-spacing:-.035em;margin-top:10px;line-height:1.06">Un verticale intatto.<br>Nessun competitor diretto.</h2>
+      <p style="font-family:var(--fb);font-size:14.5px;color:var(--dim);margin-top:16px;line-height:1.68;max-width:360px">La gestione operativa dei locali notturni è ancora completamente analogica. Nessun software verticale domina questo spazio in Italia. Chi entra ora, entra da solo.</p>
+      <div style="margin-top:28px;padding:18px 20px;border-left:2px solid var(--accent);background:rgba(212,98,42,.04)">
+        <p style="font-family:var(--fb);font-size:13.5px;color:var(--dim);line-height:1.6">Software generici come TheFork o Bookatable non coprono il nightlife. Il gestore usa 3-4 strumenti diversi. <strong style="color:var(--text);font-weight:600">Nightplan è l'unico verticale.</strong></p>
+      </div>
     </div>
     <div class="mnums">
-      <div class="mnum"><div class="v"><em>20.000</em></div><div class="d">Locali notturni, club e venue in Italia. Ognuno gestisce almeno una serata a settimana.</div></div>
-      <div class="mnum"><div class="v"><em>€200M+</em></div><div class="d">Mercato indirizzabile in Italia a €500/mese per venue (stima conservativa).</div></div>
-      <div class="mnum"><div class="v"><em>0</em></div><div class="d">Software verticali dominanti per nightclub table management in Italia. <strong>Il mercato è aperto.</strong></div></div>
+      <div class="mnum"><div class="v"><em>20.000</em></div><div class="d">Locali notturni, club e venue in Italia. Ognuno gestisce almeno una serata a settimana con prenotazioni tavoli.</div></div>
+      <div class="mnum"><div class="v"><em>€200M</em><span style="font-size:.55em;vertical-align:super">+</span></div><div class="d">Mercato indirizzabile in Italia a €150–500/mese per venue. <strong>Stima conservativa.</strong></div></div>
+      <div class="mnum"><div class="v"><em>0</em></div><div class="d">Software verticali dominanti per nightclub management in Italia. <strong>Il mercato è aperto.</strong></div></div>
     </div>
   </div>
 </div>
 
-<!-- ══ 9 — PRICING ══ -->
-<div class="slide" id="s9">
+<!-- ══ 10 — PRICING ══ -->
+<div class="slide" id="s10">
   <div class="dots"></div>
-  <span class="lbl">Modello commerciale</span>
-  <h2 class="D" style="font-size:clamp(26px,3.2vw,44px);letter-spacing:-.035em;margin-top:10px;line-height:1.06">SaaS. Subscription mensile.<br>Zero commissioni per transazione.</h2>
+  <span class="lbl" style="position:relative;z-index:1">Modello commerciale</span>
+  <h2 class="D" style="font-size:clamp(24px,3vw,42px);letter-spacing:-.035em;margin-top:10px;line-height:1.06;position:relative;z-index:1">Subscription mensile.<br>Zero commissioni sulle transazioni.</h2>
   <div class="pgrd">
     <div class="prc">
       <div class="pt">Starter</div>
@@ -602,6 +692,7 @@ html,body{width:100%;height:100%;background:var(--bg);color:var(--text);font-fam
         <div class="pf">Fino a 5 PR</div>
         <div class="pf">Check-in digitale</div>
         <div class="pf">Dashboard base</div>
+        <div class="pf">Supporto email</div>
       </div>
     </div>
     <div class="prc feat">
@@ -615,12 +706,13 @@ html,body{width:100%;height:100%;background:var(--bg);color:var(--text);font-fam
         <div class="pf">Statistiche avanzate</div>
         <div class="pf">Ranking PR e storico</div>
         <div class="pf">Approvazioni personalizzate</div>
+        <div class="pf">Supporto prioritario</div>
       </div>
     </div>
     <div class="prc">
       <div class="pt">Enterprise</div>
-      <div class="pv" style="font-size:36px;margin-top:16px;line-height:1.15">Su<br>misura</div>
-      <div class="pp">catene e gruppi</div>
+      <div class="pv" style="font-size:34px;margin-top:14px;line-height:1.2;letter-spacing:-.025em">Su<br>misura</div>
+      <div class="pp">catene e gruppi multi-venue</div>
       <div class="pdiv"></div>
       <div class="pfs">
         <div class="pf">Venue illimitate</div>
@@ -628,46 +720,47 @@ html,body{width:100%;height:100%;background:var(--bg);color:var(--text);font-fam
         <div class="pf">Onboarding dedicato</div>
         <div class="pf">API e integrazioni</div>
         <div class="pf">SLA garantito</div>
+        <div class="pf">Account manager dedicato</div>
       </div>
     </div>
   </div>
 </div>
 
-<!-- ══ 10 — PERCHÉ NIGHTPLAN (2×2 grid) ══ -->
-<div class="slide" id="s10">
+<!-- ══ 11 — PERCHÉ NIGHTPLAN ══ -->
+<div class="slide" id="s11">
   <div class="dots"></div>
-  <span class="lbl">Perché Nightplan</span>
-  <h2 class="D" style="font-size:clamp(28px,3.5vw,46px);letter-spacing:-.035em;margin-top:10px;line-height:1.06">Non è un gestionale.<br>È un centro di controllo.</h2>
+  <span class="lbl" style="position:relative;z-index:1">Perché Nightplan</span>
+  <h2 class="D" style="font-size:clamp(26px,3.2vw,44px);letter-spacing:-.035em;margin-top:10px;line-height:1.06;position:relative;z-index:1">Non è un gestionale.<br>È un centro di controllo.</h2>
   <div class="why-grid">
     <div class="why-card">
       <div class="why-n">01</div>
       <div class="why-title">Verticale. Non generalista.</div>
-      <div class="why-desc">Costruito esclusivamente per il nightlife. Nessun compromesso con use case generici o funzionalità inutili.</div>
+      <div class="why-desc">Costruito esclusivamente per il nightlife. Nessun compromesso con use case generici. Ogni funzione serve a chi gestisce locali, non a chi vende pizze.</div>
     </div>
     <div class="why-card">
       <div class="why-n">02</div>
       <div class="why-title">Real-time by design.</div>
-      <div class="why-desc">Firebase Firestore sincronizza ogni modifica in millisecondi. Admin, PR e host vedono sempre la stessa realtà.</div>
+      <div class="why-desc">Ogni modifica è sincronizzata in millisecondi su tutti i dispositivi connessi. Admin, PR e host vedono sempre la stessa realtà — senza refresh, senza ritardi.</div>
     </div>
     <div class="why-card">
       <div class="why-n">03</div>
       <div class="why-title">Zero training necessario.</div>
-      <div class="why-desc">L'interfaccia è autoesplicativa. Un PR è operativo in 5 minuti. L'admin in meno di un'ora, senza manuale.</div>
+      <div class="why-desc">L'interfaccia è autoesplicativa. Un PR è operativo in 5 minuti. L'admin in meno di un'ora. Nessun manuale, nessuna formazione a pagamento.</div>
     </div>
     <div class="why-card">
       <div class="why-n">04</div>
-      <div class="why-title">Pronto per scalare.</div>
-      <div class="why-desc">Architettura Firebase multi-venue. Da un singolo locale a una catena nazionale senza riscrivere nulla.</div>
+      <div class="why-title">Scalabile da subito.</div>
+      <div class="why-desc">Architettura cloud multi-venue. Da un singolo locale a una catena nazionale, senza migrazioni e senza riscrivere nulla. Cresce con te.</div>
     </div>
   </div>
 </div>
 
-<!-- ══ 11 — CTA ══ -->
-<div class="slide" id="s11">
+<!-- ══ 12 — CTA ══ -->
+<div class="slide" id="s12">
   <div class="dots"></div>
-  <div class="glow" style="width:900px;height:600px;top:50%;left:50%;transform:translate(-50%,-55%)"></div>
+  <div class="glow" style="width:1000px;height:700px;top:50%;left:50%;transform:translate(-50%,-55%)"></div>
   <h2 class="D">Porta Nightplan<br>nel tuo locale.</h2>
-  <p class="sub">30 giorni di prova gratuita. Nessuna carta di credito.</p>
+  <p class="sub">30 giorni di prova gratuita. Nessuna carta di credito. Setup in un'ora.</p>
   <div class="ctarow">
     <button class="ctabtn">Richiedi una demo</button>
     <span class="ctaemail">oppure scrivici a <strong>hello@nightplan.it</strong></span>
@@ -679,7 +772,7 @@ html,body{width:100%;height:100%;background:var(--bg);color:var(--text);font-fam
 
 <div class="nav">
   <button class="nb" id="prev">←</button>
-  <span class="nc" id="counter">1 / 11</span>
+  <span class="nc" id="counter">1 / 12</span>
   <button class="nb" id="next">→</button>
 </div>
 <div class="bar" id="bar"></div>
@@ -698,12 +791,12 @@ function go(n) {
   const to = slides[n];
   const dir = n > cur ? 1 : -1;
   to.style.transition = 'none';
-  to.style.transform = `translateX(${dir * 56}px)`;
+  to.style.transform = `translateX(${dir * 52}px)`;
   to.style.opacity = '0';
   to.offsetHeight;
   const from = slides[cur];
   from.style.transition = 'opacity .45s cubic-bezier(.16,1,.3,1), transform .45s cubic-bezier(.16,1,.3,1)';
-  from.style.transform = `translateX(${dir * -56}px)`;
+  from.style.transform = `translateX(${dir * -52}px)`;
   from.style.opacity = '0';
   from.classList.remove('active');
   to.style.transition = 'opacity .45s cubic-bezier(.16,1,.3,1), transform .45s cubic-bezier(.16,1,.3,1)';

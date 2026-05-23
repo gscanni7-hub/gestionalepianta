@@ -2979,28 +2979,22 @@ function SidebarContent({ user, view, onNav, onLogout, occupancyPct = 0, revenue
                 active={view==='dashboard'}
                 onClick={() => onNav('dashboard')} />
             </NavSection>
-            <NavSection label="Serata">
+            <NavSection label="Serate">
               <NavLink icon={<Calendar size={14}/>} label="Serate"
-                active={view==='active-events'||view==='plan'}
-                onClick={() => onNav('active-events')} />
-              <NavLink icon={<Building2 size={14}/>} label="Venue"
-                active={view==='venues'||view==='venue-events'||view==='editor'}
-                onClick={() => onNav('venues')} />
-            </NavSection>
-            <NavSection label="Gestione">
+                active={view==='active-events'||view==='plan'||view==='event-detail'||view==='approvals'||view==='checkin'}
+                onClick={() => onNav('active-events')}
+                badge={pendingCount} />
               <NavLink icon={<BarChart3 size={14}/>} label="Prenotazioni"
                 active={view==='reservations'}
                 onClick={() => onNav('reservations')} />
-              <NavLink icon={<Bell size={14}/>} label="Approvazioni"
-                active={view==='approvals'}
-                onClick={() => onNav('approvals')}
-                badge={pendingCount} />
+            </NavSection>
+            <NavSection label="Gestione">
               <NavLink icon={<Users size={14}/>} label="Team PR"
                 active={view==='pr-management'}
                 onClick={() => onNav('pr-management')} />
-              <NavLink icon={<DoorOpen size={14}/>} label="Ingresso"
-                active={view==='checkin'}
-                onClick={() => onNav('checkin')} />
+              <NavLink icon={<Building2 size={14}/>} label="Club"
+                active={view==='venues'||view==='venue-events'||view==='editor'}
+                onClick={() => onNav('venues')} />
             </NavSection>
           </>
         ) : user.role === 'host' ? (
@@ -4034,10 +4028,10 @@ function BottomTabBar({ user, view, onNav, pendingCount, prPendingCount }: {
 
   const tabs: Tab[] = user.role === 'admin' ? [
     { id: 'dashboard',     label: 'Home',     icon: <TrendingUp size={16}/>, active: view === 'dashboard' },
-    { id: 'active-events', label: 'Serate',   icon: <Calendar size={16}/>,  active: view === 'active-events' || view === 'plan' },
-    { id: 'approvals',     label: 'Approva',  icon: <Bell size={16}/>,      active: view === 'approvals', badge: pendingCount },
+    { id: 'active-events', label: 'Serate',   icon: <Calendar size={16}/>,  active: view === 'active-events' || view === 'plan' || view === 'event-detail' || view === 'approvals' || view === 'checkin', badge: pendingCount },
+    { id: 'reservations',  label: 'Prenot.',  icon: <BarChart3 size={16}/>, active: view === 'reservations' },
     { id: 'pr-management', label: 'PR',       icon: <Users size={16}/>,     active: view === 'pr-management' },
-    { id: 'checkin',       label: 'Ingresso', icon: <DoorOpen size={16}/>,  active: view === 'checkin' },
+    { id: 'venues',        label: 'Club',     icon: <Building2 size={16}/>, active: view === 'venues' || view === 'venue-events' || view === 'editor' },
   ] : user.role === 'host' ? [
     { id: 'dashboard',     label: 'Home',     icon: <TrendingUp size={16}/>, active: view === 'dashboard' },
     { id: 'checkin',       label: 'Ingresso', icon: <DoorOpen size={16}/>,  active: view === 'checkin' },

@@ -385,7 +385,10 @@ export default function App() {
     }
   };
 
-  // URL → State (initial mount, browser back/forward, refresh)
+  // URL → State (initial mount, browser back/forward, refresh).
+  // NB: `user` NON è una dipendenza di proposito: al login il landing è
+  // deciso da setView() nei handler; se riapplicassimo l'URL qui
+  // sovrascriveremmo quella scelta (es. URL rimasto su /clubs dopo un logout).
   useEffect(() => {
     if (!user) return;
     if (ignoreNextLocationChange.current) {
@@ -394,7 +397,7 @@ export default function App() {
     }
     applyFromUrl(location.pathname);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [location.pathname, user]);
+  }, [location.pathname]);
 
   // State → URL
   useEffect(() => {

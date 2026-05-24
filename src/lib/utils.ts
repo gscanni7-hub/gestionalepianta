@@ -22,6 +22,17 @@ export function isEventVisibleToHost(event: Event): boolean {
   return event.visibleToHost !== false;
 }
 
+/* Datetime di fine serata. Se l'orario di fine è <= inizio, la serata
+   scavalca la mezzanotte → fine il giorno dopo. null se manca l'orario di fine. */
+export function eventEndDateTime(event: Event): Date | null {
+  if (!event.endTime || !event.date) return null;
+  const start = event.time ?? '00:00';
+  const end = new Date(`${event.date}T${event.endTime}:00`);
+  if (isNaN(end.getTime())) return null;
+  if (event.endTime <= start) end.setDate(end.getDate() + 1);
+  return end;
+}
+
 /* ── Design tokens — status palette ──────────────────────── */
 export const COLORS = {
   accent:  '#D4622A',

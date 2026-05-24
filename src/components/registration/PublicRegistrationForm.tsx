@@ -19,6 +19,7 @@ export default function PublicRegistrationForm() {
   const [pr, setPr] = useState<ManagedUser | null>(null);
   const [loading, setLoading] = useState(true);
   const [notFound, setNotFound] = useState(false);
+  const [ended, setEnded] = useState(false);
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState('');
 
@@ -74,6 +75,7 @@ export default function PublicRegistrationForm() {
       }
 
       if (!foundEvent) { setNotFound(true); setLoading(false); return; }
+      if (foundEvent.status === 'completed') { setEnded(true); setLoading(false); return; }
       setEvent(foundEvent);
       setVenue(foundVenue);
 
@@ -150,6 +152,26 @@ export default function PublicRegistrationForm() {
             <p className="text-[8px] font-mono uppercase tracking-[0.4em] text-[#D4622A] mb-2">Nightplan</p>
             <p className="text-white hv font-black text-xl uppercase">Link non valido</p>
             <p className="text-[#8E8E93] text-xs mt-2">Questo link di registrazione non esiste o è scaduto.</p>
+          </div>
+        </motion.div>
+      </div>
+    );
+  }
+
+  if (ended) {
+    return (
+      <div className="min-h-screen bg-[#0d0d0d] flex items-center justify-center p-6">
+        <motion.div
+          initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }}
+          className="text-center space-y-4 max-w-xs"
+        >
+          <div className="w-10 h-10 bg-[#1C1C1E] border border-[#2C2C2E] flex items-center justify-center mx-auto">
+            <AlertCircle size={20} className="text-[#8E8E93]" />
+          </div>
+          <div>
+            <p className="text-[8px] font-mono uppercase tracking-[0.4em] text-[#D4622A] mb-2">Nightplan</p>
+            <p className="text-white hv font-black text-xl uppercase">Evento terminato</p>
+            <p className="text-[#8E8E93] text-xs mt-2">Le registrazioni per questa serata sono chiuse.</p>
           </div>
         </motion.div>
       </div>

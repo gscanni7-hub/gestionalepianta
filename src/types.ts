@@ -62,7 +62,8 @@ export interface Event {
   venueId: string;
   name: string;
   date: string;
-  time?: string;
+  time?: string;       // orario di inizio
+  endTime?: string;    // orario di fine; se <= inizio si intende il giorno dopo
   description: string;
   coverImage?: string;
   maxCapacity?: number;

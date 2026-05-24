@@ -6,7 +6,7 @@ import {
 } from 'lucide-react';
 import { Event, Venue, Reservation, Registration, ManagedUser, PrGroup } from '../../types';
 import { getRegistrationsByEvent } from '../../lib/registrationService';
-import { cn } from '../../lib/utils';
+import { cn, eventEndDateTime } from '../../lib/utils';
 import IngressiView from '../host/IngressiView';
 
 interface Props {
@@ -26,6 +26,9 @@ export default function EventDetailView({ event, venue, reservations, prUsers, p
   const [tab, setTab] = useState<'tavoli' | 'approva' | 'registrazioni' | 'ingresso'>('tavoli');
   const [confirmReject, setConfirmReject] = useState<string | null>(null);
   const [showVisibility, setShowVisibility] = useState(false);
+  const [confirmConclude, setConfirmConclude] = useState(false);
+  const endDt = eventEndDateTime(event);
+  const isPastEnd = endDt ? Date.now() > endDt.getTime() : false;
   const [registrations, setRegistrations] = useState<Registration[]>([]);
   const [loadingReg, setLoadingReg] = useState(false);
   const [regError, setRegError] = useState(false);
@@ -109,6 +112,36 @@ export default function EventDetailView({ event, venue, reservations, prUsers, p
           <p className="text-[#8E8E93] text-xs mt-2">{event.description}</p>
         )}
       </div>
+
+      {/* Conclusione serata */}
+      {event.status === 'active' && (
+        <div className={cn('rounded-xl p-4 mb-6 flex items-center justify-between gap-3 border',
+          isPastEnd ? 'border-[#F59E0B]/30 bg-[#F59E0B]/[0.06]' : 'border-[#2C2C2E] bg-[#1C1C1E]')}>
+          <div className="flex items-center gap-2.5 min-w-0">
+            <Clock size={15} className={cn('shrink-0', isPastEnd ? 'text-[#F59E0B]' : 'text-[#8E8E93]')} />
+            <p className="text-sm text-white truncate">{isPastEnd ? 'Questa serata è finita.' : 'Serata in corso.'}</p>
+          </div>
+          <button
+            onClick={() => { if (confirmConclude) { onUpdateEvent({ status: 'completed' }); setConfirmConclude(false); } else setConfirmConclude(true); }}
+            onBlur={() => setConfirmConclude(false)}
+            className={cn('px-4 py-2 rounded-xl text-xs font-semibold transition-colors shrink-0',
+              confirmConclude ? 'bg-white text-black' : isPastEnd ? 'bg-[#F59E0B] text-black hover:bg-white' : 'border border-[#3A3A3C] text-[#AEAEB2] hover:text-white hover:border-[#48484A]')}>
+            {confirmConclude ? 'Confermi?' : 'Concludi serata'}
+          </button>
+        </div>
+      )}
+      {event.status === 'completed' && (
+        <div className="rounded-xl p-4 mb-6 flex items-center justify-between gap-3 border border-[#2C2C2E] bg-[#1C1C1E]">
+          <div className="flex items-center gap-2.5 min-w-0">
+            <CheckCircle2 size={15} className="text-[#22C55E] shrink-0" />
+            <p className="text-sm text-white truncate">Serata conclusa e archiviata.</p>
+          </div>
+          <button onClick={() => onUpdateEvent({ status: 'active' })}
+            className="px-4 py-2 rounded-xl border border-[#3A3A3C] text-[#AEAEB2] text-xs font-semibold hover:text-white hover:border-[#48484A] transition-colors shrink-0">
+            Riapri
+          </button>
+        </div>
+      )}
 
       {/* Link registrazione */}
       {genericLink && (

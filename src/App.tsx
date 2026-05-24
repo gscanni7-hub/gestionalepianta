@@ -9,7 +9,7 @@ import {
 import { MOCK_USERS, INITIAL_VENUES, INITIAL_EVENTS, INITIAL_RESERVATIONS, INITIAL_MANAGED_USERS } from './constants';
 import { UserProfile, Event, Reservation, Venue, FloorPlan, ManagedUser, Table, PrGroup } from './types';
 import { motion, AnimatePresence } from 'framer-motion';
-import { cn, COLORS, easeOutQuart, gridContainer, gridItem, isEventVisibleToPr, isEventVisibleToHost } from './lib/utils';
+import { cn, COLORS, easeOutQuart, gridContainer, gridItem, isEventVisibleToPr, isEventVisibleToHost, eventEndDateTime } from './lib/utils';
 import { isEmailConfigured, sendPasswordResetEmail } from './lib/emailService';
 import { isFirebaseConfigured, signInWithGoogle, signInWithApple } from './lib/firebase';
 import { subscribeToReservations } from './lib/reservationService';
@@ -217,7 +217,12 @@ export default function App() {
   const loginFormRef = useRef<HTMLFormElement>(null);
   const [view, setView] = useState<AppView>('venues');
   const [venues, setVenues] = useState(INITIAL_VENUES);
-  const [events, setEvents] = useState(INITIAL_EVENTS);
+  const [events, setEvents] = useState<Event[]>(() => {
+    try {
+      const saved = localStorage.getItem('nightplan_events');
+      return saved ? JSON.parse(saved) : INITIAL_EVENTS;
+    } catch { return INITIAL_EVENTS; }
+  });
   const [reservations, setReservations] = useState<Reservation[]>(() => {
     try {
       const saved = localStorage.getItem('nightplan_reservations');
@@ -240,6 +245,7 @@ export default function App() {
   const [venueTab, setVenueTab] = useState<'events' | 'layout'>('events');
   const [editingReservation, setEditingReservation] = useState<Reservation | null>(null);
   const [selectedPR, setSelectedPR] = useState<ManagedUser | null>(null);
+  const [serateFilter, setSerateFilter] = useState<'attive' | 'concluse'>('attive');
   const [prGroups, setPrGroups] = useState<PrGroup[]>(() => {
     try {
       const saved = localStorage.getItem('nightplan_pr_groups');
@@ -412,6 +418,34 @@ export default function App() {
   useEffect(() => {
     localStorage.setItem('nightplan_pr_groups', JSON.stringify(prGroups));
   }, [prGroups]);
+
+  useEffect(() => {
+    localStorage.setItem('nightplan_events', JSON.stringify(events));
+  }, [events]);
+
+  /* Auto-archiviazione: una serata con orario di fine viene conclusa
+     automaticamente qualche ora dopo la fine (margine), così non taglia
+     il check-in in corso. Senza backend il controllo gira all'apertura
+     dell'app e ogni 10 minuti mentre è aperta. */
+  useEffect(() => {
+    const GRACE_MS = 4 * 60 * 60 * 1000;
+    const sweep = () => {
+      const now = Date.now();
+      setEvents(prev => {
+        let changed = false;
+        const next = prev.map(e => {
+          if (e.status !== 'active') return e;
+          const end = eventEndDateTime(e);
+          if (end && now > end.getTime() + GRACE_MS) { changed = true; return { ...e, status: 'completed' as const }; }
+          return e;
+        });
+        return changed ? next : prev;
+      });
+    };
+    sweep();
+    const id = setInterval(sweep, 10 * 60 * 1000);
+    return () => clearInterval(id);
+  }, []);
 
   /* ── Firestore real-time sync for reservations ───────────── */
   useEffect(() => {
@@ -1577,18 +1611,31 @@ export default function App() {
               </motion.div>
             )}
 
-            {/* PR events */}
-            {view === 'active-events' && (
+            {/* Serate — admin */}
+            {view === 'active-events' && (() => {
+              const completedEvents = events.filter(e => e.status === 'completed');
+              const shown = serateFilter === 'attive' ? activeEvents : completedEvents;
+              return (
               <motion.div key="active-events" {...PAGE}>
-                <PageTitle title="Prossimi eventi" sub="Seleziona un evento per aprire la pianta" />
-                {activeEvents.length === 0 ? (
-                  <EmptyState icon={<Calendar size={28} />} label="Nessuna serata attiva." />
+                <PageTitle title="Serate" sub="Seleziona una serata per gestirla" />
+                {/* Filtro Attive / Concluse */}
+                <div className="flex items-center gap-1 bg-[#1C1C1E] border border-[#2C2C2E] rounded-xl p-1 w-fit mt-6 mb-2">
+                  {([['attive', `Attive (${activeEvents.length})`], ['concluse', `Concluse (${completedEvents.length})`]] as const).map(([k, label]) => (
+                    <button key={k} onClick={() => setSerateFilter(k)}
+                      className={cn('px-4 py-2 rounded-lg text-xs font-semibold transition-colors',
+                        serateFilter === k ? 'bg-accent text-black' : 'text-[#8E8E93] hover:text-white')}>
+                      {label}
+                    </button>
+                  ))}
+                </div>
+                {shown.length === 0 ? (
+                  <EmptyState icon={<Calendar size={28} />} label={serateFilter === 'attive' ? 'Nessuna serata attiva.' : 'Nessuna serata conclusa.'} />
                 ) : (
                   <motion.div
-                    className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-4 mt-8"
+                    className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-4 mt-6"
                     variants={gridContainer} initial="initial" animate="animate"
                   >
-                    {activeEvents.map((event) => (
+                    {shown.map((event) => (
                       <motion.div key={event.id} variants={gridItem}>
                         <EventCard event={event}
                           venueName={venues.find(v => v.id === event.venueId)?.name}
@@ -1598,7 +1645,8 @@ export default function App() {
                   </motion.div>
                 )}
               </motion.div>
-            )}
+              );
+            })()}
 
             {view === 'events' && (
               <motion.div key="events" {...PAGE}>
@@ -3636,7 +3684,7 @@ function NewEventModal({ venue, floorPlans, prUsers, prGroups, onClose, onSubmit
   prUsers: ManagedUser[];
   prGroups: PrGroup[];
   onClose: () => void;
-  onSubmit: (d: { name: string; date: string; time: string; description: string; coverImage: string; maxCapacity: number | undefined; floorPlanId: string; assignedPrIds: string[] | undefined; visibleToHost: boolean }, token?: string) => void;
+  onSubmit: (d: { name: string; date: string; time: string; endTime: string; description: string; coverImage: string; maxCapacity: number | undefined; floorPlanId: string; assignedPrIds: string[] | undefined; visibleToHost: boolean }, token?: string) => void;
   initialData?: Event;
 }) {
   const isEdit = !!initialData;
@@ -3648,6 +3696,7 @@ function NewEventModal({ venue, floorPlans, prUsers, prGroups, onClose, onSubmit
     name: initialData?.name ?? '',
     date: initialData?.date ?? today,
     time: initialData?.time ?? '22:00',
+    endTime: initialData?.endTime ?? '04:00',
     description: initialData?.description ?? '',
     coverImage: initialData?.coverImage ?? '',
     maxCapacity: initialData?.maxCapacity ? String(initialData.maxCapacity) : '',
@@ -3742,18 +3791,24 @@ function NewEventModal({ venue, floorPlans, prUsers, prGroups, onClose, onSubmit
                 value={form.name} onChange={e => setForm({ ...form, name: e.target.value })} />
             </Field>
 
+            <Field label="Data">
+              <input required type="date" min={minDate}
+                className="w-full bg-bg border border-[#3A3A3C] px-4 py-3 text-xs font-sans text-white outline-none transition-colors [color-scheme:dark]"
+                value={form.date} onChange={e => setForm({ ...form, date: e.target.value })} />
+            </Field>
             <div className="grid grid-cols-2 gap-3">
-              <Field label="Data">
-                <input required type="date" min={minDate}
-                  className="w-full bg-bg border border-[#3A3A3C] px-4 py-3 text-xs font-sans text-white outline-none transition-colors [color-scheme:dark]"
-                  value={form.date} onChange={e => setForm({ ...form, date: e.target.value })} />
-              </Field>
-              <Field label="Orario">
+              <Field label="Inizio">
                 <input type="time"
                   className="w-full bg-bg border border-[#3A3A3C] px-4 py-3 text-xs font-sans text-white outline-none transition-colors [color-scheme:dark]"
                   value={form.time} onChange={e => setForm({ ...form, time: e.target.value })} />
               </Field>
+              <Field label="Fine">
+                <input type="time"
+                  className="w-full bg-bg border border-[#3A3A3C] px-4 py-3 text-xs font-sans text-white outline-none transition-colors [color-scheme:dark]"
+                  value={form.endTime} onChange={e => setForm({ ...form, endTime: e.target.value })} />
+              </Field>
             </div>
+            <p className="text-[10px] text-[#636366] -mt-3">Se la fine è prima dell'inizio (es. 04:00) si intende la notte successiva. A fine serata l'evento si archivia da solo.</p>
 
             <Field label="Immagine di copertina (URL)">
               <input placeholder="https://..."

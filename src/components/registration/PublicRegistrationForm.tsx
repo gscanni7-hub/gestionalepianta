@@ -145,7 +145,7 @@ export default function PublicRegistrationForm() {
           initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }}
           className="text-center space-y-4 max-w-xs"
         >
-          <div className="w-10 h-10 bg-[#1C1C1E] border border-[#2C2C2E] flex items-center justify-center mx-auto">
+          <div className="w-10 h-10 bg-[#1d1b19] border border-[#2d2a26] flex items-center justify-center mx-auto">
             <AlertCircle size={20} className="text-[#EF4444]" />
           </div>
           <div>
@@ -165,7 +165,7 @@ export default function PublicRegistrationForm() {
           initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }}
           className="text-center space-y-4 max-w-xs"
         >
-          <div className="w-10 h-10 bg-[#1C1C1E] border border-[#2C2C2E] flex items-center justify-center mx-auto">
+          <div className="w-10 h-10 bg-[#1d1b19] border border-[#2d2a26] flex items-center justify-center mx-auto">
             <AlertCircle size={20} className="text-[#8E8E93]" />
           </div>
           <div>
@@ -218,7 +218,7 @@ export default function PublicRegistrationForm() {
           {pr && (
             <motion.div
               initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }} transition={{ delay: 0.2 }}
-              className="mt-5 inline-flex items-center gap-2 bg-[#1C1C1E] border border-[#2C2C2E] px-4 py-2"
+              className="mt-5 inline-flex items-center gap-2 bg-[#1d1b19] border border-[#2d2a26] px-4 py-2"
             >
               <div className="w-1.5 h-1.5 bg-[#D4622A]" />
               <span className="text-[9px] font-mono uppercase tracking-widest text-[#aaa]">
@@ -231,7 +231,7 @@ export default function PublicRegistrationForm() {
 
       {/* Divider */}
       <div className="max-w-md mx-auto px-6">
-        <div className="h-[1px] bg-gradient-to-r from-transparent via-[#2C2C2E] to-transparent mb-8" />
+        <div className="h-[1px] bg-gradient-to-r from-transparent via-[#2d2a26] to-transparent mb-8" />
       </div>
 
       {/* Form */}
@@ -248,7 +248,7 @@ export default function PublicRegistrationForm() {
                   value={form.firstName}
                   onChange={e => setForm({ ...form, firstName: e.target.value })}
                   placeholder="Mario"
-                  className="w-full bg-[#1C1C1E] border border-[#2C2C2E] pl-9 pr-3 py-3 text-sm text-white placeholder-[#636366] outline-none focus:border-[#D4622A] transition-colors"
+                  className="w-full bg-[#1d1b19] border border-[#2d2a26] pl-9 pr-3 py-3 text-sm text-white placeholder-[#636366] outline-none focus:border-[#D4622A] transition-colors"
                 />
               </div>
             </div>
@@ -259,7 +259,7 @@ export default function PublicRegistrationForm() {
                 value={form.lastName}
                 onChange={e => setForm({ ...form, lastName: e.target.value })}
                 placeholder="Rossi"
-                className="w-full bg-[#1C1C1E] border border-[#2C2C2E] px-3 py-3 text-sm text-white placeholder-[#636366] outline-none focus:border-[#D4622A] transition-colors"
+                className="w-full bg-[#1d1b19] border border-[#2d2a26] px-3 py-3 text-sm text-white placeholder-[#636366] outline-none focus:border-[#D4622A] transition-colors"
               />
             </div>
           </div>
@@ -274,7 +274,7 @@ export default function PublicRegistrationForm() {
                 value={form.email}
                 onChange={e => setForm({ ...form, email: e.target.value })}
                 placeholder="mario@email.com"
-                className="w-full bg-[#1C1C1E] border border-[#2C2C2E] pl-9 pr-3 py-3 text-sm text-white placeholder-[#636366] outline-none focus:border-[#D4622A] transition-colors"
+                className="w-full bg-[#1d1b19] border border-[#2d2a26] pl-9 pr-3 py-3 text-sm text-white placeholder-[#636366] outline-none focus:border-[#D4622A] transition-colors"
               />
             </div>
           </div>
@@ -288,7 +288,7 @@ export default function PublicRegistrationForm() {
                 value={form.phone}
                 onChange={e => setForm({ ...form, phone: e.target.value })}
                 placeholder="+39 333 000 0000"
-                className="w-full bg-[#1C1C1E] border border-[#2C2C2E] pl-9 pr-3 py-3 text-sm text-white placeholder-[#636366] outline-none focus:border-[#D4622A] transition-colors"
+                className="w-full bg-[#1d1b19] border border-[#2d2a26] pl-9 pr-3 py-3 text-sm text-white placeholder-[#636366] outline-none focus:border-[#D4622A] transition-colors"
               />
             </div>
           </div>
@@ -300,7 +300,7 @@ export default function PublicRegistrationForm() {
               <select
                 value={form.guestsCount}
                 onChange={e => setForm({ ...form, guestsCount: parseInt(e.target.value) })}
-                className="w-full bg-[#1C1C1E] border border-[#2C2C2E] pl-9 pr-3 py-3 text-sm text-white outline-none focus:border-[#D4622A] transition-colors [color-scheme:dark]"
+                className="w-full bg-[#1d1b19] border border-[#2d2a26] pl-9 pr-3 py-3 text-sm text-white outline-none focus:border-[#D4622A] transition-colors [color-scheme:dark]"
               >
                 {[1,2,3,4,5,6,7,8,9,10].map(n => (
                   <option key={n} value={n}>{n} {n === 1 ? 'persona' : 'persone'}</option>
@@ -339,11 +339,11 @@ export default function PublicRegistrationForm() {
         </form>
 
         {/* Footer brand */}
-        <div className="mt-12 pt-6 border-t border-[#1C1C1E] flex items-center justify-center gap-2">
+        <div className="mt-12 pt-6 border-t border-[#1d1b19] flex items-center justify-center gap-2">
           <div className="w-4 h-4 bg-[#D4622A] flex items-center justify-center">
             <span className="text-black font-black text-[7px]" style={{ fontFamily: 'Helvetica Neue, Helvetica, Arial, sans-serif' }}>N</span>
           </div>
-          <span className="text-[8px] font-mono uppercase tracking-[0.4em] text-[#3A3A3C]">Powered by Nightplan</span>
+          <span className="text-[8px] font-mono uppercase tracking-[0.4em] text-[#3b3733]">Powered by Nightplan</span>
         </div>
       </div>
     </div>

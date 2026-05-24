@@ -37,9 +37,9 @@ export default function PRRankingView({ managedUsers, reservations }: Props) {
   return (
     <div>
       <p className="text-xs font-medium text-[#8E8E93] mb-5">Ranking PR — per incasso</p>
-      <div className="border border-[#2C2C2E] overflow-hidden rounded-xl">
+      <div className="border border-[#2d2a26] overflow-hidden rounded-xl">
         {/* Header */}
-        <div className="grid grid-cols-[40px_1fr_80px_80px_100px] gap-0 px-5 py-3 bg-[#111111] border-b border-[#2C2C2E]">
+        <div className="grid grid-cols-[40px_1fr_80px_80px_100px] gap-0 px-5 py-3 bg-[#121110] border-b border-[#2d2a26]">
           <span className="text-[8px] font-sans uppercase tracking-[0.3em] text-[#8E8E93]">#</span>
           <span className="text-[8px] font-sans uppercase tracking-[0.3em] text-[#8E8E93]">Nome</span>
           <span className="text-[8px] font-sans uppercase tracking-[0.3em] text-[#8E8E93] text-right">Pren.</span>
@@ -48,7 +48,7 @@ export default function PRRankingView({ managedUsers, reservations }: Props) {
         </div>
 
         {/* Rows */}
-        <div className="divide-y divide-[#2C2C2E]">
+        <div className="divide-y divide-[#2d2a26]">
           {ranked.map(({ pr, totalPren, totalPersone, totalIncasso }, idx) => {
             const rank = idx + 1;
             const medalColor = MEDAL_COLORS[rank];
@@ -58,7 +58,7 @@ export default function PRRankingView({ managedUsers, reservations }: Props) {
               <div
                 key={pr.id}
                 className={`grid grid-cols-[40px_1fr_80px_80px_100px] gap-0 px-5 py-4 items-center transition-colors ${
-                  isTop3 ? 'bg-[#1C1C1E]' : 'bg-[#111111]'
+                  isTop3 ? 'bg-[#1d1b19]' : 'bg-[#121110]'
                 } hover:bg-white/[0.02]`}
                 style={isTop3 ? { borderLeft: `2px solid ${medalColor}40` } : {}}
               >
@@ -74,7 +74,7 @@ export default function PRRankingView({ managedUsers, reservations }: Props) {
                 <div className="flex items-center gap-3 min-w-0">
                   <div
                     className="w-8 h-8 flex items-center justify-center shrink-0 overflow-hidden rounded-xl"
-                    style={{ border: `1px solid ${medalColor ? medalColor + '40' : '#2C2C2E'}` }}
+                    style={{ border: `1px solid ${medalColor ? medalColor + '40' : '#2d2a26'}` }}
                   >
                     {pr.profileImage
                       ? <img src={pr.profileImage} alt="" className="w-full h-full object-cover" />

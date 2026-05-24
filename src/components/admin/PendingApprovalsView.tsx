@@ -80,12 +80,12 @@ export default function PendingApprovalsView({
             {pendingResv.map(r => (
               <div
                 key={r.id}
-                className="flex items-center justify-between p-5 bg-[#1C1C1E] border border-[#2C2C2E] hover:border-[#48484A] transition-colors gap-4 rounded-xl"
+                className="flex items-center justify-between p-5 bg-[#1d1b19] border border-[#2d2a26] hover:border-[#48484A] transition-colors gap-4 rounded-xl"
               >
                 <div className="min-w-0 flex-1">
                   <div className="flex items-center gap-3 flex-wrap">
                     <span className="font-semibold text-white text-sm">{r.customerName}</span>
-                    <span className="text-xs font-medium text-[#AEAEB2] border border-[#3A3A3C] rounded-full px-2 py-0.5">
+                    <span className="text-xs font-medium text-[#AEAEB2] border border-[#3b3733] rounded-full px-2 py-0.5">
                       Tav. {r.tableName ?? r.tableId}
                     </span>
                   </div>
@@ -137,10 +137,10 @@ export default function PendingApprovalsView({
             {pendingUsers.map(u => (
               <div
                 key={u.id}
-                className="flex items-center justify-between p-5 bg-[#1C1C1E] border border-[#2C2C2E] hover:border-[#48484A] transition-colors gap-4 rounded-xl"
+                className="flex items-center justify-between p-5 bg-[#1d1b19] border border-[#2d2a26] hover:border-[#48484A] transition-colors gap-4 rounded-xl"
               >
                 <div className="flex items-center gap-4 min-w-0">
-                  <div className="w-9 h-9 bg-[#2C2C2E] border border-[#3A3A3C] flex items-center justify-center shrink-0 rounded-xl">
+                  <div className="w-9 h-9 bg-[#2d2a26] border border-[#3b3733] flex items-center justify-center shrink-0 rounded-xl">
                     <span className="hv font-black text-[#AEAEB2] text-xs">
                       {u.displayName.substring(0, 2).toUpperCase()}
                     </span>

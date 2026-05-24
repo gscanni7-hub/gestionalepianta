@@ -32,7 +32,7 @@ export default function PRLinkGenerator({ events, venues, user }: Props) {
   if (activeEvents.length === 0) return null;
 
   return (
-    <div className="mt-8 border border-[#2C2C2E] bg-[#1C1C1E] rounded-xl overflow-hidden">
+    <div className="mt-8 border border-[#2d2a26] bg-[#1d1b19] rounded-xl overflow-hidden">
       {/* Header toggle */}
       <button
         onClick={() => setOpen(o => !o)}
@@ -57,7 +57,7 @@ export default function PRLinkGenerator({ events, venues, user }: Props) {
             transition={{ duration: 0.2 }}
             className="overflow-hidden"
           >
-            <div className="px-5 pb-5 border-t border-[#2C2C2E] space-y-4 pt-4">
+            <div className="px-5 pb-5 border-t border-[#2d2a26] space-y-4 pt-4">
               {activeEvents.map(event => {
                 const venue = venues.find(v => v.id === event.venueId);
                 const link = getPersonalLink(event);
@@ -78,7 +78,7 @@ export default function PRLinkGenerator({ events, venues, user }: Props) {
                     </div>
 
                     <div className="flex items-center gap-2">
-                      <div className="flex-1 bg-[#111111] border border-[#2C2C2E] px-3 py-2 overflow-hidden rounded-lg">
+                      <div className="flex-1 bg-[#121110] border border-[#2d2a26] px-3 py-2 overflow-hidden rounded-lg">
                         <p className="text-[9px] font-mono text-[#636366] truncate">{link}</p>
                       </div>
                       <motion.button
@@ -88,7 +88,7 @@ export default function PRLinkGenerator({ events, venues, user }: Props) {
                           'p-2.5 border transition-colors shrink-0 rounded-lg',
                           isCopied
                             ? 'border-[#22C55E]/40 text-[#22C55E] bg-[#22C55E]/10'
-                            : 'border-[#2C2C2E] text-[#636366] hover:text-white hover:border-[#3a3a3a]'
+                            : 'border-[#2d2a26] text-[#636366] hover:text-white hover:border-[#3a3a3a]'
                         )}
                       >
                         {isCopied ? <Check size={14} /> : <Copy size={14} />}
@@ -97,7 +97,7 @@ export default function PRLinkGenerator({ events, venues, user }: Props) {
                         href={link}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="p-2.5 border border-[#2C2C2E] text-[#636366] hover:text-white hover:border-[#3a3a3a] transition-colors shrink-0 rounded-lg"
+                        className="p-2.5 border border-[#2d2a26] text-[#636366] hover:text-white hover:border-[#3a3a3a] transition-colors shrink-0 rounded-lg"
                       >
                         <ExternalLink size={14} />
                       </a>

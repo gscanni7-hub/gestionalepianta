@@ -106,7 +106,7 @@ export default function EventDetailView({ event, venue, reservations, prUsers, p
 
       {/* Cover image */}
       {event.coverImage && (
-        <div className="h-40 overflow-hidden border border-[#2C2C2E] mb-6 rounded-xl">
+        <div className="h-40 overflow-hidden border border-[#2d2a26] mb-6 rounded-xl">
           <img src={event.coverImage} alt="" className="w-full h-full object-cover opacity-70" />
         </div>
       )}
@@ -138,7 +138,7 @@ export default function EventDetailView({ event, venue, reservations, prUsers, p
       {/* Conclusione serata */}
       {event.status === 'active' && (
         <div className={cn('rounded-xl p-4 mb-6 flex items-center justify-between gap-3 border',
-          isPastEnd ? 'border-[#F59E0B]/30 bg-[#F59E0B]/[0.06]' : 'border-[#2C2C2E] bg-[#1C1C1E]')}>
+          isPastEnd ? 'border-[#F59E0B]/30 bg-[#F59E0B]/[0.06]' : 'border-[#2d2a26] bg-[#1d1b19]')}>
           <div className="flex items-center gap-2.5 min-w-0">
             <Clock size={15} className={cn('shrink-0', isPastEnd ? 'text-[#F59E0B]' : 'text-[#8E8E93]')} />
             <p className="text-sm text-white truncate">{isPastEnd ? 'Questa serata è finita.' : 'Serata in corso.'}</p>
@@ -147,19 +147,19 @@ export default function EventDetailView({ event, venue, reservations, prUsers, p
             onClick={() => { if (confirmConclude) { onUpdateEvent({ status: 'completed' }); setConfirmConclude(false); } else setConfirmConclude(true); }}
             onBlur={() => setConfirmConclude(false)}
             className={cn('px-4 py-2 rounded-xl text-xs font-semibold transition-colors shrink-0',
-              confirmConclude ? 'bg-white text-black' : isPastEnd ? 'bg-[#F59E0B] text-black hover:bg-white' : 'border border-[#3A3A3C] text-[#AEAEB2] hover:text-white hover:border-[#48484A]')}>
+              confirmConclude ? 'bg-white text-black' : isPastEnd ? 'bg-[#F59E0B] text-black hover:bg-white' : 'border border-[#3b3733] text-[#AEAEB2] hover:text-white hover:border-[#48484A]')}>
             {confirmConclude ? 'Confermi?' : 'Concludi serata'}
           </button>
         </div>
       )}
       {event.status === 'completed' && (
-        <div className="rounded-xl p-4 mb-6 flex items-center justify-between gap-3 border border-[#2C2C2E] bg-[#1C1C1E]">
+        <div className="rounded-xl p-4 mb-6 flex items-center justify-between gap-3 border border-[#2d2a26] bg-[#1d1b19]">
           <div className="flex items-center gap-2.5 min-w-0">
             <CheckCircle2 size={15} className="text-[#22C55E] shrink-0" />
             <p className="text-sm text-white truncate">Serata conclusa e archiviata.</p>
           </div>
           <button onClick={() => onUpdateEvent({ status: 'active' })}
-            className="px-4 py-2 rounded-xl border border-[#3A3A3C] text-[#AEAEB2] text-xs font-semibold hover:text-white hover:border-[#48484A] transition-colors shrink-0">
+            className="px-4 py-2 rounded-xl border border-[#3b3733] text-[#AEAEB2] text-xs font-semibold hover:text-white hover:border-[#48484A] transition-colors shrink-0">
             Riapri
           </button>
         </div>
@@ -167,7 +167,7 @@ export default function EventDetailView({ event, venue, reservations, prUsers, p
 
       {/* Link registrazione */}
       {genericLink && (
-        <div className="border border-[#2C2C2E] bg-[#1C1C1E] p-4 mb-6 flex items-center gap-3 rounded-xl">
+        <div className="border border-[#2d2a26] bg-[#1d1b19] p-4 mb-6 flex items-center gap-3 rounded-xl">
           <Link2 size={13} className="text-[#D4622A] shrink-0" />
           <div className="flex-1 min-w-0">
             <p className="text-xs font-medium text-[#8E8E93] mb-0.5">Link registrazione generico</p>
@@ -175,12 +175,12 @@ export default function EventDetailView({ event, venue, reservations, prUsers, p
           </div>
           <button onClick={handleCopyLink}
             className={cn('p-2 border transition-colors shrink-0 rounded-lg',
-              copiedLink ? 'border-[#22C55E]/40 text-[#22C55E]' : 'border-[#2C2C2E] text-[#636366] hover:text-white'
+              copiedLink ? 'border-[#22C55E]/40 text-[#22C55E]' : 'border-[#2d2a26] text-[#636366] hover:text-white'
             )}>
             {copiedLink ? <Check size={13} /> : <Copy size={13} />}
           </button>
           <a href={genericLink} target="_blank" rel="noopener noreferrer"
-            className="p-2 border border-[#2C2C2E] text-[#636366] hover:text-white transition-colors shrink-0 rounded-lg">
+            className="p-2 border border-[#2d2a26] text-[#636366] hover:text-white transition-colors shrink-0 rounded-lg">
             <ExternalLink size={13} />
           </a>
         </div>
@@ -195,7 +195,7 @@ export default function EventDetailView({ event, venue, reservations, prUsers, p
       </button>
 
       {/* Visibilità — richiudibile, modifiche immediate */}
-      <div className="border border-[#2C2C2E] rounded-xl mb-6 overflow-hidden">
+      <div className="border border-[#2d2a26] rounded-xl mb-6 overflow-hidden">
         <button
           onClick={() => setShowVisibility(o => !o)}
           className="w-full px-4 py-3 flex items-center justify-between hover:bg-white/[0.02] transition-colors text-left"
@@ -215,9 +215,9 @@ export default function EventDetailView({ event, venue, reservations, prUsers, p
           {showVisibility && (
             <motion.div initial={{ height: 0, opacity: 0 }} animate={{ height: 'auto', opacity: 1 }}
               exit={{ height: 0, opacity: 0 }} transition={{ duration: 0.2 }} className="overflow-hidden">
-              <div className="px-4 pb-4 pt-1 space-y-3 border-t border-[#1C1C1E]">
+              <div className="px-4 pb-4 pt-1 space-y-3 border-t border-[#1d1b19]">
                 {/* Host */}
-                <label className="flex items-center justify-between bg-[#1C1C1E] border border-[#2C2C2E] rounded-xl px-4 py-3 cursor-pointer">
+                <label className="flex items-center justify-between bg-[#1d1b19] border border-[#2d2a26] rounded-xl px-4 py-3 cursor-pointer">
                   <span className="text-sm text-white">Attiva per l'ingresso</span>
                   <input type="checkbox" checked={event.visibleToHost !== false}
                     onChange={e => onUpdateEvent({ visibleToHost: e.target.checked })}
@@ -225,7 +225,7 @@ export default function EventDetailView({ event, venue, reservations, prUsers, p
                 </label>
 
                 {/* PR */}
-                <label className="flex items-center justify-between bg-[#1C1C1E] border border-[#2C2C2E] rounded-xl px-4 py-3 cursor-pointer">
+                <label className="flex items-center justify-between bg-[#1d1b19] border border-[#2d2a26] rounded-xl px-4 py-3 cursor-pointer">
                   <span className="text-sm text-white">Tutti i PR</span>
                   <input type="checkbox" checked={event.assignedPrIds === undefined}
                     onChange={e => onUpdateEvent({ assignedPrIds: e.target.checked ? undefined : [] })}
@@ -242,14 +242,14 @@ export default function EventDetailView({ event, venue, reservations, prUsers, p
                             <button type="button" key={g.id}
                               onClick={() => onUpdateEvent({ assignedPrIds: allIn ? ids.filter(id => !g.prIds.includes(id)) : [...new Set([...ids, ...g.prIds])] })}
                               className={cn('px-3 py-1.5 rounded-full text-xs font-medium border transition-colors',
-                                allIn ? 'bg-accent text-black border-accent' : 'border-[#3A3A3C] text-[#AEAEB2] hover:border-[#48484A]')}>
+                                allIn ? 'bg-accent text-black border-accent' : 'border-[#3b3733] text-[#AEAEB2] hover:border-[#48484A]')}>
                               {g.name} <span className="opacity-60">({g.prIds.length})</span>
                             </button>
                           );
                         })}
                       </div>
                     )}
-                    <div className="space-y-1 max-h-44 overflow-y-auto border border-[#2C2C2E] rounded-xl p-2">
+                    <div className="space-y-1 max-h-44 overflow-y-auto border border-[#2d2a26] rounded-xl p-2">
                       {prUsers.length === 0 ? (
                         <p className="text-xs text-[#636366] px-2 py-3 text-center">Nessun PR approvato</p>
                       ) : (
@@ -276,7 +276,7 @@ export default function EventDetailView({ event, venue, reservations, prUsers, p
       </div>
 
       {/* Tabs */}
-      <div className="flex border border-[#2C2C2E] mb-5 rounded-xl overflow-x-auto">
+      <div className="flex border border-[#2d2a26] mb-5 rounded-xl overflow-x-auto">
         {(['tavoli', 'approva', 'registrazioni', 'ingresso', 'report'] as const).map(t => (
           <button key={t}
             onClick={() => setTab(t)}
@@ -311,7 +311,7 @@ export default function EventDetailView({ event, venue, reservations, prUsers, p
               { label: 'In attesa', value: pendingRes.length, color: pendingRes.length > 0 ? 'text-[#F59E0B]' : 'text-[#8E8E93]' },
               { label: 'Entrati', value: checkedInRes.length, color: 'text-[#22C55E]' },
             ].map(s => (
-              <div key={s.label} className="border border-[#2C2C2E] bg-[#1C1C1E] p-3 text-center rounded-xl">
+              <div key={s.label} className="border border-[#2d2a26] bg-[#1d1b19] p-3 text-center rounded-xl">
                 <div className={cn('hv font-black text-2xl leading-none', s.color)}>{s.value}</div>
                 <div className="text-xs text-[#8E8E93] mt-1">{s.label}</div>
               </div>
@@ -319,13 +319,13 @@ export default function EventDetailView({ event, venue, reservations, prUsers, p
           </div>
 
           {approvedRes.length === 0 && pendingRes.length === 0 ? (
-            <div className="py-16 text-center border border-[#2C2C2E] rounded-xl">
+            <div className="py-16 text-center border border-[#2d2a26] rounded-xl">
               <p className="text-sm text-[#636366]">Nessuna prenotazione</p>
             </div>
           ) : (
-            <div className="border border-[#2C2C2E] overflow-hidden">
+            <div className="border border-[#2d2a26] overflow-hidden">
               {[...approvedRes, ...pendingRes].map(res => (
-                <div key={res.id} className="flex items-center gap-4 px-4 py-3 border-b border-[#1C1C1E] last:border-0">
+                <div key={res.id} className="flex items-center gap-4 px-4 py-3 border-b border-[#1d1b19] last:border-0">
                   <div className={cn('w-2 h-2 rounded-full shrink-0',
                     res.checkedIn ? 'bg-[#22C55E]' : res.approvalStatus === 'approved' ? 'bg-[#D4622A]' : 'bg-[#F59E0B]'
                   )} />
@@ -347,18 +347,18 @@ export default function EventDetailView({ event, venue, reservations, prUsers, p
       {tab === 'approva' && (
         <div className="space-y-2">
           {pendingRes.length === 0 ? (
-            <div className="py-16 text-center border border-[#2C2C2E] rounded-xl flex flex-col items-center gap-3">
+            <div className="py-16 text-center border border-[#2d2a26] rounded-xl flex flex-col items-center gap-3">
               <CheckCircle2 size={28} className="text-[#22C55E]" />
               <p className="text-sm text-[#8E8E93]">Nessuna prenotazione da approvare</p>
             </div>
           ) : (
             pendingRes.map(r => (
               <div key={r.id}
-                className="flex items-center justify-between p-4 bg-[#1C1C1E] border border-[#2C2C2E] hover:border-[#48484A] transition-colors gap-4 rounded-xl">
+                className="flex items-center justify-between p-4 bg-[#1d1b19] border border-[#2d2a26] hover:border-[#48484A] transition-colors gap-4 rounded-xl">
                 <div className="min-w-0 flex-1">
                   <div className="flex items-center gap-3 flex-wrap">
                     <span className="font-semibold text-white text-sm">{r.customerName}</span>
-                    <span className="text-xs font-medium text-[#AEAEB2] border border-[#3A3A3C] rounded-full px-2 py-0.5">
+                    <span className="text-xs font-medium text-[#AEAEB2] border border-[#3b3733] rounded-full px-2 py-0.5">
                       Tav. {r.tableName ?? r.tableId}
                     </span>
                   </div>
@@ -421,7 +421,7 @@ export default function EventDetailView({ event, venue, reservations, prUsers, p
                   { label: 'Da PR', value: regFromPr.length, color: 'text-[#D4622A]' },
                   { label: 'Entrati', value: regCheckedIn.length, color: 'text-[#22C55E]' },
                 ].map(s => (
-                  <div key={s.label} className="border border-[#2C2C2E] bg-[#1C1C1E] p-3 text-center rounded-xl">
+                  <div key={s.label} className="border border-[#2d2a26] bg-[#1d1b19] p-3 text-center rounded-xl">
                     <div className={cn('hv font-black text-2xl leading-none', s.color)}>{s.value}</div>
                     <div className="text-xs text-[#8E8E93] mt-1">{s.label}</div>
                   </div>
@@ -429,14 +429,14 @@ export default function EventDetailView({ event, venue, reservations, prUsers, p
               </div>
 
               {registrations.length === 0 ? (
-                <div className="py-16 text-center border border-[#2C2C2E] rounded-xl">
+                <div className="py-16 text-center border border-[#2d2a26] rounded-xl">
                   <p className="text-sm text-[#636366]">Nessuna registrazione ancora</p>
                 </div>
               ) : (
-                <div className="border border-[#2C2C2E] overflow-hidden rounded-xl">
+                <div className="border border-[#2d2a26] overflow-hidden rounded-xl">
                   {registrations.map(reg => (
-                    <div key={reg.id} className="flex items-center gap-4 px-4 py-3 border-b border-[#1C1C1E] last:border-0">
-                      <div className={cn('w-2 h-2 rounded-full shrink-0', reg.checkedIn ? 'bg-[#22C55E]' : 'bg-[#2C2C2E]')} />
+                    <div key={reg.id} className="flex items-center gap-4 px-4 py-3 border-b border-[#1d1b19] last:border-0">
+                      <div className={cn('w-2 h-2 rounded-full shrink-0', reg.checkedIn ? 'bg-[#22C55E]' : 'bg-[#2d2a26]')} />
                       <div className="flex-1 min-w-0">
                         <p className="text-sm font-bold text-white truncate">
                           {reg.firstName} {reg.lastName}
@@ -470,13 +470,13 @@ export default function EventDetailView({ event, venue, reservations, prUsers, p
       {tab === 'report' && (
         <div className="space-y-6">
           {approvedRes.length === 0 ? (
-            <div className="py-16 text-center border border-[#2C2C2E] rounded-xl">
+            <div className="py-16 text-center border border-[#2d2a26] rounded-xl">
               <p className="text-sm text-[#636366]">Nessun dato: nessuna prenotazione approvata.</p>
             </div>
           ) : (
             <>
               {/* Incasso reale vs previsto */}
-              <div className="border border-[#2C2C2E] bg-[#1C1C1E] rounded-xl p-5">
+              <div className="border border-[#2d2a26] bg-[#1d1b19] rounded-xl p-5">
                 <div className="flex items-end justify-between gap-4 flex-wrap">
                   <div>
                     <p className="text-[10px] uppercase tracking-widest text-[#8E8E93] flex items-center gap-1.5">
@@ -501,7 +501,7 @@ export default function EventDetailView({ event, venue, reservations, prUsers, p
                   { label: 'Persone', value: `${personeEntrate}/${personePreviste}`, color: 'text-white' },
                   { label: 'Occupazione', value: `${occupancy}%`, color: 'text-[#D4622A]' },
                 ].map(k => (
-                  <div key={k.label} className="border border-[#2C2C2E] bg-[#1C1C1E] rounded-xl p-4 text-center">
+                  <div key={k.label} className="border border-[#2d2a26] bg-[#1d1b19] rounded-xl p-4 text-center">
                     <div className={cn('hv font-black text-2xl leading-none', k.color)}>{k.value}</div>
                     <div className="text-[10px] text-[#8E8E93] mt-2">{k.label}</div>
                   </div>
@@ -511,10 +511,10 @@ export default function EventDetailView({ event, venue, reservations, prUsers, p
               {/* Top PR */}
               <div>
                 <p className="text-xs font-medium text-[#8E8E93] mb-3">Top PR — per incasso reale</p>
-                <div className="border border-[#2C2C2E] rounded-xl overflow-hidden">
+                <div className="border border-[#2d2a26] rounded-xl overflow-hidden">
                   {prRanking.map((p, i) => (
-                    <div key={p.name + i} className="flex items-center gap-4 px-4 py-3 border-b border-[#1C1C1E] last:border-0">
-                      <span className="hv font-black text-sm w-5 shrink-0" style={{ color: i === 0 ? '#FFD700' : i === 1 ? '#C0C0C0' : i === 2 ? '#CD7F32' : '#3A3A3C' }}>{i + 1}</span>
+                    <div key={p.name + i} className="flex items-center gap-4 px-4 py-3 border-b border-[#1d1b19] last:border-0">
+                      <span className="hv font-black text-sm w-5 shrink-0" style={{ color: i === 0 ? '#FFD700' : i === 1 ? '#C0C0C0' : i === 2 ? '#CD7F32' : '#3b3733' }}>{i + 1}</span>
                       <span className="flex-1 min-w-0 text-sm text-white truncate">{p.name}</span>
                       <span className="text-[10px] text-[#8E8E93] shrink-0">{p.tavoli} tav.</span>
                       <span className="hv font-black text-sm text-[#D4622A] shrink-0 w-16 text-right">{eur(p.incasso)}</span>

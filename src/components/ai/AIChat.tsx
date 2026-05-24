@@ -189,11 +189,11 @@ export default function AIChat({ user, events, venues, reservations, managedUser
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: 12, scale: 0.96 }}
             transition={{ duration: 0.2, ease: [0.25, 0.46, 0.45, 0.94] }}
-            className="pointer-events-auto w-[340px] flex flex-col bg-[#0f0f0f] border border-[#1C1C1E] shadow-[0_24px_60px_rgba(0,0,0,0.7)]"
+            className="pointer-events-auto w-[340px] flex flex-col bg-[#0f0f0f] border border-[#1d1b19] shadow-[0_24px_60px_rgba(0,0,0,0.7)]"
             style={{ maxHeight: '480px', borderRadius: 12 }}
           >
             {/* Header */}
-            <div className="flex items-center justify-between px-4 py-3 border-b border-[#1C1C1E] shrink-0">
+            <div className="flex items-center justify-between px-4 py-3 border-b border-[#1d1b19] shrink-0">
               <div className="flex items-center gap-2">
                 <div className="w-6 h-6 flex items-center justify-center bg-accent/10 rounded-md">
                   <Sparkles size={12} className="text-accent" />
@@ -223,7 +223,7 @@ export default function AIChat({ user, events, venues, reservations, managedUser
                       <button
                         key={s}
                         onClick={() => sendMessage(s)}
-                        className="w-full text-left px-3 py-2 border border-[#1C1C1E] hover:border-[#D4622A]/30 hover:bg-[#D4622A]/5 text-[10px] font-sans text-[#8E8E93] hover:text-white transition-all"
+                        className="w-full text-left px-3 py-2 border border-[#1d1b19] hover:border-[#D4622A]/30 hover:bg-[#D4622A]/5 text-[10px] font-sans text-[#8E8E93] hover:text-white transition-all"
                         style={{ borderRadius: 6 }}
                       >
                         {s}
@@ -239,7 +239,7 @@ export default function AIChat({ user, events, venues, reservations, managedUser
                     className={`max-w-[80%] px-3 py-2 text-[11px] font-sans leading-relaxed ${
                       m.role === 'user'
                         ? 'bg-accent text-black font-medium'
-                        : 'bg-[#1C1C1E] text-[#AEAEB2] border border-[#2C2C2E]'
+                        : 'bg-[#1d1b19] text-[#AEAEB2] border border-[#2d2a26]'
                     }`}
                     style={{ borderRadius: m.role === 'user' ? '12px 12px 4px 12px' : '12px 12px 12px 4px' }}
                   >
@@ -250,7 +250,7 @@ export default function AIChat({ user, events, venues, reservations, managedUser
 
               {loading && (
                 <div className="flex justify-start">
-                  <div className="bg-[#1C1C1E] border border-[#2C2C2E] px-3 py-2 flex items-center gap-2" style={{ borderRadius: '12px 12px 12px 4px' }}>
+                  <div className="bg-[#1d1b19] border border-[#2d2a26] px-3 py-2 flex items-center gap-2" style={{ borderRadius: '12px 12px 12px 4px' }}>
                     <Loader2 size={10} className="text-accent animate-spin" />
                     <span className="text-[10px] font-sans text-[#636366]">Analisi in corso…</span>
                   </div>
@@ -267,14 +267,14 @@ export default function AIChat({ user, events, venues, reservations, managedUser
             </div>
 
             {/* Input */}
-            <form onSubmit={handleSubmit} className="flex items-center gap-2 px-3 py-3 border-t border-[#1C1C1E] shrink-0">
+            <form onSubmit={handleSubmit} className="flex items-center gap-2 px-3 py-3 border-t border-[#1d1b19] shrink-0">
               <input
                 ref={inputRef}
                 value={input}
                 onChange={e => setInput(e.target.value)}
                 placeholder="Chiedi qualcosa…"
                 disabled={loading}
-                className="flex-1 bg-[#1C1C1E] border border-[#2C2C2E] px-3 py-2 text-[11px] font-sans text-white placeholder-[#48484A] outline-none focus:border-[#3A3A3C] transition-colors disabled:opacity-50"
+                className="flex-1 bg-[#1d1b19] border border-[#2d2a26] px-3 py-2 text-[11px] font-sans text-white placeholder-[#48484A] outline-none focus:border-[#3b3733] transition-colors disabled:opacity-50"
                 style={{ borderRadius: 8 }}
               />
               <button

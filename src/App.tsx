@@ -1064,7 +1064,7 @@ export default function App() {
                         Controlla la tua casella di posta<br />e clicca il link per reimpostare<br />la password.
                       </p>
                       {forgotDevLink && (
-                        <div className="mt-6 p-4 bg-[#111111] border border-[#3A3A3C] text-left">
+                        <div className="mt-6 p-4 bg-[#121110] border border-[#3b3733] text-left">
                           <p className="text-[8px] font-sans uppercase tracking-widest text-[#8E8E93] mb-2">Link di reset (dev mode)</p>
                           <a href={forgotDevLink} className="text-accent text-[10px] font-mono break-all hover:underline">
                             Clicca qui per reimpostare
@@ -1072,7 +1072,7 @@ export default function App() {
                         </div>
                       )}
                       <button onClick={() => { setAuthScreen('login'); setForgotSent(false); setForgotEmail(''); }}
-                        className="mt-8 w-full py-3.5 text-sm font-medium rounded-xl border border-[#2C2C2E] text-[#8E8E93] hover:border-accent/40 hover:text-accent transition-colors">
+                        className="mt-8 w-full py-3.5 text-sm font-medium rounded-xl border border-[#2d2a26] text-[#8E8E93] hover:border-accent/40 hover:text-accent transition-colors">
                         Torna al Login
                       </button>
                     </div>
@@ -1088,7 +1088,7 @@ export default function App() {
                           <input type="email" required value={forgotEmail}
                             onChange={e => { setForgotEmail(e.target.value); setForgotError(''); }}
                             placeholder="tua@email.it"
-                            className="auth-input w-full bg-[#111111] border border-[#3A3A3C] px-5 py-4 text-sm text-white placeholder-[#636366] font-sans" />
+                            className="auth-input w-full bg-[#121110] border border-[#3b3733] px-5 py-4 text-sm text-white placeholder-[#636366] font-sans" />
                         </div>
                         {forgotError && <p className="text-red-400 text-xs pt-1">{forgotError}</p>}
                         <motion.button type="submit" whileHover={{ scale: 1.01 }} whileTap={{ scale: 0.99 }}
@@ -1097,7 +1097,7 @@ export default function App() {
                           <ChevronRight size={14} className="group-hover:translate-x-1 transition-transform" />
                         </motion.button>
                       </form>
-                      <div className="mt-8 pt-6 border-t border-[#2C2C2E]">
+                      <div className="mt-8 pt-6 border-t border-[#2d2a26]">
                         <button onClick={() => setAuthScreen('login')}
                           className="w-full text-xs font-medium text-[#636366] hover:text-[#AEAEB2] transition-colors py-2">
                           ← Torna al Login
@@ -1135,7 +1135,7 @@ export default function App() {
                             <input type={showNewPasswordField ? 'text' : 'password'} required minLength={4} value={newPassword}
                               onChange={e => { setNewPassword(e.target.value); setResetError(''); }}
                               placeholder="••••••••"
-                              className="auth-input w-full bg-[#111111] border border-[#3A3A3C] px-5 py-4 pr-11 text-sm text-white placeholder-[#636366] font-sans" />
+                              className="auth-input w-full bg-[#121110] border border-[#3b3733] px-5 py-4 pr-11 text-sm text-white placeholder-[#636366] font-sans" />
                             <button type="button" onClick={() => setShowNewPasswordField(o => !o)}
                               className="absolute right-4 top-1/2 -translate-y-1/2 text-[#8E8E93] hover:text-accent transition-colors">
                               {showNewPasswordField ? <EyeOff size={14} /> : <Eye size={14} />}
@@ -1163,7 +1163,7 @@ export default function App() {
                     Il tuo account è in attesa<br />di approvazione admin.
                   </p>
                   <button onClick={() => { setAuthScreen('login'); setRegDone(false); setRegName(''); setRegEmail(''); setRegPassword(''); }}
-                    className="mt-8 w-full py-3.5 text-sm font-medium rounded-xl border border-[#2C2C2E] text-[#8E8E93] hover:border-accent/40 hover:text-accent transition-colors">
+                    className="mt-8 w-full py-3.5 text-sm font-medium rounded-xl border border-[#2d2a26] text-[#8E8E93] hover:border-accent/40 hover:text-accent transition-colors">
                     Torna al Login
                   </button>
                 </motion.div>
@@ -1181,13 +1181,13 @@ export default function App() {
                         <label className="text-xs font-medium text-[#636366]">Nome</label>
                         <input required value={regName} onChange={e => { setRegName(e.target.value); setRegError(''); }}
                           placeholder="Mario"
-                          className="auth-input w-full bg-[#111111] border border-[#3A3A3C] px-4 py-4 text-sm text-white placeholder-[#636366] font-sans" />
+                          className="auth-input w-full bg-[#121110] border border-[#3b3733] px-4 py-4 text-sm text-white placeholder-[#636366] font-sans" />
                       </div>
                       <div className="space-y-1">
                         <label className="text-xs font-medium text-[#636366]">Cognome</label>
                         <input required value={regLastName} onChange={e => { setRegLastName(e.target.value); setRegError(''); }}
                           placeholder="Rossi"
-                          className="auth-input w-full bg-[#111111] border border-[#3A3A3C] px-4 py-4 text-sm text-white placeholder-[#636366] font-sans" />
+                          className="auth-input w-full bg-[#121110] border border-[#3b3733] px-4 py-4 text-sm text-white placeholder-[#636366] font-sans" />
                       </div>
                     </div>
                     <div className="space-y-1">
@@ -1206,7 +1206,7 @@ export default function App() {
                         }}
                         onBlur={() => { if (regEmail) setRegEmailError(validateEmail(regEmail)); }}
                         placeholder="tua@email.it"
-                        className={`auth-input w-full bg-[#111111] border px-5 py-4 text-sm text-white placeholder-[#636366] font-sans ${regEmailError ? 'border-red-500/60' : 'border-[#3A3A3C]'}`}
+                        className={`auth-input w-full bg-[#121110] border px-5 py-4 text-sm text-white placeholder-[#636366] font-sans ${regEmailError ? 'border-red-500/60' : 'border-[#3b3733]'}`}
                       />
                       {regEmailError && <p className="text-red-500/80 text-xs">{regEmailError}</p>}
                     </div>
@@ -1226,7 +1226,7 @@ export default function App() {
                         }}
                         onBlur={() => { if (regPhone) setRegPhoneError(validatePhone(regPhone)); }}
                         placeholder="+39 333 000 0000"
-                        className={`auth-input w-full bg-[#111111] border px-5 py-4 text-sm text-white placeholder-[#636366] font-sans ${regPhoneError ? 'border-red-500/60' : 'border-[#3A3A3C]'}`}
+                        className={`auth-input w-full bg-[#121110] border px-5 py-4 text-sm text-white placeholder-[#636366] font-sans ${regPhoneError ? 'border-red-500/60' : 'border-[#3b3733]'}`}
                       />
                       {regPhoneError && <p className="text-red-500/80 text-xs">{regPhoneError}</p>}
                     </div>
@@ -1235,7 +1235,7 @@ export default function App() {
                       <div className="relative">
                         <input type={showRegPassword ? 'text' : 'password'} required value={regPassword} onChange={e => { setRegPassword(e.target.value); setRegError(''); }}
                           placeholder="••••••••"
-                          className="auth-input w-full bg-[#111111] border border-[#3A3A3C] px-5 py-4 pr-11 text-sm text-white placeholder-[#636366] font-sans" />
+                          className="auth-input w-full bg-[#121110] border border-[#3b3733] px-5 py-4 pr-11 text-sm text-white placeholder-[#636366] font-sans" />
                         <button type="button" onClick={() => setShowRegPassword(o => !o)}
                           className="absolute right-4 top-1/2 -translate-y-1/2 text-[#8E8E93] hover:text-accent transition-colors">
                           {showRegPassword ? <EyeOff size={14} /> : <Eye size={14} />}
@@ -1248,7 +1248,7 @@ export default function App() {
                       disabled={!!regEmailError || !!regPhoneError}
                       whileHover={!regEmailError && !regPhoneError ? { scale: 1.01 } : {}}
                       whileTap={!regEmailError && !regPhoneError ? { scale: 0.99 } : {}}
-                      className={`group w-full py-4 text-sm font-semibold rounded-xl flex items-center justify-between px-6 transition-colors mt-2 ${regEmailError || regPhoneError ? 'bg-[#2C2C2E] text-[#8E8E93] cursor-not-allowed' : 'bg-accent text-black hover:bg-white'}`}>
+                      className={`group w-full py-4 text-sm font-semibold rounded-xl flex items-center justify-between px-6 transition-colors mt-2 ${regEmailError || regPhoneError ? 'bg-[#2d2a26] text-[#8E8E93] cursor-not-allowed' : 'bg-accent text-black hover:bg-white'}`}>
                       <span>Invia Richiesta</span>
                       <ChevronRight size={14} className="group-hover:translate-x-1 transition-transform" />
                     </motion.button>
@@ -1295,7 +1295,7 @@ export default function App() {
             </div>
           </div>
         </motion.div>
-        <p className="absolute bottom-5 text-[9px] font-sans text-[#2C2C2E] uppercase tracking-[0.3em]">© 2025 Nightplan</p>
+        <p className="absolute bottom-5 text-[9px] font-sans text-[#2d2a26] uppercase tracking-[0.3em]">© 2025 Nightplan</p>
       </div>
     );
   }
@@ -1305,7 +1305,7 @@ export default function App() {
     <div className="min-h-screen bg-bg text-white flex flex-col md:flex-row relative">
 
       {/* ── Mobile top bar ── */}
-      <div className="md:hidden h-12 bg-[#111111] border-b border-[#2C2C2E] flex items-center justify-between px-4 sticky top-0 z-50 shrink-0">
+      <div className="md:hidden h-12 bg-[#121110] border-b border-[#2d2a26] flex items-center justify-between px-4 sticky top-0 z-50 shrink-0">
         <span className="hv font-black text-xl uppercase tracking-tight">NP</span>
         <button onClick={() => setMobileSidebarOpen(o => !o)} className="text-[#8E8E93] hover:text-white transition-colors p-1">
           <Menu size={18} />
@@ -1324,7 +1324,7 @@ export default function App() {
             <motion.div
               initial={{ x: '-100%' }} animate={{ x: 0 }} exit={{ x: '-100%' }}
               transition={{ type: 'spring', damping: 30, stiffness: 300 }}
-              className="fixed left-0 top-0 bottom-0 w-72 bg-[#111111]/90 backdrop-blur-xl border-r border-white/[0.06] z-50 md:hidden flex flex-col"
+              className="fixed left-0 top-0 bottom-0 w-72 bg-[#121110]/90 backdrop-blur-xl border-r border-white/[0.06] z-50 md:hidden flex flex-col"
             >
               <SidebarContent
                 user={user}
@@ -1342,7 +1342,7 @@ export default function App() {
       </AnimatePresence>
 
       {/* ── Desktop sidebar ── */}
-      <aside className="hidden md:flex w-60 xl:w-64 border-r border-white/[0.06] bg-[#111111]/90 backdrop-blur-xl flex-col shrink-0 sticky top-0 h-screen">
+      <aside className="hidden md:flex w-60 xl:w-64 border-r border-white/[0.06] bg-[#121110]/90 backdrop-blur-xl flex-col shrink-0 sticky top-0 h-screen">
         <SidebarContent user={user} view={view}
           onNav={(v) => { setView(v as AppView); setSelectedVenue(null); setSelectedEvent(null); setEditingFloorPlan(null); setEditorVenueId(null); setSelectedPR(null); }}
           onLogout={handleLogout}
@@ -1365,18 +1365,18 @@ export default function App() {
           const searchBtn = (
             <button
               onClick={() => setPaletteOpen(true)}
-              className="hidden md:flex items-center gap-2 px-3 py-1.5 border border-[#2C2C2E] text-[#636366] hover:text-white hover:border-[#48484A] transition-colors text-xs shrink-0"
+              className="hidden md:flex items-center gap-2 px-3 py-1.5 border border-[#2d2a26] text-[#636366] hover:text-white hover:border-[#48484A] transition-colors text-xs shrink-0"
               title="Cerca (⌘K)"
             >
               <Search size={12} />
               <span>Cerca</span>
-              <kbd className="hidden lg:inline text-[8px] font-mono border border-[#2C2C2E] px-1 py-0.5 ml-1">⌘K</kbd>
+              <kbd className="hidden lg:inline text-[8px] font-mono border border-[#2d2a26] px-1 py-0.5 ml-1">⌘K</kbd>
             </button>
           );
 
           if (!expanded) {
             return (
-              <header className="h-12 border-b border-[#2C2C2E] flex items-center justify-between px-5 bg-[#111111]/95 backdrop-blur-sm sticky top-0 z-30 shrink-0">
+              <header className="h-12 border-b border-[#2d2a26] flex items-center justify-between px-5 bg-[#121110]/95 backdrop-blur-sm sticky top-0 z-30 shrink-0">
                 <div className="flex items-center gap-4 min-w-0">
                   {showBack && (
                     <button onClick={goBack}
@@ -1394,7 +1394,7 @@ export default function App() {
           }
 
           return (
-            <header className="border-b border-[#2C2C2E] bg-[#111111]/95 backdrop-blur-sm sticky top-0 z-30 shrink-0">
+            <header className="border-b border-[#2d2a26] bg-[#121110]/95 backdrop-blur-sm sticky top-0 z-30 shrink-0">
               <div className="px-5 py-3 flex items-start justify-between gap-3">
                 <div className="min-w-0 flex-1">
                   {/* Breadcrumbs */}
@@ -1530,7 +1530,7 @@ export default function App() {
                           {user.role === 'admin' && (
                             <div className="mt-6 flex justify-center">
                               <button onClick={() => setShowNewEventModal(true)}
-                                className="flex items-center gap-2 border border-[#3A3A3C] text-[#AEAEB2] px-6 py-3 text-sm font-medium rounded-xl hover:border-accent hover:text-accent transition-all">
+                                className="flex items-center gap-2 border border-[#3b3733] text-[#AEAEB2] px-6 py-3 text-sm font-medium rounded-xl hover:border-accent hover:text-accent transition-all">
                                 <Plus size={11} /> Nuova Serata
                               </button>
                             </div>
@@ -1555,7 +1555,7 @@ export default function App() {
                             return liveFloorPlans.length === 0 ? (
                             <EmptyState icon={<Map size={28} />} label="Nessuna pianta per questo club." />
                           ) : (
-                            <div className="border border-[#3A3A3C] bg-card divide-y divide-[#2C2C2E] rounded-xl overflow-hidden">
+                            <div className="border border-[#3b3733] bg-card divide-y divide-[#2d2a26] rounded-xl overflow-hidden">
                               {liveFloorPlans.map(fp => (
                                 <div key={fp.id} className="px-7 py-4 flex items-center justify-between group hover:bg-white/[0.01] transition-colors">
                                   <div className="flex items-center gap-4">
@@ -1619,7 +1619,7 @@ export default function App() {
               <motion.div key="active-events" {...PAGE}>
                 <PageTitle title="Serate" sub="Seleziona una serata per gestirla" />
                 {/* Filtro Attive / Concluse */}
-                <div className="flex items-center gap-1 bg-[#1C1C1E] border border-[#2C2C2E] rounded-xl p-1 w-fit mt-6 mb-2">
+                <div className="flex items-center gap-1 bg-[#1d1b19] border border-[#2d2a26] rounded-xl p-1 w-fit mt-6 mb-2">
                   {([['attive', `Attive (${activeEvents.length})`], ['concluse', `Concluse (${completedEvents.length})`]] as const).map(([k, label]) => (
                     <button key={k} onClick={() => setSerateFilter(k)}
                       className={cn('px-4 py-2 rounded-lg text-xs font-semibold transition-colors',
@@ -1757,9 +1757,9 @@ export default function App() {
                       </div>
                       <div className="space-y-6">
                         {venuesToShow.map(venue => (
-                          <div key={venue.id} className="border border-[#3A3A3C] bg-card rounded-xl overflow-hidden">
+                          <div key={venue.id} className="border border-[#3b3733] bg-card rounded-xl overflow-hidden">
                             {!filteredVenue && (
-                              <div className="px-7 py-5 border-b border-[#2C2C2E]">
+                              <div className="px-7 py-5 border-b border-[#2d2a26]">
                                 <h3 className="font-bold text-xl text-white">{venue.name}</h3>
                                 <p className="text-xs text-[#AEAEB2] mt-0.5">{venue.address}</p>
                               </div>
@@ -1769,7 +1769,7 @@ export default function App() {
                                 <p className="text-sm text-[#636366]">Nessuna pianta</p>
                               </div>
                             ) : (
-                              <div className="divide-y divide-[#2C2C2E]">
+                              <div className="divide-y divide-[#2d2a26]">
                                 {venue.floorPlans.map(fp => (
                                   <div key={fp.id} className="px-7 py-4 flex items-center justify-between group hover:bg-white/[0.01] transition-colors">
                                     <div className="flex items-center gap-4">
@@ -1886,25 +1886,25 @@ export default function App() {
 
                   {/* KPIs */}
                   <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 mt-8 mb-10">
-                    <div className="border border-[#2C2C2E] bg-card px-6 py-6 rounded-xl">
+                    <div className="border border-[#2d2a26] bg-card px-6 py-6 rounded-xl">
                       <div className="text-accent mb-4"><BarChart3 size={18}/></div>
                       <div className="hv font-black text-4xl text-white leading-none">{myRes.length}</div>
                       <div className="text-xs text-[#8E8E93] mt-3">Tavoli prenotati</div>
                     </div>
-                    <div className="border border-[#2C2C2E] bg-card px-6 py-6 rounded-xl">
+                    <div className="border border-[#2d2a26] bg-card px-6 py-6 rounded-xl">
                       <div className="text-accent mb-4"><TrendingUp size={18}/></div>
                       <div className="hv font-black text-4xl text-white leading-none">€{totalBudget >= 1000 ? `${(totalBudget/1000).toFixed(1)}K` : totalBudget}</div>
                       <div className="text-xs text-[#8E8E93] mt-3">Budget generato</div>
                     </div>
-                    <div className="border border-[#2C2C2E] bg-card px-6 py-6 rounded-xl">
+                    <div className="border border-[#2d2a26] bg-card px-6 py-6 rounded-xl">
                       <div className="text-accent mb-4"><Calendar size={18}/></div>
                       <div className="hv font-black text-4xl text-white leading-none">{myEventIds.length}</div>
                       <div className="text-xs text-[#8E8E93] mt-3">Serate lavorate</div>
                     </div>
-                    <div className="border border-[#2C2C2E] bg-card px-6 py-6 rounded-xl">
+                    <div className="border border-[#2d2a26] bg-card px-6 py-6 rounded-xl">
                       <div className="text-accent mb-4"><CheckCircle2 size={18}/></div>
                       <div className="hv font-black text-4xl text-white leading-none">{approvalRate}<span className="text-xl text-[#8E8E93]">%</span></div>
-                      <div className="mt-3 h-1 bg-[#1C1C1E] rounded-full overflow-hidden">
+                      <div className="mt-3 h-1 bg-[#1d1b19] rounded-full overflow-hidden">
                         <motion.div className="h-full bg-accent" initial={{ width: 0 }} animate={{ width: `${approvalRate}%` }} transition={{ duration: 1, ease: 'easeOut' }} />
                       </div>
                       <div className="text-xs text-[#8E8E93] mt-2">Tasso approvazione</div>
@@ -2016,7 +2016,7 @@ export default function App() {
               animate={{ opacity: 1, y: 0, scale: 1 }}
               exit={{ opacity: 0, y: 8, scale: 0.96 }}
               transition={{ duration: 0.2 }}
-              className="bg-[#1C1C1E] border border-[#2C2C2E] px-5 py-4 min-w-[260px] shadow-2xl rounded-xl"
+              className="bg-[#1d1b19] border border-[#2d2a26] px-5 py-4 min-w-[260px] shadow-2xl rounded-xl"
             >
               <div className="flex items-center gap-2">
                 <CheckCircle2 size={13} className="text-accent shrink-0" />
@@ -2221,7 +2221,7 @@ function PRProfile({ user, onSave }: {
         {/* Avatar */}
         <div className="flex flex-col items-center gap-4">
           <button type="button" onClick={() => fileRef.current?.click()}
-            className="relative group w-24 h-24 bg-[#2C2C2E] border border-[#3A3A3C] overflow-hidden hover:border-accent/40 transition-colors rounded-2xl">
+            className="relative group w-24 h-24 bg-[#2d2a26] border border-[#3b3733] overflow-hidden hover:border-accent/40 transition-colors rounded-2xl">
             {image
               ? <img src={image} alt="" className="w-full h-full object-cover" />
               : <span className="hv font-black text-accent text-2xl">{initials}</span>
@@ -2239,16 +2239,16 @@ function PRProfile({ user, onSave }: {
           <div className="grid grid-cols-2 gap-4">
             <Field label="Nome">
               <input required value={firstName} onChange={e => setFirstName(e.target.value)}
-                className="w-full bg-bg border border-[#3A3A3C] rounded-xl px-4 py-3 text-sm text-white outline-none focus:border-accent/40 transition-colors font-sans" />
+                className="w-full bg-bg border border-[#3b3733] rounded-xl px-4 py-3 text-sm text-white outline-none focus:border-accent/40 transition-colors font-sans" />
             </Field>
             <Field label="Cognome">
               <input value={lastName} onChange={e => setLastName(e.target.value)}
-                className="w-full bg-bg border border-[#3A3A3C] rounded-xl px-4 py-3 text-sm text-white outline-none focus:border-accent/40 transition-colors font-sans" />
+                className="w-full bg-bg border border-[#3b3733] rounded-xl px-4 py-3 text-sm text-white outline-none focus:border-accent/40 transition-colors font-sans" />
             </Field>
           </div>
           <Field label="Email">
             <input disabled value={user.email}
-              className="w-full bg-[#080808] border border-[#1C1C1E] rounded-xl px-4 py-3 text-sm text-[#636366] outline-none font-sans cursor-not-allowed" />
+              className="w-full bg-[#0a0908] border border-[#1d1b19] rounded-xl px-4 py-3 text-sm text-[#636366] outline-none font-sans cursor-not-allowed" />
           </Field>
         </div>
 
@@ -2300,7 +2300,7 @@ function PRManagementPage({ managedUsers, reservations, events, prGroups, select
   const statusBadge = (s: string) => {
     if (s === 'approved') return <span className="px-2.5 py-0.5 text-xs font-medium rounded-full bg-green-500/10 text-green-400 border border-green-500/20">Attivo</span>;
     if (s === 'rejected') return <span className="px-2.5 py-0.5 text-xs font-medium rounded-full bg-red-500/10 text-red-400 border border-red-500/20">Rifiutato</span>;
-    return <span className="px-2.5 py-0.5 text-xs font-medium rounded-full bg-[#1C1C1E] text-[#8E8E93] border border-[#2C2C2E]">In attesa</span>;
+    return <span className="px-2.5 py-0.5 text-xs font-medium rounded-full bg-[#1d1b19] text-[#8E8E93] border border-[#2d2a26]">In attesa</span>;
   };
 
   if (selectedPR) {
@@ -2328,13 +2328,13 @@ function PRManagementPage({ managedUsers, reservations, events, prGroups, select
           </button>
         </div>
         {prGroups.length === 0 ? (
-          <p className="text-xs text-[#636366] border border-[#2C2C2E] rounded-xl px-4 py-5 text-center">
+          <p className="text-xs text-[#636366] border border-[#2d2a26] rounded-xl px-4 py-5 text-center">
             Nessun gruppo. Crea un gruppo per assegnare più PR a un evento con un tap.
           </p>
         ) : (
           <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-3">
             {prGroups.map(g => (
-              <div key={g.id} className="border border-[#2C2C2E] bg-card rounded-xl px-4 py-3 flex items-center justify-between gap-3">
+              <div key={g.id} className="border border-[#2d2a26] bg-card rounded-xl px-4 py-3 flex items-center justify-between gap-3">
                 <div className="min-w-0">
                   <p className="text-sm font-semibold text-white truncate">{g.name}</p>
                   <p className="text-[10px] text-[#8E8E93] mt-0.5">{g.prIds.length} PR</p>
@@ -2378,10 +2378,10 @@ function PRManagementPage({ managedUsers, reservations, events, prGroups, select
           {prUsers.map(pr => {
             const stats = prStats(pr.id);
             return (
-              <div key={pr.id} className="border border-[#2C2C2E] bg-card p-6 flex flex-col gap-5 hover:border-[#3a3a3a] transition-colors rounded-xl">
+              <div key={pr.id} className="border border-[#2d2a26] bg-card p-6 flex flex-col gap-5 hover:border-[#3a3a3a] transition-colors rounded-xl">
                 {/* Header */}
                 <div className="flex items-center gap-4">
-                  <div className="w-11 h-11 bg-[#1C1C1E] border border-[#2C2C2E] flex items-center justify-center shrink-0 overflow-hidden rounded-xl">
+                  <div className="w-11 h-11 bg-[#1d1b19] border border-[#2d2a26] flex items-center justify-center shrink-0 overflow-hidden rounded-xl">
                     {pr.profileImage
                       ? <img src={pr.profileImage} alt="" className="w-full h-full object-cover" />
                       : <span className="hv font-black text-accent text-sm">{pr.displayName.slice(0,2).toUpperCase()}</span>}
@@ -2394,7 +2394,7 @@ function PRManagementPage({ managedUsers, reservations, events, prGroups, select
                 </div>
 
                 {/* Stats */}
-                <div className="grid grid-cols-3 gap-3 border-t border-[#1C1C1E] pt-5">
+                <div className="grid grid-cols-3 gap-3 border-t border-[#1d1b19] pt-5">
                   <div>
                     <p className="hv font-black text-xl text-white">{stats.total}</p>
                     <p className="text-xs text-[#8E8E93] mt-1">Tavoli</p>
@@ -2411,7 +2411,7 @@ function PRManagementPage({ managedUsers, reservations, events, prGroups, select
 
                 {/* CTA */}
                 <button onClick={() => onSelectPR(pr)}
-                  className="w-full py-2.5 text-sm font-medium rounded-xl border border-[#2C2C2E] text-[#636366] hover:border-accent/40 hover:text-accent transition-colors flex items-center justify-center gap-2">
+                  className="w-full py-2.5 text-sm font-medium rounded-xl border border-[#2d2a26] text-[#636366] hover:border-accent/40 hover:text-accent transition-colors flex items-center justify-center gap-2">
                   Apri Scheda <ChevronRight size={11} />
                 </button>
               </div>
@@ -2442,9 +2442,9 @@ function GroupEditorModal({ group, prUsers, onClose, onSave }: {
         className="absolute inset-0 bg-black/90 backdrop-blur-sm" onClick={onClose} />
       <motion.div initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.22, ease: 'easeOut' }}
-        className="relative w-full sm:max-w-md bg-card border-t border-x sm:border border-[#3A3A3C] overflow-hidden rounded-t-2xl sm:rounded-2xl max-h-[90vh] flex flex-col">
+        className="relative w-full sm:max-w-md bg-card border-t border-x sm:border border-[#3b3733] overflow-hidden rounded-t-2xl sm:rounded-2xl max-h-[90vh] flex flex-col">
         <div className="h-[2px] bg-accent shrink-0" />
-        <div className="px-6 sm:px-8 py-5 border-b border-[#2C2C2E] flex items-center justify-between shrink-0">
+        <div className="px-6 sm:px-8 py-5 border-b border-[#2d2a26] flex items-center justify-between shrink-0">
           <h3 className="font-bold text-xl text-white">{group ? 'Modifica gruppo' : 'Nuovo gruppo'}</h3>
           <button onClick={onClose} className="text-[#AEAEB2] hover:text-white transition-colors p-1"><X size={18} /></button>
         </div>
@@ -2452,14 +2452,14 @@ function GroupEditorModal({ group, prUsers, onClose, onSave }: {
           onSubmit={(e) => { e.preventDefault(); if (!canSave) return; onSave({ id: group?.id ?? `g_${Date.now()}`, name: name.trim(), prIds }); }}>
           <Field label="Nome gruppo">
             <input required autoFocus placeholder="Es. Team Sabato"
-              className="w-full bg-bg border border-[#3A3A3C] rounded-xl px-4 py-3 text-sm text-white placeholder-[#8E8E93] outline-none focus:border-[#D4622A] transition-colors"
+              className="w-full bg-bg border border-[#3b3733] rounded-xl px-4 py-3 text-sm text-white placeholder-[#8E8E93] outline-none focus:border-[#D4622A] transition-colors"
               value={name} onChange={e => setName(e.target.value)} />
           </Field>
           <Field label={`Membri (${prIds.length})`}>
             {prUsers.length === 0 ? (
-              <p className="text-xs text-[#636366] px-2 py-3 text-center border border-[#2C2C2E] rounded-xl">Nessun PR approvato</p>
+              <p className="text-xs text-[#636366] px-2 py-3 text-center border border-[#2d2a26] rounded-xl">Nessun PR approvato</p>
             ) : (
-              <div className="space-y-1 max-h-60 overflow-y-auto border border-[#2C2C2E] rounded-xl p-2">
+              <div className="space-y-1 max-h-60 overflow-y-auto border border-[#2d2a26] rounded-xl p-2">
                 {prUsers.map(pr => (
                   <label key={pr.id} className="flex items-center gap-3 px-2 py-2 rounded-lg hover:bg-white/[0.03] cursor-pointer">
                     <input type="checkbox" checked={prIds.includes(pr.id)} onChange={() => toggle(pr.id)}
@@ -2472,12 +2472,12 @@ function GroupEditorModal({ group, prUsers, onClose, onSave }: {
           </Field>
           <div className="flex gap-3 pt-2">
             <button type="button" onClick={onClose}
-              className="flex-1 py-3.5 text-sm font-medium rounded-xl border border-[#2C2C2E] text-[#8E8E93] hover:text-white hover:border-[#48484A] transition-all">
+              className="flex-1 py-3.5 text-sm font-medium rounded-xl border border-[#2d2a26] text-[#8E8E93] hover:text-white hover:border-[#48484A] transition-all">
               Annulla
             </button>
             <button type="submit" disabled={!canSave}
               className={cn('flex-1 py-3.5 text-sm font-semibold rounded-xl transition-colors',
-                canSave ? 'bg-accent text-black hover:bg-white' : 'bg-[#2C2C2E] text-[#8E8E93] cursor-not-allowed')}>
+                canSave ? 'bg-accent text-black hover:bg-white' : 'bg-[#2d2a26] text-[#8E8E93] cursor-not-allowed')}>
               {group ? 'Salva' : 'Crea gruppo'}
             </button>
           </div>
@@ -2513,7 +2513,7 @@ function PRDetailView({ pr, reservations, events, onBack, onUpdateStatus, status
 
       {/* Header */}
       <div className="flex items-center gap-5 mb-8">
-        <div className="w-16 h-16 bg-[#1C1C1E] border border-[#2C2C2E] flex items-center justify-center shrink-0 overflow-hidden rounded-2xl">
+        <div className="w-16 h-16 bg-[#1d1b19] border border-[#2d2a26] flex items-center justify-center shrink-0 overflow-hidden rounded-2xl">
           {pr.profileImage
             ? <img src={pr.profileImage} alt="" className="w-full h-full object-cover" />
             : <span className="hv font-black text-accent text-xl">{pr.displayName.slice(0,2).toUpperCase()}</span>}
@@ -2531,7 +2531,7 @@ function PRDetailView({ pr, reservations, events, onBack, onUpdateStatus, status
         {/* Left: info + actions */}
         <div className="space-y-4">
           {/* Info card */}
-          <div className="border border-[#2C2C2E] bg-card p-5 space-y-4 rounded-xl">
+          <div className="border border-[#2d2a26] bg-card p-5 space-y-4 rounded-xl">
             <p className="text-xs text-[#8E8E93] mb-1">Informazioni</p>
             {[
               { label: 'Email', value: pr.email },
@@ -2579,7 +2579,7 @@ function PRDetailView({ pr, reservations, events, onBack, onUpdateStatus, status
               { label: 'Serate', value: myEventIds.length },
               { label: 'Approv.', value: `${approvalRate}%` },
             ].map(({ label, value }) => (
-              <div key={label} className="border border-[#2C2C2E] bg-card px-4 py-4 rounded-xl">
+              <div key={label} className="border border-[#2d2a26] bg-card px-4 py-4 rounded-xl">
                 <p className="hv font-black text-2xl text-white">{value}</p>
                 <p className="text-xs text-[#8E8E93] mt-2">{label}</p>
               </div>
@@ -2588,12 +2588,12 @@ function PRDetailView({ pr, reservations, events, onBack, onUpdateStatus, status
 
           {/* Barra approvazione */}
           {myRes.length > 0 && (
-            <div className="border border-[#2C2C2E] bg-card px-5 py-4 rounded-xl">
+            <div className="border border-[#2d2a26] bg-card px-5 py-4 rounded-xl">
               <div className="flex justify-between mb-2">
                 <span className="text-xs text-[#8E8E93]">Tasso approvazione</span>
                 <span className="text-[9px] hv font-black text-accent">{approvalRate}%</span>
               </div>
-              <div className="h-1 bg-[#1C1C1E] rounded-full overflow-hidden">
+              <div className="h-1 bg-[#1d1b19] rounded-full overflow-hidden">
                 <motion.div className="h-full bg-accent" initial={{ width: 0 }} animate={{ width: `${approvalRate}%` }} transition={{ duration: 1, ease: 'easeOut' }} />
               </div>
             </div>
@@ -2639,9 +2639,9 @@ function ReservationQuickEditModal({ reservation, onClose, onSave }: {
       <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
         className="absolute inset-0 bg-black/90 backdrop-blur-sm" onClick={onClose} />
       <motion.div initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.2 }}
-        className="relative w-full sm:max-w-md bg-card border-t border-x sm:border border-[#3A3A3C] overflow-hidden rounded-t-2xl sm:rounded-2xl max-h-[90vh] flex flex-col">
+        className="relative w-full sm:max-w-md bg-card border-t border-x sm:border border-[#3b3733] overflow-hidden rounded-t-2xl sm:rounded-2xl max-h-[90vh] flex flex-col">
         <div className="h-[2px] bg-accent shrink-0" />
-        <div className="px-6 py-5 border-b border-[#2C2C2E] flex items-center justify-between shrink-0">
+        <div className="px-6 py-5 border-b border-[#2d2a26] flex items-center justify-between shrink-0">
           <div>
             <h3 className="font-bold text-lg text-white">Modifica Prenotazione</h3>
             <p className="text-sm text-[#8E8E93] mt-0.5">{reservation.tableName} · {reservation.customerName}</p>
@@ -2653,28 +2653,28 @@ function ReservationQuickEditModal({ reservation, onClose, onSave }: {
             <div>
               <label className="block text-xs font-medium text-[#636366] mb-2">N. Ospiti</label>
               <input type="number" min={1} value={guests} onChange={e => setGuests(Number(e.target.value))}
-                className="w-full bg-[#111111] border border-[#3A3A3C] rounded-xl px-4 py-3 text-sm text-white outline-none focus:border-accent/40 transition-colors font-sans" />
+                className="w-full bg-[#121110] border border-[#3b3733] rounded-xl px-4 py-3 text-sm text-white outline-none focus:border-accent/40 transition-colors font-sans" />
             </div>
             <div>
               <label className="block text-xs font-medium text-[#636366] mb-2">Budget €</label>
               <input type="number" min={0} value={budget} onChange={e => setBudget(Number(e.target.value))}
-                className="w-full bg-[#111111] border border-[#3A3A3C] rounded-xl px-4 py-3 text-sm text-white outline-none focus:border-accent/40 transition-colors font-sans" />
+                className="w-full bg-[#121110] border border-[#3b3733] rounded-xl px-4 py-3 text-sm text-white outline-none focus:border-accent/40 transition-colors font-sans" />
             </div>
           </div>
           <div>
             <label className="block text-xs font-medium text-[#636366] mb-2">Bottiglie</label>
             <input value={bottles} onChange={e => setBottles(e.target.value)}
               placeholder="es. 2 vodka, 1 champagne"
-              className="w-full bg-[#111111] border border-[#3A3A3C] px-4 py-3 text-sm text-white placeholder-[#636366] outline-none focus:border-accent/40 transition-colors font-sans" />
+              className="w-full bg-[#121110] border border-[#3b3733] px-4 py-3 text-sm text-white placeholder-[#636366] outline-none focus:border-accent/40 transition-colors font-sans" />
           </div>
           <div>
             <label className="block text-xs font-medium text-[#636366] mb-2">Note</label>
             <textarea value={notes} onChange={e => setNotes(e.target.value)} rows={3}
-              className="w-full bg-[#111111] border border-[#3A3A3C] rounded-xl px-4 py-3 text-sm text-white placeholder-[#636366] outline-none focus:border-accent/40 transition-colors font-sans resize-none" />
+              className="w-full bg-[#121110] border border-[#3b3733] rounded-xl px-4 py-3 text-sm text-white placeholder-[#636366] outline-none focus:border-accent/40 transition-colors font-sans resize-none" />
           </div>
           <div className="flex gap-3 pt-2">
             <button type="button" onClick={onClose}
-              className="flex-1 py-3 text-sm font-medium rounded-xl border border-[#2C2C2E] text-[#8E8E93] hover:border-[#8E8E93] transition-colors">
+              className="flex-1 py-3 text-sm font-medium rounded-xl border border-[#2d2a26] text-[#8E8E93] hover:border-[#8E8E93] transition-colors">
               Annulla
             </button>
             <button type="submit"
@@ -2695,26 +2695,26 @@ function HistoryEventRow({ event, venueName, reservations, approvedCount, totalB
 }) {
   const [open, setOpen] = useState(false);
   const rejected = reservations.filter(r => r.approvalStatus === 'rejected').length;
-  const statusColor = rejected > 0 ? '#EF4444' : approvedCount === reservations.length ? '#22C55E' : '#3A3A3C';
+  const statusColor = rejected > 0 ? '#EF4444' : approvedCount === reservations.length ? '#22C55E' : '#3b3733';
   const statusLabel = (s: string) =>
     s === 'approved' ? 'Approvata' : s === 'rejected' ? 'Rifiutata' : 'In attesa';
 
   const approvalBadge = (s: string) => {
     if (s === 'approved') return <span className="px-2.5 py-0.5 text-xs font-medium rounded-full bg-green-500/10 text-green-400 border border-green-500/20">Approvata</span>;
     if (s === 'rejected') return <span className="px-2.5 py-0.5 text-xs font-medium rounded-full bg-red-500/10 text-red-400 border border-red-500/20">Rifiutata</span>;
-    return <span className="px-2.5 py-0.5 text-xs font-medium rounded-full bg-[#1C1C1E] text-[#8E8E93] border border-[#2C2C2E]">In attesa</span>;
+    return <span className="px-2.5 py-0.5 text-xs font-medium rounded-full bg-[#1d1b19] text-[#8E8E93] border border-[#2d2a26]">In attesa</span>;
   };
 
   return (
-    <div className="border border-[#2C2C2E] bg-card overflow-hidden rounded-xl">
+    <div className="border border-[#2d2a26] bg-card overflow-hidden rounded-xl">
       <button
         onClick={() => setOpen(o => !o)}
         className="w-full px-6 py-5 flex items-center justify-between hover:bg-white/[0.02] transition-colors text-left"
       >
         <div className="flex items-center gap-5 min-w-0">
-          <div className="w-10 h-10 bg-[#1C1C1E] flex items-center justify-center shrink-0 rounded-xl border"
+          <div className="w-10 h-10 bg-[#1d1b19] flex items-center justify-center shrink-0 rounded-xl border"
             style={{ borderColor: statusColor + '66' }}>
-            <Calendar size={14} style={{ color: statusColor === '#3A3A3C' ? '#D4622A' : statusColor }} />
+            <Calendar size={14} style={{ color: statusColor === '#3b3733' ? '#D4622A' : statusColor }} />
           </div>
           <div className="min-w-0">
             <p className="font-semibold text-sm text-white truncate">{event.name}</p>
@@ -2742,13 +2742,13 @@ function HistoryEventRow({ event, venueName, reservations, approvedCount, totalB
             transition={{ duration: 0.2 }}
             className="overflow-hidden"
           >
-            <div className="border-t border-[#2C2C2E] divide-y divide-[#2C2C2E]">
+            <div className="border-t border-[#2d2a26] divide-y divide-[#2d2a26]">
               {reservations.map(r => (
                 <div key={r.id} className="px-6 py-3.5 flex items-center justify-between gap-4">
                   <div className="flex items-center gap-4 min-w-0">
                     <div className={cn(
                       'w-7 h-7 border flex items-center justify-center shrink-0 rounded-lg',
-                      r.checkedIn ? 'bg-green-500/10 border-green-500/30' : 'bg-[#111111] border-[#1C1C1E]'
+                      r.checkedIn ? 'bg-green-500/10 border-green-500/30' : 'bg-[#121110] border-[#1d1b19]'
                     )}>
                       <span className={cn('text-[9px] hv font-black', r.checkedIn ? 'text-green-400' : 'text-accent')}>
                         {r.tableName ?? '—'}
@@ -2804,7 +2804,7 @@ function CheckinRow({ res, events, venues, onCheckIn, onUndoCheckIn, onUpdatePeo
 
   return (
     <div
-      className="border-b border-[#1C1C1E] last:border-0"
+      className="border-b border-[#1d1b19] last:border-0"
       style={{
         backgroundColor: flash ? 'rgba(34,197,94,0.14)' : isIn ? 'rgba(34,197,94,0.03)' : 'transparent',
         transition: 'background-color 0.35s',
@@ -2815,7 +2815,7 @@ function CheckinRow({ res, events, venues, onCheckIn, onUndoCheckIn, onUpdatePeo
         onClick={() => setOpen(o => !o)}
         className="w-full px-5 py-4 flex items-center gap-4 text-left hover:bg-white/[0.02] transition-colors"
       >
-        <div className={cn('w-2.5 h-2.5 rounded-full shrink-0 transition-colors', isIn ? 'bg-green-500' : 'bg-[#2C2C2E]')} />
+        <div className={cn('w-2.5 h-2.5 rounded-full shrink-0 transition-colors', isIn ? 'bg-green-500' : 'bg-[#2d2a26]')} />
         <div className="flex-1 min-w-0">
           <p className={cn('font-semibold text-base truncate transition-colors', isIn ? 'text-[#aaa]' : 'text-white')}>
             {res.customerName}
@@ -2839,21 +2839,21 @@ function CheckinRow({ res, events, venues, onCheckIn, onUndoCheckIn, onUpdatePeo
             exit={{ height: 0, opacity: 0 }} transition={{ duration: 0.18 }}
             className="overflow-hidden"
           >
-            <div className="px-5 pb-5 pt-1 border-t border-[#1C1C1E]">
+            <div className="px-5 pb-5 pt-1 border-t border-[#1d1b19]">
               {/* People counter */}
               <div className="flex items-center justify-between mb-4">
                 <span className="text-xs text-[#8E8E93]">Persone entrate</span>
                 <div className="flex items-center gap-3">
                   <button onClick={() => setPeople(p => Math.max(1, p - 1))}
-                    className="w-8 h-8 border border-[#3A3A3C] text-[#AEAEB2] hover:text-white hover:border-[#8E8E93] transition-colors text-xl leading-none flex items-center justify-center rounded-xl">−</button>
+                    className="w-8 h-8 border border-[#3b3733] text-[#AEAEB2] hover:text-white hover:border-[#8E8E93] transition-colors text-xl leading-none flex items-center justify-center rounded-xl">−</button>
                   <span className="hv font-black text-2xl text-white w-8 text-center">{people}</span>
                   <button onClick={() => setPeople(p => p + 1)}
-                    className="w-8 h-8 border border-[#3A3A3C] text-[#AEAEB2] hover:text-white hover:border-[#8E8E93] transition-colors text-xl leading-none flex items-center justify-center rounded-xl">+</button>
+                    className="w-8 h-8 border border-[#3b3733] text-[#AEAEB2] hover:text-white hover:border-[#8E8E93] transition-colors text-xl leading-none flex items-center justify-center rounded-xl">+</button>
                 </div>
               </div>
 
               {/* Budget preview */}
-              <div className="flex items-center justify-between mb-5 py-3 border-t border-b border-[#1C1C1E]">
+              <div className="flex items-center justify-between mb-5 py-3 border-t border-b border-[#1d1b19]">
                 <span className="text-xs text-[#8E8E93]">Incasso</span>
                 <div className="flex items-center gap-2">
                   {people !== res.guestsCount && <span className="text-[9px] font-sans text-[#636366] line-through">€{res.budget}</span>}
@@ -2891,7 +2891,7 @@ function CheckinRow({ res, events, venues, onCheckIn, onUndoCheckIn, onUpdatePeo
                     )}
                     <button
                       onClick={() => { onUndoCheckIn(res.id); setOpen(false); }}
-                      className="flex-1 py-2.5 rounded-xl border border-[#3A3A3C] text-[#636366] text-xs font-medium hover:border-red-500/40 hover:text-red-400 transition-colors"
+                      className="flex-1 py-2.5 rounded-xl border border-[#3b3733] text-[#636366] text-xs font-medium hover:border-red-500/40 hover:text-red-400 transition-colors"
                     >
                       Annulla Entrata
                     </button>
@@ -2951,7 +2951,7 @@ function HostCheckinView({ reservations, events, venues, userRole, currentUser, 
   if (activeEvents.length === 0) {
     return (
       <div className="flex flex-col items-center justify-center py-32 gap-4">
-        <DoorOpen size={32} className="text-[#3A3A3C]" />
+        <DoorOpen size={32} className="text-[#3b3733]" />
         <p className="text-sm text-[#8E8E93]">Nessun evento attivo stasera</p>
       </div>
     );
@@ -2986,7 +2986,7 @@ function HostCheckinView({ reservations, events, venues, userRole, currentUser, 
                   'px-3 py-1.5 text-xs font-medium transition-colors border rounded-xl',
                   activeEventId === ev.id
                     ? 'bg-accent text-black border-accent'
-                    : 'border-[#2C2C2E] text-[#636366] hover:text-white hover:border-[#48484A]'
+                    : 'border-[#2d2a26] text-[#636366] hover:text-white hover:border-[#48484A]'
                 )}
               >
                 {ev.name}
@@ -2996,7 +2996,7 @@ function HostCheckinView({ reservations, events, venues, userRole, currentUser, 
         )}
 
         <div className="flex items-center gap-3">
-          <div className="flex-1 h-1 bg-[#2C2C2E] overflow-hidden rounded-full">
+          <div className="flex-1 h-1 bg-[#2d2a26] overflow-hidden rounded-full">
             <motion.div className="h-full bg-accent" initial={{ width: 0 }}
               animate={{ width: `${pct}%` }} transition={{ duration: 0.6, ease: 'easeOut' }} />
           </div>
@@ -3005,7 +3005,7 @@ function HostCheckinView({ reservations, events, venues, userRole, currentUser, 
       </div>
 
       {/* Tab switcher */}
-      <div className="flex gap-0 mb-5 max-w-xl mx-auto w-full border border-[#2C2C2E] rounded-xl overflow-hidden">
+      <div className="flex gap-0 mb-5 max-w-xl mx-auto w-full border border-[#2d2a26] rounded-xl overflow-hidden">
         {(['lista', 'ingressi', 'pianta'] as const).map(t => (
           <button key={t}
             onClick={() => setTab(t)}
@@ -3031,7 +3031,7 @@ function HostCheckinView({ reservations, events, venues, userRole, currentUser, 
               placeholder="Cerca cliente, tavolo, PR…"
               value={search}
               onChange={e => setSearch(e.target.value)}
-              className="w-full bg-[#1C1C1E] border border-[#2C2C2E] rounded-xl px-4 py-3 text-sm font-sans text-white placeholder-[#636366] outline-none focus:border-accent/40 transition-colors"
+              className="w-full bg-[#1d1b19] border border-[#2d2a26] rounded-xl px-4 py-3 text-sm font-sans text-white placeholder-[#636366] outline-none focus:border-accent/40 transition-colors"
             />
             {search && (
               <button onClick={() => setSearch('')}
@@ -3047,7 +3047,7 @@ function HostCheckinView({ reservations, events, venues, userRole, currentUser, 
               <p className="text-xs text-[#8E8E93] mb-2 px-1">
                 Da fare — {pending.length}
               </p>
-              <div className="border border-[#2C2C2E] bg-card overflow-hidden rounded-xl">
+              <div className="border border-[#2d2a26] bg-card overflow-hidden rounded-xl">
                 {pending.map(res => (
                   <CheckinRow key={res.id} res={res} events={events} venues={venues}
                     onCheckIn={onCheckIn} onUndoCheckIn={onUndoCheckIn} onUpdatePeople={onUpdatePeople} />
@@ -3070,7 +3070,7 @@ function HostCheckinView({ reservations, events, venues, userRole, currentUser, 
                 {showEntered && (
                   <motion.div initial={{ height: 0, opacity: 0 }} animate={{ height: 'auto', opacity: 1 }}
                     exit={{ height: 0, opacity: 0 }} transition={{ duration: 0.2 }} className="overflow-hidden">
-                    <div className="border border-[#2C2C2E] bg-card overflow-hidden rounded-xl">
+                    <div className="border border-[#2d2a26] bg-card overflow-hidden rounded-xl">
                       {entered.map(res => (
                         <CheckinRow key={res.id} res={res} events={events} venues={venues}
                           onCheckIn={onCheckIn} onUndoCheckIn={onUndoCheckIn} onUpdatePeople={onUpdatePeople} />
@@ -3135,7 +3135,7 @@ function SidebarContent({ user, view, onNav, onLogout, occupancyPct = 0, revenue
   return (
     <>
       {/* Brand */}
-      <div className="px-5 py-4 border-b border-[#2C2C2E] shrink-0">
+      <div className="px-5 py-4 border-b border-[#2d2a26] shrink-0">
         <div className="flex items-center gap-3">
           <div className="w-8 h-8 shrink-0 flex items-center justify-center">
             <img src="/Logo.png" alt="Nightplan" className="w-full h-full object-contain" />
@@ -3149,7 +3149,7 @@ function SidebarContent({ user, view, onNav, onLogout, occupancyPct = 0, revenue
 
       {/* KPIs — admin only */}
       {user.role === 'admin' && (
-        <div className="px-5 py-4 border-b border-[#2C2C2E] flex items-center gap-4 shrink-0">
+        <div className="px-5 py-4 border-b border-[#2d2a26] flex items-center gap-4 shrink-0">
           <div className="flex-1">
             <div className="flex items-baseline gap-1">
               <span className="hv font-black text-[22px] text-white leading-none">{occupancyPct}</span>
@@ -3157,12 +3157,12 @@ function SidebarContent({ user, view, onNav, onLogout, occupancyPct = 0, revenue
             </div>
             <p className="text-[9px] text-[#8E8E93] mt-0.5">Occupazione</p>
           </div>
-          <div className="w-px h-8 bg-[#2C2C2E]" />
+          <div className="w-px h-8 bg-[#2d2a26]" />
           <div className="flex-1">
             <div className="hv font-black text-[22px] text-accent leading-none">{revenueDisplay}</div>
             <p className="text-[9px] text-[#8E8E93] mt-0.5">Incasso</p>
           </div>
-          <div className="w-1 h-10 bg-[#2C2C2E] rounded-full overflow-hidden">
+          <div className="w-1 h-10 bg-[#2d2a26] rounded-full overflow-hidden">
             <motion.div className="w-full bg-accent rounded-full"
               initial={{ height: '0%' }} animate={{ height: `${occupancyPct}%` }}
               transition={{ duration: 1.2, delay: 0.3, ease: 'easeOut' }}
@@ -3227,13 +3227,13 @@ function SidebarContent({ user, view, onNav, onLogout, occupancyPct = 0, revenue
       </nav>
 
       {/* User */}
-      <div className="px-4 py-4 border-t border-[#2C2C2E] shrink-0">
+      <div className="px-4 py-4 border-t border-[#2d2a26] shrink-0">
         <div className="flex items-center gap-3">
           <button
             onClick={() => user.role === 'pr' ? onNav('profile') : undefined}
             className={cn('flex items-center gap-2.5 flex-1 min-w-0 text-left', user.role === 'pr' && 'group cursor-pointer')}
           >
-            <div className="w-7 h-7 bg-[#2C2C2E] border border-[#3A3A3C] flex items-center justify-center shrink-0 overflow-hidden group-hover:border-accent/30 transition-colors rounded-lg">
+            <div className="w-7 h-7 bg-[#2d2a26] border border-[#3b3733] flex items-center justify-center shrink-0 overflow-hidden group-hover:border-accent/30 transition-colors rounded-lg">
               {user.profileImage
                 ? <img src={user.profileImage} alt="" className="w-full h-full object-cover" />
                 : <span className="hv font-black text-accent text-[9px]">{user.displayName.substring(0, 2).toUpperCase()}</span>
@@ -3326,13 +3326,13 @@ function VenueCard({ venue, eventCount, onClick, onEdit, onDelete }: {
       whileHover={{ y: -3 }}
       whileTap={{ scale: 0.985 }}
       transition={{ duration: 0.3, ease: easeOutQuart }}
-      className="group bg-card border border-[#3A3A3C] cursor-pointer overflow-hidden flex flex-col relative card-hover rounded-xl"
+      className="group bg-card border border-[#3b3733] cursor-pointer overflow-hidden flex flex-col relative card-hover rounded-xl"
     >
       <div className="h-[2px] w-0 group-hover:w-full bg-accent transition-all duration-500 origin-left" />
 
       <div className="p-7 flex flex-col gap-7 flex-1">
         <div className="flex items-start justify-between">
-          <div className="w-9 h-9 border border-[#3A3A3C] flex items-center justify-center group-hover:border-accent/30 transition-colors shrink-0 rounded-xl">
+          <div className="w-9 h-9 border border-[#3b3733] flex items-center justify-center group-hover:border-accent/30 transition-colors shrink-0 rounded-xl">
             <Building2 size={15} className="text-[#AEAEB2] group-hover:text-accent transition-colors" />
           </div>
           {(onEdit || onDelete) && (
@@ -3360,7 +3360,7 @@ function VenueCard({ venue, eventCount, onClick, onEdit, onDelete }: {
           <p className="text-xs text-[#AEAEB2] mt-1">{venue.address}</p>
         </div>
 
-        <div className="flex items-end justify-between border-t border-[#2C2C2E] pt-5">
+        <div className="flex items-end justify-between border-t border-[#2d2a26] pt-5">
           <div>
             <span className="hv font-black text-[52px] leading-none text-[#3a3a3a] group-hover:text-[#8E8E93] transition-colors select-none">
               {String(eventCount).padStart(2, '0')}
@@ -3390,13 +3390,13 @@ function EventCard({ event, venueName, onClick, onEdit, onDelete }: {
       whileHover={{ y: -3 }}
       whileTap={{ scale: 0.985 }}
       transition={{ duration: 0.3, ease: easeOutQuart }}
-      className="group bg-card border border-[#3A3A3C] cursor-pointer overflow-hidden flex flex-col card-hover rounded-xl"
+      className="group bg-card border border-[#3b3733] cursor-pointer overflow-hidden flex flex-col card-hover rounded-xl"
     >
       {/* Cover image */}
       {event.coverImage ? (
         <div className="relative h-36 overflow-hidden">
           <img src={event.coverImage} alt={event.name} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
-          <div className="absolute inset-0 bg-gradient-to-t from-[#1C1C1E] via-transparent to-transparent" />
+          <div className="absolute inset-0 bg-gradient-to-t from-[#1d1b19] via-transparent to-transparent" />
           <div className="absolute top-3 left-3 right-3 flex items-center justify-between">
             <span
               className="text-xs font-medium rounded-full px-2.5 py-0.5"
@@ -3437,7 +3437,7 @@ function EventCard({ event, venueName, onClick, onEdit, onDelete }: {
                     ? { color: COLORS.success, background: 'rgba(34,197,94,0.10)' }
                     : event.status === 'draft'
                     ? { color: COLORS.warning, background: 'rgba(245,158,11,0.10)' }
-                    : { color: '#999', background: '#2C2C2E' }
+                    : { color: '#999', background: '#2d2a26' }
                 }
               >
                 {event.status === 'active' && <span className="inline-block w-1.5 h-1.5 rounded-full blink mr-1.5 align-middle" style={{ background: COLORS.success }} />}
@@ -3469,7 +3469,7 @@ function EventCard({ event, venueName, onClick, onEdit, onDelete }: {
           )}
         </div>
 
-        <div className="flex items-center justify-between border-t border-[#2C2C2E] pt-3">
+        <div className="flex items-center justify-between border-t border-[#2d2a26] pt-3">
           <div className="flex items-center gap-1.5 text-[#636366] group-hover:text-accent transition-colors">
             <span className="text-xs font-medium">Apri</span>
             <ChevronRight size={11} className="group-hover:translate-x-1 transition-transform" />
@@ -3496,7 +3496,7 @@ function ReservationsTable({ reservations, userRole, events, onDelete, onEdit }:
   const approvalBadge = (s: string) => {
     if (s === 'approved') return <span className="inline-flex items-center gap-1 px-2.5 py-0.5 text-xs font-medium rounded-full bg-green-500/10 text-green-400 border border-green-500/20">Approvata</span>;
     if (s === 'rejected') return <span className="inline-flex items-center gap-1 px-2.5 py-0.5 text-xs font-medium rounded-full bg-red-500/10 text-red-400 border border-red-500/20">Rifiutata</span>;
-    return <span className="inline-flex items-center gap-1 px-2.5 py-0.5 text-xs font-medium rounded-full bg-[#2C2C2E] text-[#AEAEB2] border border-[#3A3A3C]">In attesa</span>;
+    return <span className="inline-flex items-center gap-1 px-2.5 py-0.5 text-xs font-medium rounded-full bg-[#2d2a26] text-[#AEAEB2] border border-[#3b3733]">In attesa</span>;
   };
 
   // Group reservations by event, sorted alphabetically within each group
@@ -3535,8 +3535,8 @@ function ReservationsTable({ reservations, userRole, events, onDelete, onEdit }:
   };
 
   return (
-    <div className="bg-card border border-[#3A3A3C] overflow-hidden rounded-xl">
-      <div className="px-7 py-5 border-b border-[#2C2C2E]">
+    <div className="bg-card border border-[#3b3733] overflow-hidden rounded-xl">
+      <div className="px-7 py-5 border-b border-[#2d2a26]">
         <h2 className="font-bold text-xl text-white">Prenotazioni</h2>
       </div>
 
@@ -3549,7 +3549,7 @@ function ReservationsTable({ reservations, userRole, events, onDelete, onEdit }:
           {groups.map(({ event, eventId, rows }) => (
             <div key={eventId}>
               {/* Event header */}
-              <div className="px-7 py-3 bg-[#111111] border-b border-[#2C2C2E] flex items-center gap-4 flex-wrap">
+              <div className="px-7 py-3 bg-[#121110] border-b border-[#2d2a26] flex items-center gap-4 flex-wrap">
                 <span className="font-semibold text-sm text-white">
                   {event?.name ?? eventId}
                 </span>
@@ -3574,13 +3574,13 @@ function ReservationsTable({ reservations, userRole, events, onDelete, onEdit }:
               </div>
 
               {/* Mobile cards */}
-              <div className="sm:hidden divide-y divide-[#2C2C2E]">
+              <div className="sm:hidden divide-y divide-[#2d2a26]">
                 {rows.map(res => (
                   <div key={res.id} className="p-5 space-y-3">
                     <div className="flex items-center justify-between">
                       <div className="flex items-center gap-2">
                         <span className={cn('w-1.5 h-1.5 rounded-full shrink-0',
-                          res.status === 'confirmed' ? 'bg-accent blink' : 'bg-[#3A3A3C]'
+                          res.status === 'confirmed' ? 'bg-accent blink' : 'bg-[#3b3733]'
                         )} />
                         <span className={cn('text-xs font-medium',
                           res.status === 'confirmed' ? 'text-accent' : 'text-[#AEAEB2]'
@@ -3606,7 +3606,7 @@ function ReservationsTable({ reservations, userRole, events, onDelete, onEdit }:
               <div className="hidden sm:block overflow-x-auto">
                 <table className="w-full text-left border-collapse min-w-[640px]">
                   <thead>
-                    <tr className="border-b border-[#2C2C2E]">
+                    <tr className="border-b border-[#2d2a26]">
                       {['Tavolo', 'Cliente', ...(userRole === 'admin' ? ['PR'] : []), 'Pax', 'Budget', 'Stato', ''].map((h, i) => (
                         <th key={i} className="px-6 py-3 text-xs font-medium text-[#8E8E93]">{h}</th>
                       ))}
@@ -3614,7 +3614,7 @@ function ReservationsTable({ reservations, userRole, events, onDelete, onEdit }:
                   </thead>
                   <tbody>
                     {rows.map(res => (
-                      <tr key={res.id} className="border-b border-[#1C1C1E] hover:bg-white/[0.015] transition-colors group">
+                      <tr key={res.id} className="border-b border-[#1d1b19] hover:bg-white/[0.015] transition-colors group">
                         <td className="px-6 py-3.5">
                           <span className="hv font-black text-sm text-white">{res.tableName ?? res.tableId}</span>
                         </td>
@@ -3733,10 +3733,10 @@ function NewEventModal({ venue, floorPlans, prUsers, prGroups, onClose, onSubmit
       <motion.div
         initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.22, ease: 'easeOut' }}
-        className="relative w-full sm:max-w-md bg-card border-t border-x sm:border border-[#3A3A3C] overflow-hidden rounded-t-2xl sm:rounded-2xl max-h-[90vh] flex flex-col"
+        className="relative w-full sm:max-w-md bg-card border-t border-x sm:border border-[#3b3733] overflow-hidden rounded-t-2xl sm:rounded-2xl max-h-[90vh] flex flex-col"
       >
         <div className="h-[2px] bg-accent shrink-0" />
-        <div className="px-6 sm:px-8 py-5 sm:py-6 border-b border-[#2C2C2E] flex items-center justify-between shrink-0">
+        <div className="px-6 sm:px-8 py-5 sm:py-6 border-b border-[#2d2a26] flex items-center justify-between shrink-0">
           <div>
             <h3 className="font-bold text-xl text-white">{isEdit ? 'Modifica Evento' : 'Nuovo Evento'}</h3>
             <p className="text-sm text-[#8E8E93] mt-1">{venue.name}</p>
@@ -3754,7 +3754,7 @@ function NewEventModal({ venue, floorPlans, prUsers, prGroups, onClose, onSubmit
               <p className="font-bold text-white text-lg">Evento creato</p>
               <p className="text-[#636366] text-xs mt-1">Copia il link di registrazione e condividilo</p>
             </div>
-            <div className="w-full bg-[#111111] border border-[#2C2C2E] px-4 py-3">
+            <div className="w-full bg-[#121110] border border-[#2d2a26] px-4 py-3">
               <p className="text-[9px] font-mono text-[#8E8E93] break-all">{createdLink}</p>
             </div>
             <button
@@ -3787,24 +3787,24 @@ function NewEventModal({ venue, floorPlans, prUsers, prGroups, onClose, onSubmit
           }}>
             <Field label="Nome Evento">
               <input required placeholder="ES. TECHNO FRIDAY"
-                className="w-full bg-bg border border-[#3A3A3C] rounded-xl px-4 py-3 text-sm text-white placeholder-[#8E8E93] outline-none transition-colors"
+                className="w-full bg-bg border border-[#3b3733] rounded-xl px-4 py-3 text-sm text-white placeholder-[#8E8E93] outline-none transition-colors"
                 value={form.name} onChange={e => setForm({ ...form, name: e.target.value })} />
             </Field>
 
             <Field label="Data">
               <input required type="date" min={minDate}
-                className="w-full bg-bg border border-[#3A3A3C] px-4 py-3 text-xs font-sans text-white outline-none transition-colors [color-scheme:dark]"
+                className="w-full bg-bg border border-[#3b3733] px-4 py-3 text-xs font-sans text-white outline-none transition-colors [color-scheme:dark]"
                 value={form.date} onChange={e => setForm({ ...form, date: e.target.value })} />
             </Field>
             <div className="grid grid-cols-2 gap-3">
               <Field label="Inizio">
                 <input type="time"
-                  className="w-full bg-bg border border-[#3A3A3C] px-4 py-3 text-xs font-sans text-white outline-none transition-colors [color-scheme:dark]"
+                  className="w-full bg-bg border border-[#3b3733] px-4 py-3 text-xs font-sans text-white outline-none transition-colors [color-scheme:dark]"
                   value={form.time} onChange={e => setForm({ ...form, time: e.target.value })} />
               </Field>
               <Field label="Fine">
                 <input type="time"
-                  className="w-full bg-bg border border-[#3A3A3C] px-4 py-3 text-xs font-sans text-white outline-none transition-colors [color-scheme:dark]"
+                  className="w-full bg-bg border border-[#3b3733] px-4 py-3 text-xs font-sans text-white outline-none transition-colors [color-scheme:dark]"
                   value={form.endTime} onChange={e => setForm({ ...form, endTime: e.target.value })} />
               </Field>
             </div>
@@ -3812,10 +3812,10 @@ function NewEventModal({ venue, floorPlans, prUsers, prGroups, onClose, onSubmit
 
             <Field label="Immagine di copertina (URL)">
               <input placeholder="https://..."
-                className="w-full bg-bg border border-[#3A3A3C] px-4 py-3 text-xs font-sans text-white placeholder-[#636366] outline-none transition-colors"
+                className="w-full bg-bg border border-[#3b3733] px-4 py-3 text-xs font-sans text-white placeholder-[#636366] outline-none transition-colors"
                 value={form.coverImage} onChange={e => setForm({ ...form, coverImage: e.target.value })} />
               {form.coverImage && (
-                <div className="mt-2 h-20 overflow-hidden border border-[#2C2C2E]">
+                <div className="mt-2 h-20 overflow-hidden border border-[#2d2a26]">
                   <img src={form.coverImage} alt="" className="w-full h-full object-cover" onError={e => (e.currentTarget.style.display = 'none')} />
                 </div>
               )}
@@ -3823,20 +3823,20 @@ function NewEventModal({ venue, floorPlans, prUsers, prGroups, onClose, onSubmit
 
             <Field label="Capacità massima (opzionale)">
               <input type="number" min="1" step={1} placeholder="Es. 200"
-                className="w-full bg-bg border border-[#3A3A3C] px-4 py-3 text-xs font-sans text-white placeholder-[#636366] outline-none transition-colors"
+                className="w-full bg-bg border border-[#3b3733] px-4 py-3 text-xs font-sans text-white placeholder-[#636366] outline-none transition-colors"
                 value={form.maxCapacity} onChange={e => setForm({ ...form, maxCapacity: e.target.value })} />
             </Field>
 
             <Field label="Descrizione (opzionale)">
               <textarea rows={2} placeholder="DETTAGLI..."
-                className="w-full bg-bg border border-[#3A3A3C] rounded-xl px-4 py-3 text-sm text-white placeholder-[#8E8E93] outline-none transition-colors resize-none"
+                className="w-full bg-bg border border-[#3b3733] rounded-xl px-4 py-3 text-sm text-white placeholder-[#8E8E93] outline-none transition-colors resize-none"
                 value={form.description} onChange={e => setForm({ ...form, description: e.target.value })} />
             </Field>
 
             {floorPlans.length > 0 && (
               <Field label="Pianta">
                 <select
-                  className="w-full bg-bg border border-[#3A3A3C] rounded-xl px-4 py-3 text-sm text-white outline-none transition-colors [color-scheme:dark]"
+                  className="w-full bg-bg border border-[#3b3733] rounded-xl px-4 py-3 text-sm text-white outline-none transition-colors [color-scheme:dark]"
                   value={form.floorPlanId}
                   onChange={e => setForm({ ...form, floorPlanId: e.target.value })}>
                   {floorPlans.map(fp => (
@@ -3848,7 +3848,7 @@ function NewEventModal({ venue, floorPlans, prUsers, prGroups, onClose, onSubmit
 
             {/* Visibilità ingresso (host) */}
             <Field label="Ingresso">
-              <label className="flex items-center justify-between bg-bg border border-[#3A3A3C] rounded-xl px-4 py-3 cursor-pointer">
+              <label className="flex items-center justify-between bg-bg border border-[#3b3733] rounded-xl px-4 py-3 cursor-pointer">
                 <span className="text-sm text-white">Attiva per l'ingresso</span>
                 <input type="checkbox" checked={visibleToHost}
                   onChange={e => setVisibleToHost(e.target.checked)}
@@ -3859,7 +3859,7 @@ function NewEventModal({ venue, floorPlans, prUsers, prGroups, onClose, onSubmit
 
             {/* Assegnazione PR */}
             <Field label="Chi può lavorarlo (PR)">
-              <label className="flex items-center justify-between bg-bg border border-[#3A3A3C] rounded-xl px-4 py-3 cursor-pointer">
+              <label className="flex items-center justify-between bg-bg border border-[#3b3733] rounded-xl px-4 py-3 cursor-pointer">
                 <span className="text-sm text-white">Tutti i PR</span>
                 <input type="checkbox" checked={assignAll}
                   onChange={e => setAssignAll(e.target.checked)}
@@ -3874,14 +3874,14 @@ function NewEventModal({ venue, floorPlans, prUsers, prGroups, onClose, onSubmit
                         return (
                           <button type="button" key={g.id} onClick={() => toggleGroup(g)}
                             className={cn('px-3 py-1.5 rounded-full text-xs font-medium border transition-colors',
-                              allIn ? 'bg-accent text-black border-accent' : 'border-[#3A3A3C] text-[#AEAEB2] hover:border-[#48484A]')}>
+                              allIn ? 'bg-accent text-black border-accent' : 'border-[#3b3733] text-[#AEAEB2] hover:border-[#48484A]')}>
                             {g.name} <span className="opacity-60">({g.prIds.length})</span>
                           </button>
                         );
                       })}
                     </div>
                   )}
-                  <div className="mt-2 space-y-1 max-h-44 overflow-y-auto border border-[#2C2C2E] rounded-xl p-2">
+                  <div className="mt-2 space-y-1 max-h-44 overflow-y-auto border border-[#2d2a26] rounded-xl p-2">
                     {prUsers.length === 0 ? (
                       <p className="text-xs text-[#636366] px-2 py-3 text-center">Nessun PR approvato</p>
                     ) : (
@@ -3901,7 +3901,7 @@ function NewEventModal({ venue, floorPlans, prUsers, prGroups, onClose, onSubmit
 
             <div className="flex gap-3 pt-2">
               <button type="button" onClick={onClose}
-                className="flex-1 py-3.5 text-sm font-medium rounded-xl border border-[#2C2C2E] text-[#8E8E93] hover:text-white hover:border-[#48484A] transition-all">
+                className="flex-1 py-3.5 text-sm font-medium rounded-xl border border-[#2d2a26] text-[#8E8E93] hover:text-white hover:border-[#48484A] transition-all">
                 Annulla
               </button>
               <button type="submit"
@@ -3945,10 +3945,10 @@ function NewClubModal({ onClose, onSubmit, initialData }: {
       <motion.div
         initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.22, ease: 'easeOut' }}
-        className="relative w-full sm:max-w-md bg-card border-t border-x sm:border border-[#3A3A3C] overflow-hidden rounded-t-2xl sm:rounded-2xl max-h-[90vh] flex flex-col"
+        className="relative w-full sm:max-w-md bg-card border-t border-x sm:border border-[#3b3733] overflow-hidden rounded-t-2xl sm:rounded-2xl max-h-[90vh] flex flex-col"
       >
         <div className="h-[2px] bg-accent shrink-0" />
-        <div className="px-6 sm:px-8 py-5 sm:py-6 border-b border-[#2C2C2E] flex items-center justify-between shrink-0">
+        <div className="px-6 sm:px-8 py-5 sm:py-6 border-b border-[#2d2a26] flex items-center justify-between shrink-0">
           <div>
             <h3 className="font-bold text-xl text-white">{isEdit ? 'Modifica Club' : 'Nuovo Club'}</h3>
             <p className="text-sm text-[#8E8E93] mt-1">{isEdit ? 'Aggiorna nome e indirizzo' : 'Crea il locale e poi la sua piantina'}</p>
@@ -3959,18 +3959,18 @@ function NewClubModal({ onClose, onSubmit, initialData }: {
         <form className="p-6 sm:p-8 space-y-5 overflow-y-auto" onSubmit={(e) => { e.preventDefault(); onSubmit(form); }}>
           <Field label="Nome del Club">
             <input required placeholder="Es. Amnesia Club"
-              className="w-full bg-bg border border-[#3A3A3C] rounded-xl px-4 py-3 text-sm font-sans text-white placeholder-[#636366] outline-none focus:border-accent/40 transition-colors"
+              className="w-full bg-bg border border-[#3b3733] rounded-xl px-4 py-3 text-sm font-sans text-white placeholder-[#636366] outline-none focus:border-accent/40 transition-colors"
               value={form.name} onChange={e => setForm({ ...form, name: e.target.value })} />
           </Field>
           <Field label="Città / Indirizzo">
             <input placeholder="Es. Milano"
-              className="w-full bg-bg border border-[#3A3A3C] rounded-xl px-4 py-3 text-sm font-sans text-white placeholder-[#636366] outline-none focus:border-accent/40 transition-colors"
+              className="w-full bg-bg border border-[#3b3733] rounded-xl px-4 py-3 text-sm font-sans text-white placeholder-[#636366] outline-none focus:border-accent/40 transition-colors"
               value={form.address} onChange={e => setForm({ ...form, address: e.target.value })} />
           </Field>
 
           <div className="flex gap-3 pt-2">
             <button type="button" onClick={onClose}
-              className="flex-1 py-3.5 text-sm font-medium rounded-xl border border-[#2C2C2E] text-[#8E8E93] hover:text-white hover:border-[#48484A] transition-all">
+              className="flex-1 py-3.5 text-sm font-medium rounded-xl border border-[#2d2a26] text-[#8E8E93] hover:text-white hover:border-[#48484A] transition-all">
               Annulla
             </button>
             <button type="submit"
@@ -3999,9 +3999,9 @@ function NewFloorPlanModal({ venues, onClose, onSubmit }: {
         className="absolute inset-0 bg-black/90 backdrop-blur-sm" onClick={onClose} />
       <motion.div initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.22, ease: 'easeOut' }}
-        className="relative w-full sm:max-w-md bg-card border-t border-x sm:border border-[#3A3A3C] overflow-hidden rounded-t-2xl sm:rounded-2xl max-h-[90vh] flex flex-col">
+        className="relative w-full sm:max-w-md bg-card border-t border-x sm:border border-[#3b3733] overflow-hidden rounded-t-2xl sm:rounded-2xl max-h-[90vh] flex flex-col">
         <div className="h-[2px] bg-accent shrink-0" />
-        <div className="px-6 sm:px-8 py-5 sm:py-6 border-b border-[#2C2C2E] flex items-center justify-between shrink-0">
+        <div className="px-6 sm:px-8 py-5 sm:py-6 border-b border-[#2d2a26] flex items-center justify-between shrink-0">
           <div>
             <h3 className="font-bold text-xl text-white">Nuova Pianta</h3>
             <p className="text-sm text-[#8E8E93] mt-1">Dai un nome e scegli il locale</p>
@@ -4011,19 +4011,19 @@ function NewFloorPlanModal({ venues, onClose, onSubmit }: {
         <form className="p-6 sm:p-8 space-y-5 overflow-y-auto" onSubmit={(e) => { e.preventDefault(); if (venueId && name.trim()) onSubmit(venueId, name.trim()); }}>
           <Field label="Nome Pianta">
             <input required placeholder="Es. Piano Terra, VIP Room..."
-              className="w-full bg-bg border border-[#3A3A3C] rounded-xl px-4 py-3 text-sm font-sans text-white placeholder-[#636366] outline-none focus:border-accent/40 transition-colors"
+              className="w-full bg-bg border border-[#3b3733] rounded-xl px-4 py-3 text-sm font-sans text-white placeholder-[#636366] outline-none focus:border-accent/40 transition-colors"
               value={name} onChange={e => setName(e.target.value)} />
           </Field>
           <Field label="Locale">
             <select required
-              className="w-full bg-bg border border-[#3A3A3C] rounded-xl px-4 py-3 text-sm font-sans text-white outline-none focus:border-accent/40 transition-colors [color-scheme:dark]"
+              className="w-full bg-bg border border-[#3b3733] rounded-xl px-4 py-3 text-sm font-sans text-white outline-none focus:border-accent/40 transition-colors [color-scheme:dark]"
               value={venueId} onChange={e => setVenueId(e.target.value)}>
               {venues.map(v => <option key={v.id} value={v.id}>{v.name}</option>)}
             </select>
           </Field>
           <div className="flex gap-3 pt-2">
             <button type="button" onClick={onClose}
-              className="flex-1 py-3.5 text-sm font-medium rounded-xl border border-[#2C2C2E] text-[#8E8E93] hover:text-white hover:border-[#48484A] transition-all">
+              className="flex-1 py-3.5 text-sm font-medium rounded-xl border border-[#2d2a26] text-[#8E8E93] hover:text-white hover:border-[#48484A] transition-all">
               Annulla
             </button>
             <button type="submit"
@@ -4051,9 +4051,9 @@ function FloorPlanMetaModal({ fp, onClose, onSubmit }: {
         className="absolute inset-0 bg-black/90 backdrop-blur-sm" onClick={onClose} />
       <motion.div initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.22, ease: 'easeOut' }}
-        className="relative w-full sm:max-w-md bg-card border-t border-x sm:border border-[#3A3A3C] overflow-hidden rounded-t-2xl sm:rounded-2xl max-h-[90vh] flex flex-col">
+        className="relative w-full sm:max-w-md bg-card border-t border-x sm:border border-[#3b3733] overflow-hidden rounded-t-2xl sm:rounded-2xl max-h-[90vh] flex flex-col">
         <div className="h-[2px] bg-accent shrink-0" />
-        <div className="px-6 sm:px-8 py-5 sm:py-6 border-b border-[#2C2C2E] flex items-center justify-between shrink-0">
+        <div className="px-6 sm:px-8 py-5 sm:py-6 border-b border-[#2d2a26] flex items-center justify-between shrink-0">
           <div>
             <h3 className="font-bold text-xl text-white">Modifica Pianta</h3>
             <p className="text-sm text-[#8E8E93] mt-1">Aggiorna il nome della pianta</p>
@@ -4063,12 +4063,12 @@ function FloorPlanMetaModal({ fp, onClose, onSubmit }: {
         <form className="p-6 sm:p-8 space-y-5 overflow-y-auto" onSubmit={(e) => { e.preventDefault(); onSubmit(name); }}>
           <Field label="Nome Pianta">
             <input required
-              className="w-full bg-bg border border-[#3A3A3C] rounded-xl px-4 py-3 text-sm font-sans text-white placeholder-[#636366] outline-none focus:border-accent/40 transition-colors"
+              className="w-full bg-bg border border-[#3b3733] rounded-xl px-4 py-3 text-sm font-sans text-white placeholder-[#636366] outline-none focus:border-accent/40 transition-colors"
               value={name} onChange={e => setName(e.target.value)} />
           </Field>
           <div className="flex gap-3 pt-2">
             <button type="button" onClick={onClose}
-              className="flex-1 py-3.5 text-sm font-medium rounded-xl border border-[#2C2C2E] text-[#8E8E93] hover:text-white hover:border-[#48484A] transition-all">
+              className="flex-1 py-3.5 text-sm font-medium rounded-xl border border-[#2d2a26] text-[#8E8E93] hover:text-white hover:border-[#48484A] transition-all">
               Annulla
             </button>
             <button type="submit"
@@ -4084,7 +4084,7 @@ function FloorPlanMetaModal({ fp, onClose, onSubmit }: {
 
 function IconBtn({ children, onClick }: { children: React.ReactNode; onClick?: () => void }) {
   return (
-    <button onClick={onClick} className="w-8 h-8 border border-[#3A3A3C] flex items-center justify-center text-[#AEAEB2] hover:text-accent hover:border-[#48484A] transition-all">
+    <button onClick={onClick} className="w-8 h-8 border border-[#3b3733] flex items-center justify-center text-[#AEAEB2] hover:text-accent hover:border-[#48484A] transition-all">
       {children}
     </button>
   );
@@ -4235,10 +4235,10 @@ function CommandPalette({
         initial={{ opacity: 0, y: -16, scale: 0.98 }}
         animate={{ opacity: 1, y: 0, scale: 1 }}
         transition={{ duration: 0.18, ease: [0.16, 1, 0.3, 1] }}
-        className="relative w-full max-w-xl bg-[#1C1C1E] border border-[#2C2C2E] shadow-2xl overflow-hidden"
+        className="relative w-full max-w-xl bg-[#1d1b19] border border-[#2d2a26] shadow-2xl overflow-hidden"
       >
         {/* Search input */}
-        <div className="flex items-center gap-3 px-5 py-4 border-b border-[#1C1C1E]">
+        <div className="flex items-center gap-3 px-5 py-4 border-b border-[#1d1b19]">
           <Search size={14} className="text-[#8E8E93] shrink-0" />
           <input
             ref={inputRef}
@@ -4247,7 +4247,7 @@ function CommandPalette({
             placeholder="Cerca club, serata, cliente, PR…"
             className="flex-1 bg-transparent outline-none text-sm font-sans text-white placeholder-[#636366]"
           />
-          <kbd className="text-[8px] font-mono border border-[#2C2C2E] px-1.5 py-0.5 text-[#8E8E93] shrink-0">ESC</kbd>
+          <kbd className="text-[8px] font-mono border border-[#2d2a26] px-1.5 py-0.5 text-[#8E8E93] shrink-0">ESC</kbd>
         </div>
 
         {/* Results */}
@@ -4284,10 +4284,10 @@ function CommandPalette({
         </div>
 
         {/* Footer hints */}
-        <div className="px-5 py-2.5 border-t border-[#1C1C1E] flex items-center justify-between text-xs text-[#8E8E93]">
+        <div className="px-5 py-2.5 border-t border-[#1d1b19] flex items-center justify-between text-xs text-[#8E8E93]">
           <div className="flex items-center gap-4">
-            <span className="flex items-center gap-1"><kbd className="font-mono border border-[#2C2C2E] px-1 py-0.5">↑↓</kbd> naviga</span>
-            <span className="flex items-center gap-1"><kbd className="font-mono border border-[#2C2C2E] px-1 py-0.5">↵</kbd> apri</span>
+            <span className="flex items-center gap-1"><kbd className="font-mono border border-[#2d2a26] px-1 py-0.5">↑↓</kbd> naviga</span>
+            <span className="flex items-center gap-1"><kbd className="font-mono border border-[#2d2a26] px-1 py-0.5">↵</kbd> apri</span>
           </div>
           <span>{results.length} risultati</span>
         </div>
@@ -4324,7 +4324,7 @@ function BottomTabBar({ user, view, onNav, pendingCount, prPendingCount }: {
   ];
 
   return (
-    <nav className="md:hidden fixed bottom-0 left-0 right-0 z-40 bg-[#0c0c0c]/95 backdrop-blur-md border-t border-[#2C2C2E]">
+    <nav className="md:hidden fixed bottom-0 left-0 right-0 z-40 bg-[#0c0c0c]/95 backdrop-blur-md border-t border-[#2d2a26]">
       <div className="flex items-stretch">
         {tabs.map(tab => (
           <button

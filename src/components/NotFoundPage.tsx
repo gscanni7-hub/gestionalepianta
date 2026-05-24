@@ -5,7 +5,7 @@ import { useNavigate } from 'react-router-dom';
 export default function NotFoundPage() {
   const navigate = useNavigate();
   return (
-    <div className="min-h-screen bg-[#111111] flex items-center justify-center p-6">
+    <div className="min-h-screen bg-[#121110] flex items-center justify-center p-6">
       <motion.div
         initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.4 }}

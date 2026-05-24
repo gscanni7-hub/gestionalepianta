@@ -59,13 +59,13 @@ export default function QuickAddModal({ events, venues, user, onClose, onAdd }: 
     <div className="fixed inset-0 z-[100] flex items-end justify-center sm:items-center p-0 sm:p-4">
       <motion.div
         initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
-        className="absolute inset-0 bg-black/90 backdrop-blur-sm"
+        className="absolute inset-0 bg-black/70 backdrop-blur-md"
         onClick={onClose}
       />
       <motion.div
         initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.22, ease: 'easeOut' }}
-        className="relative w-full sm:max-w-md bg-[#1d1b19] border-t border-x sm:border border-[#2d2a26] overflow-hidden rounded-t-2xl sm:rounded-2xl max-h-[90vh] flex flex-col"
+        className="relative w-full sm:max-w-md bg-[#1d1b19]/80 backdrop-blur-2xl border-t border-x sm:border border-white/10 overflow-hidden rounded-t-2xl sm:rounded-2xl max-h-[90vh] flex flex-col shadow-[0_24px_80px_rgba(0,0,0,0.6)]"
       >
         <div className="h-[2px] bg-[#D4622A] shrink-0" />
 

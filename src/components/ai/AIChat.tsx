@@ -189,7 +189,7 @@ export default function AIChat({ user, events, venues, reservations, managedUser
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: 12, scale: 0.96 }}
             transition={{ duration: 0.2, ease: [0.25, 0.46, 0.45, 0.94] }}
-            className="pointer-events-auto w-[340px] flex flex-col bg-[#0f0f0f] border border-[#1d1b19] shadow-[0_24px_60px_rgba(0,0,0,0.7)]"
+            className="pointer-events-auto w-[340px] flex flex-col bg-[#161412]/85 backdrop-blur-2xl border border-white/10 shadow-[0_24px_60px_rgba(0,0,0,0.7)]"
             style={{ maxHeight: '480px', borderRadius: 12 }}
           >
             {/* Header */}

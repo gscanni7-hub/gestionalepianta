@@ -477,11 +477,11 @@ function BookingModal({ table, initialReservation, defaultPrName, onClose, onSub
   return (
     <div className="fixed inset-0 z-[100] flex items-center justify-center p-4">
       <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }}
-        className="absolute inset-0 bg-black/90 backdrop-blur-sm" onClick={onClose} />
+        className="absolute inset-0 bg-black/70 backdrop-blur-md" onClick={onClose} />
 
       <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.2, ease: [0.16, 1, 0.3, 1] }}
-        className="relative w-full max-w-lg bg-card border border-[#2d2a26] rounded-2xl overflow-hidden max-h-[90vh] flex flex-col">
+        className="relative w-full max-w-lg bg-[#1d1b19]/80 backdrop-blur-2xl border border-white/10 rounded-2xl overflow-hidden max-h-[90vh] flex flex-col shadow-[0_24px_80px_rgba(0,0,0,0.6)]">
         <div className="h-[2px] bg-accent shrink-0" />
 
         <div className="px-8 py-5 border-b border-[#1d1b19] flex items-center justify-between shrink-0">

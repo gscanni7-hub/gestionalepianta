@@ -2442,10 +2442,10 @@ function GroupEditorModal({ group, prUsers, onClose, onSave }: {
   return (
     <div className="fixed inset-0 z-[100] flex items-end justify-center sm:items-center p-0 sm:p-4">
       <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
-        className="absolute inset-0 bg-black/90 backdrop-blur-sm" onClick={onClose} />
+        className="absolute inset-0 bg-black/70 backdrop-blur-md" onClick={onClose} />
       <motion.div initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.22, ease: 'easeOut' }}
-        className="relative w-full sm:max-w-md bg-card border-t border-x sm:border border-[#3b3733] overflow-hidden rounded-t-2xl sm:rounded-2xl max-h-[90vh] flex flex-col">
+        className="relative w-full sm:max-w-md bg-[#1d1b19]/80 backdrop-blur-2xl border-t border-x sm:border border-white/10 overflow-hidden rounded-t-2xl sm:rounded-2xl max-h-[90vh] flex flex-col shadow-[0_24px_80px_rgba(0,0,0,0.6)]">
         <div className="h-[2px] bg-accent shrink-0" />
         <div className="px-6 sm:px-8 py-5 border-b border-[#2d2a26] flex items-center justify-between shrink-0">
           <h3 className="font-bold text-xl text-white">{group ? 'Modifica gruppo' : 'Nuovo gruppo'}</h3>
@@ -2640,9 +2640,9 @@ function ReservationQuickEditModal({ reservation, onClose, onSave }: {
   return (
     <div className="fixed inset-0 z-[100] flex items-end justify-center sm:items-center p-0 sm:p-4">
       <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
-        className="absolute inset-0 bg-black/90 backdrop-blur-sm" onClick={onClose} />
+        className="absolute inset-0 bg-black/70 backdrop-blur-md" onClick={onClose} />
       <motion.div initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.2 }}
-        className="relative w-full sm:max-w-md bg-card border-t border-x sm:border border-[#3b3733] overflow-hidden rounded-t-2xl sm:rounded-2xl max-h-[90vh] flex flex-col">
+        className="relative w-full sm:max-w-md bg-[#1d1b19]/80 backdrop-blur-2xl border-t border-x sm:border border-white/10 overflow-hidden rounded-t-2xl sm:rounded-2xl max-h-[90vh] flex flex-col shadow-[0_24px_80px_rgba(0,0,0,0.6)]">
         <div className="h-[2px] bg-accent shrink-0" />
         <div className="px-6 py-5 border-b border-[#2d2a26] flex items-center justify-between shrink-0">
           <div>
@@ -3730,13 +3730,13 @@ function NewEventModal({ venue, floorPlans, prUsers, prGroups, onClose, onSubmit
     <div className="fixed inset-0 z-[100] flex items-end justify-center sm:items-center p-0 sm:p-4">
       <motion.div
         initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
-        className="absolute inset-0 bg-black/90 backdrop-blur-sm"
+        className="absolute inset-0 bg-black/70 backdrop-blur-md"
         onClick={onClose}
       />
       <motion.div
         initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.22, ease: 'easeOut' }}
-        className="relative w-full sm:max-w-md bg-card border-t border-x sm:border border-[#3b3733] overflow-hidden rounded-t-2xl sm:rounded-2xl max-h-[90vh] flex flex-col"
+        className="relative w-full sm:max-w-md bg-[#1d1b19]/80 backdrop-blur-2xl border-t border-x sm:border border-white/10 overflow-hidden rounded-t-2xl sm:rounded-2xl max-h-[90vh] flex flex-col shadow-[0_24px_80px_rgba(0,0,0,0.6)]"
       >
         <div className="h-[2px] bg-accent shrink-0" />
         <div className="px-6 sm:px-8 py-5 sm:py-6 border-b border-[#2d2a26] flex items-center justify-between shrink-0">
@@ -3942,13 +3942,13 @@ function NewClubModal({ onClose, onSubmit, initialData }: {
     <div className="fixed inset-0 z-[100] flex items-end justify-center sm:items-center p-0 sm:p-4">
       <motion.div
         initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
-        className="absolute inset-0 bg-black/90 backdrop-blur-sm"
+        className="absolute inset-0 bg-black/70 backdrop-blur-md"
         onClick={onClose}
       />
       <motion.div
         initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.22, ease: 'easeOut' }}
-        className="relative w-full sm:max-w-md bg-card border-t border-x sm:border border-[#3b3733] overflow-hidden rounded-t-2xl sm:rounded-2xl max-h-[90vh] flex flex-col"
+        className="relative w-full sm:max-w-md bg-[#1d1b19]/80 backdrop-blur-2xl border-t border-x sm:border border-white/10 overflow-hidden rounded-t-2xl sm:rounded-2xl max-h-[90vh] flex flex-col shadow-[0_24px_80px_rgba(0,0,0,0.6)]"
       >
         <div className="h-[2px] bg-accent shrink-0" />
         <div className="px-6 sm:px-8 py-5 sm:py-6 border-b border-[#2d2a26] flex items-center justify-between shrink-0">
@@ -3999,10 +3999,10 @@ function NewFloorPlanModal({ venues, onClose, onSubmit }: {
   return (
     <div className="fixed inset-0 z-[100] flex items-end justify-center sm:items-center p-0 sm:p-4">
       <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }}
-        className="absolute inset-0 bg-black/90 backdrop-blur-sm" onClick={onClose} />
+        className="absolute inset-0 bg-black/70 backdrop-blur-md" onClick={onClose} />
       <motion.div initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.22, ease: 'easeOut' }}
-        className="relative w-full sm:max-w-md bg-card border-t border-x sm:border border-[#3b3733] overflow-hidden rounded-t-2xl sm:rounded-2xl max-h-[90vh] flex flex-col">
+        className="relative w-full sm:max-w-md bg-[#1d1b19]/80 backdrop-blur-2xl border-t border-x sm:border border-white/10 overflow-hidden rounded-t-2xl sm:rounded-2xl max-h-[90vh] flex flex-col shadow-[0_24px_80px_rgba(0,0,0,0.6)]">
         <div className="h-[2px] bg-accent shrink-0" />
         <div className="px-6 sm:px-8 py-5 sm:py-6 border-b border-[#2d2a26] flex items-center justify-between shrink-0">
           <div>
@@ -4051,10 +4051,10 @@ function FloorPlanMetaModal({ fp, onClose, onSubmit }: {
   return (
     <div className="fixed inset-0 z-[100] flex items-end justify-center sm:items-center p-0 sm:p-4">
       <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }}
-        className="absolute inset-0 bg-black/90 backdrop-blur-sm" onClick={onClose} />
+        className="absolute inset-0 bg-black/70 backdrop-blur-md" onClick={onClose} />
       <motion.div initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.22, ease: 'easeOut' }}
-        className="relative w-full sm:max-w-md bg-card border-t border-x sm:border border-[#3b3733] overflow-hidden rounded-t-2xl sm:rounded-2xl max-h-[90vh] flex flex-col">
+        className="relative w-full sm:max-w-md bg-[#1d1b19]/80 backdrop-blur-2xl border-t border-x sm:border border-white/10 overflow-hidden rounded-t-2xl sm:rounded-2xl max-h-[90vh] flex flex-col shadow-[0_24px_80px_rgba(0,0,0,0.6)]">
         <div className="h-[2px] bg-accent shrink-0" />
         <div className="px-6 sm:px-8 py-5 sm:py-6 border-b border-[#2d2a26] flex items-center justify-between shrink-0">
           <div>

@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
-  Map, Users, Link2, Copy, Check, Calendar, Clock,
-  ChevronDown, CheckCircle2, XCircle, ArrowLeft, ExternalLink, AlertCircle
+  Map as MapIcon, Users, Link2, Copy, Check, Calendar, Clock,
+  ChevronDown, CheckCircle2, XCircle, ArrowLeft, ExternalLink, AlertCircle, TrendingUp
 } from 'lucide-react';
 import { Event, Venue, Reservation, Registration, ManagedUser, PrGroup } from '../../types';
 import { getRegistrationsByEvent } from '../../lib/registrationService';
@@ -23,7 +23,7 @@ interface Props {
 }
 
 export default function EventDetailView({ event, venue, reservations, prUsers, prGroups, onApproveReservation, onRejectReservation, onUpdateEvent, onOpenPlan, onBack }: Props) {
-  const [tab, setTab] = useState<'tavoli' | 'approva' | 'registrazioni' | 'ingresso'>('tavoli');
+  const [tab, setTab] = useState<'tavoli' | 'approva' | 'registrazioni' | 'ingresso' | 'report'>(event.status === 'completed' ? 'report' : 'tavoli');
   const [confirmReject, setConfirmReject] = useState<string | null>(null);
   const [showVisibility, setShowVisibility] = useState(false);
   const [confirmConclude, setConfirmConclude] = useState(false);
@@ -71,6 +71,28 @@ export default function EventDetailView({ event, venue, reservations, prUsers, p
   const regCheckedIn = registrations.filter(r => r.checkedIn);
   const regGeneric = registrations.filter(r => !r.prId);
   const regFromPr = registrations.filter(r => r.prId);
+
+  /* ── Report di fine serata ── */
+  const noShowRes = approvedRes.filter(r => !r.checkedIn);
+  const incassoPrenotato = approvedRes.reduce((s, r) => s + r.budget, 0);
+  const incassoReale = checkedInRes.reduce((s, r) => s + (r.actualBudget ?? r.budget), 0);
+  const deltaIncasso = incassoReale - incassoPrenotato;
+  const personePreviste = approvedRes.reduce((s, r) => s + r.guestsCount, 0);
+  const personeEntrate = checkedInRes.reduce((s, r) => s + (r.actualPeople ?? r.guestsCount), 0);
+  const fp = venue.floorPlans.find(f => f.id === event.floorPlanId) ?? venue.floorPlans[0];
+  const totalTables = fp?.tables.filter(t => !t.isFixture).length ?? 0;
+  const occupancy = totalTables > 0 ? Math.round((approvedRes.length / totalTables) * 100) : 0;
+  const prRanking = (() => {
+    const map = new Map<string, { name: string; tavoli: number; incasso: number }>();
+    approvedRes.forEach(r => {
+      const cur = map.get(r.prId) ?? { name: r.prName, tavoli: 0, incasso: 0 };
+      cur.tavoli += 1;
+      if (r.checkedIn) cur.incasso += (r.actualBudget ?? r.budget);
+      map.set(r.prId, cur);
+    });
+    return [...map.values()].sort((a, b) => b.incasso - a.incasso);
+  })();
+  const eur = (n: number) => `€${n.toLocaleString('it-IT')}`;
 
   return (
     <div>
@@ -169,7 +191,7 @@ export default function EventDetailView({ event, venue, reservations, prUsers, p
         onClick={onOpenPlan}
         className="w-full flex items-center justify-center gap-2 bg-[#D4622A] text-black py-3.5 text-sm font-semibold rounded-xl hover:bg-white transition-colors mb-6"
       >
-        <Map size={14} /> Apri Pianta
+        <MapIcon size={14} /> Apri Pianta
       </button>
 
       {/* Visibilità — richiudibile, modifiche immediate */}
@@ -255,7 +277,7 @@ export default function EventDetailView({ event, venue, reservations, prUsers, p
 
       {/* Tabs */}
       <div className="flex border border-[#2C2C2E] mb-5 rounded-xl overflow-x-auto">
-        {(['tavoli', 'approva', 'registrazioni', 'ingresso'] as const).map(t => (
+        {(['tavoli', 'approva', 'registrazioni', 'ingresso', 'report'] as const).map(t => (
           <button key={t}
             onClick={() => setTab(t)}
             className={cn(
@@ -269,7 +291,9 @@ export default function EventDetailView({ event, venue, reservations, prUsers, p
               ? `Approva${pendingRes.length > 0 ? ` (${pendingRes.length})` : ''}`
               : t === 'registrazioni'
               ? `Registrazioni (${registrations.length})`
-              : 'Ingresso'}
+              : t === 'ingresso'
+              ? 'Ingresso'
+              : 'Report'}
             {t === 'approva' && pendingRes.length > 0 && tab !== 'approva' && (
               <span className="absolute top-1.5 right-2 w-1.5 h-1.5 rounded-full bg-[#F59E0B]" />
             )}
@@ -440,6 +464,67 @@ export default function EventDetailView({ event, venue, reservations, prUsers, p
       {/* Tab: Ingresso */}
       {tab === 'ingresso' && (
         <IngressiView activeEvent={event} />
+      )}
+
+      {/* Tab: Report */}
+      {tab === 'report' && (
+        <div className="space-y-6">
+          {approvedRes.length === 0 ? (
+            <div className="py-16 text-center border border-[#2C2C2E] rounded-xl">
+              <p className="text-sm text-[#636366]">Nessun dato: nessuna prenotazione approvata.</p>
+            </div>
+          ) : (
+            <>
+              {/* Incasso reale vs previsto */}
+              <div className="border border-[#2C2C2E] bg-[#1C1C1E] rounded-xl p-5">
+                <div className="flex items-end justify-between gap-4 flex-wrap">
+                  <div>
+                    <p className="text-[10px] uppercase tracking-widest text-[#8E8E93] flex items-center gap-1.5">
+                      <TrendingUp size={11} className="text-[#22C55E]" /> Incasso reale
+                    </p>
+                    <p className="hv font-black text-3xl text-white mt-1.5">{eur(incassoReale)}</p>
+                  </div>
+                  <div className="text-right">
+                    <p className="text-[10px] text-[#636366]">previsto {eur(incassoPrenotato)}</p>
+                    <p className={cn('text-sm font-semibold mt-0.5', deltaIncasso >= 0 ? 'text-[#22C55E]' : 'text-[#EF4444]')}>
+                      {deltaIncasso >= 0 ? '+' : '−'}{eur(Math.abs(deltaIncasso))}
+                    </p>
+                  </div>
+                </div>
+              </div>
+
+              {/* KPI */}
+              <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
+                {[
+                  { label: 'Tavoli entrati', value: `${checkedInRes.length}/${approvedRes.length}`, color: 'text-[#22C55E]' },
+                  { label: 'No-show', value: String(noShowRes.length), color: noShowRes.length > 0 ? 'text-[#F59E0B]' : 'text-white' },
+                  { label: 'Persone', value: `${personeEntrate}/${personePreviste}`, color: 'text-white' },
+                  { label: 'Occupazione', value: `${occupancy}%`, color: 'text-[#D4622A]' },
+                ].map(k => (
+                  <div key={k.label} className="border border-[#2C2C2E] bg-[#1C1C1E] rounded-xl p-4 text-center">
+                    <div className={cn('hv font-black text-2xl leading-none', k.color)}>{k.value}</div>
+                    <div className="text-[10px] text-[#8E8E93] mt-2">{k.label}</div>
+                  </div>
+                ))}
+              </div>
+
+              {/* Top PR */}
+              <div>
+                <p className="text-xs font-medium text-[#8E8E93] mb-3">Top PR — per incasso reale</p>
+                <div className="border border-[#2C2C2E] rounded-xl overflow-hidden">
+                  {prRanking.map((p, i) => (
+                    <div key={p.name + i} className="flex items-center gap-4 px-4 py-3 border-b border-[#1C1C1E] last:border-0">
+                      <span className="hv font-black text-sm w-5 shrink-0" style={{ color: i === 0 ? '#FFD700' : i === 1 ? '#C0C0C0' : i === 2 ? '#CD7F32' : '#3A3A3C' }}>{i + 1}</span>
+                      <span className="flex-1 min-w-0 text-sm text-white truncate">{p.name}</span>
+                      <span className="text-[10px] text-[#8E8E93] shrink-0">{p.tavoli} tav.</span>
+                      <span className="hv font-black text-sm text-[#D4622A] shrink-0 w-16 text-right">{eur(p.incasso)}</span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </>
+          )}
+        </div>
       )}
     </div>
   );

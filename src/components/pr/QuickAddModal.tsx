@@ -88,7 +88,7 @@ export default function QuickAddModal({ events, venues, user, onClose, onAdd }: 
               <p className="text-[#636366] text-xs mt-1">In attesa di approvazione admin</p>
             </div>
             <button onClick={onClose}
-              className="w-full py-3.5 rounded-xl bg-[#D4622A] text-black text-sm font-semibold hover:bg-white transition-colors">
+              className="w-full py-3.5 rounded-xl btn-primary text-sm font-semibold">
               Chiudi
             </button>
           </div>
@@ -187,11 +187,11 @@ export default function QuickAddModal({ events, venues, user, onClose, onAdd }: 
 
             <div className="flex gap-3 pt-2">
               <button type="button" onClick={onClose}
-                className="flex-1 py-3.5 rounded-xl border border-[#2d2a26] text-[#636366] text-sm font-medium hover:text-white hover:border-[#3a3a3a] transition-colors">
+                className="flex-1 py-3.5 rounded-xl btn-secondary text-sm font-medium">
                 Annulla
               </button>
               <button type="submit"
-                className="flex-1 py-3.5 rounded-xl bg-[#D4622A] text-black text-sm font-semibold hover:bg-white transition-colors">
+                className="flex-1 py-3.5 rounded-xl btn-primary text-sm font-semibold">
                 Aggiungi
               </button>
             </div>

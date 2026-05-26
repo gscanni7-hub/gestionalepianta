@@ -333,7 +333,7 @@ export default function FloorPlanEditor({ floorPlan, onSave, onClose }: FloorPla
 
         {/* Save */}
         <button onClick={handleSave}
-          className="flex items-center gap-1.5 px-4 py-1.5 bg-accent text-black text-[9px] hv font-black uppercase tracking-widest hover:bg-white transition-all ml-1">
+          className="flex items-center gap-1.5 px-4 py-1.5 btn-primary text-[9px] hv font-black uppercase tracking-widest ml-1">
           <Save size={11} /> Salva
         </button>
       </div>

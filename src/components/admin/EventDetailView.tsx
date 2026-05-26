@@ -191,7 +191,7 @@ export default function EventDetailView({ event, venue, reservations, prUsers, p
       <div className="flex gap-2 mb-6">
         <button
           onClick={onOpenPlan}
-          className="flex-1 flex items-center justify-center gap-2 bg-[#D4622A] text-black py-3.5 text-sm font-semibold rounded-xl hover:bg-white transition-colors"
+          className="flex-1 flex items-center justify-center gap-2 btn-primary py-3.5 text-sm font-semibold rounded-xl"
         >
           <MapIcon size={14} /> Apri Pianta
         </button>
@@ -420,7 +420,7 @@ export default function EventDetailView({ event, venue, reservations, prUsers, p
               <AlertCircle size={28} className="text-[#EF4444]" />
               <p className="text-sm text-[#8E8E93]">Impossibile caricare le registrazioni</p>
               <button onClick={loadRegistrations}
-                className="px-5 py-2.5 rounded-xl bg-[#D4622A] text-black text-sm font-semibold hover:bg-white transition-colors">
+                className="px-5 py-2.5 rounded-xl btn-primary text-sm font-semibold">
                 Riprova
               </button>
             </div>

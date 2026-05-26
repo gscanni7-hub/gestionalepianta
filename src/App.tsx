@@ -1028,7 +1028,7 @@ export default function App() {
                     </div>
                     {loginError && <p className="text-red-400 text-xs pt-1">{loginError}</p>}
                     <motion.button type="submit" whileTap={{ scale: 0.98 }}
-                      className="group w-full bg-accent text-black py-4 text-sm font-semibold rounded-xl flex items-center justify-between px-6 hover:bg-[#e8702f] transition-all duration-200 mt-1">
+                      className="group w-full btn-primary py-4 text-sm font-semibold rounded-xl flex items-center justify-between px-6 transition-all duration-200 mt-1">
                       <span>Accedi</span>
                       <ChevronRight size={13} className="group-hover:translate-x-1 transition-transform" />
                     </motion.button>
@@ -1109,7 +1109,7 @@ export default function App() {
                         </div>
                         {forgotError && <p className="text-red-400 text-xs pt-1">{forgotError}</p>}
                         <motion.button type="submit" whileHover={{ scale: 1.01 }} whileTap={{ scale: 0.99 }}
-                          className="group w-full bg-accent text-black py-4 text-sm font-semibold rounded-xl flex items-center justify-between px-6 hover:bg-[#e8702f] transition-all duration-200 mt-2">
+                          className="group w-full btn-primary py-4 text-sm font-semibold rounded-xl flex items-center justify-between px-6 transition-all duration-200 mt-2">
                           <span>Invia Link</span>
                           <ChevronRight size={14} className="group-hover:translate-x-1 transition-transform" />
                         </motion.button>
@@ -1135,7 +1135,7 @@ export default function App() {
                         La tua password è stata<br />reimpostata con successo.
                       </p>
                       <button onClick={() => { setAuthScreen('login'); setResetDone(false); setNewPassword(''); }}
-                        className="mt-8 w-full py-4 text-sm font-semibold rounded-xl bg-accent text-black hover:bg-[#e8702f] transition-colors">
+                        className="mt-8 w-full py-4 text-sm font-semibold rounded-xl btn-primary">
                         Accedi ora
                       </button>
                     </div>
@@ -1161,7 +1161,7 @@ export default function App() {
                         </div>
                         {resetError && <p className="text-red-400 text-xs pt-1">{resetError}</p>}
                         <motion.button type="submit" whileHover={{ scale: 1.01 }} whileTap={{ scale: 0.99 }}
-                          className="group w-full bg-accent text-black py-4 text-sm font-semibold rounded-xl flex items-center justify-between px-6 hover:bg-[#e8702f] transition-all duration-200 mt-2">
+                          className="group w-full btn-primary py-4 text-sm font-semibold rounded-xl flex items-center justify-between px-6 transition-all duration-200 mt-2">
                           <span>Reimposta Password</span>
                           <ChevronRight size={14} className="group-hover:translate-x-1 transition-transform" />
                         </motion.button>
@@ -1265,7 +1265,7 @@ export default function App() {
                       disabled={!!regEmailError || !!regPhoneError}
                       whileHover={!regEmailError && !regPhoneError ? { scale: 1.01 } : {}}
                       whileTap={!regEmailError && !regPhoneError ? { scale: 0.99 } : {}}
-                      className={`group w-full py-4 text-sm font-semibold rounded-xl flex items-center justify-between px-6 transition-colors mt-2 ${regEmailError || regPhoneError ? 'bg-[#2d2a26] text-[#8E8E93] cursor-not-allowed' : 'bg-accent text-black hover:bg-white'}`}>
+                      className={`group w-full py-4 text-sm font-semibold rounded-xl flex items-center justify-between px-6 transition-colors mt-2 ${regEmailError || regPhoneError ? 'bg-[#2d2a26] text-[#8E8E93] cursor-not-allowed' : 'btn-primary'}`}>
                       <span>Invia Richiesta</span>
                       <ChevronRight size={14} className="group-hover:translate-x-1 transition-transform" />
                     </motion.button>
@@ -1473,7 +1473,7 @@ export default function App() {
                         <Wine size={13} /> Listino
                       </button>
                       <button onClick={() => setShowNewClubModal(true)}
-                        className="flex items-center gap-2 bg-accent text-black px-5 py-3 text-sm font-semibold rounded-xl hover:bg-white transition-colors">
+                        className="flex items-center gap-2 btn-primary px-5 py-3 text-sm font-semibold rounded-xl">
                         <Plus size={12} /> Nuovo Club
                       </button>
                     </div>
@@ -1530,7 +1530,7 @@ export default function App() {
                       {venueEvents.length === 0 ? (
                         <EmptyState icon={<Calendar size={28} />} label="Nessuna serata ancora.">
                           <button onClick={() => setShowNewEventModal(true)}
-                            className="mt-5 flex items-center gap-2 bg-accent text-black px-5 py-3 text-sm font-semibold rounded-xl hover:bg-white transition-colors">
+                            className="mt-5 flex items-center gap-2 btn-primary px-5 py-3 text-sm font-semibold rounded-xl">
                             <Plus size={13} /> Crea Serata
                           </button>
                         </EmptyState>
@@ -1570,7 +1570,7 @@ export default function App() {
                       <div>
                           <div className="flex justify-end mb-6">
                             <button onClick={() => setEditingFloorPlan({ venueId: selectedVenue.id, fp: { id: `fp_${Date.now()}`, name: '', canvasWidth: 800, canvasHeight: 600, staticAreas: [], tables: [] } })}
-                              className="flex items-center gap-2 bg-accent text-black px-5 py-3 text-sm font-semibold rounded-xl hover:bg-white transition-colors">
+                              className="flex items-center gap-2 btn-primary px-5 py-3 text-sm font-semibold rounded-xl">
                               <Plus size={12} /> Nuova Pianta
                             </button>
                           </div>
@@ -1679,7 +1679,7 @@ export default function App() {
                   {user.role === 'pr' && prVisibleEvents.length > 0 && (
                     <button
                       onClick={() => setShowQuickAdd(true)}
-                      className="flex items-center gap-2 bg-accent text-black px-4 py-2.5 text-sm font-semibold rounded-xl hover:bg-white transition-colors shrink-0 mt-1"
+                      className="flex items-center gap-2 btn-primary px-4 py-2.5 text-sm font-semibold rounded-xl shrink-0 mt-1"
                     >
                       <Plus size={12} /> Aggiungi
                     </button>
@@ -1777,7 +1777,7 @@ export default function App() {
                         </div>
                         <button
                           onClick={() => setShowNewFloorPlanModal(true)}
-                          className="flex items-center gap-2 bg-accent text-black px-5 py-3 text-sm font-semibold rounded-xl hover:bg-white transition-colors shrink-0 mt-1">
+                          className="flex items-center gap-2 btn-primary px-5 py-3 text-sm font-semibold rounded-xl shrink-0 mt-1">
                           <Plus size={12} /> Nuova Pianta
                         </button>
                       </div>
@@ -2328,7 +2328,7 @@ function PRProfile({ user, onSave }: {
         <motion.button type="submit" whileHover={{ scale: 1.01 }} whileTap={{ scale: 0.99 }}
           className={cn(
             'w-full py-4 text-sm font-semibold rounded-xl transition-colors',
-            saved ? 'bg-green-500 text-black' : 'bg-accent text-black hover:bg-white'
+            saved ? 'bg-green-500 text-black' : 'btn-primary'
           )}>
           {saved ? 'Salvato ✓' : 'Salva Modifiche'}
         </motion.button>
@@ -2396,7 +2396,7 @@ function PRManagementPage({ managedUsers, reservations, events, prGroups, select
         <div className="flex items-center justify-between mb-4">
           <p className="text-xs font-medium text-[#8E8E93]">Gruppi PR</p>
           <button onClick={() => setEditingGroup('new')}
-            className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-accent text-black text-xs font-semibold hover:bg-white transition-colors">
+            className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl btn-primary text-xs font-semibold">
             <Plus size={12} /> Crea gruppo
           </button>
         </div>
@@ -2550,7 +2550,7 @@ function BottleMenuModal({ menu, onClose, onSave }: {
           <button type="button" onClick={onClose}
             className="flex-1 py-3 text-sm font-medium rounded-xl border border-[#2d2a26] text-[#8E8E93] hover:text-white hover:border-[#48484A] transition-all">Annulla</button>
           <button type="button" onClick={() => onSave(items.filter(it => it.name.trim()))}
-            className="flex-1 py-3 text-sm font-semibold rounded-xl bg-accent text-black hover:bg-white transition-colors">Salva listino</button>
+            className="flex-1 py-3 text-sm font-semibold rounded-xl btn-primary">Salva listino</button>
         </div>
       </motion.div>
     </div>
@@ -2611,7 +2611,7 @@ function GroupEditorModal({ group, prUsers, onClose, onSave }: {
             </button>
             <button type="submit" disabled={!canSave}
               className={cn('flex-1 py-3.5 text-sm font-semibold rounded-xl transition-colors',
-                canSave ? 'bg-accent text-black hover:bg-white' : 'bg-[#2d2a26] text-[#8E8E93] cursor-not-allowed')}>
+                canSave ? 'btn-primary' : 'bg-[#2d2a26] text-[#8E8E93] cursor-not-allowed')}>
               {group ? 'Salva' : 'Crea gruppo'}
             </button>
           </div>
@@ -2812,7 +2812,7 @@ function ReservationQuickEditModal({ reservation, onClose, onSave }: {
               Annulla
             </button>
             <button type="submit"
-              className="flex-1 py-3 text-sm font-semibold rounded-xl bg-accent text-black hover:bg-[#e8702f] transition-colors">
+              className="flex-1 py-3 text-sm font-semibold rounded-xl btn-primary">
               Salva
             </button>
           </div>
@@ -3018,7 +3018,7 @@ function CheckinRow({ res, events, venues, onCheckIn, onUndoCheckIn, onUpdatePeo
                     {peopleChanged && (
                       <button
                         onClick={() => { onUpdatePeople(res.id, people); setOpen(false); }}
-                        className="flex-1 py-2.5 rounded-xl bg-accent text-black text-xs font-semibold hover:bg-white transition-colors"
+                        className="flex-1 py-2.5 rounded-xl btn-primary text-xs font-semibold"
                       >
                         Aggiorna
                       </button>
@@ -3898,7 +3898,7 @@ function NewEventModal({ venue, floorPlans, prUsers, prGroups, onClose, onSubmit
             </div>
             <button
               onClick={handleCopy}
-              className="w-full py-3.5 text-sm font-semibold rounded-xl bg-accent text-black hover:bg-[#e8702f] transition-colors flex items-center justify-center gap-2"
+              className="w-full py-3.5 text-sm font-semibold rounded-xl btn-primary flex items-center justify-center gap-2"
             >
               {copied ? <><CheckCircle2 size={13} /> Copiato!</> : 'Copia link'}
             </button>
@@ -4044,7 +4044,7 @@ function NewEventModal({ venue, floorPlans, prUsers, prGroups, onClose, onSubmit
                 Annulla
               </button>
               <button type="submit"
-                className="flex-1 py-3.5 text-sm font-semibold rounded-xl bg-accent text-black hover:bg-[#e8702f] transition-colors">
+                className="flex-1 py-3.5 text-sm font-semibold rounded-xl btn-primary">
                 {isEdit ? 'Salva Modifiche' : 'Crea Evento'}
               </button>
             </div>
@@ -4113,7 +4113,7 @@ function NewClubModal({ onClose, onSubmit, initialData }: {
               Annulla
             </button>
             <button type="submit"
-              className="flex-1 py-3.5 text-sm font-semibold rounded-xl bg-accent text-black hover:bg-[#e8702f] transition-colors">
+              className="flex-1 py-3.5 text-sm font-semibold rounded-xl btn-primary">
               {isEdit ? 'Salva Modifiche' : 'Avanti'}
             </button>
           </div>
@@ -4166,7 +4166,7 @@ function NewFloorPlanModal({ venues, onClose, onSubmit }: {
               Annulla
             </button>
             <button type="submit"
-              className="flex-1 py-3.5 text-sm font-semibold rounded-xl bg-accent text-black hover:bg-[#e8702f] transition-colors">
+              className="flex-1 py-3.5 text-sm font-semibold rounded-xl btn-primary">
               Avanti
             </button>
           </div>
@@ -4211,7 +4211,7 @@ function FloorPlanMetaModal({ fp, onClose, onSubmit }: {
               Annulla
             </button>
             <button type="submit"
-              className="flex-1 py-3.5 text-sm font-semibold rounded-xl bg-accent text-black hover:bg-[#e8702f] transition-colors">
+              className="flex-1 py-3.5 text-sm font-semibold rounded-xl btn-primary">
               Salva Modifiche
             </button>
           </div>

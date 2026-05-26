@@ -280,7 +280,7 @@ export default function AIChat({ user, events, venues, reservations, managedUser
               <button
                 type="submit"
                 disabled={!input.trim() || loading}
-                className="w-8 h-8 flex items-center justify-center bg-accent text-black hover:bg-white transition-colors disabled:opacity-30 disabled:cursor-not-allowed shrink-0"
+                className="w-8 h-8 flex items-center justify-center btn-primary rounded-lg disabled:opacity-30 disabled:cursor-not-allowed shrink-0"
                 style={{ borderRadius: 8 }}
               >
                 <Send size={12} />

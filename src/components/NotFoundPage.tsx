@@ -16,7 +16,7 @@ export default function NotFoundPage() {
         <p className="text-[#8E8E93] text-sm mb-8">Questa pagina non esiste o il link non è valido.</p>
         <button
           onClick={() => navigate('/')}
-          className="px-8 py-3.5 bg-[#D4622A] text-black text-[9px] hv font-black uppercase tracking-widest hover:bg-white transition-colors"
+          className="px-8 py-3.5 btn-primary text-[9px] hv font-black uppercase tracking-widest"
         >
           Torna all'app
         </button>

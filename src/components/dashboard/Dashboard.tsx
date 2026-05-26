@@ -235,14 +235,14 @@ function PRDashboard({ user, events, venues, reservations, prPendingCount, onNav
                   key={ev.id}
                   onClick={() => onOpenEvent(ev)}
                   whileTap={{ scale: 0.985 }}
-                  className="w-full flex items-center gap-4 bg-[#D4622A] hover:bg-white transition-colors p-4 text-left group rounded-xl"
+                  className="w-full flex items-center gap-4 btn-primary p-4 text-left group rounded-xl"
                 >
-                  <Calendar size={16} className="text-black shrink-0" />
+                  <Calendar size={16} className="text-white shrink-0" />
                   <div className="flex-1 min-w-0">
-                    <p className="font-semibold text-black text-sm truncate">{ev.name}</p>
-                    <p className="text-[9px] font-mono text-black/60 mt-0.5">{venue?.name ?? ''}</p>
+                    <p className="font-semibold text-white text-sm truncate">{ev.name}</p>
+                    <p className="text-[9px] font-mono text-white/60 mt-0.5">{venue?.name ?? ''}</p>
                   </div>
-                  <ChevronRight size={14} className="text-black shrink-0" />
+                  <ChevronRight size={14} className="text-white shrink-0" />
                 </motion.button>
               );
             })}
@@ -266,7 +266,7 @@ function PRDashboard({ user, events, venues, reservations, prPendingCount, onNav
                     </div>
                     <button
                       onClick={() => navigator.clipboard.writeText(link)}
-                      className="shrink-0 px-4 py-2 rounded-xl bg-[#D4622A] text-black text-xs font-semibold hover:bg-white transition-colors"
+                      className="shrink-0 px-4 py-2 rounded-xl btn-primary text-xs font-semibold"
                     >
                       Copia
                     </button>
@@ -368,7 +368,7 @@ function HostDashboard({ user, events, venues, reservations, onNav }: {
             <motion.button
               onClick={() => onNav('checkin')}
               whileTap={{ scale: 0.97 }}
-              className="w-full flex items-center justify-center gap-3 bg-[#D4622A] text-black py-4 text-sm font-semibold rounded-xl hover:bg-white transition-colors"
+              className="w-full flex items-center justify-center gap-3 btn-primary py-4 text-sm font-semibold rounded-xl"
             >
               <DoorOpen size={18} />
               Vai all'ingresso

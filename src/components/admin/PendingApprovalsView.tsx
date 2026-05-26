@@ -67,10 +67,10 @@ export default function PendingApprovalsView({
               onClick={armOrApproveAll}
               onBlur={() => setConfirmAll(false)}
               className={cn(
-                'flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-semibold transition-colors',
+                'flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-semibold',
                 confirmAll
                   ? 'bg-white text-black ring-2 ring-accent'
-                  : 'bg-accent text-black hover:bg-white'
+                  : 'btn-primary'
               )}
             >
               <CheckCheck size={12} /> {confirmAll ? `Confermi? (${pendingResv.length})` : 'Approva tutte'}

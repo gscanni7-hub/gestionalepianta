@@ -320,7 +320,7 @@ export default function PublicRegistrationForm() {
             type="submit"
             disabled={submitting}
             whileTap={{ scale: 0.97 }}
-            className="w-full bg-[#D4622A] text-white py-4 font-black uppercase tracking-widest text-xs flex items-center justify-center gap-2 disabled:opacity-50 mt-2"
+            className="w-full btn-primary rounded-xl py-4 font-black uppercase tracking-widest text-xs flex items-center justify-center gap-2 mt-2"
             style={{ fontFamily: 'Helvetica Neue, Helvetica, Arial, sans-serif' }}
           >
             {submitting ? (

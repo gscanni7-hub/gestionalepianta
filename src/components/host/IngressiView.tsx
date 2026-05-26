@@ -135,7 +135,7 @@ export default function IngressiView({ activeEvent }: Props) {
           'w-full flex items-center justify-center gap-2 py-4 mb-4 text-sm font-semibold rounded-xl transition-colors',
           scanning
             ? 'border border-[#3b3733] text-[#636366] hover:text-white hover:border-[#48484A]'
-            : 'bg-[#D4622A] text-black hover:bg-white'
+            : 'btn-primary'
         )}
       >
         {scanning ? <><X size={14} /> Chiudi scanner</> : <><Camera size={14} /> Scannerizza QR</>}
@@ -207,7 +207,7 @@ export default function IngressiView({ activeEvent }: Props) {
           <p className="text-sm text-[#8E8E93]">Impossibile caricare le registrazioni</p>
           <button
             onClick={loadRegistrations}
-            className="px-5 py-2.5 rounded-xl bg-[#D4622A] text-black text-sm font-semibold hover:bg-white transition-colors"
+            className="px-5 py-2.5 rounded-xl btn-primary text-sm font-semibold"
           >
             Riprova
           </button>

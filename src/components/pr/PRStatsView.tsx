@@ -1,5 +1,4 @@
 import React from 'react';
-import { BarChart3, TrendingUp, Calendar, CheckCircle2 } from 'lucide-react';
 import { Reservation, Event } from '../../types';
 
 interface Props {
@@ -23,21 +22,20 @@ export default function PRStatsView({ prId, reservations, events }: Props) {
   }), 1);
 
   const kpis = [
-    { icon: <BarChart3 size={18} />, value: myRes.length, label: 'Prenotazioni' },
-    { icon: <CheckCircle2 size={18} />, value: totalGuests, label: 'Ospiti totali' },
-    { icon: <TrendingUp size={18} />, value: `€${totalBudget >= 1000 ? `${(totalBudget / 1000).toFixed(1)}K` : totalBudget}`, label: 'Budget totale' },
-    { icon: <Calendar size={18} />, value: `${checkinRate}%`, label: 'Tasso ingressi' },
+    { value: myRes.length, label: 'Prenotazioni' },
+    { value: totalGuests, label: 'Ospiti totali' },
+    { value: `€${totalBudget >= 1000 ? `${(totalBudget / 1000).toFixed(1)}K` : totalBudget}`, label: 'Budget totale' },
+    { value: `${checkinRate}%`, label: 'Tasso ingressi' },
   ];
 
   return (
     <div>
       {/* KPIs */}
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 mb-10">
-        {kpis.map(({ icon, value, label }) => (
-          <div key={label} className="border border-[#2d2a26] bg-[#1d1b19] px-6 py-6 rounded-xl">
-            <div className="text-accent mb-4">{icon}</div>
-            <div className="hv font-black text-3xl text-white leading-none">{value}</div>
-            <div className="text-xs text-[#8E8E93] mt-3">{label}</div>
+        {kpis.map(({ value, label }) => (
+          <div key={label} className="border border-white/[0.07] bg-white/[0.018] rounded-2xl px-5 py-5">
+            <div className="hv font-black text-3xl text-white leading-none tabular-nums">{value}</div>
+            <div className="text-[11px] uppercase tracking-[0.14em] text-[#8a8278] mt-3">{label}</div>
           </div>
         ))}
       </div>
@@ -45,12 +43,12 @@ export default function PRStatsView({ prId, reservations, events }: Props) {
       {/* Per-event breakdown */}
       {eventIds.length === 0 ? (
         <div className="py-16 text-center">
-          <p className="text-sm text-[#636366]">Nessuna prenotazione ancora</p>
+          <p className="text-sm text-[#8a8278]">Nessuna prenotazione ancora</p>
         </div>
       ) : (
         <div>
-          <p className="text-xs font-medium text-[#8E8E93] mb-5">Dettaglio per serata</p>
-          <div className="space-y-3">
+          <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-[#8a8278] mb-4">Dettaglio per serata</p>
+          <div className="border border-white/[0.07] bg-white/[0.018] rounded-2xl overflow-hidden">
             {eventIds.map(eid => {
               const event = events.find(e => e.id === eid);
               const evRes = myRes.filter(r => r.eventId === eid);
@@ -59,38 +57,23 @@ export default function PRStatsView({ prId, reservations, events }: Props) {
               const barPct = Math.round((evBudget / maxBudget) * 100);
 
               return (
-                <div key={eid} className="border border-[#2d2a26] bg-[#1d1b19] px-5 py-4 rounded-xl">
-                  <div className="flex items-center justify-between mb-3 flex-wrap gap-2">
-                    <div>
-                      <p className="font-semibold text-sm text-white">{event?.name ?? eid}</p>
-                      {event && (
-                        <p className="text-[9px] font-sans text-[#8E8E93] mt-0.5">{event.date}</p>
-                      )}
+                <div key={eid} className="px-5 py-4 border-t border-white/[0.05] first:border-t-0">
+                  <div className="flex items-center justify-between flex-wrap gap-2">
+                    <div className="min-w-0">
+                      <p className="font-semibold text-[15px] text-white truncate">{event?.name ?? eid}</p>
+                      {event && <p className="text-xs text-[#8a8278] mt-0.5">{event.date}</p>}
                     </div>
                     <div className="flex items-center gap-5 shrink-0">
-                      <div className="text-right">
-                        <p className="hv font-black text-lg text-white">{evRes.length}</p>
-                        <p className="text-xs text-[#8E8E93]">pren.</p>
-                      </div>
-                      <div className="text-right">
-                        <p className="hv font-black text-lg text-white">{evGuests}</p>
-                        <p className="text-xs text-[#8E8E93]">ospiti</p>
-                      </div>
-                      <div className="text-right">
-                        <p className="hv font-black text-lg text-accent">€{evBudget >= 1000 ? `${(evBudget / 1000).toFixed(1)}K` : evBudget}</p>
-                        <p className="text-xs text-[#8E8E93]">budget</p>
-                      </div>
+                      <div className="text-right"><p className="hv font-black text-lg text-white tabular-nums">{evRes.length}</p><p className="text-[10px] text-[#8a8278]">pren.</p></div>
+                      <div className="text-right"><p className="hv font-black text-lg text-white tabular-nums">{evGuests}</p><p className="text-[10px] text-[#8a8278]">ospiti</p></div>
+                      <div className="text-right"><p className="hv font-black text-lg text-[#D4622A] tabular-nums">€{evBudget >= 1000 ? `${(evBudget / 1000).toFixed(1)}K` : evBudget}</p><p className="text-[10px] text-[#8a8278]">budget</p></div>
                     </div>
                   </div>
-                  {/* CSS bar chart */}
-                  <div className="flex items-center gap-2 mt-2">
-                    <div className="flex-1 h-1.5 bg-[#2d2a26] overflow-hidden rounded-full">
-                      <div
-                        className="h-full bg-accent transition-all duration-700"
-                        style={{ width: `${barPct}%` }}
-                      />
+                  <div className="flex items-center gap-2 mt-3">
+                    <div className="flex-1 h-1.5 bg-white/[0.07] overflow-hidden rounded-full">
+                      <div className="h-full bg-[#D4622A] transition-all duration-700" style={{ width: `${barPct}%` }} />
                     </div>
-                    <span className="text-[8px] font-mono text-[#8E8E93] shrink-0 w-8 text-right">{barPct}%</span>
+                    <span className="text-[9px] font-mono text-[#8a8278] shrink-0 w-8 text-right">{barPct}%</span>
                   </div>
                 </div>
               );

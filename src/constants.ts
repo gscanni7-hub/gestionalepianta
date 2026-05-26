@@ -226,3 +226,14 @@ export const INITIAL_EVENTS: Event[] = [
 ];
 
 export const INITIAL_RESERVATIONS: Reservation[] = [];
+
+export const INITIAL_BOTTLE_MENU = [
+  { id: 'b_vodka',     name: 'Vodka Premium',  price: 180 },
+  { id: 'b_gin',       name: 'Gin Tonic Set',  price: 160 },
+  { id: 'b_rum',       name: 'Rum Selezione',  price: 170 },
+  { id: 'b_whisky',    name: 'Whisky Riserva', price: 220 },
+  { id: 'b_champagne', name: 'Champagne',      price: 350 },
+  { id: 'b_moet',      name: 'Moët & Chandon', price: 300 },
+  { id: 'b_prosecco',  name: 'Prosecco',       price: 90  },
+  { id: 'b_tequila',   name: 'Tequila',        price: 190 },
+];

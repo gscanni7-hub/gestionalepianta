@@ -4,10 +4,10 @@ import {
   Calendar, Settings, BarChart3, LogOut, ChevronRight, ChevronDown,
   Plus, Download, Filter, Building2, X, ArrowLeft, Menu, Map, Pencil, Trash2,
   UserCheck, Bell, Clock, TrendingUp, CheckCircle2, XCircle, Users, Eye, EyeOff,
-  DoorOpen, LogIn, Search, Copy
+  DoorOpen, LogIn, Search, Copy, Wine
 } from 'lucide-react';
-import { MOCK_USERS, INITIAL_VENUES, INITIAL_EVENTS, INITIAL_RESERVATIONS, INITIAL_MANAGED_USERS } from './constants';
-import { UserProfile, Event, Reservation, Venue, FloorPlan, ManagedUser, Table, PrGroup } from './types';
+import { MOCK_USERS, INITIAL_VENUES, INITIAL_EVENTS, INITIAL_RESERVATIONS, INITIAL_MANAGED_USERS, INITIAL_BOTTLE_MENU } from './constants';
+import { UserProfile, Event, Reservation, Venue, FloorPlan, ManagedUser, Table, PrGroup, BottleMenuItem } from './types';
 import { motion, AnimatePresence } from 'framer-motion';
 import { cn, COLORS, easeOutQuart, gridContainer, gridItem, isEventVisibleToPr, isEventVisibleToHost, eventEndDateTime } from './lib/utils';
 import { isEmailConfigured, sendPasswordResetEmail } from './lib/emailService';
@@ -255,6 +255,13 @@ export default function App() {
       return saved ? JSON.parse(saved) : [];
     } catch { return []; }
   });
+  const [bottleMenu, setBottleMenu] = useState<BottleMenuItem[]>(() => {
+    try {
+      const saved = localStorage.getItem('nightplan_bottle_menu');
+      return saved ? JSON.parse(saved) : INITIAL_BOTTLE_MENU;
+    } catch { return INITIAL_BOTTLE_MENU; }
+  });
+  const [showBottleMenu, setShowBottleMenu] = useState(false);
 
   /* ── Page transition direction ───────────────────────────── */
   const prevDepthRef = useRef<number>(1);
@@ -428,6 +435,10 @@ export default function App() {
   useEffect(() => {
     localStorage.setItem('nightplan_events', JSON.stringify(events));
   }, [events]);
+
+  useEffect(() => {
+    localStorage.setItem('nightplan_bottle_menu', JSON.stringify(bottleMenu));
+  }, [bottleMenu]);
 
   /* Auto-archiviazione: una serata con orario di fine viene conclusa
      automaticamente qualche ora dopo la fine (margine), così non taglia
@@ -1456,10 +1467,16 @@ export default function App() {
                 <div className="flex items-start justify-between mb-8 gap-4">
                   <PageTitle title="I tuoi Locali" sub="Seleziona un locale per gestire gli eventi" />
                   {user.role === 'admin' && (
-                    <button onClick={() => setShowNewClubModal(true)}
-                      className="flex items-center gap-2 bg-accent text-black px-5 py-3 text-sm font-semibold rounded-xl hover:bg-white transition-colors shrink-0 mt-1">
-                      <Plus size={12} /> Nuovo Club
-                    </button>
+                    <div className="flex items-center gap-2 shrink-0 mt-1">
+                      <button onClick={() => setShowBottleMenu(true)}
+                        className="flex items-center gap-2 border border-[#3b3733] text-[#AEAEB2] px-4 py-3 text-sm font-semibold rounded-xl hover:text-white hover:border-[#48484A] transition-colors">
+                        <Wine size={13} /> Listino
+                      </button>
+                      <button onClick={() => setShowNewClubModal(true)}
+                        className="flex items-center gap-2 bg-accent text-black px-5 py-3 text-sm font-semibold rounded-xl hover:bg-white transition-colors">
+                        <Plus size={12} /> Nuovo Club
+                      </button>
+                    </div>
                   )}
                 </div>
                 <motion.div
@@ -1699,6 +1716,7 @@ export default function App() {
                   <FloorPlanViewer
                     event={selectedEvent} floorPlan={fp}
                     reservations={reservations} currentUser={user}
+                    bottleMenu={bottleMenu}
                     onReservationAdded={(res) => setReservations(prev => [...prev, {
                       ...res,
                       approvalStatus: user.role === 'admin' ? 'approved' : 'pending',
@@ -2145,6 +2163,14 @@ export default function App() {
         );
       })()}
 
+      {showBottleMenu && (
+        <BottleMenuModal
+          menu={bottleMenu}
+          onClose={() => setShowBottleMenu(false)}
+          onSave={(m) => { setBottleMenu(m); setShowBottleMenu(false); }}
+        />
+      )}
+
       {showQuickAdd && user && (
         <QuickAddModal
           events={prVisibleEvents}
@@ -2466,6 +2492,67 @@ function PRManagementPage({ managedUsers, reservations, events, prGroups, select
           })}
         </div>
       )}
+    </div>
+  );
+}
+
+/* ── BottleMenuModal ─────────────────────────────────────── */
+function BottleMenuModal({ menu, onClose, onSave }: {
+  menu: BottleMenuItem[];
+  onClose: () => void;
+  onSave: (m: BottleMenuItem[]) => void;
+}) {
+  const [items, setItems] = useState<BottleMenuItem[]>(() => menu.map(m => ({ ...m })));
+  const update = (id: string, patch: Partial<BottleMenuItem>) =>
+    setItems(prev => prev.map(it => it.id === id ? { ...it, ...patch } : it));
+  const remove = (id: string) => setItems(prev => prev.filter(it => it.id !== id));
+  const add = () => setItems(prev => [...prev, { id: `b_${Date.now()}`, name: '', price: 0 }]);
+  const inp = "bg-bg border border-[#2d2a26] rounded-xl px-3 py-2.5 text-sm font-sans text-white placeholder-[#636366] outline-none focus:border-[#D4622A] transition-colors";
+
+  return (
+    <div className="fixed inset-0 z-[100] flex items-end justify-center sm:items-center p-0 sm:p-4">
+      <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
+        className="absolute inset-0 bg-black/70 backdrop-blur-md" onClick={onClose} />
+      <motion.div initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.22, ease: 'easeOut' }}
+        className="relative w-full sm:max-w-md bg-[#1d1b19]/80 backdrop-blur-2xl border-t border-x sm:border border-white/10 overflow-hidden rounded-t-2xl sm:rounded-2xl max-h-[90vh] flex flex-col shadow-[0_24px_80px_rgba(0,0,0,0.6)]">
+        <div className="h-[2px] bg-accent shrink-0" />
+        <div className="px-6 sm:px-8 py-5 border-b border-[#2d2a26] flex items-center justify-between shrink-0">
+          <div>
+            <h3 className="font-bold text-xl text-white">Listino bottiglie</h3>
+            <p className="text-[11px] text-[#8E8E93] mt-0.5">Prezzi usati nelle prenotazioni</p>
+          </div>
+          <button onClick={onClose} className="text-[#AEAEB2] hover:text-white transition-colors p-1"><X size={18} /></button>
+        </div>
+        <div className="p-6 sm:p-8 space-y-2 overflow-y-auto">
+          {items.length === 0 && (
+            <p className="text-xs text-[#636366] text-center py-6 border border-[#2d2a26] rounded-xl">Nessuna bottiglia. Aggiungine una.</p>
+          )}
+          {items.map(it => (
+            <div key={it.id} className="flex items-center gap-2">
+              <input className={cn(inp, 'flex-1')} placeholder="Nome bottiglia"
+                value={it.name} onChange={e => update(it.id, { name: e.target.value })} />
+              <div className="relative w-24 shrink-0">
+                <span className="absolute left-3 top-1/2 -translate-y-1/2 text-[#636366] text-sm">€</span>
+                <input type="number" min={0} className={cn(inp, 'w-full pl-7 tabular-nums')} placeholder="0"
+                  value={it.price || ''} onChange={e => update(it.id, { price: parseInt(e.target.value) || 0 })} />
+              </div>
+              <button type="button" onClick={() => remove(it.id)}
+                className="text-[#8E8E93] hover:text-red-500 transition-colors p-1 shrink-0"><X size={14} /></button>
+            </div>
+          ))}
+          <button type="button" onClick={add}
+            className="flex items-center gap-2 w-full py-2.5 border border-dashed border-[#2d2a26] text-[#8E8E93] hover:border-accent/50 hover:text-accent transition-colors text-[9px] hv font-black uppercase tracking-widest justify-center mt-1">
+            <Plus size={11} /> Aggiungi bottiglia
+          </button>
+        </div>
+        <div className="px-6 sm:px-8 py-4 border-t border-[#2d2a26] flex gap-3 shrink-0">
+          <button type="button" onClick={onClose}
+            className="flex-1 py-3 text-sm font-medium rounded-xl border border-[#2d2a26] text-[#8E8E93] hover:text-white hover:border-[#48484A] transition-all">Annulla</button>
+          <button type="button" onClick={() => onSave(items.filter(it => it.name.trim()))}
+            className="flex-1 py-3 text-sm font-semibold rounded-xl bg-accent text-black hover:bg-white transition-colors">Salva listino</button>
+        </div>
+      </motion.div>
     </div>
   );
 }

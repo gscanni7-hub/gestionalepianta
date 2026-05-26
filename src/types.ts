@@ -127,3 +127,9 @@ export interface PrGroup {
   name: string;
   prIds: string[];
 }
+
+export interface BottleMenuItem {
+  id: string;
+  name: string;
+  price: number;
+}

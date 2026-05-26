@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Stage, Layer, Rect, Circle, Text, Group } from 'react-konva';
-import { FloorPlan, Event, Reservation, Table, UserProfile } from '../../types';
+import { FloorPlan, Event, Reservation, Table, UserProfile, BottleMenuItem } from '../../types';
 import { X, Info, Plus, Lock } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { cn, COLORS } from '../../lib/utils';
@@ -10,6 +10,7 @@ interface FloorPlanViewerProps {
   floorPlan: FloorPlan;
   reservations: Reservation[];
   currentUser: UserProfile;
+  bottleMenu?: BottleMenuItem[];
   onReservationAdded: (res: Reservation) => void;
   onReservationUpdated: (res: Reservation) => void;
   onReservationRemoved: (id: string) => void;
@@ -37,7 +38,7 @@ const HOST_COLORS = {
 } as const;
 
 export default function FloorPlanViewer({
-  event, floorPlan, reservations, currentUser,
+  event, floorPlan, reservations, currentUser, bottleMenu = [],
   onReservationAdded, onReservationUpdated, onReservationRemoved,
   hostMode = false,
 }: FloorPlanViewerProps) {
@@ -390,6 +391,7 @@ export default function FloorPlanViewer({
           table={selectedTable}
           initialReservation={editingReservation ?? undefined}
           defaultPrName={`${currentUser.displayName}${currentUser.lastName ? ' ' + currentUser.lastName : ''}`}
+          bottleMenu={bottleMenu}
           onClose={closeBooking}
           onSubmit={(data) => {
             if (editingReservation) {
@@ -442,10 +444,11 @@ function serializeBottles(items: BottleItem[]): string {
   return items.filter(b => b.name.trim()).map(b => `${b.qty}x ${b.name.toUpperCase()}`).join(', ');
 }
 
-function BookingModal({ table, initialReservation, defaultPrName, onClose, onSubmit }: {
+function BookingModal({ table, initialReservation, defaultPrName, bottleMenu, onClose, onSubmit }: {
   table: Table;
   initialReservation?: Reservation;
   defaultPrName?: string;
+  bottleMenu: BottleMenuItem[];
   onClose: () => void;
   onSubmit: (data: any) => void;
 }) {
@@ -459,7 +462,6 @@ function BookingModal({ table, initialReservation, defaultPrName, onClose, onSub
     customerName: initialReservation?.customerName ?? '',
     prName:       initialReservation?.prName       ?? defaultPrName ?? '',
     guestsCount:  initialReservation?.guestsCount  ?? table.capacity,
-    budget:       initialReservation?.budget       ?? calcBudget(table.capacity),
     notes:        initialReservation?.notes        ?? '',
   });
 
@@ -471,6 +473,12 @@ function BookingModal({ table, initialReservation, defaultPrName, onClose, onSub
   const removeBottle = (i: number) => setBottleItems(prev => prev.filter((_, idx) => idx !== i));
   const updateBottle = (i: number, patch: Partial<BottleItem>) =>
     setBottleItems(prev => prev.map((b, idx) => idx === i ? { ...b, ...patch } : b));
+
+  // Prezzo dal listino (match per nome). Il budget è il massimo tra il minimo
+  // del tavolo e il totale delle bottiglie scelte dal listino.
+  const priceOf = (name: string) => bottleMenu.find(m => m.name === name)?.price ?? 0;
+  const bottleTotal = bottleItems.reduce((s, b) => s + priceOf(b.name) * b.qty, 0);
+  const budget = Math.max(calcBudget(form.guestsCount), bottleTotal);
 
   const inp = "w-full bg-bg border border-[#2d2a26] rounded-xl px-4 py-3 text-sm font-sans text-white placeholder-[#636366] outline-none focus:border-[#D4622A] transition-colors";
 
@@ -499,7 +507,7 @@ function BookingModal({ table, initialReservation, defaultPrName, onClose, onSub
         <form className="p-8 space-y-5 overflow-y-auto"
           onSubmit={(e) => {
             e.preventDefault();
-            onSubmit({ ...form, bottles: serializeBottles(bottleItems), status: 'confirmed' as const });
+            onSubmit({ ...form, budget, bottles: serializeBottles(bottleItems), status: 'confirmed' as const });
           }}>
           <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
             <BField label="Cliente">
@@ -512,46 +520,59 @@ function BookingModal({ table, initialReservation, defaultPrName, onClose, onSub
             </BField>
             <BField label="PAX">
               <input type="number" min={1} className={inp}
-                value={form.guestsCount} onChange={e => {
-                  const guests = +e.target.value;
-                  setForm({ ...form, guestsCount: guests, budget: calcBudget(guests) });
-                }} />
+                value={form.guestsCount} onChange={e => setForm({ ...form, guestsCount: +e.target.value })} />
             </BField>
             <BField label="Budget €">
               <div className={cn(inp, 'text-accent hv font-black select-none cursor-default')}>
-                €{form.budget}
+                €{budget}
               </div>
             </BField>
           </div>
 
           <BField label="Bottiglie">
+            <datalist id="bottle-menu">
+              {bottleMenu.map(m => <option key={m.id} value={m.name}>{`€${m.price}`}</option>)}
+            </datalist>
             <div className="space-y-2">
-              {bottleItems.map((bottle, i) => (
+              {bottleItems.map((bottle, i) => {
+                const unit = priceOf(bottle.name);
+                return (
                 <div key={i} className="flex items-center gap-2">
                   <select
                     value={bottle.qty}
                     onChange={e => updateBottle(i, { qty: +e.target.value })}
-                    className="bg-bg border border-[#2d2a26] rounded-xl px-3 py-3 text-sm font-sans text-white outline-none focus:border-[#D4622A] transition-colors w-20 shrink-0 [color-scheme:dark]">
+                    className="bg-bg border border-[#2d2a26] rounded-xl px-3 py-3 text-sm font-sans text-white outline-none focus:border-[#D4622A] transition-colors w-16 shrink-0 [color-scheme:dark]">
                     {Array.from({ length: 10 }, (_, n) => n + 1).map(n => (
                       <option key={n} value={n}>{n}</option>
                     ))}
                   </select>
                   <input
                     className={inp}
-                    placeholder="Nome bottiglia"
+                    placeholder="Scegli dal listino o scrivi…"
+                    list="bottle-menu"
                     value={bottle.name}
                     onChange={e => updateBottle(i, { name: e.target.value })}
                   />
+                  <span className="text-xs font-medium tabular-nums w-16 text-right shrink-0" style={{ color: unit ? '#D4622A' : '#48484A' }}>
+                    {unit ? `€${unit * bottle.qty}` : '—'}
+                  </span>
                   <button type="button" onClick={() => removeBottle(i)}
                     className="text-[#8E8E93] hover:text-red-500 transition-colors p-1 shrink-0">
                     <X size={14} />
                   </button>
                 </div>
-              ))}
+                );
+              })}
               <button type="button" onClick={addBottle}
                 className="flex items-center gap-2 w-full py-2.5 border border-dashed border-[#2d2a26] text-[#8E8E93] hover:border-accent/50 hover:text-accent transition-colors text-[9px] hv font-black uppercase tracking-widest justify-center mt-1">
                 <Plus size={11} /> Aggiungi Bottiglia
               </button>
+              {bottleTotal > 0 && (
+                <div className="flex items-center justify-between pt-1 text-xs">
+                  <span className="text-[#8E8E93]">Totale listino</span>
+                  <span className="hv font-black text-accent tabular-nums">€{bottleTotal}</span>
+                </div>
+              )}
             </div>
           </BField>
 

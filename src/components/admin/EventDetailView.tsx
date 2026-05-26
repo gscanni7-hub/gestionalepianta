@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
   Map as MapIcon, Users, Link2, Copy, Check, Calendar, Clock,
-  ChevronDown, CheckCircle2, XCircle, ArrowLeft, ExternalLink, AlertCircle, TrendingUp
+  ChevronDown, CheckCircle2, XCircle, ArrowLeft, ExternalLink, AlertCircle
 } from 'lucide-react';
 import { Event, Venue, Reservation, Registration, ManagedUser, PrGroup } from '../../types';
 import { getRegistrationsByEvent } from '../../lib/registrationService';
@@ -480,59 +480,70 @@ export default function EventDetailView({ event, venue, reservations, prUsers, p
 
       {/* Tab: Report */}
       {tab === 'report' && (
-        <div className="space-y-6">
+        <div>
           {approvedRes.length === 0 ? (
-            <div className="py-16 text-center border border-[#2d2a26] rounded-xl">
-              <p className="text-sm text-[#636366]">Nessun dato: nessuna prenotazione approvata.</p>
+            <div className="py-16 text-center border border-white/[0.07] rounded-2xl">
+              <p className="text-sm text-[#8a8278]">Nessun dato: nessuna prenotazione approvata.</p>
             </div>
           ) : (
             <>
-              {/* Incasso reale vs previsto */}
-              <div className="border border-[#2d2a26] bg-[#1d1b19] rounded-xl p-5">
-                <div className="flex items-end justify-between gap-4 flex-wrap">
-                  <div>
-                    <p className="text-[10px] uppercase tracking-widest text-[#8E8E93] flex items-center gap-1.5">
-                      <TrendingUp size={11} className="text-[#22C55E]" /> Incasso reale
-                    </p>
-                    <p className="hv font-black text-3xl text-white mt-1.5">{eur(incassoReale)}</p>
-                  </div>
+              {/* Hero incasso */}
+              <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-[#8a8278]">Incasso reale</p>
+              <p className="hv font-black text-[56px] leading-none text-white tracking-tight tabular-nums mt-3">{eur(incassoReale)}</p>
+              <p className="text-[13px] text-[#8a8278] mt-2.5">
+                previsto {eur(incassoPrenotato)}
+                {deltaIncasso < 0 && <> · <span className="text-[#ef6a5a] font-semibold">−{eur(Math.abs(deltaIncasso))}</span> per no-show</>}
+                {deltaIncasso > 0 && <> · <span className="text-[#22C55E] font-semibold">+{eur(deltaIncasso)}</span></>}
+              </p>
+
+              <div className="h-px bg-white/[0.07] my-7" />
+
+              {/* Card Ospiti */}
+              <div className="border border-white/[0.07] bg-white/[0.018] rounded-2xl p-5">
+                <div className="flex items-start justify-between gap-3">
+                  <span className="text-[11px] font-semibold uppercase tracking-[0.18em] text-[#8a8278]">Ospiti</span>
                   <div className="text-right">
-                    <p className="text-[10px] text-[#636366]">previsto {eur(incassoPrenotato)}</p>
-                    <p className={cn('text-sm font-semibold mt-0.5', deltaIncasso >= 0 ? 'text-[#22C55E]' : 'text-[#EF4444]')}>
-                      {deltaIncasso >= 0 ? '+' : '−'}{eur(Math.abs(deltaIncasso))}
-                    </p>
+                    <div className="hv font-black text-2xl text-white leading-none tabular-nums">{checkedInRes.length}<span className="text-[#5a544c]">/{approvedRes.length}</span></div>
+                    <div className="text-[11px] text-[#8a8278] mt-1.5">{approvedRes.length > 0 ? Math.round(checkedInRes.length / approvedRes.length * 100) : 0}% entrati</div>
                   </div>
                 </div>
-              </div>
-
-              {/* KPI */}
-              <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
-                {[
-                  { label: 'Tavoli entrati', value: `${checkedInRes.length}/${approvedRes.length}`, color: 'text-[#22C55E]' },
-                  { label: 'No-show', value: String(noShowRes.length), color: noShowRes.length > 0 ? 'text-[#F59E0B]' : 'text-white' },
-                  { label: 'Persone', value: `${personeEntrate}/${personePreviste}`, color: 'text-white' },
-                  { label: 'Occupazione', value: `${occupancy}%`, color: 'text-[#D4622A]' },
-                ].map(k => (
-                  <div key={k.label} className="border border-[#2d2a26] bg-[#1d1b19] rounded-xl p-4 text-center">
-                    <div className={cn('hv font-black text-2xl leading-none', k.color)}>{k.value}</div>
-                    <div className="text-[10px] text-[#8E8E93] mt-2">{k.label}</div>
+                <div className="mt-4">
+                  <div className="flex items-center justify-between py-2.5 border-t border-white/[0.05] first:border-t-0">
+                    <span className="flex items-center gap-2.5 text-sm text-[#cfc7bc]"><span className="w-1.5 h-1.5 rounded-full bg-[#22C55E]" />Entrati</span>
+                    <span className="text-sm font-semibold text-white tabular-nums">{checkedInRes.length} tavoli · {personeEntrate}p</span>
                   </div>
-                ))}
+                  <div className="flex items-center justify-between py-2.5 border-t border-white/[0.05]">
+                    <span className="flex items-center gap-2.5 text-sm text-[#cfc7bc]"><span className="w-1.5 h-1.5 rounded-full bg-[#F59E0B]" />No-show</span>
+                    <span className="text-sm font-semibold text-white tabular-nums">{noShowRes.length} tavoli</span>
+                  </div>
+                  <div className="flex items-center justify-between py-2.5 border-t border-white/[0.05]">
+                    <span className="flex items-center gap-2.5 text-sm text-[#cfc7bc]"><span className="w-1.5 h-1.5 rounded-full bg-[#5a544c]" />Occupazione</span>
+                    <span className="text-sm font-semibold text-white tabular-nums">{occupancy}%</span>
+                  </div>
+                </div>
               </div>
 
               {/* Top PR */}
-              <div>
-                <p className="text-xs font-medium text-[#8E8E93] mb-3">Top PR — per incasso reale</p>
-                <div className="border border-[#2d2a26] rounded-xl overflow-hidden">
-                  {prRanking.map((p, i) => (
-                    <div key={p.name + i} className="flex items-center gap-4 px-4 py-3 border-b border-[#1d1b19] last:border-0">
-                      <span className="hv font-black text-sm w-5 shrink-0" style={{ color: i === 0 ? '#FFD700' : i === 1 ? '#C0C0C0' : i === 2 ? '#CD7F32' : '#3b3733' }}>{i + 1}</span>
-                      <span className="flex-1 min-w-0 text-sm text-white truncate">{p.name}</span>
-                      <span className="text-[10px] text-[#8E8E93] shrink-0">{p.tavoli} tav.</span>
-                      <span className="hv font-black text-sm text-[#D4622A] shrink-0 w-16 text-right">{eur(p.incasso)}</span>
-                    </div>
-                  ))}
+              <div className="border border-white/[0.07] bg-white/[0.018] rounded-2xl p-5 mt-4">
+                <div className="flex items-center justify-between">
+                  <span className="text-[11px] font-semibold uppercase tracking-[0.18em] text-[#8a8278]">Top PR · per incasso</span>
+                  <span className="text-[13px] text-[#8a8278] tabular-nums">{prRanking.length}</span>
                 </div>
+                <div className="grid grid-cols-[1fr_52px_72px] gap-2 mt-4 pb-2 border-b border-white/[0.07]">
+                  <span className="text-[10px] uppercase tracking-widest text-[#8a8278]">Nome</span>
+                  <span className="text-[10px] uppercase tracking-widest text-[#8a8278] text-right">Tav.</span>
+                  <span className="text-[10px] uppercase tracking-widest text-[#8a8278] text-right">Incasso</span>
+                </div>
+                {prRanking.map((p, i) => (
+                  <div key={p.name + i} className="grid grid-cols-[1fr_52px_72px] gap-2 items-center py-3 border-t border-white/[0.04] first:border-t-0">
+                    <div className="flex items-center gap-2.5 min-w-0">
+                      <span className="hv font-black text-sm w-4 shrink-0" style={{ color: i === 0 ? '#FFD700' : i === 1 ? '#C0C0C0' : i === 2 ? '#CD7F32' : '#5a544c' }}>{i + 1}</span>
+                      <span className="text-sm text-white truncate">{p.name}</span>
+                    </div>
+                    <span className="text-[13px] text-[#8a8278] text-right tabular-nums">{p.tavoli}t</span>
+                    <span className="hv font-black text-sm text-[#D4622A] text-right tabular-nums">{eur(p.incasso)}</span>
+                  </div>
+                ))}
               </div>
             </>
           )}

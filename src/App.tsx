@@ -1579,7 +1579,7 @@ export default function App() {
                             return liveFloorPlans.length === 0 ? (
                             <EmptyState icon={<Map size={28} />} label="Nessuna pianta per questo club." />
                           ) : (
-                            <div className="border border-[#3b3733] bg-card divide-y divide-[#2d2a26] rounded-xl overflow-hidden">
+                            <div className="border border-[#3b3733] bg-white/[0.018] divide-y divide-[#2d2a26] rounded-xl overflow-hidden">
                               {liveFloorPlans.map(fp => (
                                 <div key={fp.id} className="px-7 py-4 flex items-center justify-between group hover:bg-white/[0.01] transition-colors">
                                   <div className="flex items-center gap-4">
@@ -1783,7 +1783,7 @@ export default function App() {
                       </div>
                       <div className="space-y-6">
                         {venuesToShow.map(venue => (
-                          <div key={venue.id} className="border border-[#3b3733] bg-card rounded-xl overflow-hidden">
+                          <div key={venue.id} className="border border-[#3b3733] bg-white/[0.018] rounded-xl overflow-hidden">
                             {!filteredVenue && (
                               <div className="px-7 py-5 border-b border-[#2d2a26]">
                                 <h3 className="font-bold text-xl text-white">{venue.name}</h3>
@@ -2403,7 +2403,7 @@ function PRManagementPage({ managedUsers, reservations, events, prGroups, select
         ) : (
           <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-3">
             {prGroups.map(g => (
-              <div key={g.id} className="border border-[#2d2a26] bg-card rounded-xl px-4 py-3 flex items-center justify-between gap-3">
+              <div key={g.id} className="border border-[#2d2a26] bg-white/[0.018] rounded-xl px-4 py-3 flex items-center justify-between gap-3">
                 <div className="min-w-0">
                   <p className="text-sm font-semibold text-white truncate">{g.name}</p>
                   <p className="text-[10px] text-[#8E8E93] mt-0.5">{g.prIds.length} PR</p>
@@ -2447,7 +2447,7 @@ function PRManagementPage({ managedUsers, reservations, events, prGroups, select
           {prUsers.map(pr => {
             const stats = prStats(pr.id);
             return (
-              <div key={pr.id} className="border border-[#2d2a26] bg-card p-6 flex flex-col gap-5 hover:border-[#3a3a3a] transition-colors rounded-xl">
+              <div key={pr.id} className="border border-[#2d2a26] bg-white/[0.018] p-6 flex flex-col gap-5 hover:border-[#3a3a3a] transition-colors rounded-xl">
                 {/* Header */}
                 <div className="flex items-center gap-4">
                   <div className="w-11 h-11 bg-[#1d1b19] border border-[#2d2a26] flex items-center justify-center shrink-0 overflow-hidden rounded-xl">
@@ -2661,7 +2661,7 @@ function PRDetailView({ pr, reservations, events, onBack, onUpdateStatus, status
         {/* Left: info + actions */}
         <div className="space-y-4">
           {/* Info card */}
-          <div className="border border-[#2d2a26] bg-card p-5 space-y-4 rounded-xl">
+          <div className="border border-[#2d2a26] bg-white/[0.018] p-5 space-y-4 rounded-xl">
             <p className="text-xs text-[#8E8E93] mb-1">Informazioni</p>
             {[
               { label: 'Email', value: pr.email },
@@ -2709,7 +2709,7 @@ function PRDetailView({ pr, reservations, events, onBack, onUpdateStatus, status
               { label: 'Serate', value: myEventIds.length },
               { label: 'Approv.', value: `${approvalRate}%` },
             ].map(({ label, value }) => (
-              <div key={label} className="border border-[#2d2a26] bg-card px-4 py-4 rounded-xl">
+              <div key={label} className="border border-[#2d2a26] bg-white/[0.018] px-4 py-4 rounded-xl">
                 <p className="hv font-black text-2xl text-white">{value}</p>
                 <p className="text-xs text-[#8E8E93] mt-2">{label}</p>
               </div>
@@ -2718,7 +2718,7 @@ function PRDetailView({ pr, reservations, events, onBack, onUpdateStatus, status
 
           {/* Barra approvazione */}
           {myRes.length > 0 && (
-            <div className="border border-[#2d2a26] bg-card px-5 py-4 rounded-xl">
+            <div className="border border-[#2d2a26] bg-white/[0.018] px-5 py-4 rounded-xl">
               <div className="flex justify-between mb-2">
                 <span className="text-xs text-[#8E8E93]">Tasso approvazione</span>
                 <span className="text-[9px] hv font-black text-accent">{approvalRate}%</span>
@@ -2836,7 +2836,7 @@ function HistoryEventRow({ event, venueName, reservations, approvedCount, totalB
   };
 
   return (
-    <div className="border border-[#2d2a26] bg-card overflow-hidden rounded-xl">
+    <div className="border border-[#2d2a26] bg-white/[0.018] overflow-hidden rounded-xl">
       <button
         onClick={() => setOpen(o => !o)}
         className="w-full px-6 py-5 flex items-center justify-between hover:bg-white/[0.02] transition-colors text-left"
@@ -3180,7 +3180,7 @@ function HostCheckinView({ reservations, events, venues, userRole, currentUser, 
               <p className="text-xs text-[#8E8E93] mb-2 px-1">
                 Da fare — {pending.length}
               </p>
-              <div className="border border-[#2d2a26] bg-card overflow-hidden rounded-xl">
+              <div className="border border-[#2d2a26] bg-white/[0.018] overflow-hidden rounded-xl">
                 {pending.map(res => (
                   <CheckinRow key={res.id} res={res} events={events} venues={venues}
                     onCheckIn={onCheckIn} onUndoCheckIn={onUndoCheckIn} onUpdatePeople={onUpdatePeople} />
@@ -3203,7 +3203,7 @@ function HostCheckinView({ reservations, events, venues, userRole, currentUser, 
                 {showEntered && (
                   <motion.div initial={{ height: 0, opacity: 0 }} animate={{ height: 'auto', opacity: 1 }}
                     exit={{ height: 0, opacity: 0 }} transition={{ duration: 0.2 }} className="overflow-hidden">
-                    <div className="border border-[#2d2a26] bg-card overflow-hidden rounded-xl">
+                    <div className="border border-[#2d2a26] bg-white/[0.018] overflow-hidden rounded-xl">
                       {entered.map(res => (
                         <CheckinRow key={res.id} res={res} events={events} venues={venues}
                           onCheckIn={onCheckIn} onUndoCheckIn={onUndoCheckIn} onUpdatePeople={onUpdatePeople} />
@@ -3459,7 +3459,7 @@ function VenueCard({ venue, eventCount, onClick, onEdit, onDelete }: {
       whileHover={{ y: -3 }}
       whileTap={{ scale: 0.985 }}
       transition={{ duration: 0.3, ease: easeOutQuart }}
-      className="group bg-card border border-[#3b3733] cursor-pointer overflow-hidden flex flex-col relative card-hover rounded-xl"
+      className="group bg-white/[0.018] border border-[#3b3733] cursor-pointer overflow-hidden flex flex-col relative card-hover rounded-xl"
     >
       <div className="h-[2px] w-0 group-hover:w-full bg-accent transition-all duration-500 origin-left" />
 
@@ -3524,7 +3524,7 @@ function EventCard({ event, venueName, onClick, onEdit, onDelete, onDuplicate }:
       whileHover={{ y: -3 }}
       whileTap={{ scale: 0.985 }}
       transition={{ duration: 0.3, ease: easeOutQuart }}
-      className="group bg-card border border-[#3b3733] cursor-pointer overflow-hidden flex flex-col card-hover rounded-xl"
+      className="group bg-white/[0.018] border border-[#3b3733] cursor-pointer overflow-hidden flex flex-col card-hover rounded-xl"
     >
       {/* Cover image */}
       {event.coverImage ? (
@@ -3671,14 +3671,14 @@ function ReservationsTable({ reservations, userRole, events, onDelete, onEdit }:
   };
 
   return (
-    <div className="bg-card border border-[#3b3733] overflow-hidden rounded-xl">
-      <div className="px-7 py-5 border-b border-[#2d2a26]">
+    <div className="bg-white/[0.018] border border-white/[0.07] overflow-hidden rounded-2xl">
+      <div className="px-7 py-5 border-b border-white/[0.07]">
         <h2 className="font-bold text-xl text-white">Prenotazioni</h2>
       </div>
 
       {reservations.length === 0 ? (
         <div className="px-7 py-24 text-center">
-          <p className="text-sm text-[#636366]">Nessuna Prenotazione</p>
+          <p className="text-sm text-[#8a8278]">Nessuna prenotazione</p>
         </div>
       ) : (
         <div className="space-y-0">

@@ -210,7 +210,7 @@ export default function FloorPlanViewer({
             <motion.div key={selectedTable.id}
               initial={{ opacity: 0, x: 16 }} animate={{ opacity: 1, x: 0 }}
               exit={{ opacity: 0, x: 16 }}
-              className="flex-1 bg-card border border-[#2d2a26] flex flex-col overflow-hidden">
+              className="flex-1 bg-white/[0.018] border border-[#2d2a26] flex flex-col overflow-hidden">
 
               <div className="px-6 py-4 border-b border-[#1d1b19] flex items-center justify-between bg-[#0a0908]">
                 <div>

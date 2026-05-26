@@ -4,7 +4,7 @@ import {
   Calendar, Settings, BarChart3, LogOut, ChevronRight, ChevronDown,
   Plus, Download, Filter, Building2, X, ArrowLeft, Menu, Map, Pencil, Trash2,
   UserCheck, Bell, Clock, TrendingUp, CheckCircle2, XCircle, Users, Eye, EyeOff,
-  DoorOpen, LogIn, Search
+  DoorOpen, LogIn, Search, Copy
 } from 'lucide-react';
 import { MOCK_USERS, INITIAL_VENUES, INITIAL_EVENTS, INITIAL_RESERVATIONS, INITIAL_MANAGED_USERS } from './constants';
 import { UserProfile, Event, Reservation, Venue, FloorPlan, ManagedUser, Table, PrGroup } from './types';
@@ -241,6 +241,7 @@ export default function App() {
   const [showNewFloorPlanModal, setShowNewFloorPlanModal] = useState(false);
   const [editingFloorPlanMeta, setEditingFloorPlanMeta] = useState<{ venueId: string; fp: FloorPlan } | null>(null);
   const [editingEvent, setEditingEvent] = useState<Event | null>(null);
+  const [duplicatingEvent, setDuplicatingEvent] = useState<Event | null>(null);
   const [editorVenueId, setEditorVenueId] = useState<string | null>(null);
   const [venueTab, setVenueTab] = useState<'events' | 'layout'>('events');
   const [editingReservation, setEditingReservation] = useState<Reservation | null>(null);
@@ -1525,6 +1526,7 @@ export default function App() {
                                   event={event}
                                   onClick={() => openEvent(event)}
                                   onEdit={(e) => { e.stopPropagation(); setEditingEvent(event); }}
+                                  onDuplicate={(e) => { e.stopPropagation(); setDuplicatingEvent(event); }}
                                   onDelete={(e) => { e.stopPropagation(); setEvents(prev => prev.filter(ev => ev.id !== event.id)); }}
                                 />
                               </motion.div>
@@ -2100,6 +2102,31 @@ export default function App() {
           }}
         />
       )}
+
+      {duplicatingEvent && (() => {
+        const dupVenue = venues.find(v => v.id === duplicatingEvent.venueId);
+        if (!dupVenue) return null;
+        return (
+          <NewEventModal
+            venue={dupVenue}
+            floorPlans={dupVenue.floorPlans}
+            prUsers={managedUsers.filter(u => u.role === 'pr' && u.status === 'approved')}
+            prGroups={prGroups}
+            prefill={duplicatingEvent}
+            onClose={() => setDuplicatingEvent(null)}
+            onSubmit={(data, token) => {
+              setEvents(prev => [...prev, {
+                id: `e_${Date.now()}`,
+                venueId: dupVenue.id,
+                status: 'active',
+                registrationToken: token,
+                ...data,
+              }]);
+              setDuplicatingEvent(null);
+            }}
+          />
+        );
+      })()}
 
       {showQuickAdd && user && (
         <QuickAddModal
@@ -3381,10 +3408,11 @@ function VenueCard({ venue, eventCount, onClick, onEdit, onDelete }: {
 }
 
 /* ── EventCard ───────────────────────────────────────────── */
-function EventCard({ event, venueName, onClick, onEdit, onDelete }: {
+function EventCard({ event, venueName, onClick, onEdit, onDelete, onDuplicate }: {
   event: Event; venueName?: string; onClick: () => void;
   onEdit?: (e: React.MouseEvent) => void;
   onDelete?: (e: React.MouseEvent) => void;
+  onDuplicate?: (e: React.MouseEvent) => void;
 }) {
   const formattedDate = new Date(event.date).toLocaleDateString('it-IT', { weekday: 'short', day: 'numeric', month: 'short' });
   return (
@@ -3412,10 +3440,11 @@ function EventCard({ event, venueName, onClick, onEdit, onDelete }: {
               {event.status === 'active' && <span className="inline-block w-1.5 h-1.5 rounded-full blink mr-1.5 align-middle" style={{ background: COLORS.success }} />}
               {event.status}
             </span>
-            {(onEdit || onDelete) && (
+            {(onEdit || onDelete || onDuplicate) && (
               <div className="flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
-                {onEdit && <button onClick={onEdit} className="w-7 h-7 flex items-center justify-center bg-black/60 text-[#AEAEB2] hover:text-accent transition-colors"><Pencil size={12} /></button>}
-                {onDelete && <button onClick={onDelete} className="w-7 h-7 flex items-center justify-center bg-black/60 text-[#AEAEB2] hover:text-red-500 transition-colors"><Trash2 size={12} /></button>}
+                {onEdit && <button onClick={onEdit} title="Modifica" className="w-7 h-7 flex items-center justify-center bg-black/60 text-[#AEAEB2] hover:text-accent transition-colors"><Pencil size={12} /></button>}
+                {onDuplicate && <button onClick={onDuplicate} title="Duplica" className="w-7 h-7 flex items-center justify-center bg-black/60 text-[#AEAEB2] hover:text-accent transition-colors"><Copy size={12} /></button>}
+                {onDelete && <button onClick={onDelete} title="Elimina" className="w-7 h-7 flex items-center justify-center bg-black/60 text-[#AEAEB2] hover:text-red-500 transition-colors"><Trash2 size={12} /></button>}
               </div>
             )}
           </div>
@@ -3447,10 +3476,11 @@ function EventCard({ event, venueName, onClick, onEdit, onDelete }: {
                 {event.status}
               </span>
             </div>
-            {(onEdit || onDelete) && (
+            {(onEdit || onDelete || onDuplicate) && (
               <div className="flex items-center gap-1 shrink-0 md:opacity-0 md:group-hover:opacity-100 transition-opacity">
-                {onEdit && <button onClick={onEdit} className="w-7 h-7 flex items-center justify-center text-[#AEAEB2] hover:text-accent transition-colors"><Pencil size={12} /></button>}
-                {onDelete && <button onClick={onDelete} className="w-7 h-7 flex items-center justify-center text-[#AEAEB2] hover:text-red-500 transition-colors"><Trash2 size={12} /></button>}
+                {onEdit && <button onClick={onEdit} title="Modifica" className="w-7 h-7 flex items-center justify-center text-[#AEAEB2] hover:text-accent transition-colors"><Pencil size={12} /></button>}
+                {onDuplicate && <button onClick={onDuplicate} title="Duplica" className="w-7 h-7 flex items-center justify-center text-[#AEAEB2] hover:text-accent transition-colors"><Copy size={12} /></button>}
+                {onDelete && <button onClick={onDelete} title="Elimina" className="w-7 h-7 flex items-center justify-center text-[#AEAEB2] hover:text-red-500 transition-colors"><Trash2 size={12} /></button>}
               </div>
             )}
           </div>
@@ -3681,7 +3711,7 @@ function ReservationsTable({ reservations, userRole, events, onDelete, onEdit }:
 }
 
 /* ── NewEventModal ───────────────────────────────────────── */
-function NewEventModal({ venue, floorPlans, prUsers, prGroups, onClose, onSubmit, initialData }: {
+function NewEventModal({ venue, floorPlans, prUsers, prGroups, onClose, onSubmit, initialData, prefill }: {
   venue: Venue;
   floorPlans: FloorPlan[];
   prUsers: ManagedUser[];
@@ -3689,27 +3719,29 @@ function NewEventModal({ venue, floorPlans, prUsers, prGroups, onClose, onSubmit
   onClose: () => void;
   onSubmit: (d: { name: string; date: string; time: string; endTime: string; description: string; coverImage: string; maxCapacity: number | undefined; floorPlanId: string; assignedPrIds: string[] | undefined; visibleToHost: boolean }, token?: string) => void;
   initialData?: Event;
+  prefill?: Event;   // duplica: pre-compila in modalità CREA (nuovo evento, nuovo link, data = oggi)
 }) {
   const isEdit = !!initialData;
+  const seed = initialData ?? prefill;   // sorgente dei valori pre-compilati
   const today = new Date().toISOString().slice(0, 10);
   // La data evento non può essere retroattiva. In modifica di un evento già passato
   // si tiene la sua data come minimo, per non bloccare l'editing.
   const minDate = initialData?.date && initialData.date < today ? initialData.date : today;
   const [form, setForm] = useState({
-    name: initialData?.name ?? '',
+    name: initialData?.name ?? (prefill ? `${prefill.name} (copia)` : ''),
     date: initialData?.date ?? today,
-    time: initialData?.time ?? '22:00',
-    endTime: initialData?.endTime ?? '04:00',
-    description: initialData?.description ?? '',
-    coverImage: initialData?.coverImage ?? '',
-    maxCapacity: initialData?.maxCapacity ? String(initialData.maxCapacity) : '',
-    floorPlanId: initialData?.floorPlanId ?? floorPlans[0]?.id ?? '',
+    time: seed?.time ?? '22:00',
+    endTime: seed?.endTime ?? '04:00',
+    description: seed?.description ?? '',
+    coverImage: seed?.coverImage ?? '',
+    maxCapacity: seed?.maxCapacity ? String(seed.maxCapacity) : '',
+    floorPlanId: seed?.floorPlanId ?? floorPlans[0]?.id ?? '',
   });
   // Visibilità: nuovo evento = nessun PR + ingresso spento (l'admin decide).
-  // In modifica, eventi legacy (campi undefined) = "Tutti i PR" e ingresso visibile.
-  const [assignAll, setAssignAll] = useState(isEdit ? initialData!.assignedPrIds === undefined : false);
-  const [assignedPrIds, setAssignedPrIds] = useState<string[]>(initialData?.assignedPrIds ?? []);
-  const [visibleToHost, setVisibleToHost] = useState<boolean>(initialData?.visibleToHost ?? isEdit);
+  // Duplica/modifica: si ereditano i valori della sorgente.
+  const [assignAll, setAssignAll] = useState(seed ? seed.assignedPrIds === undefined : false);
+  const [assignedPrIds, setAssignedPrIds] = useState<string[]>(seed?.assignedPrIds ?? []);
+  const [visibleToHost, setVisibleToHost] = useState<boolean>(seed?.visibleToHost ?? isEdit);
   const togglePr = (id: string) =>
     setAssignedPrIds(prev => prev.includes(id) ? prev.filter(x => x !== id) : [...prev, id]);
   const toggleGroup = (g: PrGroup) => {

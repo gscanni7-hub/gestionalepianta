@@ -606,8 +606,7 @@ function BookingModal({ table, initialReservation, defaultPrName, bottleMenu, on
           </BField>
 
           <button type="submit" disabled={overBudget}
-            className={cn('w-full py-4 rounded-xl text-sm font-semibold transition-colors',
-              overBudget ? 'bg-[#2d2a26] text-[#8E8E93] cursor-not-allowed' : 'bg-accent text-black hover:bg-white')}>
+            className="w-full py-4 rounded-xl text-sm font-semibold btn-primary">
             {overBudget ? 'Le bottiglie superano il budget' : isEdit ? 'Salva Modifiche' : 'Conferma Prenotazione'}
           </button>
         </form>

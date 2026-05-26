@@ -462,6 +462,11 @@ function BookingModal({ table, initialReservation, defaultPrName, bottleMenu, on
     customerName: initialReservation?.customerName ?? '',
     prName:       initialReservation?.prName       ?? defaultPrName ?? '',
     guestsCount:  initialReservation?.guestsCount  ?? table.capacity,
+    // Extra: aggiunta manuale al prezzo del tavolo, oltre il minimo da persone.
+    // In modifica si ricostruisce da budget salvato - minimo persone.
+    extra:        initialReservation
+                    ? Math.max(0, (initialReservation.budget ?? 0) - (table.minSpend + Math.max(0, ((initialReservation.guestsCount ?? table.capacity) - table.capacity) * (table.capacity > 0 ? Math.round(table.minSpend / table.capacity) : 0))))
+                    : 0,
     notes:        initialReservation?.notes        ?? '',
   });
 
@@ -477,7 +482,8 @@ function BookingModal({ table, initialReservation, defaultPrName, bottleMenu, on
   // Il budget è fissato dal numero di persone (minimo del tavolo + extra per pax).
   // Le bottiglie si scelgono DENTRO quel budget: il totale non può superarlo.
   const priceOf = (name: string) => bottleMenu.find(m => m.name === name)?.price ?? 0;
-  const budget = calcBudget(form.guestsCount);
+  const baseBudget = calcBudget(form.guestsCount);          // minimo dalle persone
+  const budget = baseBudget + Math.max(0, form.extra || 0); // prezzo complessivo del tavolo
   const bottleTotal = bottleItems.reduce((s, b) => s + priceOf(b.name) * b.qty, 0);
   const remaining = budget - bottleTotal;
   const overBudget = bottleTotal > budget;
@@ -526,11 +532,20 @@ function BookingModal({ table, initialReservation, defaultPrName, bottleMenu, on
               <input type="number" min={1} className={inp}
                 value={form.guestsCount} onChange={e => setForm({ ...form, guestsCount: +e.target.value })} />
             </BField>
-            <BField label="Budget €">
-              <div className={cn(inp, 'text-accent hv font-black select-none cursor-default')}>
-                €{budget}
-              </div>
+            <BField label="Extra € (facoltativo)">
+              <input type="number" min={0} step={10} className={inp} placeholder="0"
+                value={form.extra || ''}
+                onChange={e => setForm({ ...form, extra: Math.max(0, parseInt(e.target.value) || 0) })} />
             </BField>
+          </div>
+
+          {/* Totale tavolo = minimo da persone + extra manuale */}
+          <div className="flex items-center justify-between bg-bg border border-[#2d2a26] rounded-xl px-4 py-3">
+            <div className="min-w-0">
+              <p className="text-[10px] uppercase tracking-widest text-[#636366]">Totale tavolo</p>
+              <p className="text-[10px] text-[#636366] mt-0.5">minimo €{baseBudget}{form.extra > 0 ? ` + extra €${form.extra}` : ''}</p>
+            </div>
+            <span className="hv font-black text-2xl text-accent tabular-nums">€{budget}</span>
           </div>
 
           <BField label="Bottiglie">

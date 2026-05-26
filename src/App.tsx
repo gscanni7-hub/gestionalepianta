@@ -2356,6 +2356,11 @@ function PRManagementPage({ managedUsers, reservations, events, prGroups, select
   const approvedPrs = prUsers.filter(u => u.status === 'approved');
   const [editingGroup, setEditingGroup] = useState<PrGroup | 'new' | null>(null);
   const [confirmDeleteGroup, setConfirmDeleteGroup] = useState<string | null>(null);
+  const [prSearch, setPrSearch] = useState('');
+  const prQuery = prSearch.trim().toLowerCase();
+  const filteredPrs = prQuery
+    ? prUsers.filter(u => `${u.displayName} ${u.lastName} ${u.email}`.toLowerCase().includes(prQuery))
+    : prUsers;
 
   const prStats = (prId: string) => {
     const res = reservations.filter(r => r.prId === prId);
@@ -2443,8 +2448,23 @@ function PRManagementPage({ managedUsers, reservations, events, prGroups, select
       {prUsers.length === 0 ? (
         <EmptyState icon={<Users size={28}/>} label="Nessun PR registrato." />
       ) : (
-        <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4">
-          {prUsers.map(pr => {
+        <>
+          <div className="flex items-center justify-between gap-3 mb-4 flex-wrap">
+            <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-[#8a8278]">Tutti i PR · {filteredPrs.length}</p>
+            <div className="relative w-full sm:w-64">
+              <Search size={13} className="absolute left-3 top-1/2 -translate-y-1/2 text-[#8a8278]" />
+              <input value={prSearch} onChange={e => setPrSearch(e.target.value)} placeholder="Cerca nome o email…"
+                className="w-full bg-white/[0.018] border border-white/[0.07] rounded-xl pl-9 pr-8 py-2.5 text-sm text-white placeholder-[#8a8278] outline-none focus:border-[#D4622A]/40 transition-colors" />
+              {prSearch && <button onClick={() => setPrSearch('')} className="absolute right-3 top-1/2 -translate-y-1/2 text-[#8a8278] hover:text-white"><X size={13} /></button>}
+            </div>
+          </div>
+          {filteredPrs.length === 0 ? (
+            <div className="py-12 text-center border border-white/[0.07] rounded-2xl">
+              <p className="text-sm text-[#8a8278]">Nessun PR trovato per "{prSearch}"</p>
+            </div>
+          ) : (
+            <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4">
+              {filteredPrs.map(pr => {
             const stats = prStats(pr.id);
             return (
               <div key={pr.id} className="border border-[#2d2a26] bg-white/[0.018] p-6 flex flex-col gap-5 hover:border-[#3a3a3a] transition-colors rounded-xl">
@@ -2486,7 +2506,9 @@ function PRManagementPage({ managedUsers, reservations, events, prGroups, select
               </div>
             );
           })}
-        </div>
+            </div>
+          )}
+        </>
       )}
     </div>
   );

@@ -24,6 +24,7 @@ import Dashboard from './components/dashboard/Dashboard';
 import EventDetailView from './components/admin/EventDetailView';
 import PendingApprovalsView from './components/admin/PendingApprovalsView';
 import PRRankingView from './components/admin/PRRankingView';
+import LiveControlRoom from './components/admin/LiveControlRoom';
 import AIChat from './components/ai/AIChat';
 
 type AppView = 'dashboard' | 'venues' | 'venue-events' | 'event-detail' | 'events' | 'active-events' | 'plan' | 'editor' | 'reservations' | 'approvals' | 'profile' | 'history' | 'pr-management' | 'checkin';
@@ -242,6 +243,7 @@ export default function App() {
   const [editingFloorPlanMeta, setEditingFloorPlanMeta] = useState<{ venueId: string; fp: FloorPlan } | null>(null);
   const [editingEvent, setEditingEvent] = useState<Event | null>(null);
   const [duplicatingEvent, setDuplicatingEvent] = useState<Event | null>(null);
+  const [regiaEvent, setRegiaEvent] = useState<Event | null>(null);
   const [editorVenueId, setEditorVenueId] = useState<string | null>(null);
   const [venueTab, setVenueTab] = useState<'events' | 'layout'>('events');
   const [editingReservation, setEditingReservation] = useState<Reservation | null>(null);
@@ -1727,6 +1729,7 @@ export default function App() {
                       setSelectedEvent(prev => prev ? { ...prev, ...patch } : prev);
                     }}
                     onOpenPlan={() => setView('plan')}
+                    onOpenRegia={() => setRegiaEvent(selectedEvent)}
                     onBack={() => { setSelectedEvent(null); setView(selectedVenue ? 'venue-events' : 'active-events'); }}
                   />
                 </motion.div>
@@ -2124,6 +2127,20 @@ export default function App() {
               }]);
               setDuplicatingEvent(null);
             }}
+          />
+        );
+      })()}
+
+      {regiaEvent && user && (() => {
+        const rVenue = venues.find(v => v.id === regiaEvent.venueId);
+        if (!rVenue) return null;
+        return (
+          <LiveControlRoom
+            event={regiaEvent}
+            venue={rVenue}
+            reservations={reservations}
+            currentUser={user}
+            onClose={() => setRegiaEvent(null)}
           />
         );
       })()}

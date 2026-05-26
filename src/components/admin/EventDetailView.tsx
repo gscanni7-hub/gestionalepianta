@@ -19,10 +19,11 @@ interface Props {
   onRejectReservation: (id: string) => void;
   onUpdateEvent: (patch: Partial<Event>) => void;
   onOpenPlan: () => void;
+  onOpenRegia?: () => void;
   onBack: () => void;
 }
 
-export default function EventDetailView({ event, venue, reservations, prUsers, prGroups, onApproveReservation, onRejectReservation, onUpdateEvent, onOpenPlan, onBack }: Props) {
+export default function EventDetailView({ event, venue, reservations, prUsers, prGroups, onApproveReservation, onRejectReservation, onUpdateEvent, onOpenPlan, onOpenRegia, onBack }: Props) {
   const [tab, setTab] = useState<'tavoli' | 'approva' | 'registrazioni' | 'ingresso' | 'report'>(event.status === 'completed' ? 'report' : 'tavoli');
   const [confirmReject, setConfirmReject] = useState<string | null>(null);
   const [showVisibility, setShowVisibility] = useState(false);
@@ -186,13 +187,24 @@ export default function EventDetailView({ event, venue, reservations, prUsers, p
         </div>
       )}
 
-      {/* CTA pianta */}
-      <button
-        onClick={onOpenPlan}
-        className="w-full flex items-center justify-center gap-2 bg-[#D4622A] text-black py-3.5 text-sm font-semibold rounded-xl hover:bg-white transition-colors mb-6"
-      >
-        <MapIcon size={14} /> Apri Pianta
-      </button>
+      {/* CTA pianta + regia */}
+      <div className="flex gap-2 mb-6">
+        <button
+          onClick={onOpenPlan}
+          className="flex-1 flex items-center justify-center gap-2 bg-[#D4622A] text-black py-3.5 text-sm font-semibold rounded-xl hover:bg-white transition-colors"
+        >
+          <MapIcon size={14} /> Apri Pianta
+        </button>
+        {event.status === 'active' && onOpenRegia && (
+          <button
+            onClick={onOpenRegia}
+            title="Vista regia a tutto schermo, in diretta"
+            className="flex items-center justify-center gap-2 px-4 py-3.5 border border-[#3b3733] text-[#AEAEB2] text-sm font-semibold rounded-xl hover:text-white hover:border-[#48484A] transition-colors"
+          >
+            <span className="w-1.5 h-1.5 rounded-full bg-[#22C55E] blink" /> Regia
+          </button>
+        )}
+      </div>
 
       {/* Visibilità — richiudibile, modifiche immediate */}
       <div className="border border-[#2d2a26] rounded-xl mb-6 overflow-hidden">

@@ -474,11 +474,14 @@ function BookingModal({ table, initialReservation, defaultPrName, bottleMenu, on
   const updateBottle = (i: number, patch: Partial<BottleItem>) =>
     setBottleItems(prev => prev.map((b, idx) => idx === i ? { ...b, ...patch } : b));
 
-  // Prezzo dal listino (match per nome). Il budget è il massimo tra il minimo
-  // del tavolo e il totale delle bottiglie scelte dal listino.
+  // Il budget è fissato dal numero di persone (minimo del tavolo + extra per pax).
+  // Le bottiglie si scelgono DENTRO quel budget: il totale non può superarlo.
   const priceOf = (name: string) => bottleMenu.find(m => m.name === name)?.price ?? 0;
+  const budget = calcBudget(form.guestsCount);
   const bottleTotal = bottleItems.reduce((s, b) => s + priceOf(b.name) * b.qty, 0);
-  const budget = Math.max(calcBudget(form.guestsCount), bottleTotal);
+  const remaining = budget - bottleTotal;
+  const overBudget = bottleTotal > budget;
+  const usedPct = budget > 0 ? Math.min(100, Math.round((bottleTotal / budget) * 100)) : 0;
 
   const inp = "w-full bg-bg border border-[#2d2a26] rounded-xl px-4 py-3 text-sm font-sans text-white placeholder-[#636366] outline-none focus:border-[#D4622A] transition-colors";
 
@@ -507,6 +510,7 @@ function BookingModal({ table, initialReservation, defaultPrName, bottleMenu, on
         <form className="p-8 space-y-5 overflow-y-auto"
           onSubmit={(e) => {
             e.preventDefault();
+            if (overBudget) return;
             onSubmit({ ...form, budget, bottles: serializeBottles(bottleItems), status: 'confirmed' as const });
           }}>
           <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
@@ -567,12 +571,17 @@ function BookingModal({ table, initialReservation, defaultPrName, bottleMenu, on
                 className="flex items-center gap-2 w-full py-2.5 border border-dashed border-[#2d2a26] text-[#8E8E93] hover:border-accent/50 hover:text-accent transition-colors text-[9px] hv font-black uppercase tracking-widest justify-center mt-1">
                 <Plus size={11} /> Aggiungi Bottiglia
               </button>
-              {bottleTotal > 0 && (
-                <div className="flex items-center justify-between pt-1 text-xs">
-                  <span className="text-[#8E8E93]">Totale listino</span>
-                  <span className="hv font-black text-accent tabular-nums">€{bottleTotal}</span>
+              <div className="pt-2 space-y-2">
+                <div className="h-1.5 rounded-full bg-[#2d2a26] overflow-hidden">
+                  <div className="h-full transition-all duration-300" style={{ width: `${usedPct}%`, background: overBudget ? '#EF4444' : '#D4622A' }} />
                 </div>
-              )}
+                <div className="flex items-center justify-between text-xs">
+                  <span className="text-[#8E8E93] tabular-nums">Bottiglie €{bottleTotal} / budget €{budget}</span>
+                  <span className="font-semibold tabular-nums" style={{ color: overBudget ? '#EF4444' : '#22C55E' }}>
+                    {overBudget ? `Supera di €${bottleTotal - budget}` : `Rimanente €${remaining}`}
+                  </span>
+                </div>
+              </div>
             </div>
           </BField>
 
@@ -581,9 +590,10 @@ function BookingModal({ table, initialReservation, defaultPrName, bottleMenu, on
               value={form.notes} onChange={e => setForm({ ...form, notes: e.target.value })} />
           </BField>
 
-          <button type="submit"
-            className="w-full py-4 rounded-xl bg-accent text-black text-sm font-semibold hover:bg-white transition-colors">
-            {isEdit ? 'Salva Modifiche' : 'Conferma Prenotazione'}
+          <button type="submit" disabled={overBudget}
+            className={cn('w-full py-4 rounded-xl text-sm font-semibold transition-colors',
+              overBudget ? 'bg-[#2d2a26] text-[#8E8E93] cursor-not-allowed' : 'bg-accent text-black hover:bg-white')}>
+            {overBudget ? 'Le bottiglie superano il budget' : isEdit ? 'Salva Modifiche' : 'Conferma Prenotazione'}
           </button>
         </form>
       </motion.div>

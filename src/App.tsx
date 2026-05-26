@@ -1912,28 +1912,24 @@ export default function App() {
 
                   {/* KPIs */}
                   <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 mt-8 mb-10">
-                    <div className="border border-[#2d2a26] bg-card px-6 py-6 rounded-xl">
-                      <div className="text-accent mb-4"><BarChart3 size={18}/></div>
-                      <div className="hv font-black text-4xl text-white leading-none">{myRes.length}</div>
-                      <div className="text-xs text-[#8E8E93] mt-3">Tavoli prenotati</div>
+                    <div className="border border-white/[0.07] bg-white/[0.018] px-5 py-5 rounded-2xl">
+                      <div className="hv font-black text-4xl text-white leading-none tabular-nums">{myRes.length}</div>
+                      <div className="text-[11px] uppercase tracking-[0.14em] text-[#8a8278] mt-3">Tavoli prenotati</div>
                     </div>
-                    <div className="border border-[#2d2a26] bg-card px-6 py-6 rounded-xl">
-                      <div className="text-accent mb-4"><TrendingUp size={18}/></div>
-                      <div className="hv font-black text-4xl text-white leading-none">€{totalBudget >= 1000 ? `${(totalBudget/1000).toFixed(1)}K` : totalBudget}</div>
-                      <div className="text-xs text-[#8E8E93] mt-3">Budget generato</div>
+                    <div className="border border-white/[0.07] bg-white/[0.018] px-5 py-5 rounded-2xl">
+                      <div className="hv font-black text-4xl text-white leading-none tabular-nums">€{totalBudget >= 1000 ? `${(totalBudget/1000).toFixed(1)}K` : totalBudget}</div>
+                      <div className="text-[11px] uppercase tracking-[0.14em] text-[#8a8278] mt-3">Budget generato</div>
                     </div>
-                    <div className="border border-[#2d2a26] bg-card px-6 py-6 rounded-xl">
-                      <div className="text-accent mb-4"><Calendar size={18}/></div>
-                      <div className="hv font-black text-4xl text-white leading-none">{myEventIds.length}</div>
-                      <div className="text-xs text-[#8E8E93] mt-3">Serate lavorate</div>
+                    <div className="border border-white/[0.07] bg-white/[0.018] px-5 py-5 rounded-2xl">
+                      <div className="hv font-black text-4xl text-white leading-none tabular-nums">{myEventIds.length}</div>
+                      <div className="text-[11px] uppercase tracking-[0.14em] text-[#8a8278] mt-3">Serate lavorate</div>
                     </div>
-                    <div className="border border-[#2d2a26] bg-card px-6 py-6 rounded-xl">
-                      <div className="text-accent mb-4"><CheckCircle2 size={18}/></div>
-                      <div className="hv font-black text-4xl text-white leading-none">{approvalRate}<span className="text-xl text-[#8E8E93]">%</span></div>
-                      <div className="mt-3 h-1 bg-[#1d1b19] rounded-full overflow-hidden">
-                        <motion.div className="h-full bg-accent" initial={{ width: 0 }} animate={{ width: `${approvalRate}%` }} transition={{ duration: 1, ease: 'easeOut' }} />
+                    <div className="border border-white/[0.07] bg-white/[0.018] px-5 py-5 rounded-2xl">
+                      <div className="hv font-black text-4xl text-white leading-none tabular-nums">{approvalRate}<span className="text-xl text-[#8a8278]">%</span></div>
+                      <div className="mt-3 h-1.5 bg-white/[0.07] rounded-full overflow-hidden">
+                        <motion.div className="h-full bg-[#D4622A]" initial={{ width: 0 }} animate={{ width: `${approvalRate}%` }} transition={{ duration: 1, ease: 'easeOut' }} />
                       </div>
-                      <div className="text-xs text-[#8E8E93] mt-2">Tasso approvazione</div>
+                      <div className="text-[11px] uppercase tracking-[0.14em] text-[#8a8278] mt-2">Tasso approvazione</div>
                     </div>
                   </div>
 

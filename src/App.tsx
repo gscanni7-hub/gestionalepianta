@@ -3096,31 +3096,31 @@ function HostCheckinView({ reservations, events, venues, userRole, currentUser, 
 
       {/* Header */}
       <div className="mb-5 max-w-xl mx-auto w-full">
-        <div className="flex items-center justify-between gap-3 mb-2">
-          <h1 className="font-bold text-2xl text-white">Ingresso Serata</h1>
+        <div className="flex items-center justify-between gap-3">
+          <h1 className="font-bold text-2xl text-white">Ingresso</h1>
           {onExport && activeEvent && (
             <button
               onClick={() => onExport(activeEvent.id)}
-              className="flex items-center gap-1.5 text-[#636366] hover:text-accent transition-colors text-xs"
+              className="flex items-center gap-1.5 border border-white/[0.14] rounded-xl px-3 py-2 text-[11px] font-bold uppercase tracking-[0.14em] text-[#cfc7bc] hover:text-white hover:border-[#D4622A]/50 transition-colors"
               title="Esporta lista ospiti"
             >
-              <Download size={13} /> Export
+              <Download size={12} /> Esporta
             </button>
           )}
         </div>
 
         {/* Multi-event selector */}
         {activeEvents.length > 1 && (
-          <div className="flex gap-1 mb-4 flex-wrap">
+          <div className="flex gap-1.5 mt-4 flex-wrap">
             {activeEvents.map(ev => (
               <button
                 key={ev.id}
                 onClick={() => setSelectedEventId(ev.id)}
                 className={cn(
-                  'px-3 py-1.5 text-xs font-medium transition-colors border rounded-xl',
+                  'px-3 py-1.5 text-xs font-medium transition-colors border rounded-full',
                   activeEventId === ev.id
-                    ? 'bg-accent text-black border-accent'
-                    : 'border-[#2d2a26] text-[#636366] hover:text-white hover:border-[#48484A]'
+                    ? 'bg-[#D4622A]/15 text-[#e8915f] border-[#D4622A]/40'
+                    : 'border-white/[0.1] text-[#8a8278] hover:text-white hover:border-[#48484A]'
                 )}
               >
                 {ev.name}
@@ -3129,13 +3129,16 @@ function HostCheckinView({ reservations, events, venues, userRole, currentUser, 
           </div>
         )}
 
-        <div className="flex items-center gap-3">
-          <div className="flex-1 h-1 bg-[#2d2a26] overflow-hidden rounded-full">
-            <motion.div className="h-full bg-accent" initial={{ width: 0 }}
-              animate={{ width: `${pct}%` }} transition={{ duration: 0.6, ease: 'easeOut' }} />
-          </div>
-          <span className="hv font-black text-white text-sm shrink-0">{checkedInCount}<span className="text-[#8E8E93] font-normal text-xs">/{total}</span></span>
+        {/* Hero entrati */}
+        <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-[#8a8278] mt-6">Persone entrate</p>
+        <p className="hv font-black text-[56px] leading-none text-white tabular-nums mt-2.5">
+          {checkedInCount}<span className="text-[#5a544c] text-3xl">/{total}</span>
+        </p>
+        <div className="mt-4 h-1.5 bg-white/[0.07] overflow-hidden rounded-full">
+          <motion.div className="h-full bg-[#22C55E]" initial={{ width: 0 }}
+            animate={{ width: `${pct}%` }} transition={{ duration: 0.6, ease: 'easeOut' }} />
         </div>
+        <p className="text-[13px] text-[#8a8278] mt-2.5">{pct}% · {total - checkedInCount} ancora attesi</p>
       </div>
 
       {/* Tab switcher */}

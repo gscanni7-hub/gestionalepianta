@@ -1,8 +1,7 @@
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import {
-  Calendar, Bell, DoorOpen, TrendingUp,
-  ChevronRight, MapPin, BarChart3, CheckCircle2, Clock, Info, X
+  Bell, DoorOpen, ChevronRight, BarChart3, Clock, Info, X
 } from 'lucide-react';
 import { UserProfile, Event, Venue, Reservation, ManagedUser } from '../../types';
 import { cn, isEventVisibleToPr, isEventVisibleToHost } from '../../lib/utils';
@@ -49,91 +48,82 @@ function AdminDashboard({ user, events, venues, reservations, managedUsers, pend
   }, 0);
   const occupancy = totalTables > 0 ? Math.round((activeRes.length / totalTables) * 100) : 0;
 
-  const kpis = [
-    { label: 'Tavoli', value: `${activeRes.length}/${totalTables}`, sub: `${occupancy}% occupazione`, color: 'text-[#D4622A]', icon: <MapPin size={14}/> },
-    { label: 'Incasso est.', value: revenueEst >= 1000 ? `€${(revenueEst/1000).toFixed(1)}K` : `€${revenueEst}`, sub: 'prenotazioni approvate', color: 'text-[#22C55E]', icon: <TrendingUp size={14}/> },
-    { label: 'Da approvare', value: String(pendingCount), sub: 'in attesa', color: pendingCount > 0 ? 'text-[#F59E0B]' : 'text-[#8E8E93]', icon: <Bell size={14}/> },
-    { label: 'Entrati', value: String(checkedIn.length), sub: `di ${activeRes.length} prenotati`, color: 'text-[#38BDF8]', icon: <CheckCircle2 size={14}/> },
-  ];
-
   return (
-    <div className="space-y-8">
+    <div>
       {/* Greeting */}
-      <div>
-        <p className="text-xs font-medium text-[#D4622A] mb-1 capitalize">{dateStr}</p>
-        <h1 className="font-bold text-3xl text-white leading-tight">
-          {greeting},<br />{user.displayName}
-        </h1>
+      <p className="text-xs font-medium text-[#8a8278] capitalize">{dateStr}</p>
+      <h1 className="font-bold text-3xl text-white leading-tight mt-1">
+        {greeting},<br />{user.displayName}
+      </h1>
+
+      {/* Hero incasso */}
+      <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-[#8a8278] mt-9">Incasso stimato</p>
+      <p className="hv font-black text-[52px] leading-none text-white tracking-tight tabular-nums mt-2.5">
+        {revenueEst >= 1000 ? `€${(revenueEst / 1000).toFixed(1)}K` : `€${revenueEst}`}
+      </p>
+      <p className="text-[13px] text-[#8a8278] mt-2.5">{activeRes.length} tavoli su {totalTables} · {occupancy}% occupazione</p>
+
+      <div className="h-px bg-white/[0.07] my-7" />
+
+      {/* Card Stasera */}
+      <div className="border border-white/[0.07] bg-white/[0.018] rounded-2xl p-5">
+        <span className="text-[11px] font-semibold uppercase tracking-[0.18em] text-[#8a8278]">Stasera</span>
+        <div className="mt-3">
+          <button onClick={() => onNav('approvals')} className="w-full flex items-center justify-between py-2.5 text-left">
+            <span className="flex items-center gap-2.5 text-sm text-[#cfc7bc]"><span className="w-1.5 h-1.5 rounded-full bg-[#F59E0B]" />Da approvare</span>
+            <span className={cn('text-sm font-semibold tabular-nums', pendingCount > 0 ? 'text-[#F59E0B]' : 'text-white')}>{pendingCount}</span>
+          </button>
+          <div className="flex items-center justify-between py-2.5 border-t border-white/[0.05]">
+            <span className="flex items-center gap-2.5 text-sm text-[#cfc7bc]"><span className="w-1.5 h-1.5 rounded-full bg-[#38BDF8]" />Entrati</span>
+            <span className="text-sm font-semibold text-white tabular-nums">{checkedIn.length} / {activeRes.length}</span>
+          </div>
+          <div className="flex items-center justify-between py-2.5 border-t border-white/[0.05]">
+            <span className="flex items-center gap-2.5 text-sm text-[#cfc7bc]"><span className="w-1.5 h-1.5 rounded-full bg-[#22C55E]" />Serate attive</span>
+            <span className="text-sm font-semibold text-white tabular-nums">{activeEvents.length}</span>
+          </div>
+        </div>
       </div>
 
-      {/* KPI grid */}
-      <div className="grid grid-cols-2 gap-3">
-        {kpis.map((k, i) => (
-          <motion.div
-            key={k.label}
-            initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.3, delay: i * 0.06 }}
-            className="border border-[#2d2a26] bg-[#1d1b19] p-4 rounded-xl"
-          >
-            <div className={cn('mb-3', k.color)}>{k.icon}</div>
-            <div className={cn('hv font-black text-3xl leading-none', k.color)}>{k.value}</div>
-            <div className="text-xs text-[#8E8E93] mt-2">{k.label}</div>
-            <div className="text-[9px] font-sans text-[#636366] mt-0.5">{k.sub}</div>
-          </motion.div>
-        ))}
-      </div>
-
-      {/* Serate attive */}
+      {/* Serate in corso */}
       {activeEvents.length > 0 && (
-        <div>
-          <p className="text-xs font-medium text-[#8E8E93] mb-3">Serate in corso</p>
-          <div className="space-y-2">
+        <>
+          <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-[#8a8278] mt-7 mb-3">Serate in corso</p>
+          <div className="border border-white/[0.07] bg-white/[0.018] rounded-2xl overflow-hidden">
             {activeEvents.map(ev => {
               const venue = venues.find(v => v.id === ev.venueId);
               const evRes = activeRes.filter(r => r.eventId === ev.id);
               return (
-                <motion.button
+                <button
                   key={ev.id}
                   onClick={() => onOpenEvent(ev)}
-                  whileTap={{ scale: 0.985 }}
-                  className="w-full flex items-center gap-4 border border-[#2d2a26] bg-[#1d1b19] hover:border-[#D4622A]/30 transition-colors p-4 text-left rounded-xl"
+                  className="w-full flex items-center gap-3.5 px-5 py-4 text-left border-t border-white/[0.05] first:border-t-0 hover:bg-white/[0.02] transition-colors"
                 >
-                  <div className="w-2 h-2 rounded-full bg-[#D4622A] shrink-0 mt-0.5" />
+                  <div className="w-1.5 h-1.5 rounded-full bg-[#D4622A] shrink-0" />
                   <div className="flex-1 min-w-0">
-                    <p className="font-semibold text-white text-sm truncate">{ev.name}</p>
-                    <p className="text-[9px] font-mono text-[#8E8E93] mt-0.5">{venue?.name ?? ''} · {evRes.length} tavoli</p>
+                    <p className="font-semibold text-white text-[15px] truncate">{ev.name}</p>
+                    <p className="text-xs text-[#8a8278] mt-0.5">{venue?.name ?? ''} · {evRes.length} tavoli</p>
                   </div>
-                  <ChevronRight size={14} className="text-[#8E8E93] shrink-0" />
-                </motion.button>
+                  <ChevronRight size={15} className="text-[#5a544c] shrink-0" />
+                </button>
               );
             })}
           </div>
-        </div>
+        </>
       )}
 
-      {/* Quick actions */}
-      <div>
-        <p className="text-xs font-medium text-[#8E8E93] mb-3">Operazioni serata</p>
-        <div className="grid grid-cols-2 gap-2">
-          {[
-            { label: 'Approva', icon: <Bell size={14}/>, view: 'approvals', badge: pendingCount },
-            { label: 'Ingresso', icon: <DoorOpen size={14}/>, view: 'checkin' },
-          ].map(a => (
-            <button
-              key={a.view}
-              onClick={() => onNav(a.view)}
-              className="relative flex items-center gap-3 border border-[#2d2a26] bg-[#1d1b19] hover:border-[#D4622A]/30 hover:bg-[#1d1b19] transition-colors px-4 py-3 text-left rounded-xl"
-            >
-              <span className="text-[#D4622A]">{a.icon}</span>
-              <span className="text-xs font-medium text-[#AEAEB2]">{a.label}</span>
-              {a.badge !== undefined && a.badge > 0 && (
-                <span className="absolute top-2 right-2 min-w-[16px] h-4 px-1 rounded-full bg-[#F59E0B] text-black text-[8px] font-black flex items-center justify-center">
-                  {a.badge}
-                </span>
-              )}
-            </button>
-          ))}
-        </div>
+      {/* Operazioni */}
+      <div className="grid grid-cols-2 gap-2.5 mt-7">
+        <button onClick={() => onNav('approvals')}
+          className="relative flex items-center justify-center gap-2 py-3.5 rounded-xl btn-secondary text-sm font-medium">
+          <Bell size={14} /> Approva
+          {pendingCount > 0 && (
+            <span className="min-w-[18px] h-[18px] px-1 rounded-full bg-[#F59E0B] text-black text-[9px] font-black flex items-center justify-center">{pendingCount}</span>
+          )}
+        </button>
+        <button onClick={() => onNav('checkin')}
+          className="flex items-center justify-center gap-2 py-3.5 rounded-xl btn-secondary text-sm font-medium">
+          <DoorOpen size={14} /> Ingresso
+        </button>
       </div>
     </div>
   );
@@ -165,109 +155,98 @@ function PRDashboard({ user, events, venues, reservations, prPendingCount, onNav
   };
 
   return (
-    <div className="space-y-8">
+    <div>
       {/* Greeting */}
-      <div>
-        <p className="text-xs font-medium text-[#D4622A] mb-1 capitalize">
-          {now.toLocaleDateString('it-IT', { weekday: 'long', day: 'numeric', month: 'long' })}
-        </p>
-        <h1 className="font-bold text-3xl text-white leading-tight">
-          {greeting},<br />{user.displayName}
-        </h1>
-      </div>
+      <p className="text-xs font-medium text-[#8a8278] capitalize">
+        {now.toLocaleDateString('it-IT', { weekday: 'long', day: 'numeric', month: 'long' })}
+      </p>
+      <h1 className="font-bold text-3xl text-white leading-tight mt-1">
+        {greeting},<br />{user.displayName}
+      </h1>
 
       {/* Hint primo-uso */}
       {!hintSeen && activeWithToken.length > 0 && (
-        <div className="border border-[#D4622A]/30 bg-[#D4622A]/[0.06] rounded-xl p-4 flex items-start gap-3">
+        <div className="border border-[#D4622A]/25 bg-[#D4622A]/[0.05] rounded-2xl p-4 flex items-start gap-3 mt-7">
           <Info size={15} className="text-[#D4622A] shrink-0 mt-0.5" />
           <div className="flex-1 min-w-0">
             <p className="text-sm font-semibold text-white">Come funziona</p>
-            <p className="text-xs text-[#AEAEB2] mt-1 leading-relaxed">
+            <p className="text-xs text-[#8a8278] mt-1 leading-relaxed">
               Copia il tuo link personale e condividilo con i clienti: ogni registrazione viene conteggiata a te e la ritrovi nelle tue statistiche.
             </p>
           </div>
-          <button onClick={dismissHint} className="text-[#8E8E93] hover:text-white transition-colors shrink-0" aria-label="Chiudi">
+          <button onClick={dismissHint} className="text-[#8a8278] hover:text-white transition-colors shrink-0" aria-label="Chiudi">
             <X size={14} />
           </button>
         </div>
       )}
 
-      {/* Stats stasera */}
-      <div className="grid grid-cols-3 gap-3">
-        {[
-          { label: 'Prenotate', value: myActiveRes.length, color: 'text-white' },
-          { label: 'Approvate', value: myApproved.length, color: 'text-[#22C55E]' },
-          { label: 'In attesa', value: prPendingCount, color: prPendingCount > 0 ? 'text-[#F59E0B]' : 'text-[#8E8E93]' },
-        ].map((s, i) => (
-          <motion.div
-            key={s.label}
-            initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.28, delay: i * 0.06 }}
-            className="border border-[#2d2a26] bg-[#1d1b19] p-4 text-center rounded-xl"
-          >
-            <div className={cn('hv font-black text-3xl leading-none', s.color)}>{s.value}</div>
-            <div className="text-xs text-[#8E8E93] mt-2">{s.label}</div>
-          </motion.div>
-        ))}
+      {/* Hero budget */}
+      <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-[#8a8278] mt-9">Budget generato stasera</p>
+      <p className="hv font-black text-[52px] leading-none text-white tracking-tight tabular-nums mt-2.5">
+        {myBudget >= 1000 ? `€${(myBudget / 1000).toFixed(1)}K` : `€${myBudget}`}
+      </p>
+      <p className="text-[13px] text-[#8a8278] mt-2.5">{myApproved.length} approvate · {myActiveRes.length} totali stasera</p>
+
+      <div className="h-px bg-white/[0.07] my-7" />
+
+      {/* Card Stasera */}
+      <div className="border border-white/[0.07] bg-white/[0.018] rounded-2xl p-5">
+        <span className="text-[11px] font-semibold uppercase tracking-[0.18em] text-[#8a8278]">Stasera</span>
+        <div className="mt-3">
+          <div className="flex items-center justify-between py-2.5">
+            <span className="flex items-center gap-2.5 text-sm text-[#cfc7bc]"><span className="w-1.5 h-1.5 rounded-full bg-[#5a544c]" />Prenotate</span>
+            <span className="text-sm font-semibold text-white tabular-nums">{myActiveRes.length}</span>
+          </div>
+          <div className="flex items-center justify-between py-2.5 border-t border-white/[0.05]">
+            <span className="flex items-center gap-2.5 text-sm text-[#cfc7bc]"><span className="w-1.5 h-1.5 rounded-full bg-[#22C55E]" />Approvate</span>
+            <span className="text-sm font-semibold text-white tabular-nums">{myApproved.length}</span>
+          </div>
+          <div className="flex items-center justify-between py-2.5 border-t border-white/[0.05]">
+            <span className="flex items-center gap-2.5 text-sm text-[#cfc7bc]"><span className="w-1.5 h-1.5 rounded-full bg-[#F59E0B]" />In attesa</span>
+            <span className={cn('text-sm font-semibold tabular-nums', prPendingCount > 0 ? 'text-[#F59E0B]' : 'text-white')}>{prPendingCount}</span>
+          </div>
+        </div>
       </div>
 
-      {myBudget > 0 && (
-        <div className="border border-[#2d2a26] bg-[#1d1b19] p-4 flex items-center justify-between rounded-xl">
-          <div>
-            <p className="text-xs text-[#8E8E93]">Budget generato stasera</p>
-            <p className="hv font-black text-2xl text-[#22C55E] mt-1">
-              {myBudget >= 1000 ? `€${(myBudget/1000).toFixed(1)}K` : `€${myBudget}`}
-            </p>
-          </div>
-          <TrendingUp size={24} className="text-[#22C55E]/30" />
-        </div>
-      )}
-
-      {/* CTA principale */}
+      {/* Serate attive */}
       {activeEvents.length > 0 && (
-        <div>
-          <p className="text-xs font-medium text-[#8E8E93] mb-3">Serate attive</p>
-          <div className="space-y-2">
+        <>
+          <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-[#8a8278] mt-7 mb-3">Serate attive</p>
+          <div className="border border-white/[0.07] bg-white/[0.018] rounded-2xl overflow-hidden">
             {activeEvents.map(ev => {
               const venue = venues.find(v => v.id === ev.venueId);
               return (
-                <motion.button
-                  key={ev.id}
-                  onClick={() => onOpenEvent(ev)}
-                  whileTap={{ scale: 0.985 }}
-                  className="w-full flex items-center gap-4 btn-primary p-4 text-left group rounded-xl"
-                >
-                  <Calendar size={16} className="text-white shrink-0" />
+                <button key={ev.id} onClick={() => onOpenEvent(ev)}
+                  className="w-full flex items-center gap-3.5 px-5 py-4 text-left border-t border-white/[0.05] first:border-t-0 hover:bg-white/[0.02] transition-colors">
+                  <span className="w-1.5 h-1.5 rounded-full bg-[#D4622A] shrink-0" />
                   <div className="flex-1 min-w-0">
-                    <p className="font-semibold text-white text-sm truncate">{ev.name}</p>
-                    <p className="text-[9px] font-mono text-white/60 mt-0.5">{venue?.name ?? ''}</p>
+                    <p className="font-semibold text-white text-[15px] truncate">{ev.name}</p>
+                    <p className="text-xs text-[#8a8278] mt-0.5">{venue?.name ?? ''}</p>
                   </div>
-                  <ChevronRight size={14} className="text-white shrink-0" />
-                </motion.button>
+                  <ChevronRight size={15} className="text-[#5a544c] shrink-0" />
+                </button>
               );
             })}
           </div>
-        </div>
+        </>
       )}
 
       {/* Il mio link */}
       {activeWithToken.length > 0 && (
-        <div>
-          <p className="text-xs font-medium text-[#8E8E93] mb-3">Il tuo link</p>
-          <div className="space-y-2">
+        <>
+          <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-[#8a8278] mt-7 mb-3">Il tuo link</p>
+          <div className="space-y-2.5">
             {activeWithToken.map(ev => {
               const link = `${window.location.origin}/r/${ev.registrationToken}?pr=${user.id}`;
               return (
-                <div key={ev.id} className="border border-[#2d2a26] bg-[#1d1b19] p-4 space-y-3 rounded-xl">
-                  <p className="font-semibold text-white text-xs">{ev.name}</p>
-                  <div className="flex items-center gap-2">
-                    <div className="flex-1 bg-[#121110] border border-[#2d2a26] px-3 py-2 overflow-hidden rounded-lg">
-                      <p className="text-[9px] font-mono text-[#8E8E93] truncate">{link}</p>
+                <div key={ev.id} className="border border-white/[0.07] bg-white/[0.018] rounded-2xl p-4">
+                  <p className="font-semibold text-white text-sm">{ev.name}</p>
+                  <div className="flex items-center gap-2 mt-3">
+                    <div className="flex-1 bg-[#0a0706] border border-white/[0.08] px-3 py-2 overflow-hidden rounded-lg">
+                      <p className="text-[10px] font-mono text-[#8a8278] truncate">{link}</p>
                     </div>
-                    <button
-                      onClick={() => navigator.clipboard.writeText(link)}
-                      className="shrink-0 px-4 py-2 rounded-xl btn-primary text-xs font-semibold"
-                    >
+                    <button onClick={() => navigator.clipboard.writeText(link)}
+                      className="shrink-0 px-4 py-2 rounded-lg btn-primary text-xs font-semibold">
                       Copia
                     </button>
                   </div>
@@ -275,29 +254,22 @@ function PRDashboard({ user, events, venues, reservations, prPendingCount, onNav
               );
             })}
           </div>
-        </div>
+        </>
       )}
 
       {/* Azioni rapide */}
-      <div className="grid grid-cols-2 gap-2">
-        {[
-          { label: 'Prenotazioni', icon: <BarChart3 size={14}/>, view: 'reservations', badge: prPendingCount },
-          { label: 'Storico', icon: <Clock size={14}/>, view: 'history' },
-        ].map(a => (
-          <button
-            key={a.view}
-            onClick={() => onNav(a.view)}
-            className="relative flex items-center gap-3 border border-[#2d2a26] bg-[#1d1b19] hover:border-[#D4622A]/30 transition-colors px-4 py-3 rounded-xl"
-          >
-            <span className="text-[#D4622A]">{a.icon}</span>
-            <span className="text-xs font-medium text-[#AEAEB2]">{a.label}</span>
-            {a.badge !== undefined && a.badge > 0 && (
-              <span className="absolute top-2 right-2 min-w-[16px] h-4 px-1 rounded-full bg-[#F59E0B] text-black text-[8px] font-black flex items-center justify-center">
-                {a.badge}
-              </span>
-            )}
-          </button>
-        ))}
+      <div className="grid grid-cols-2 gap-2.5 mt-7">
+        <button onClick={() => onNav('reservations')}
+          className="relative flex items-center justify-center gap-2 py-3.5 rounded-xl btn-secondary text-sm font-medium">
+          <BarChart3 size={14} /> Prenotazioni
+          {prPendingCount > 0 && (
+            <span className="min-w-[18px] h-[18px] px-1 rounded-full bg-[#F59E0B] text-black text-[9px] font-black flex items-center justify-center">{prPendingCount}</span>
+          )}
+        </button>
+        <button onClick={() => onNav('history')}
+          className="flex items-center justify-center gap-2 py-3.5 rounded-xl btn-secondary text-sm font-medium">
+          <Clock size={14} /> Storico
+        </button>
       </div>
     </div>
   );
@@ -320,60 +292,51 @@ function HostDashboard({ user, events, venues, reservations, onNav }: {
   const greeting = hour < 18 ? 'Ciao' : 'Buonasera';
 
   return (
-    <div className="space-y-8">
+    <div>
       {/* Greeting */}
-      <div>
-        <p className="text-xs font-medium text-[#D4622A] mb-1 capitalize">
-          {now.toLocaleDateString('it-IT', { weekday: 'long', day: 'numeric', month: 'long' })}
-        </p>
-        <h1 className="font-bold text-3xl text-white leading-tight">
-          {greeting},<br />{user.displayName}
-        </h1>
-      </div>
+      <p className="text-xs font-medium text-[#8a8278] capitalize">
+        {now.toLocaleDateString('it-IT', { weekday: 'long', day: 'numeric', month: 'long' })}
+      </p>
+      <h1 className="font-bold text-3xl text-white leading-tight mt-1">
+        {greeting},<br />{user.displayName}
+      </h1>
 
       {!activeEvent ? (
-        <div className="py-20 text-center border border-[#2d2a26] rounded-xl">
-          <DoorOpen size={32} className="text-[#3b3733] mx-auto mb-3" />
-          <p className="text-sm text-[#8E8E93]">Nessun evento attivo stasera</p>
+        <div className="py-20 text-center border border-white/[0.07] rounded-2xl mt-8">
+          <DoorOpen size={32} className="text-[#5a544c] mx-auto mb-3" />
+          <p className="text-sm text-[#8a8278]">Nessun evento attivo stasera</p>
         </div>
       ) : (
         <>
           {/* Evento in corso */}
-          <div className="border-l-2 border-[#D4622A] pl-4">
-            <p className="text-xs text-[#8E8E93]">{venue?.name ?? ''}</p>
-            <p className="font-bold text-white text-lg">{activeEvent.name}</p>
+          <div className="mt-8">
+            <p className="text-xs text-[#8a8278]">{venue?.name ?? ''}</p>
+            <p className="font-bold text-white text-xl mt-0.5">{activeEvent.name}</p>
           </div>
 
-          {/* Grande numero */}
-          <div className="border border-[#2d2a26] bg-[#1d1b19] p-8 text-center rounded-xl">
-            <div className="hv font-black text-white leading-none" style={{ fontSize: 72 }}>
-              {checkedIn.length}
-            </div>
-            <div className="text-[#8E8E93] hv font-black text-xl mt-1">/ {approved.length}</div>
-            <p className="text-xs text-[#8E8E93] mt-3">Persone entrate</p>
-            {/* Progress bar */}
-            <div className="mt-4 h-1 bg-[#2d2a26] overflow-hidden rounded-full">
-              <motion.div
-                className="h-full bg-[#22C55E]"
-                initial={{ width: 0 }}
-                animate={{ width: `${pct}%` }}
-                transition={{ duration: 0.8, ease: 'easeOut' }}
-              />
-            </div>
-            <p className="text-[9px] font-mono text-[#8E8E93] mt-2">{pct}%</p>
+          {/* Hero entrati */}
+          <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-[#8a8278] mt-9">Persone entrate</p>
+          <p className="hv font-black text-[72px] leading-none text-white tabular-nums mt-3">
+            {checkedIn.length}<span className="text-[#5a544c] text-4xl">/{approved.length}</span>
+          </p>
+          <div className="mt-5 h-1.5 bg-white/[0.07] overflow-hidden rounded-full">
+            <motion.div
+              className="h-full bg-[#22C55E]"
+              initial={{ width: 0 }}
+              animate={{ width: `${pct}%` }}
+              transition={{ duration: 0.8, ease: 'easeOut' }}
+            />
           </div>
+          <p className="text-[13px] text-[#8a8278] mt-2.5">{pct}% · {approved.length - checkedIn.length} ancora attesi</p>
 
           {/* CTA principale */}
-          <div className="space-y-2">
-            <motion.button
-              onClick={() => onNav('checkin')}
-              whileTap={{ scale: 0.97 }}
-              className="w-full flex items-center justify-center gap-3 btn-primary py-4 text-sm font-semibold rounded-xl"
-            >
-              <DoorOpen size={18} />
-              Vai all'ingresso
-            </motion.button>
-          </div>
+          <button
+            onClick={() => onNav('checkin')}
+            className="w-full flex items-center justify-center gap-3 btn-primary py-4 text-sm font-semibold rounded-xl mt-8"
+          >
+            <DoorOpen size={18} />
+            Vai all'ingresso
+          </button>
         </>
       )}
     </div>

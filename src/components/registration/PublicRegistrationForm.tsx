@@ -30,6 +30,7 @@ export default function PublicRegistrationForm() {
     phone: '',
     guestsCount: 1,
   });
+  const [consent, setConsent] = useState(false);
 
   useEffect(() => {
     async function load() {
@@ -101,6 +102,7 @@ export default function PublicRegistrationForm() {
     if (!event || !venue) return;
     if (!form.firstName.trim() || !form.lastName.trim()) { setError('Nome e cognome obbligatori.'); return; }
     if (!form.email.trim()) { setError('Email obbligatoria.'); return; }
+    if (!consent) { setError('Devi accettare il trattamento dei dati per procedere.'); return; }
 
     setSubmitting(true);
     setError('');
@@ -309,6 +311,29 @@ export default function PublicRegistrationForm() {
             </div>
           </div>
 
+          {/* Consenso GDPR */}
+          <label className="flex items-start gap-3 cursor-pointer select-none pt-2">
+            <input
+              type="checkbox"
+              checked={consent}
+              onChange={e => setConsent(e.target.checked)}
+              className="mt-0.5 w-4 h-4 accent-[#D4622A] shrink-0 cursor-pointer"
+            />
+            <span className="text-[11px] text-[#8E8E93] leading-relaxed">
+              Acconsento al trattamento dei miei dati personali per la finalità di
+              prenotazione di questa serata.{' '}
+              <a
+                href="/privacy"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-[#D4622A] hover:underline"
+              >
+                Leggi la Privacy Policy
+              </a>
+              .
+            </span>
+          </label>
+
           {error && (
             <div className="flex items-center gap-2 bg-[#EF4444]/10 border border-[#EF4444]/20 px-4 py-3">
               <AlertCircle size={14} className="text-[#EF4444] shrink-0" />
@@ -318,9 +343,9 @@ export default function PublicRegistrationForm() {
 
           <motion.button
             type="submit"
-            disabled={submitting}
-            whileTap={{ scale: 0.97 }}
-            className="w-full btn-primary rounded-xl py-4 font-black uppercase tracking-widest text-xs flex items-center justify-center gap-2 mt-2"
+            disabled={submitting || !consent}
+            whileTap={{ scale: consent ? 0.97 : 1 }}
+            className="w-full btn-primary rounded-xl py-4 font-black uppercase tracking-widest text-xs flex items-center justify-center gap-2 mt-2 disabled:opacity-50 disabled:cursor-not-allowed"
             style={{ fontFamily: 'Helvetica Neue, Helvetica, Arial, sans-serif' }}
           >
             {submitting ? (

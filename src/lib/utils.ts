@@ -1,6 +1,6 @@
 import { clsx, type ClassValue } from 'clsx';
 import { twMerge } from 'tailwind-merge';
-import type { Event } from '../types';
+import type { Event, Table, Venue } from '../types';
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
@@ -66,6 +66,33 @@ export const slideBack = {
   exit:    { opacity: 0, x: 16 },
   transition: { duration: 0.32, ease: easeOutQuart },
 };
+
+/* ── Tavolo lookup + budget effettivo (oltre capacità) ────── */
+export function findTable(
+  res: { tableId: string; eventId: string },
+  events: Event[],
+  venues: Venue[],
+): Table | null {
+  const event = events.find(e => e.id === res.eventId);
+  if (!event) return null;
+  const venue = venues.find(v => v.id === event.venueId);
+  if (!venue) return null;
+  const fp = venue.floorPlans.find(f => f.id === event.floorPlanId) ?? venue.floorPlans[0];
+  return fp?.tables.find(t => t.id === res.tableId) ?? null;
+}
+
+export function calcActualBudget(
+  reservedBudget: number,
+  actualPeople: number,
+  table: Table | null,
+): number {
+  if (!table) return reservedBudget;
+  const { capacity, minSpend } = table;
+  const perPersonRate = capacity > 0 ? minSpend / capacity : 0;
+  const base = Math.max(reservedBudget, minSpend);
+  if (actualPeople <= capacity) return base;
+  return Math.round(base + (actualPeople - capacity) * perPersonRate);
+}
 
 /* Container variants for staggered grids */
 export const gridContainer = {

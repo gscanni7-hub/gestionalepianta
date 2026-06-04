@@ -1,0 +1,109 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Nightplan — Report serata (stile Maya)</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+  :root{ --acc:#D4622A; --txt:#f3ece4; --mut:#8a8278; --green:#22C55E; --amber:#F59E0B; }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:'Inter',system-ui,sans-serif;background:#070504;color:var(--txt);-webkit-font-smoothing:antialiased;
+    display:flex;justify-content:center;padding:0}
+  .app{width:100%;max-width:440px;min-height:100vh;padding:30px 22px 60px;
+    background:radial-gradient(120% 50% at 0% 0%, rgba(212,98,42,.05), transparent 55%), #0c0908;}
+
+  .brand{font-size:11px;font-weight:700;letter-spacing:.34em;color:var(--acc);text-transform:uppercase}
+  .title{font-size:34px;font-weight:800;letter-spacing:-.01em;line-height:1.02;color:#fff;text-transform:uppercase;margin-top:10px}
+
+  .row{display:flex;align-items:center;justify-content:space-between;gap:14px}
+  .secrow{margin-top:34px}
+  .date{font-size:12px;color:var(--mut)}
+  .h2{font-size:22px;font-weight:800;color:#fff;text-transform:uppercase;letter-spacing:-.01em;margin-top:3px}
+  .ghost{display:inline-flex;align-items:center;gap:8px;border:1px solid rgba(255,255,255,.14);
+    border-radius:12px;padding:11px 16px;font-size:11px;font-weight:700;letter-spacing:.16em;
+    text-transform:uppercase;color:#cfc7bc;background:transparent;cursor:pointer}
+  .ghost:hover{border-color:rgba(212,98,42,.5);color:#fff}
+  .ghost svg{width:13px;height:13px}
+
+  .heroLab{font-size:11px;font-weight:600;letter-spacing:.22em;color:var(--mut);text-transform:uppercase;margin-top:36px}
+  .hero{font-size:64px;font-weight:800;letter-spacing:-.03em;color:#fff;line-height:1;margin-top:12px;font-variant-numeric:tabular-nums}
+  .herosub{font-size:13px;color:var(--mut);margin-top:10px}
+  .herosub .neg{color:#ef6a5a;font-weight:600}
+
+  .hr{height:1px;background:rgba(255,255,255,.07);margin:28px 0 4px}
+
+  .card{border:1px solid rgba(255,255,255,.07);border-radius:18px;padding:22px;margin-top:16px;
+    background:rgba(255,255,255,.018)}
+  .card .ch{display:flex;align-items:flex-start;justify-content:space-between;gap:14px}
+  .card .lbl{font-size:12px;font-weight:600;letter-spacing:.18em;color:var(--mut);text-transform:uppercase}
+  .card .big{font-size:30px;font-weight:800;color:#fff;letter-spacing:-.02em;line-height:1;text-align:right;font-variant-numeric:tabular-nums}
+  .card .bigsub{font-size:11px;color:var(--mut);margin-top:6px;text-align:right}
+
+  .lines{margin-top:18px;display:flex;flex-direction:column}
+  .ln{display:flex;align-items:center;justify-content:space-between;padding:11px 0;border-top:1px solid rgba(255,255,255,.05)}
+  .ln:first-child{border-top:none}
+  .ln .l{display:flex;align-items:center;gap:10px;font-size:14px;color:#cfc7bc}
+  .ln .l .dot{width:7px;height:7px;border-radius:50%}
+  .ln .v{font-size:15px;font-weight:600;color:#fff;font-variant-numeric:tabular-nums}
+
+  .thead{display:grid;grid-template-columns:1fr 56px 70px;gap:8px;margin-top:16px;padding-bottom:8px;border-bottom:1px solid rgba(255,255,255,.07)}
+  .thead span{font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--mut)}
+  .thead .r{text-align:right}
+  .trow{display:grid;grid-template-columns:1fr 56px 70px;gap:8px;align-items:center;padding:12px 0;border-top:1px solid rgba(255,255,255,.04)}
+  .trow .rank{font-weight:800;font-size:14px;width:18px;display:inline-block}
+  .trow .nm{font-size:14px;color:#fff;font-weight:500;display:flex;align-items:center;gap:9px;min-width:0}
+  .trow .nm span{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  .trow .t{font-size:13px;color:var(--mut);text-align:right;font-variant-numeric:tabular-nums}
+  .trow .inc{font-size:14px;font-weight:700;color:var(--acc);text-align:right;font-variant-numeric:tabular-nums}
+</style>
+</head>
+<body>
+  <div class="app">
+    <div class="brand">Nightplan</div>
+    <div class="title">Report serata</div>
+
+    <div class="row secrow">
+      <div>
+        <div class="date">Sabato 24 maggio · Club Vega</div>
+        <div class="h2">Techno Friday</div>
+      </div>
+      <button class="ghost">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M7 10l5 5 5-5M12 15V3"/></svg>
+        Esporta
+      </button>
+    </div>
+
+    <div class="heroLab">Incasso reale</div>
+    <div class="hero">€4.250</div>
+    <div class="herosub">previsto €4.800 · <span class="neg">−€550</span> per no-show</div>
+
+    <div class="hr"></div>
+
+    <div class="card">
+      <div class="ch">
+        <span class="lbl">Ospiti</span>
+        <div><div class="big">8<span style="color:#5a544c">/12</span></div><div class="bigsub">67% entrati</div></div>
+      </div>
+      <div class="lines">
+        <div class="ln"><span class="l"><span class="dot" style="background:var(--green)"></span>Entrati</span><span class="v">8 tavoli · 96p</span></div>
+        <div class="ln"><span class="l"><span class="dot" style="background:var(--amber)"></span>No-show</span><span class="v">4 tavoli</span></div>
+        <div class="ln"><span class="l"><span class="dot" style="background:#5a544c"></span>Occupazione</span><span class="v">30%</span></div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="ch">
+        <span class="lbl">Top PR · per incasso</span>
+        <div class="big" style="font-size:22px">3</div>
+      </div>
+      <div class="thead"><span>Nome</span><span class="r">Tav.</span><span class="r">Incasso</span></div>
+      <div class="trow"><div class="nm"><span class="rank" style="color:#FFD700">1</span><span>Luca Visca</span></div><div class="t">5t</div><div class="inc">€2.1K</div></div>
+      <div class="trow"><div class="nm"><span class="rank" style="color:#C0C0C0">2</span><span>Marco Bianchi</span></div><div class="t">4t</div><div class="inc">€1.4K</div></div>
+      <div class="trow"><div class="nm"><span class="rank" style="color:#CD7F32">3</span><span>Sara Conti</span></div><div class="t">3t</div><div class="inc">€750</div></div>
+    </div>
+  </div>
+</body>
+</html>

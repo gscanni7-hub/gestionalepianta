@@ -117,12 +117,6 @@ body {
 }
 .blink { animation: blink 1.8s ease-in-out infinite; }
 
-/* ── Animated slide-in bar ───────────────────────────────── */
-@keyframes grow-x {
-  from { transform: scaleX(0); }
-  to   { transform: scaleX(1); }
-}
-
 /* ── Scrollbar ───────────────────────────────────────────── */
 ::-webkit-scrollbar            { width: 3px; }
 ::-webkit-scrollbar-track      { background: transparent; }

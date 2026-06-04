@@ -10,7 +10,11 @@ import { INITIAL_VENUES, INITIAL_EVENTS, INITIAL_RESERVATIONS, INITIAL_MANAGED_U
 import { UserProfile, Event, Reservation, Venue, FloorPlan, ManagedUser, PrGroup, BottleMenuItem } from './types';
 import { motion, AnimatePresence } from 'framer-motion';
 import { cn, COLORS, easeOutQuart, gridContainer, gridItem, isEventVisibleToPr, isEventVisibleToHost, eventEndDateTime, findTable, calcActualBudget } from './lib/utils';
-import { isEmailConfigured, sendPasswordResetEmail } from './lib/emailService';
+import {
+  isEmailConfigured, sendPasswordResetEmail,
+  notifyReservationApproved, notifyReservationRejected,
+  notifyPrAccountApproved, notifyAdminNewPrSignup,
+} from './lib/emailService';
 import { isFirebaseConfigured, signInWithGoogle, signInWithApple } from './lib/firebase';
 import { subscribeToReservations } from './lib/reservationService';
 import SplashScreen from './components/SplashScreen';
@@ -671,6 +675,14 @@ export default function App() {
     };
     setManagedUsers(prev => [...prev, newUser]);
     setRegDone(true);
+    // Notifica admin (tutti gli admin attivi)
+    const admins = managedUsers.filter(u => u.role === 'admin' && u.status === 'approved');
+    admins.forEach(a => notifyAdminNewPrSignup({
+      adminEmail: a.email,
+      prName: `${newUser.displayName} ${newUser.lastName}`.trim(),
+      prEmail: newUser.email,
+      prPhone: newUser.phone,
+    }));
   };
 
   const handleForgotPassword = async (e: React.FormEvent) => {
@@ -760,6 +772,9 @@ export default function App() {
     setManagedUsers(prev => prev.map(x => x.id === id ? { ...x, status: 'approved' } : x));
     addToast('PR approvato', u ? `${u.displayName} ${u.lastName}` : undefined,
       { label: 'Annulla', onClick: () => setManagedUsers(prev => prev.map(x => x.id === id ? { ...x, status: 'pending' } : x)) });
+    if (u && u.role === 'pr') {
+      notifyPrAccountApproved({ prEmail: u.email, prName: `${u.displayName} ${u.lastName}`.trim() });
+    }
   };
   const handleRejectUser = (id: string) => {
     const u = managedUsers.find(x => x.id === id);
@@ -772,12 +787,30 @@ export default function App() {
     setReservations(prev => prev.map(x => x.id === id ? { ...x, approvalStatus: 'approved' } : x));
     addToast('Prenotazione approvata', r?.customerName,
       { label: 'Annulla', onClick: () => setReservations(prev => prev.map(x => x.id === id ? { ...x, approvalStatus: 'pending' } : x)) });
+    if (r) {
+      const pr = managedUsers.find(u => u.id === r.prId);
+      const ev = events.find(e => e.id === r.eventId);
+      if (pr && ev) notifyReservationApproved({
+        prEmail: pr.email, prName: `${pr.displayName} ${pr.lastName}`.trim(),
+        customerName: r.customerName, tableName: r.tableName ?? r.tableId,
+        eventName: ev.name, eventDate: ev.date,
+      });
+    }
   };
   const handleRejectReservation = (id: string) => {
     const r = reservations.find(x => x.id === id);
     setReservations(prev => prev.map(x => x.id === id ? { ...x, approvalStatus: 'rejected' } : x));
     addToast('Prenotazione rifiutata', r?.customerName,
       { label: 'Annulla', onClick: () => setReservations(prev => prev.map(x => x.id === id ? { ...x, approvalStatus: 'pending' } : x)) });
+    if (r) {
+      const pr = managedUsers.find(u => u.id === r.prId);
+      const ev = events.find(e => e.id === r.eventId);
+      if (pr && ev) notifyReservationRejected({
+        prEmail: pr.email, prName: `${pr.displayName} ${pr.lastName}`.trim(),
+        customerName: r.customerName, tableName: r.tableName ?? r.tableId,
+        eventName: ev.name, eventDate: ev.date,
+      });
+    }
   };
 
   const exportGuestList = (eventId?: string) => {

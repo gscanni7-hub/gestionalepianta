@@ -3,6 +3,7 @@ import { useParams, useSearchParams, useNavigate } from 'react-router-dom';
 import { collection, query, where, getDocs } from 'firebase/firestore';
 import { db } from '../../lib/firebase';
 import { createRegistration } from '../../lib/registrationService';
+import { notifyNewRegistration } from '../../lib/emailService';
 import { Event, Venue, ManagedUser } from '../../types';
 import { INITIAL_EVENTS, INITIAL_VENUES, INITIAL_MANAGED_USERS } from '../../constants';
 import { motion } from 'framer-motion';
@@ -120,6 +121,37 @@ export default function PublicRegistrationForm() {
         prId: pr?.id ?? null,
         prName: pr ? `${pr.displayName} ${pr.lastName}` : null,
       });
+
+      // Notifica fire-and-forget all'admin e (se presente) al PR di riferimento
+      const customerName = `${form.firstName.trim()} ${form.lastName.trim()}`;
+      const managed: ManagedUser[] = (() => {
+        try {
+          const saved = localStorage.getItem('nightplan_managed_users');
+          return saved ? JSON.parse(saved) : INITIAL_MANAGED_USERS;
+        } catch { return INITIAL_MANAGED_USERS; }
+      })();
+      managed.filter(u => u.role === 'admin' && u.status === 'approved').forEach(admin => {
+        notifyNewRegistration({
+          toEmail: admin.email,
+          customerName,
+          customerEmail: form.email.trim().toLowerCase(),
+          customerPhone: form.phone.trim(),
+          guestsCount: form.guestsCount,
+          eventName: event.name, eventDate: event.date,
+          prName: pr ? `${pr.displayName} ${pr.lastName}` : undefined,
+        });
+      });
+      if (pr) {
+        notifyNewRegistration({
+          toEmail: pr.email, toName: `${pr.displayName} ${pr.lastName}`.trim(),
+          customerName,
+          customerEmail: form.email.trim().toLowerCase(),
+          customerPhone: form.phone.trim(),
+          guestsCount: form.guestsCount,
+          eventName: event.name, eventDate: event.date,
+        });
+      }
+
       navigate(`/ticket/${id}`);
     } catch (err) {
       console.error(err);

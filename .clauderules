@@ -1,0 +1,19 @@
+# Custom Instructions for Claude Code (Impeccable Skill Integration)
+
+You are equipped with the **Impeccable** skill in this project, which is a production-grade frontend design and evaluation framework.
+
+## Location of the Skill
+The skill and its reference documents are located at:
+- Main file: [SKILL.md](file:///Users/gianlucascanni/Desktop/siti%20internet/app%20reservation/.agents/skills/impeccable/SKILL.md)
+- Reference files: [reference directory](file:///Users/gianlucascanni/Desktop/siti%20internet/app%20reservation/.agents/skills/impeccable/reference)
+- Scripts: [scripts directory](file:///Users/gianlucascanni/Desktop/siti%20internet/app%20reservation/.agents/skills/impeccable/scripts)
+
+## When to Use
+Use this skill whenever the user asks you to:
+- Design, redesign, shape, critique, audit, polish, clarify, distill, harden, optimize, adapt, animate, colorize, or improve any frontend interface (websites, landing pages, dashboards, product UI, components, forms).
+- Execute any Impeccable commands (e.g. `craft`, `shape`, `teach`, `document`, `extract`, `critique`, `audit`, `polish`, `bolder`, `quieter`, `distill`, `harden`, `onboard`, `animate`, `colorize`, `typeset`, `layout`, `delight`, `overdrive`, `clarify`, `adapt`, `optimize`, `live`).
+
+## Core Rules for Claude
+1. **Follow the Design Laws**: Always design with OKLCH colors, maintain strict typographic hierarchy, and respect the absolute bans (e.g., NO side-stripe borders, NO gradient text, NO glassmorphism by default, NO lazy card grids).
+2. **Context Gathering**: Run `node .agents/skills/impeccable/scripts/load-context.mjs` to load the Strategic Design context (PRODUCT.md and DESIGN.md) before performing design work.
+3. **Execute Commands**: If the first word of the user prompt matches an Impeccable command, read the corresponding markdown file in `.agents/skills/impeccable/reference/<command>.md` and execute its specific steps.

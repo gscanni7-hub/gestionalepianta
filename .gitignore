@@ -35,3 +35,12 @@ pnpm-debug.log*
 
 # TypeScript
 *.tsbuildinfo
+
+# AI assistant metadata (local-only)
+.agent/
+.agents/
+.impeccable/
+.claude/
+.clauderules
+.cursorrules
+skills-lock.json

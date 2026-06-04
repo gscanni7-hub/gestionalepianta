@@ -4,8 +4,8 @@ import {
   Eye, EyeOff, Clock, Calendar, CheckCircle2, X, Search,
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { cn } from '../../lib/utils';
-import { UserProfile, ManagedUser, Reservation, Event, PrGroup } from '../../types';
+import { cn, getPrCommission } from '../../lib/utils';
+import { UserProfile, ManagedUser, Reservation, Event, PrGroup, PrCommission } from '../../types';
 import { Field, GroupEditorModal } from '../modals/EntityModals';
 import { EmptyState, PageTitle } from '../layout/AppShell';
 import PRRankingView from './PRRankingView';
@@ -88,7 +88,7 @@ export function PRProfile({ user, onSave }: {
 }
 
 /* ── PRManagementPage ────────────────────────────────────── */
-export function PRManagementPage({ managedUsers, reservations, events, prGroups, selectedPR, onSelectPR, onBack, onUpdateStatus, onSaveGroup, onDeleteGroup }: {
+export function PRManagementPage({ managedUsers, reservations, events, prGroups, selectedPR, onSelectPR, onBack, onUpdateStatus, onUpdateCommission, onSaveGroup, onDeleteGroup }: {
   managedUsers: ManagedUser[];
   reservations: Reservation[];
   events: Event[];
@@ -97,6 +97,7 @@ export function PRManagementPage({ managedUsers, reservations, events, prGroups,
   onSelectPR: (pr: ManagedUser) => void;
   onBack: () => void;
   onUpdateStatus: (id: string, status: 'approved' | 'rejected') => void;
+  onUpdateCommission: (id: string, commission: PrCommission) => void;
   onSaveGroup: (g: PrGroup) => void;
   onDeleteGroup: (id: string) => void;
 }) {
@@ -126,7 +127,7 @@ export function PRManagementPage({ managedUsers, reservations, events, prGroups,
   };
 
   if (selectedPR) {
-    return <PRDetailView pr={selectedPR} reservations={reservations} events={events} onBack={onBack} onUpdateStatus={onUpdateStatus} statusBadge={statusBadge} />;
+    return <PRDetailView pr={selectedPR} reservations={reservations} events={events} onBack={onBack} onUpdateStatus={onUpdateStatus} onUpdateCommission={onUpdateCommission} statusBadge={statusBadge} />;
   }
 
   return (
@@ -263,15 +264,22 @@ export function PRManagementPage({ managedUsers, reservations, events, prGroups,
 }
 
 /* ── PRDetailView ────────────────────────────────────────── */
-export function PRDetailView({ pr, reservations, events, onBack, onUpdateStatus, statusBadge }: {
+export function PRDetailView({ pr, reservations, events, onBack, onUpdateStatus, onUpdateCommission, statusBadge }: {
   pr: ManagedUser;
   reservations: Reservation[];
   events: Event[];
   onBack: () => void;
   onUpdateStatus: (id: string, status: 'approved' | 'rejected') => void;
+  onUpdateCommission: (id: string, commission: PrCommission) => void;
   statusBadge: (s: string) => React.ReactNode;
 }) {
   const [showPwd, setShowPwd] = useState(false);
+  const initialCommission = getPrCommission(pr);
+  const [commission, setCommission] = useState<PrCommission>(initialCommission);
+  const commissionDirty =
+    commission.percentage !== initialCommission.percentage ||
+    commission.fixedPerTable !== initialCommission.fixedPerTable ||
+    commission.fixedPerEvent !== initialCommission.fixedPerEvent;
   const myRes = reservations.filter(r => r.prId === pr.id);
   const myEventIds = [...new Set(myRes.map(r => r.eventId))];
   const approved = myRes.filter(r => r.approvalStatus === 'approved').length;
@@ -327,6 +335,39 @@ export function PRDetailView({ pr, reservations, events, onBack, onUpdateStatus,
                 </button>
               </div>
             </div>
+          </div>
+
+          {/* Compenso */}
+          <div className="border border-[#2d2a26] bg-white/[0.018] p-5 space-y-3 rounded-xl">
+            <div className="flex items-center justify-between mb-1">
+              <p className="text-xs text-[#8E8E93]">Compenso</p>
+              <span className="text-[9px] font-mono uppercase tracking-[0.2em] text-[#3b3733]">per serata</span>
+            </div>
+            <CommissionRow
+              label="% sull'incasso"
+              suffix="%"
+              value={commission.percentage}
+              onChange={v => setCommission(c => ({ ...c, percentage: v }))}
+            />
+            <CommissionRow
+              label="Fisso a tavolo"
+              prefix="€"
+              value={commission.fixedPerTable}
+              onChange={v => setCommission(c => ({ ...c, fixedPerTable: v }))}
+            />
+            <CommissionRow
+              label="Fisso a serata"
+              prefix="€"
+              value={commission.fixedPerEvent}
+              onChange={v => setCommission(c => ({ ...c, fixedPerEvent: v }))}
+            />
+            {commissionDirty && (
+              <button
+                onClick={() => onUpdateCommission(pr.id, commission)}
+                className="w-full mt-2 py-2.5 text-[11px] hv font-black uppercase tracking-widest rounded-xl btn-primary">
+                Salva compenso
+              </button>
+            )}
           </div>
 
           {/* Actions */}
@@ -393,6 +434,38 @@ export function PRDetailView({ pr, reservations, events, onBack, onUpdateStatus,
             </div>
           )}
         </div>
+      </div>
+    </div>
+  );
+}
+
+/* ── CommissionRow ───────────────────────────────────────── */
+function CommissionRow({ label, prefix, suffix, value, onChange }: {
+  label: string;
+  prefix?: string;
+  suffix?: string;
+  value: number;
+  onChange: (n: number) => void;
+}) {
+  return (
+    <div className="flex items-center justify-between gap-3">
+      <label className="text-[12px] text-[#cfc7bc] flex-1">{label}</label>
+      <div className="relative w-24 shrink-0">
+        {prefix && <span className="absolute left-2.5 top-1/2 -translate-y-1/2 text-[#636366] text-xs">{prefix}</span>}
+        <input
+          type="number"
+          inputMode="decimal"
+          min={0}
+          step={prefix ? 1 : 0.5}
+          value={value || ''}
+          onChange={e => onChange(parseFloat(e.target.value) || 0)}
+          placeholder="0"
+          className={cn(
+            'w-full bg-bg border border-[#2d2a26] rounded-lg py-1.5 text-sm text-white text-right outline-none focus:border-accent/40 transition-colors tabular-nums',
+            prefix ? 'pl-6 pr-2.5' : 'pl-2.5 pr-6',
+          )}
+        />
+        {suffix && <span className="absolute right-2.5 top-1/2 -translate-y-1/2 text-[#636366] text-xs">{suffix}</span>}
       </div>
     </div>
   );

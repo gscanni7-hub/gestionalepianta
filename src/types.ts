@@ -1,5 +1,11 @@
 export type Role = 'admin' | 'pr' | 'host';
 
+export interface PrCommission {
+  percentage: number;     // % sull'incasso reale del PR
+  fixedPerTable: number;  // € × tavolo con check-in
+  fixedPerEvent: number;  // € a serata se il PR ha almeno 1 tavolo
+}
+
 export interface ManagedUser {
   id: string;
   email: string;
@@ -11,6 +17,7 @@ export interface ManagedUser {
   profileImage?: string;
   status: 'pending' | 'approved' | 'rejected';
   createdAt: string;
+  commission?: PrCommission;  // undefined = default 10% / 0 / 0
 }
 
 export interface UserProfile {

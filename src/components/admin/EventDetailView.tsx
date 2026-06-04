@@ -6,7 +6,7 @@ import {
 } from 'lucide-react';
 import { Event, Venue, Reservation, Registration, ManagedUser, PrGroup } from '../../types';
 import { getRegistrationsByEvent } from '../../lib/registrationService';
-import { cn, eventEndDateTime } from '../../lib/utils';
+import { cn, eventEndDateTime, calculatePrPayout, getPrCommission } from '../../lib/utils';
 import IngressiView from '../host/IngressiView';
 
 interface Props {
@@ -545,10 +545,107 @@ export default function EventDetailView({ event, venue, reservations, prUsers, p
                   </div>
                 ))}
               </div>
+
+              {/* Compensi PR */}
+              <PayoutsBlock event={event} reservations={reservations} prUsers={prUsers} />
             </>
           )}
         </div>
       )}
+    </div>
+  );
+}
+
+/* ── PayoutsBlock — compensi PR per la serata ───────────── */
+function PayoutsBlock({ event, reservations, prUsers }: {
+  event: Event;
+  reservations: Reservation[];
+  prUsers: ManagedUser[];
+}) {
+  const eur = (n: number) => `€${n.toLocaleString('it-IT')}`;
+
+  const rows = prUsers
+    .map(pr => ({ pr, payout: calculatePrPayout(pr, event.id, reservations) }))
+    .filter(r => r.payout.tables > 0)
+    .sort((a, b) => b.payout.total - a.payout.total);
+
+  if (rows.length === 0) return null;
+
+  const grandTotal = rows.reduce((s, r) => s + r.payout.total, 0);
+
+  const exportCSV = () => {
+    const headers = ['PR', 'Tavoli', 'Incasso €', '% / Tavolo / Serata', '% sull\'incasso €', 'Fisso a tavolo €', 'Fisso a serata €', 'Totale €'];
+    const data = rows.map(({ pr, payout }) => {
+      const c = getPrCommission(pr);
+      return [
+        `${pr.displayName} ${pr.lastName}`.trim(),
+        payout.tables,
+        payout.revenue,
+        `${c.percentage}% / €${c.fixedPerTable} / €${c.fixedPerEvent}`,
+        payout.fromPercentage,
+        payout.fromPerTable,
+        payout.fromPerEvent,
+        payout.total,
+      ];
+    });
+    const csv = [headers, ...data, ['', '', '', '', '', '', 'Totale', grandTotal]]
+      .map(row => row.map(c => `"${String(c ?? '').replace(/"/g, '""')}"`).join(','))
+      .join('\n');
+    const blob = new Blob(['﻿' + csv], { type: 'text/csv;charset=utf-8;' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `compensi_${event.name.replace(/\s+/g, '_').toLowerCase()}_${event.date}.csv`;
+    a.click();
+    URL.revokeObjectURL(url);
+  };
+
+  return (
+    <div className="border border-white/[0.07] bg-white/[0.018] rounded-2xl p-5 mt-4">
+      <div className="flex items-center justify-between">
+        <span className="text-[11px] font-semibold uppercase tracking-[0.18em] text-[#8a8278]">Compensi PR · da pagare</span>
+        <button
+          onClick={exportCSV}
+          className="text-[10px] hv font-black uppercase tracking-widest text-[#8a8278] hover:text-accent transition-colors">
+          Scarica CSV
+        </button>
+      </div>
+
+      <div className="grid grid-cols-[1fr_44px_72px_72px] gap-2 mt-4 pb-2 border-b border-white/[0.07]">
+        <span className="text-[10px] uppercase tracking-widest text-[#8a8278]">Nome</span>
+        <span className="text-[10px] uppercase tracking-widest text-[#8a8278] text-right">Tav.</span>
+        <span className="text-[10px] uppercase tracking-widest text-[#8a8278] text-right">Incasso</span>
+        <span className="text-[10px] uppercase tracking-widest text-[#8a8278] text-right">Compenso</span>
+      </div>
+
+      {rows.map(({ pr, payout }) => {
+        const c = getPrCommission(pr);
+        const breakdown: string[] = [];
+        if (c.percentage > 0)       breakdown.push(`${c.percentage}% = ${eur(Math.round(payout.fromPercentage))}`);
+        if (c.fixedPerTable > 0)    breakdown.push(`${payout.tables}×€${c.fixedPerTable} = ${eur(payout.fromPerTable)}`);
+        if (c.fixedPerEvent > 0)    breakdown.push(`fisso ${eur(payout.fromPerEvent)}`);
+
+        return (
+          <div key={pr.id} className="grid grid-cols-[1fr_44px_72px_72px] gap-2 items-center py-3 border-t border-white/[0.04] first:border-t-0">
+            <div className="min-w-0">
+              <p className="text-sm text-white truncate">{pr.displayName} {pr.lastName}</p>
+              {breakdown.length > 0 && (
+                <p className="text-[10px] font-sans text-[#5a544c] truncate mt-0.5">{breakdown.join(' · ')}</p>
+              )}
+            </div>
+            <span className="text-[13px] text-[#8a8278] text-right tabular-nums">{payout.tables}t</span>
+            <span className="text-[13px] text-[#8a8278] text-right tabular-nums">{eur(payout.revenue)}</span>
+            <span className="hv font-black text-sm text-[#22C55E] text-right tabular-nums">{eur(payout.total)}</span>
+          </div>
+        );
+      })}
+
+      <div className="grid grid-cols-[1fr_44px_72px_72px] gap-2 items-center pt-3 mt-1 border-t border-white/[0.12]">
+        <span className="text-[11px] uppercase tracking-widest text-[#cfc7bc]">Totale da pagare</span>
+        <span />
+        <span />
+        <span className="hv font-black text-base text-[#22C55E] text-right tabular-nums">{eur(grandTotal)}</span>
+      </div>
     </div>
   );
 }

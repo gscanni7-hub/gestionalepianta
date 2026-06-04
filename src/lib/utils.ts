@@ -1,6 +1,48 @@
 import { clsx, type ClassValue } from 'clsx';
 import { twMerge } from 'tailwind-merge';
-import type { Event, Table, Venue } from '../types';
+import type { Event, Table, Venue, ManagedUser, Reservation, PrCommission } from '../types';
+
+/* ── Commissioni PR ───────────────────────────────────────── */
+
+export const DEFAULT_COMMISSION: PrCommission = {
+  percentage: 10,
+  fixedPerTable: 0,
+  fixedPerEvent: 0,
+};
+
+export function getPrCommission(pr: ManagedUser): PrCommission {
+  return pr.commission ?? DEFAULT_COMMISSION;
+}
+
+/* Calcola il saldo del PR per una specifica serata.
+   Considera solo le prenotazioni con check-in effettivo. */
+export function calculatePrPayout(
+  pr: ManagedUser,
+  eventId: string,
+  reservations: Reservation[],
+): {
+  tables: number;
+  revenue: number;
+  fromPercentage: number;
+  fromPerTable: number;
+  fromPerEvent: number;
+  total: number;
+} {
+  const c = getPrCommission(pr);
+  const prRes = reservations.filter(
+    r => r.eventId === eventId && r.prId === pr.id && r.checkedIn,
+  );
+  const tables = prRes.length;
+  const revenue = prRes.reduce((s, r) => s + (r.actualBudget ?? r.budget), 0);
+  const fromPercentage = Math.round(revenue * c.percentage) / 100;
+  const fromPerTable = tables * c.fixedPerTable;
+  const fromPerEvent = tables > 0 ? c.fixedPerEvent : 0;
+  return {
+    tables, revenue,
+    fromPercentage, fromPerTable, fromPerEvent,
+    total: Math.round(fromPercentage + fromPerTable + fromPerEvent),
+  };
+}
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));

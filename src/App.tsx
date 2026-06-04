@@ -7,7 +7,7 @@ import {
   DoorOpen, LogIn, Search, Copy, Wine
 } from 'lucide-react';
 import { INITIAL_VENUES, INITIAL_EVENTS, INITIAL_RESERVATIONS, INITIAL_MANAGED_USERS, INITIAL_BOTTLE_MENU } from './constants';
-import { UserProfile, Event, Reservation, Venue, FloorPlan, ManagedUser, PrGroup, BottleMenuItem } from './types';
+import { UserProfile, Event, Reservation, Venue, FloorPlan, ManagedUser, PrGroup, BottleMenuItem, PrCommission } from './types';
 import { motion, AnimatePresence } from 'framer-motion';
 import { cn, COLORS, easeOutQuart, gridContainer, gridItem, isEventVisibleToPr, isEventVisibleToHost, eventEndDateTime, findTable, calcActualBudget } from './lib/utils';
 import {
@@ -1912,6 +1912,10 @@ export default function App() {
                   onSelectPR={setSelectedPR}
                   onBack={() => setSelectedPR(null)}
                   onUpdateStatus={(id, status) => setManagedUsers(prev => prev.map(u => u.id === id ? { ...u, status } : u))}
+                  onUpdateCommission={(id, commission) => {
+                    setManagedUsers(prev => prev.map(u => u.id === id ? { ...u, commission } : u));
+                    addToast('Compenso aggiornato');
+                  }}
                   onSaveGroup={(g) => setPrGroups(prev => prev.some(x => x.id === g.id) ? prev.map(x => x.id === g.id ? g : x) : [...prev, g])}
                   onDeleteGroup={(id) => setPrGroups(prev => prev.filter(x => x.id !== id))}
                 />

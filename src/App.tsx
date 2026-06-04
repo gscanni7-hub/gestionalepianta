@@ -197,6 +197,7 @@ export default function App() {
   const [regEmailError, setRegEmailError] = useState('');
   const [regPhoneError, setRegPhoneError] = useState('');
   const [regDone, setRegDone] = useState(false);
+  const [regConsent, setRegConsent] = useState(false);
   const [forgotEmail, setForgotEmail] = useState('');
   const [forgotError, setForgotError] = useState('');
   const [forgotSent, setForgotSent] = useState(false);
@@ -654,6 +655,7 @@ export default function App() {
     setRegEmailError(emailErr);
     setRegPhoneError(phoneErr);
     if (emailErr || phoneErr) return;
+    if (!regConsent) { setRegError('Per registrarti devi accettare i Termini e la Privacy Policy.'); return; }
     const exists = managedUsers.find(u => u.email.toLowerCase() === regEmail.trim().toLowerCase());
     if (exists) { setRegError('Email già registrata.'); return; }
     const newUser: ManagedUser = {
@@ -1254,13 +1256,34 @@ export default function App() {
                         </button>
                       </div>
                     </div>
+                    {/* Consenso T&C + Privacy */}
+                    <label className="flex items-start gap-2.5 cursor-pointer select-none pt-1">
+                      <input
+                        type="checkbox"
+                        checked={regConsent}
+                        onChange={e => { setRegConsent(e.target.checked); setRegError(''); }}
+                        className="mt-0.5 w-3.5 h-3.5 accent-[#D4622A] shrink-0 cursor-pointer"
+                      />
+                      <span className="text-[11px] text-[#8E8E93] leading-relaxed">
+                        Accetto i{' '}
+                        <a href="/terms" target="_blank" rel="noopener noreferrer" className="text-[#cfc7bc] hover:text-accent underline-offset-2 hover:underline transition-colors">
+                          Termini di Servizio
+                        </a>
+                        {' '}e la{' '}
+                        <a href="/privacy" target="_blank" rel="noopener noreferrer" className="text-[#cfc7bc] hover:text-accent underline-offset-2 hover:underline transition-colors">
+                          Privacy Policy
+                        </a>
+                        .
+                      </span>
+                    </label>
+
                     {regError && <p className="text-red-400 text-xs pt-1">{regError}</p>}
                     <motion.button
                       type="submit"
-                      disabled={!!regEmailError || !!regPhoneError}
-                      whileHover={!regEmailError && !regPhoneError ? { scale: 1.01 } : {}}
-                      whileTap={!regEmailError && !regPhoneError ? { scale: 0.99 } : {}}
-                      className={`group w-full py-4 text-sm font-semibold rounded-xl flex items-center justify-between px-6 transition-colors mt-2 ${regEmailError || regPhoneError ? 'bg-[#2d2a26] text-[#8E8E93] cursor-not-allowed' : 'btn-primary'}`}>
+                      disabled={!!regEmailError || !!regPhoneError || !regConsent}
+                      whileHover={!regEmailError && !regPhoneError && regConsent ? { scale: 1.01 } : {}}
+                      whileTap={!regEmailError && !regPhoneError && regConsent ? { scale: 0.99 } : {}}
+                      className={`group w-full py-4 text-sm font-semibold rounded-xl flex items-center justify-between px-6 transition-colors mt-2 ${regEmailError || regPhoneError || !regConsent ? 'bg-[#2d2a26] text-[#8E8E93] cursor-not-allowed' : 'btn-primary'}`}>
                       <span>Invia Richiesta</span>
                       <ChevronRight size={14} className="group-hover:translate-x-1 transition-transform" />
                     </motion.button>
@@ -1307,7 +1330,13 @@ export default function App() {
             </div>
           </div>
         </motion.div>
-        <p className="absolute bottom-5 text-[9px] font-sans text-[#2d2a26] uppercase tracking-[0.3em]">© 2025 Nightplan</p>
+        <div className="absolute bottom-5 flex items-center gap-3 text-[9px] font-sans uppercase tracking-[0.3em]">
+          <span className="text-[#2d2a26]">© 2025 Nightplan</span>
+          <span className="text-[#1d1b19]">·</span>
+          <a href="/privacy" target="_blank" rel="noopener noreferrer" className="text-[#3b3733] hover:text-[#8E8E93] transition-colors">Privacy</a>
+          <span className="text-[#1d1b19]">·</span>
+          <a href="/terms" target="_blank" rel="noopener noreferrer" className="text-[#3b3733] hover:text-[#8E8E93] transition-colors">Termini</a>
+        </div>
       </div>
     );
   }
